@@ -1,19 +1,18 @@
 <template>
-<div>
-  <header-view></header-view>
-  <main-view></main-view>
-</div>
+  <div>
+    <header-view></header-view>
+
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import HeaderView from './components/HeaderView.vue'
-import MainView from './views/MainView.vue';
+import HeaderView from "./components/HeaderView.vue";
 
 export default {
-  name: 'App',
+  name: "App",
 
   components: {
-    MainView,
     HeaderView,
   },
 
@@ -22,3 +21,15 @@ export default {
   }),
 };
 </script>
+
+<style>
+/* Router Transition */
+.routing-fade-enter-active,
+.routing-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.routing-fade-enter, .routing-fade-leave-to
+/* .routing-fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>

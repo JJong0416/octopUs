@@ -1,8 +1,11 @@
 <template>
-<div>
-    
+  <div>
     Main
-</div>
+    <br />
+    <button>login</button>
+    <br />
+    <router-link :to="`/signup`">signup</router-link>
+  </div>
 </template>
 
 <script>

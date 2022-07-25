@@ -4,7 +4,9 @@
     <br />
     <button>login</button>
     <br />
-    <router-link :to="`/signup`">signup</router-link>
+    <div class="signup">
+      <router-link :to="`/signup`">signup</router-link>
+    </div>
   </div>
 </template>
 
@@ -12,4 +14,13 @@
 export default {};
 </script>
 
-<style></style>
+<style>
+.signup a {
+  text-decoration: none;
+  color: black;
+}
+.signup a:hover {
+  text-decoration: none;
+  color: black;
+}
+</style>

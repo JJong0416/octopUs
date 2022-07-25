@@ -2,12 +2,15 @@
   <v-card class="mx-auto overflow-hidden">
     <v-app-bar color="black" dark>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <router-link :to="`/`">
-        <div class="title">
+      <!-- Home 화면 이동 링크 -->
+      <div class="title">
+        <router-link :to="`/`">
           <v-toolbar-title>OctopUS</v-toolbar-title>
-        </div>
-      </router-link>
+        </router-link>
+      </div>
+      <!-- 여백 -->
       <v-spacer></v-spacer>
+      <!-- About Us 설명 창 이동 -->
       <router-link :to="`/aboutus`">
         <v-btn elevation="2">About US</v-btn>
       </router-link>
@@ -63,9 +66,12 @@ export default {
 </script>
 
 <style>
-.title {
-  text-decoration: none !important;
+.title a {
+  text-decoration: none;
   color: white;
-  display: flex;
+}
+.title a:hover {
+  text-decoration: none;
+  color: white;
 }
 </style>

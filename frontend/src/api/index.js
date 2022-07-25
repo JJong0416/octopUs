@@ -5,4 +5,21 @@ const config = {
   baseUrl: "http://localhost:8080/",
 };
 
-// 2. API 함수들을 정리
+// 2. 데이터 받아오는 API들 정리
+function fetchHome() {
+  return axios.get(`${config.baseUrl}/home`);
+}
+
+function fetchUser(id) {
+  return axios.get(`${config.baseUrl}/users/${id}`);
+}
+
+function fetchUserMission(id) {
+  return axios.get(`${config.baseUrl}/users/${id}/mission`);
+}
+
+function fetchMission() {
+  return axios.get(`${config.baseUrl}/mission`);
+}
+
+export { fetchHome, fetchUser, fetchMission, fetchUserMission };

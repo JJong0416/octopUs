@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-img src="../assets/logo.png"></v-img>
+    <v-img src="../assets/logo.png" max-width="300" max-height="300"></v-img>
     <br />
     <button>login</button>
     <br />

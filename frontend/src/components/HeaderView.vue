@@ -32,15 +32,16 @@
             </v-list-item-icon>
             <v-list-item-title>Logout</v-list-item-title>
           </v-list-item>
-          <div class="pa-2 d-flex justify-center mb-6">
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon @click="drawer = false">mdi-close-circle</v-icon>
-              </v-list-item-icon>
-            </v-list-item>
-          </div>
         </v-list-item-group>
       </v-list>
+
+      <template v-slot:append>
+        <div class="pa-2" @click="drawer = false">
+          <v-btn block>
+            <v-icon>mdi-close-circle</v-icon>
+          </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
   </v-card>
 </template>

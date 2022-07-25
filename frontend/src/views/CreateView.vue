@@ -1,6 +1,6 @@
 <template>
   <!-- 방 생성 페이지 -->
-  <div></div>
+  <div>방생성페이지</div>
 </template>
 
 <script>

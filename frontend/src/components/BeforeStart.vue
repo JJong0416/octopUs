@@ -1,1 +1,9 @@
-// 방에 참가했지만, 아직 미션은 시작안함
+<template>
+  <div>before start mission</div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style></style>

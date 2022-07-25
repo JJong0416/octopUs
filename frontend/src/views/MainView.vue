@@ -9,8 +9,16 @@
     </div>
 
     <!-- 검색창 -->
+    <input type="text" placeholder="검색창" /><button>검색</button>
     <!-- hot -->
+    <br />
+    hot <router-link :to="`/search`">더보기</router-link>
+    <br />
     <!-- new -->
+    <div class="mx-auto">
+      new <router-link :to="`/search`">더보기</router-link>
+    </div>
+    <br />
   </div>
 </template>
 

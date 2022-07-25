@@ -14,6 +14,9 @@
       <router-link :to="`/aboutus`">
         <v-btn elevation="2">About US</v-btn>
       </router-link>
+      <router-link :to="`/create`">
+        <v-btn elevation="2">Create</v-btn>
+      </router-link>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" absolute temporary height="180px">

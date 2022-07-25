@@ -1,6 +1,6 @@
 <template>
   <div>
-    문어사진
+    <v-img src="../assets/logo.png"></v-img>
     <br />
     <button>login</button>
     <br />

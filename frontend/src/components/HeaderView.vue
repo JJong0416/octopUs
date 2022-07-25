@@ -2,9 +2,15 @@
   <v-card class="mx-auto overflow-hidden">
     <v-app-bar color="black" dark>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <v-toolbar-title>OctopUS</v-toolbar-title>
+      <router-link :to="`/`">
+        <div class="title">
+          <v-toolbar-title>OctopUS</v-toolbar-title>
+        </div>
+      </router-link>
       <v-spacer></v-spacer>
-      <v-btn color="accent" elevation="2">About US</v-btn>
+      <router-link :to="`/aboutus`">
+        <v-btn elevation="2">About US</v-btn>
+      </router-link>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" absolute temporary height="180px">
@@ -56,4 +62,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.title {
+  text-decoration: none !important;
+  color: white;
+  display: flex;
+}
+</style>

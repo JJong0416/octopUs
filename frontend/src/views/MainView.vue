@@ -1,12 +1,16 @@
 <template>
   <div>
-    Main
+    문어사진
     <br />
     <button>login</button>
     <br />
     <div class="signup">
       <router-link :to="`/signup`">signup</router-link>
     </div>
+
+    <!-- 검색창 -->
+    <!-- hot -->
+    <!-- new -->
   </div>
 </template>
 

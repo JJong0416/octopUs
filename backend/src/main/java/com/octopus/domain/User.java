@@ -48,6 +48,11 @@ public class User {
     private Long platformAccessToken;
 
     @ManyToMany
+    @JoinTable(
+            name = "octopus_table",
+            joinColumns = @JoinColumn(name = "user_no"),
+            inverseJoinColumns = @JoinColumn(name = "mission_no")
+    )
     private final Set<Mission> missions = new HashSet<>();
 
     @Builder(builderMethodName = "signUpBuilder")

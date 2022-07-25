@@ -1,9 +1,10 @@
 <template>
   <v-card class="mx-auto overflow-hidden">
-    <v-app-bar color="deep-purple" dark>
+    <v-app-bar color="black" dark>
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-
       <v-toolbar-title>OctopUS</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn color="accent" elevation="2">About US</v-btn>
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" absolute temporary height="180px">

@@ -28,7 +28,7 @@ public class User {
     @Column(name = "user_nickname", length = 10, nullable = false, unique = true)
     private String userNickname;
 
-    @Column(name = "user_password", length = 20, nullable = false)
+    @Column(name = "user_password", length = 100, nullable = false)
     private String userPassword;
 
     @Column(name = "user_email", length = 30, nullable = false, unique = true)
@@ -61,6 +61,6 @@ public class User {
         this.userPassword = signUpDto.getUserPassword();
         this.userNickname = signUpDto.getUserNickname();
         this.userEmail = signUpDto.getUserEmail();
-        this.userAvatar = "1";
+        this.userAvatar = signUpDto.getUserAvatar();
     }
 }

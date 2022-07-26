@@ -1,5 +1,6 @@
 package com.octopus.jwt;
 
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -20,9 +21,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-/**
- * 토큰의 생성, 토큰의 유효성 검사
- */
+// 토큰의 생성, 토큰의 유효성 검증등을 담당할 Token Provider를 만들어보겠다.
 @Component
 public class TokenProvider implements InitializingBean {
 
@@ -42,21 +41,18 @@ public class TokenProvider implements InitializingBean {
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
     }
 
-    // 빈이 생성되고 의존성 주입 받은 후, Base 64 Decode를 통해 Key 변수에 할당
     @Override
     public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Authentication 객체에 포함된 권한 정보를 담은 토큰 생성
     public String createToken(Authentication authentication) {
 
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        // application.properties에 있는 token expire 시간 가져오기
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
@@ -68,7 +64,6 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-    // Token을 받아 Authentication 객체를 리턴
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts
                 .parserBuilder()
@@ -87,7 +82,6 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
-    // 유효성 검사
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

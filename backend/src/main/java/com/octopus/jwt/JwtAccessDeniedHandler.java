@@ -8,11 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-/**
- * 필요한 권한이 존재하지 않는 경우 403 Forbidden 에러 리턴
- */
-// TODO: 2022-07-26  Exception 따로 빼두기.
+// 필요한 권한이 존재하지 않는 경우에 403 Forbidden에러를 리턴하기 위해 JwtAccessDeniedHandler 클래스 작성
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 

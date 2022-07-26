@@ -3,22 +3,22 @@
     <header-view></header-view>
 
     <router-view></router-view>
+
+    <footer-view/>
   </div>
 </template>
 
 <script>
-import HeaderView from "./components/HeaderView.vue";
+import FooterView from "./components/common/FooterView.vue";
+import HeaderView from "./components/common/HeaderView.vue";
 
 export default {
   name: "App",
 
   components: {
     HeaderView,
+    FooterView,
   },
-
-  data: () => ({
-    //
-  }),
 };
 </script>
 

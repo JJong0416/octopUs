@@ -1,17 +1,41 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import getters from "./getters.js";
-import mutations from "./mutations.js";
-import actions from "./actions.js";
+import axios from "axios";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  strict: process.env.NODE_ENV !== "production",
   state: {
-    user: {},
+    userInfo: null,
+    isLogin: false,
   },
-  getters,
-  mutations,
-  actions,
+  mutations: {
+    loginSuccess(state, payload) {
+      state.isLogin = true;
+      state.userInfo = payload;
+    },
+    logout(state) {
+      state.isLogin = false;
+      state.userInfo = null;
+      localStorage.removeItem("access_token");
+    },
+  },
+  actions: {
+    getAccountInfo({ commit }) {
+      let token = localStorage.getItem("access_token");
+      axios
+        .get("/userinfo", {
+          headers: {
+            "X-AUTH-TOKEN": token,
+          },
+        })
+        .then((response) => {
+          commit("loginSuccess", response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+  modules: {},
 });

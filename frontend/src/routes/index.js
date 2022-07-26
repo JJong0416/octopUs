@@ -8,6 +8,7 @@ import MypageView from "../views/MypageView.vue";
 import MissionView from "../views/MissionView.vue";
 import SearchView from "../views/SearchView.vue";
 import PreView from "../views/PreView.vue";
+import LoginView from "../views/LoginView.vue";
 
 Vue.use(VueRouter);
 
@@ -45,6 +46,10 @@ export default new VueRouter({
     {
       path: "/preview",
       component: PreView,
+    },
+    {
+      path: "/login",
+      component: LoginView,
     },
   ],
 });

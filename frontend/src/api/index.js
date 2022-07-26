@@ -24,4 +24,4 @@ function fetchMission() {
 
 // 3. 데이터를 전송하는 API들 정리
 
-export { fetchHome, fetchUser, fetchMission, fetchUserMission };
+export { fetchHome, fetchUser, fetchMission, fetchUserMission, config };

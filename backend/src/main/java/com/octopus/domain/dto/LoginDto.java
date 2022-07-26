@@ -1,6 +1,7 @@
 package com.octopus.domain.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -18,7 +19,8 @@ public class LoginDto {
 
     @Builder
     public LoginDto(
-            String userId, String userPassword){
+            String userId, String userPassword
+    ) {
         this.userId = userId;
         this.userPassword = userPassword;
     }

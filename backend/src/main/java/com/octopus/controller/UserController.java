@@ -22,6 +22,7 @@ public class UserController {
         return ResponseEntity.ok("hello");
     }
 
+    // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<User> signup(
             @Valid @RequestBody SignUpDto signUpDto

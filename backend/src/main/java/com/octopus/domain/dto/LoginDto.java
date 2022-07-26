@@ -5,17 +5,21 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Getter @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class LoginDto {
 
     @NotBlank
     @Size(min = 6, max = 15)
-    private  String userId;
+    private final String userId;
 
     @NotBlank
     @Size(min = 6, max = 100)
-    private  String userPassword;
+    private final String userPassword;
+
+    @Builder
+    public LoginDto(
+            String userId, String userPassword){
+        this.userId = userId;
+        this.userPassword = userPassword;
+    }
 }

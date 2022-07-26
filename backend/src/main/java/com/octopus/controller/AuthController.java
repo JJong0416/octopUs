@@ -23,33 +23,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+/**
+ * 테스트 하기 위한 Controller
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
+
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepository userRepository;
 
-
-
     @PostMapping("/authenticate")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getUserId(), loginDto.getUserPassword());
 
-        System.out.println("hello1");
-
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        System.out.println(authentication.toString());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        System.out.println("hello2");
 
         String jwt = tokenProvider.createToken(authentication);
 
-        System.out.println(jwt);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new TokenDto(jwt),httpHeaders, HttpStatus.OK);

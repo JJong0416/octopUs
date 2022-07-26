@@ -2,11 +2,15 @@ package com.octopus.domain.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class TokenDto {
-    private String token;
+
+    @NotNull
+    private final String token;
+
+    public TokenDto(String token){
+        this.token = token;
+    }
 }

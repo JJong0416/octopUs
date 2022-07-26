@@ -57,6 +57,10 @@ public class User {
 
     @Builder(builderMethodName = "signUpBuilder")
     public User(SignUpDto signUpDto) {
-
+        this.userId = signUpDto.getUserId();
+        this.userPassword = signUpDto.getUserPassword();
+        this.userNickname = signUpDto.getUserNickname();
+        this.userEmail = signUpDto.getUserEmail();
+        this.userAvatar = "1";
     }
 }

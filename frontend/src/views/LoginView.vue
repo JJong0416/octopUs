@@ -37,13 +37,16 @@
 
                     <v-card-actions>
                       <v-btn
-                        color="#2c4f91"
+                        color="#ff809d"
                         dark
                         large
                         block
                         @click="loginSubmit"
                         >Login</v-btn
                       >
+                    </v-card-actions>
+                    <v-card-actions>
+                      <v-img src="../assets/kakaologin.png"></v-img>
                     </v-card-actions>
                   </v-form>
                 </v-col>

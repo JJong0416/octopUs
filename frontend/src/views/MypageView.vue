@@ -1,68 +1,25 @@
 <template>
-  <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left">Name</th>
-          <th class="text-left">Calories</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in desserts" :key="item.name">
-          <td>{{ item.name }}</td>
-          <td>{{ item.calories }}</td>
-        </tr>
-      </tbody>
+  <v-card :loading="loading" class="mx-auto my-12" max-width="374">
+    <template slot="progress">
+      <v-progress-linear
+        color="deep-purple"
+        height="10"
+        indeterminate
+      ></v-progress-linear>
     </template>
-  </v-simple-table>
+
+    <v-img height="250" src="../assets/img/1.png"></v-img>
+
+    <v-card-title>나는 문어</v-card-title>
+
+    <v-card-text>
+      <div>내 정보가 들어갈 곳</div>
+    </v-card-text>
+
+    <v-divider class="mx-4"></v-divider>
+
+    <v-card-title>꿈을 꾸는 문어</v-card-title>
+    <v-img style="max-width: 70px" src="../assets/kakaopay.png"></v-img>
+  </v-card>
 </template>
-<script>
-export default {
-  data() {
-    return {
-      desserts: [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-        },
-        {
-          name: "Donut",
-          calories: 452,
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-        },
-      ],
-    };
-  },
-};
-</script>
+<script></script>

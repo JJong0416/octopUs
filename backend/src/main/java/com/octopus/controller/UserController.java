@@ -4,12 +4,16 @@ import com.octopus.domain.User;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * 회원가입, 회원정보 수정에 대한 컨트롤러(Login X)
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -17,28 +21,18 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        return ResponseEntity.ok("hello");
+    // Domain 회원가입
+    @PostMapping("/register/domain")
+    public ResponseEntity<HttpStatus> signup(@Valid @RequestBody SignUpDto signUpDto) {
+        userService.signup(signUpDto);
+        return ResponseEntity.ok().build();
     }
 
-    // 회원가입
-    @PostMapping("/signup")
-    public ResponseEntity<User> signup(
-            @Valid @RequestBody SignUpDto signUpDto
-    ) {
-        return ResponseEntity.ok(userService.signup(signUpDto));
-    }
 
-    @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<User> getMyUserInfo() {
-        return ResponseEntity.ok(userService.getMyUserWithUserId().get());
-    }
-
+    // 로그인 권한 테스트
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasAnyRole('USER')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<User> getUserInfo(@PathVariable String userId) {
-        return ResponseEntity.ok(userService.getUserWithUserId(userId).get());
+        return ResponseEntity.ok(userService.getUserWithUserId(userId));
     }
 }

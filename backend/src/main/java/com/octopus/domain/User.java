@@ -62,5 +62,6 @@ public class User {
         this.userNickname = signUpDto.getUserNickname();
         this.userEmail = signUpDto.getUserEmail();
         this.userAvatar = signUpDto.getUserAvatar();
+        this.userPoint = signUpDto.getUserPoint();
     }
 }

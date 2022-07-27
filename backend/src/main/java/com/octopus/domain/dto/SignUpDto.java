@@ -29,6 +29,8 @@ public class SignUpDto {
     @NotEmpty
     private final String userAvatar;
 
+    private final Integer userPoint = 1000;
+
     public void dtoEncodePassword(String encodePassword){
         this.userPassword = encodePassword;
     }

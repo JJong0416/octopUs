@@ -1,9 +1,12 @@
 <template>
   <div>
-    <v-img src="../assets/logo.png" max-width="300" max-height="300"></v-img>
+    <v-img src="../assets/Logo.png" max-width="300" max-height="300"></v-img>
     <br />
     <router-link :to="`/login`">login</router-link>
     <br />
+    <div class="login">
+    <router-link :to="`/login`"><button>login</button></router-link>
+    </div>
     <div class="signup">
       <router-link :to="`/signup`">signup</router-link>
     </div>
@@ -27,6 +30,14 @@ export default {};
 </script>
 
 <style>
+.login a {
+  text-decoration: none;
+  color: black;
+}
+.login a:hover {
+  text-decoration: none;
+  color: black;
+}
 .signup a {
   text-decoration: none;
   color: black;

@@ -2,7 +2,7 @@
   <div>
     <v-img src="../assets/logo.png" max-width="300" max-height="300"></v-img>
     <br />
-    <button>login</button>
+    <router-link :to="`/login`">login</router-link>
     <br />
     <div class="signup">
       <router-link :to="`/signup`">signup</router-link>

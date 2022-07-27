@@ -1,9 +1,6 @@
 <template>
   <div>
     <v-img src="../assets/Logo.png" max-width="300" max-height="300"></v-img>
-    <br />
-    <router-link :to="`/login`">login</router-link>
-    <br />
     <div class="login">
     <router-link :to="`/login`"><button>login</button></router-link>
     </div>

@@ -1,25 +1,23 @@
 <template>
   <v-card class="mx-auto overflow-hidden">
-    <v-app-bar color="black" dark>
+    <v-app-bar>
+      <!-- 좌측 메뉴 바 -->
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <!-- Home 화면 이동 링크 -->
       <div class="title">
         <router-link :to="`/`">
-          <v-toolbar-title>OctopUS</v-toolbar-title>
+          <v-img src="../../assets/Title.png" max-width="150" max-height="80"></v-img>
         </router-link>
       </div>
       <!-- 여백 -->
       <v-spacer></v-spacer>
-      <!-- About Us 설명 창 이동 -->
-      <router-link :to="`/aboutus`">
-        <v-btn elevation="2">About US</v-btn>
-      </router-link>
+
       <router-link :to="`/create`">
         <v-btn elevation="2">Create</v-btn>
       </router-link>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary height="180px">
+    <v-navigation-drawer v-model="drawer" absolute temporary height="896px">
       <v-list nav dense>
         <v-list-item-group
           v-model="group"
@@ -36,7 +34,7 @@
             <v-list-item-icon>
               <v-icon>mdi-account</v-icon>
             </v-list-item-icon>
-            <v-list-item-title>Account</v-list-item-title>
+            <v-list-item-title>My Page</v-list-item-title>
           </v-list-item>
 
           <v-list-item>
@@ -45,6 +43,14 @@
             </v-list-item-icon>
             <v-list-item-title>Logout</v-list-item-title>
           </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-information-variant</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>About US</v-list-item-title>
+          </v-list-item>
+          
         </v-list-item-group>
       </v-list>
 

@@ -12,21 +12,28 @@
             href="#mobile-tabs-5-1"
             class="primary--text"
           >
-            <v-icon>mdi-phone</v-icon>
+            <v-icon>mdi-home</v-icon>
           </v-tab>
 
           <v-tab
             href="#mobile-tabs-5-2"
             class="primary--text"
           >
-            <v-icon>mdi-heart</v-icon>
+            <v-icon>mdi-fire</v-icon>
           </v-tab>
 
           <v-tab
             href="#mobile-tabs-5-3"
             class="primary--text"
           >
-            <v-icon>mdi-account-box</v-icon>
+            <v-icon>mdi-magnify</v-icon>
+          </v-tab>
+
+          <v-tab
+            href="#mobile-tabs-5-3"
+            class="primary--text"
+          >
+            <v-icon>mdi-account</v-icon>
           </v-tab>
         </v-tabs>
       </template>
@@ -38,7 +45,6 @@
         :key="i"
         :value="'mobile-tabs-5-' + i"
       >
-       
       </v-tab-item>
     </v-tabs-items>
   </v-card>

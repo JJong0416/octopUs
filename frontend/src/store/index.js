@@ -1,41 +1,20 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
-
+import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
-    userInfo: null,
-    isLogin: false,
+import memberStore from "@/store/modules/memberStore.js";
+
+const store = new Vuex.Store({
+  modules: {
+    memberStore,
   },
-  mutations: {
-    loginSuccess(state, payload) {
-      state.isLogin = true;
-      state.userInfo = payload;
-    },
-    logout(state) {
-      state.isLogin = false;
-      state.userInfo = null;
-      localStorage.removeItem("access_token");
-    },
-  },
-  actions: {
-    getAccountInfo({ commit }) {
-      let token = localStorage.getItem("access_token");
-      axios
-        .get("/userinfo", {
-          headers: {
-            "X-AUTH-TOKEN": token,
-          },
-        })
-        .then((response) => {
-          commit("loginSuccess", response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-  },
-  modules: {},
+  plugins: [
+    createPersistedState({
+      // 브라우저 종료시 제거하기 위해 localStorage가 아닌 sessionStorage로 변경. (default: localStorage)
+      storage: sessionStorage,
+    }),
+  ],
 });
+
+export default store;

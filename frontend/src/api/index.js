@@ -1,27 +1,15 @@
 import axios from "axios";
+import { API_BASE_URL } from "@/config";
 
-// 1. HTTP Request & Response와 관련된 기본설정
-const config = {
-  baseUrl: "http://localhost:8080/",
-};
-
-// 2. 데이터 받아오는 API들 정리
-function fetchHome() {
-  return axios.get(`${config.baseUrl}/home`);
+// axios 객체 생성
+function apiInstance() {
+  const instance = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+      "Content-type": "application/json",
+    },
+  });
+  return instance;
 }
 
-function fetchUser(id) {
-  return axios.get(`${config.baseUrl}/users/${id}`);
-}
-
-function fetchUserMission(id) {
-  return axios.get(`${config.baseUrl}/users/${id}/mission`);
-}
-
-function fetchMission() {
-  return axios.get(`${config.baseUrl}/mission`);
-}
-
-// 3. 데이터를 전송하는 API들 정리
-
-export { fetchHome, fetchUser, fetchMission, fetchUserMission, config };
+export { apiInstance };

@@ -2,20 +2,19 @@ package com.octopus.service;
 
 import com.octopus.domain.User;
 import com.octopus.domain.dto.LoginDto;
+import com.octopus.domain.dto.NicknameDto;
+import com.octopus.domain.dto.PasswordDto;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.dto.UpdateDto;
 import com.octopus.exception.SignUpException;
 
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.UserRepository;
-import com.octopus.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -80,6 +79,48 @@ public class UserService {
                 .signUpDto(signUpDto)
                 .build();
     }
+
+    @Transactional
+    public boolean checkUserNickname(NicknameDto nicknameDto) {
+        if (getUserInfoByNickname(nicknameDto.getNickname()))
+            return false;
+        else{
+            changeUserNickname(nicknameDto);
+            return true;
+        }
+    }
+    @Transactional
+    public void changeUserNickname(NicknameDto nicknameDto) {
+            getUserWithUserId(nicknameDto.getUserId()).changeNickname(nicknameDto);
+    }
+    @Transactional
+    public boolean changeUserPassword(PasswordDto passwordDto) {
+        if (passwordEncoder.matches(passwordDto.getOldPassword(),getUserInfo(passwordDto.getUserId()).getUserPassword())){
+            {
+                User user = getUserInfo(passwordDto.getUserId());
+                user.changePassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+                return true;
+            }
+        }
+        else
+            return false;
+    }
+
+    protected User getUserInfo(String userId){
+        return userRepository.findByUserId(userId).orElseThrow(()->{
+            throw new UserNotFoundException();
+        });
+    }
+
+    protected boolean getUserInfoByNickname(String nickname){
+        if (userRepository.findByUserNickname(nickname).isPresent()){
+            return true;
+        }
+        else
+            return false;
+    }
+
+
 
 
 }

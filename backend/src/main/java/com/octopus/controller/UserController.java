@@ -1,6 +1,8 @@
 package com.octopus.controller;
 
 import com.octopus.domain.User;
+import com.octopus.domain.dto.NicknameDto;
+import com.octopus.domain.dto.PasswordDto;
 import com.octopus.domain.dto.LoginDto;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.dto.UpdateDto;
@@ -57,5 +59,25 @@ public class UserController {
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
+
+
+    @PutMapping("/user/modify/password")
+    public ResponseEntity<HttpStatus> checkPassword(@Valid @RequestBody PasswordDto passwordDto) {
+       return (userService.changeUserPassword(passwordDto))
+               ? ResponseEntity.ok().build()
+               : ResponseEntity.badRequest().build();
+    }
+
+    @PutMapping("/user/modify/nickname")
+    public ResponseEntity<HttpStatus> changeNickname(@Valid @RequestBody NicknameDto nicknameDto){
+        return  (userService.checkUserNickname(nicknameDto))
+            ? ResponseEntity.ok().build()
+            : ResponseEntity.badRequest().build();
+    }
+
+
+
+
+
 
 }

@@ -39,20 +39,27 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getUserWithUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(() ->{
+        return userRepository.findByUserId(userId).orElseThrow(() -> {
             throw userNotFoundException;
         });
     }
 
     @Transactional
-    public boolean checkUserIdAndPw(LoginDto logindto){
-        Optional<User> tmp = userRepository.findByUserId(logindto.getUserId());
+    public boolean isPasswordEqualDbPassword(LoginDto logindto) {
+        User findUser = findUserByUserId(logindto);
         // 입력받은 id, pw조합이 존재한다면 - 삭제
-        if(tmp.isPresent() && passwordEncoder.matches(logindto.getUserPassword(), tmp.get().getUserPassword())) {
-            userRepository.delete(tmp.get());
+        if (passwordEncoder.matches(logindto.getUserPassword(), findUser.getUserPassword())) {
+            userRepository.delete(findUser);
             return true;
         }
         return false;
+    }
+
+    @Transactional(readOnly = true)
+    protected User findUserByUserId(LoginDto loginDto) {
+        return userRepository.findByUserId(loginDto.getUserId()).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
     }
 
     private User createUser(SignUpDto signUpDto) {
@@ -60,4 +67,6 @@ public class UserService {
                 .signUpDto(signUpDto)
                 .build();
     }
+
+
 }

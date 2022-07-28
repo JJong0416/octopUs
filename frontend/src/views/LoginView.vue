@@ -17,7 +17,7 @@
                       <div class="mx-1">
                         <v-text-field
                           placeholder="userId"
-                          v-model="user.userid"
+                          v-model="user.userId"
                           required
                         ></v-text-field>
                       </div>
@@ -29,7 +29,7 @@
                         <v-text-field
                           placeholder="userPassword"
                           type="password"
-                          v-model="user.userpwd"
+                          v-model="user.userPassword"
                           required
                         ></v-text-field>
                       </div>
@@ -65,8 +65,8 @@ export default {
   data() {
     return {
       user: {
-        userid: "",
-        userpwd: "",
+        userId: "",
+        userPassword: "",
       },
       kakaouser: {
         userid: null,
@@ -92,7 +92,7 @@ export default {
         await this.getUserInfo(token);
         this.$router.push({ name: "MainView" });
       } else {
-        this.$swal("로그인 정보가 잘못되었습니다.", { icon: "error" });
+        alert("로그인 정보가 잘못되었습니다.", { icon: "error" });
       }
     },
     movePage() {

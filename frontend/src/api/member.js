@@ -1,17 +1,19 @@
 import { apiInstance } from "./index.js";
 
+// import http from "../utils/http-common.js";
+
 const api = apiInstance();
 
 async function login(user, success, fail) {
   await api
-    .post(`/login/domain`, JSON.stringify(user))
+    .post(`api/login/domain`, JSON.stringify(user))
     .then(success)
     .catch(fail);
 }
 
 async function findById(userid, success, fail) {
   api.defaults.headers["access-token"] = sessionStorage.getItem("access-token");
-  await api.get(`/user/info/${userid}`).then(success).catch(fail);
+  await api.get(`api/user/info/${userid}`).then(success).catch(fail);
 }
 
 // function logout(success, fail)

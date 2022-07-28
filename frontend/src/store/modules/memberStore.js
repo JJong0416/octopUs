@@ -33,7 +33,7 @@ const memberStore = {
         user,
         (response) => {
           console.log(response);
-          if (response.data.message === "success") {
+          if (response === "OK") {
             let token = response.data["access-token"];
             console.log(token);
             commit("SET_IS_LOGIN", true);

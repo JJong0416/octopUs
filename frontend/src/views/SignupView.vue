@@ -92,11 +92,12 @@
 </template>
 
 <script>
-import { apiInstance } from "../api/index.js";
+import axios from "axios";
+// import { apiInstance } from "../api/index.js";
 
 // import http from "../utils/http-common.js";
 
-const api = apiInstance();
+// const api = apiInstance();
 
 export default {
   data: () => ({
@@ -129,7 +130,7 @@ export default {
   }),
   methods: {
     idcheck() {
-      api
+      axios
         .get(`api/user/idcheck/${this.user.userid}`)
         .then(({ data }) => {
           let msg = "중복된 아이디입니다. 다시 입력해주세요";
@@ -177,7 +178,7 @@ export default {
         this.errorMsg = "이메일과 닉네임과 비밀번호를 모두 입력해주세요.";
         return;
       }
-      api
+      axios
         .post(`api/register/domain`, {
           userId: this.user.userid,
           userPassword: this.user.userpwd,

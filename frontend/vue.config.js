@@ -3,16 +3,15 @@
 //   transpileDependencies: ["vuetify"],
 // });
 module.exports = {
-  outputDir: "../src/main/resources/static",
-  indexPath: "../static/index.html",
-
   devServer: {
+    port: 8080,
     proxy: {
-      "/": {
-        target: "http://localhost:8080/",
-        pathRewrite: { "^/": "" },
+      "/api": {
+        target: "http://localhost:7070",
         changeOrigin: true,
+        logLevel: "debug",
         secure: false,
+        // pathRewrite: {     "^/api": "" }
       },
     },
   },

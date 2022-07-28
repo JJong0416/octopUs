@@ -10,7 +10,7 @@ async function login(user, success, fail) {
     .post(`api/login/domain`, JSON.stringify(user), {
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json; charset = utf-8",
+        "Content-Type": "application/json",
       },
     })
     .then((success) => {

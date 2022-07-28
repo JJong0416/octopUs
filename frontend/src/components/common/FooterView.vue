@@ -1,62 +1,37 @@
 <template>
   <div>
-  <v-card>
-    <v-toolbar flat>
-      <template v-slot:extension>
-        <v-tabs
-          v-model="tabs"
-          fixed-tabs
-        >
-          <v-tabs-slider></v-tabs-slider>
-          <v-tab
-            href="#mobile-tabs-5-1"
-            class="primary--text"
-          >
-            <v-icon>mdi-home</v-icon>
-          </v-tab>
-
-          <v-tab
-            href="#mobile-tabs-5-2"
-            class="primary--text"
-          >
-            <v-icon>mdi-fire</v-icon>
-          </v-tab>
-
-          <v-tab
-            href="#mobile-tabs-5-3"
-            class="primary--text"
-          >
-            <v-icon>mdi-magnify</v-icon>
-          </v-tab>
-
-          <v-tab
-            href="#mobile-tabs-5-3"
-            class="primary--text"
-          >
-            <v-icon>mdi-account</v-icon>
-          </v-tab>
-        </v-tabs>
-      </template>
-    </v-toolbar>
-
-    <v-tabs-items v-model="tabs">
-      <v-tab-item
-        v-for="i in 3"
-        :key="i"
-        :value="'mobile-tabs-5-' + i"
-      >
-      </v-tab-item>
-    </v-tabs-items>
-  </v-card>
+    <v-tabs fixed-tabs background-color="#FCF8E8">
+      <!-- 홈 화면 탭 -->
+      <v-tab href="#mobile-tabs-5-1" class="primary--text">
+        <router-link :to="`/`"> <v-icon>mdi-home</v-icon></router-link>
+      </v-tab>
+      <!-- Hot 탭 -->
+      <v-tab href="#mobile-tabs-5-2" class="primary--text">
+        <router-link :to="`/search`"> <v-icon>mdi-fire</v-icon></router-link>
+      </v-tab>
+      <!-- 검색 탭 -->
+      <v-tab href="#mobile-tabs-5-3" class="primary--text">
+        <router-link :to="`/search`"><v-icon>mdi-magnify</v-icon></router-link>
+      </v-tab>
+      <!-- 마이페이지 탭 -->
+      <v-tab href="#mobile-tabs-5-4" class="primary--text">
+        <router-link :to="`/mypage`"><v-icon>mdi-account</v-icon></router-link>
+      </v-tab>
+    </v-tabs>
   </div>
 </template>
 
 <script>
-  export default {
-   
-  }
+export default {};
 </script>
 
 <style>
-
+.v-tab a {
+  text-decoration: none;
+  color: #ff2456;
+}
+.v-tab a:hover {
+  text-decoration: none;
+  color: #ff2456;
+}
 </style>

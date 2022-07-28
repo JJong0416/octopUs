@@ -1,29 +1,92 @@
 <template>
   <div>
-    <v-img src="../assets/Logo.png" max-width="300" max-height="300"></v-img>
-    <div class="login">
-    <router-link :to="`/login`"><button>login</button></router-link>
-    </div>
-    <div class="signup">
-      <router-link :to="`/signup`">signup</router-link>
-    </div>
+    <!-- 왕문어 -->
+    <v-container>
+      <v-row>
+        <v-col></v-col>
+        <v-col>
+          <v-img src="../assets/Logo.png" max-width="200"></v-img>
+        </v-col>
+        <v-col></v-col>
+      </v-row>
 
-    <!-- 검색창 -->
-    <input type="text" placeholder="검색창" /><button>검색</button>
-    <!-- hot -->
-    <br />
-    hot <router-link :to="`/search`">더보기</router-link>
-    <br />
-    <!-- new -->
-    <div class="mx-auto">
-      new <router-link :to="`/search`">더보기</router-link>
-    </div>
-    <br />
+      <!-- 검색창 -->
+      <v-row>
+        <v-col cols="4">
+          <v-select :items="items" label="코드 입력"></v-select>
+        </v-col>
+        <v-col cols="5">
+          <v-text-field hide-details single-line></v-text-field>
+        </v-col>
+        <v-col cols="">
+          <v-card-text>
+            <v-btn icon>
+              <v-icon> mdi-magnify </v-icon>
+            </v-btn>
+          </v-card-text>
+        </v-col>
+      </v-row>
+      <!-- hot -->
+      <v-row>
+        <v-col cols="2"
+          ><v-img src="../assets/img/Hot.png" max-width="50"></v-img
+        ></v-col>
+        <v-col cols="7"> hot </v-col>
+        <v-col cols="3">
+          <div class="more">
+            <router-link :to="`/search`">더보기</router-link>
+          </div></v-col
+        >
+      </v-row>
+      <!-- new -->
+      <v-row>
+        <v-col cols="2"
+          ><v-img src="../assets/img/New.png" max-width="30"></v-img
+        ></v-col>
+        <v-col cols="7"> New </v-col>
+        <v-col cols="3">
+          <div class="more">
+            <router-link :to="`/search`">더보기</router-link>
+          </div></v-col
+        >
+      </v-row>
+      <v-spacer></v-spacer>
+      <!-- login -->
+      <v-row>
+        <v-col cols="2"></v-col>
+        <v-col cols="4">
+          <v-card-actions
+            ><div class="login">
+              <router-link :to="`/login`">
+                <v-btn color="#ff809d" dark large block>Login</v-btn>
+              </router-link>
+            </div>
+          </v-card-actions></v-col
+        >
+        <!-- 회원가입 -->
+        <v-col cols="4">
+          <v-card-actions>
+            <div class="signup">
+              <router-link :to="`/signup`">
+                <v-btn color="#ff809d" dark large block
+                  >Sign Up</v-btn
+                ></router-link
+              >
+            </div>
+          </v-card-actions></v-col
+        >
+        <v-col cols="2"></v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data: () => ({
+    items: ["코드 입력", "테마 검색", "제목 검색"],
+  }),
+};
 </script>
 
 <style>
@@ -42,5 +105,32 @@ export default {};
 .signup a:hover {
   text-decoration: none;
   color: black;
+}
+body {
+  background-color: #ffdede;
+}
+.more a {
+  text-decoration: none;
+  color: black;
+}
+.more a:hover {
+  text-decoration: none;
+  color: black;
+}
+.login a {
+  text-decoration: none;
+  color: white;
+}
+.login a:hover {
+  text-decoration: none;
+  color: white;
+}
+.signUp a {
+  text-decoration: none;
+  color: white;
+}
+.signUp a:hover {
+  text-decoration: none;
+  color: white;
 }
 </style>

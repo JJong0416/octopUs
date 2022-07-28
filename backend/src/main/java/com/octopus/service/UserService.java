@@ -1,6 +1,7 @@
 package com.octopus.service;
 
 import com.octopus.domain.User;
+import com.octopus.domain.dto.LoginDto;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.exception.SignUpException;
 import com.octopus.exception.UserNotFoundException;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserService {
 
     private final UserRepository userRepository;
@@ -37,8 +39,26 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User getUserWithUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(() ->{
+        return userRepository.findByUserId(userId).orElseThrow(() -> {
             throw userNotFoundException;
+        });
+    }
+
+    @Transactional
+    public boolean isPasswordEqualDbPassword(LoginDto logindto) {
+        User findUser = findUserByUserId(logindto);
+        // 입력받은 id, pw조합이 존재한다면 - 삭제
+        if (passwordEncoder.matches(logindto.getUserPassword(), findUser.getUserPassword())) {
+            userRepository.delete(findUser);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional(readOnly = true)
+    protected User findUserByUserId(LoginDto loginDto) {
+        return userRepository.findByUserId(loginDto.getUserId()).orElseThrow(() -> {
+            throw new UserNotFoundException();
         });
     }
 
@@ -47,4 +67,6 @@ public class UserService {
                 .signUpDto(signUpDto)
                 .build();
     }
+
+
 }

@@ -31,7 +31,7 @@
         <v-col cols="2"
           ><v-img src="../assets/img/Hot.png" max-width="50"></v-img
         ></v-col>
-        <v-col cols="7"> hot </v-col>
+        <v-col cols="7"> Hot </v-col>
         <v-col cols="3">
           <div class="more">
             <router-link :to="`/search`">더보기</router-link>

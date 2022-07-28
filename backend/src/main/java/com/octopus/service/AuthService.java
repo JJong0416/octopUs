@@ -19,11 +19,11 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     // JwtString 만들면서 Security에도 정보를 넣는다.
-    public String createJwtString(LoginDto loginDto){
+    public String createJwtString(LoginDto loginDto) {
         return tokenProvider.createToken(getAuthentication(loginDto));
     }
 
-    public HttpHeaders createJwtHttpHeader(String jwt){
+    public HttpHeaders createJwtHttpHeader(String jwt) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return httpHeaders;

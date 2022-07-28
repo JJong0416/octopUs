@@ -1,11 +1,8 @@
 package com.octopus.controller;
 
-import com.octopus.domain.User;
-import com.octopus.domain.dto.NicknameDto;
-import com.octopus.domain.dto.PasswordDto;
-import com.octopus.domain.dto.LoginDto;
+import com.octopus.domain.dto.AvatarUpdateDto;
+import com.octopus.domain.dto.PasswordUpdateDto;
 import com.octopus.domain.dto.SignUpDto;
-import com.octopus.domain.dto.UpdateDto;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,52 +29,39 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-
-    // 로그인 권한 테스트
-    @GetMapping("/users/{userId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<User> getUserInfo(@PathVariable String userId) {
-        return ResponseEntity.ok(userService.getUserWithUserId(userId));
-    }
-
+    // 아바타 수정
     @PatchMapping("/user/modify/avatar")
-    public ResponseEntity<String> modifyAvatar(String newAvatar){
-        return ResponseEntity.ok(userService.changeUserAvatar(newAvatar));
-
-    }
- /*   @PatchMapping("/users/{userId}")
     @PreAuthorize("hasRole('USER')")
-    public  ResponseEntity<User> updateUserInfo(@Valid @RequestBody UpdateDto updateDto){
-        return ResponseEntity.ok(userService.updateUser(updateDto));
-    }
-*/
+    public ResponseEntity<HttpStatus> modifyAvatar(String avatar) {
+        System.out.println("hello!!!!!");
+        userService.changeUserAvatar(avatar);
 
-    @PostMapping("/users/{userId}")
+        return ResponseEntity.ok().build();
+    }
+
+    // 유저 삭제
+    @PostMapping("/user")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> userDelete(@PathVariable String userId, @RequestBody LoginDto loginDto){
-        return userService.checkUserIdAndPw(new LoginDto(userId, loginDto.getUserPassword()))
+    public ResponseEntity<HttpStatus> userDelete(@RequestParam String password) {
+        return userService.isPasswordEqualDbPassword(password)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
 
 
     @PutMapping("/user/modify/password")
-    public ResponseEntity<HttpStatus> checkPassword(@Valid @RequestBody PasswordDto passwordDto) {
-       return (userService.changeUserPassword(passwordDto))
-               ? ResponseEntity.ok().build()
-               : ResponseEntity.badRequest().build();
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> checkPassword(@Valid @RequestBody PasswordUpdateDto passwordUpdateDto) {
+        return (userService.changeUserPassword(passwordUpdateDto))
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/user/modify/nickname")
-    public ResponseEntity<HttpStatus> changeNickname(@Valid @RequestBody NicknameDto nicknameDto){
-        return  (userService.checkUserNickname(nicknameDto))
-            ? ResponseEntity.ok().build()
-            : ResponseEntity.badRequest().build();
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> changeNickname(@RequestParam String newNickname) {
+        return (userService.checkUserNickname(newNickname))
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
-
-
-
-
-
-
 }

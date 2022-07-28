@@ -42,7 +42,7 @@ public class Mission {
     @Column(name = "mission_status", nullable = false)
     private MissionStatus missionStatus;
 
-    @Column(name = "mission_limit_personnel",nullable = false)
+    @Column(name = "mission_limit_personnel", nullable = false)
     private Integer missionLimitPersonnel;
 
     @Column(name = "mission_users", length = 100)

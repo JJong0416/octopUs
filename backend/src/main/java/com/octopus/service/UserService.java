@@ -1,20 +1,20 @@
 package com.octopus.service;
 
 import com.octopus.domain.User;
-import com.octopus.domain.dto.LoginDto;
-import com.octopus.domain.dto.NicknameDto;
-import com.octopus.domain.dto.PasswordDto;
+import com.octopus.domain.dto.AvatarUpdateDto;
+import com.octopus.domain.dto.PasswordUpdateDto;
 import com.octopus.domain.dto.SignUpDto;
-import com.octopus.domain.dto.UpdateDto;
 import com.octopus.exception.SignUpException;
-
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+import static com.octopus.utils.SecurityUtil.getCurrentUsername;
 
 @Service
 @RequiredArgsConstructor
@@ -39,39 +39,23 @@ public class UserService {
         userRepository.save(user);
     }
 
-    @Transactional(readOnly = true)
-    public User getUserWithUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(() -> {
-            throw userNotFoundException;
-        });
+    @Transactional
+    public void changeUserAvatar(String avatar) {
+        User user = getUserInfo(getCurrentUsername().get());
+        user.updateAvatar(avatar);
+        userRepository.save(user);
     }
 
-
-
-    public String changeUserAvatar(String newAvatar){
-        String userId = "jjong04161";
-        User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new UsernameNotFoundException(userId + " -> 데이터베이스에서 찾을 수 없습니다."));
-        user.updateAvatar(userId, newAvatar);
-        return user.getUserAvatar();
-
+    // 패스워드 중복 체크 후, 삭제
     @Transactional
-    public boolean isPasswordEqualDbPassword(LoginDto logindto) {
-        User findUser = findUserByUserId(logindto);
+    public boolean isPasswordEqualDbPassword(String password) {
+        User user = getUserInfo(String.valueOf(getCurrentUsername()));
         // 입력받은 id, pw조합이 존재한다면 - 삭제
-        if (passwordEncoder.matches(logindto.getUserPassword(), findUser.getUserPassword())) {
-            userRepository.delete(findUser);
+        if (isCurrentPasswordAndDbPasswordEquals(password, user.getUserPassword())) {
+            userRepository.delete(user);
             return true;
         }
         return false;
-    }
-
-    @Transactional(readOnly = true)
-    protected User findUserByUserId(LoginDto loginDto) {
-        return userRepository.findByUserId(loginDto.getUserId()).orElseThrow(() -> {
-            throw new UserNotFoundException();
-        });
-
     }
 
     private User createUser(SignUpDto signUpDto) {
@@ -81,46 +65,48 @@ public class UserService {
     }
 
     @Transactional
-    public boolean checkUserNickname(NicknameDto nicknameDto) {
-        if (getUserInfoByNickname(nicknameDto.getNickname()))
+    public boolean checkUserNickname(String newNickname) {
+        if (isUserInfoByNickname(newNickname))
             return false;
-        else{
-            changeUserNickname(nicknameDto);
+        else {
+            changeUserNickname(newNickname);
             return true;
         }
     }
+
     @Transactional
-    public void changeUserNickname(NicknameDto nicknameDto) {
-            getUserWithUserId(nicknameDto.getUserId()).changeNickname(nicknameDto);
-    }
-    @Transactional
-    public boolean changeUserPassword(PasswordDto passwordDto) {
-        if (passwordEncoder.matches(passwordDto.getOldPassword(),getUserInfo(passwordDto.getUserId()).getUserPassword())){
-            {
-                User user = getUserInfo(passwordDto.getUserId());
-                user.changePassword(passwordEncoder.encode(passwordDto.getNewPassword()));
-                return true;
-            }
-        }
-        else
-            return false;
+    public void changeUserNickname(String newNickname) {
+        User user = getUserInfo(String.valueOf(getCurrentUsername()));
+        user.changeNickname(newNickname);
     }
 
-    protected User getUserInfo(String userId){
-        return userRepository.findByUserId(userId).orElseThrow(()->{
+    @Transactional
+    public boolean changeUserPassword(PasswordUpdateDto passwordUpdateDto) {
+
+        User user = getUserInfo(String.valueOf(getCurrentUsername()));
+
+        if (isCurrentPasswordAndDbPasswordEquals(passwordUpdateDto.getCurrentPassword(), user.getUserPassword())) {
+            user.updatePassword(passwordEncoder.encode(passwordUpdateDto.getNewPassword()));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isCurrentPasswordAndDbPasswordEquals(String currentPassword, String dbPassword) {
+        return passwordEncoder.matches(currentPassword, dbPassword);
+    }
+
+    protected User getUserInfo(String userId) {
+        return userRepository.findByUserId(userId).orElseThrow(() -> {
             throw new UserNotFoundException();
         });
     }
 
-    protected boolean getUserInfoByNickname(String nickname){
-        if (userRepository.findByUserNickname(nickname).isPresent()){
-            return true;
-        }
-        else
-            return false;
+    @Transactional(readOnly = true)
+    protected boolean isUserInfoByNickname(String nickname) {
+        return userRepository.findByUserNickname(nickname).isPresent();
     }
-
-
 
 
 }

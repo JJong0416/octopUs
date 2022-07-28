@@ -1,13 +1,9 @@
 package com.octopus.domain;
 
-import com.octopus.domain.dto.NicknameDto;
+import com.octopus.domain.dto.AvatarUpdateDto;
 import com.octopus.domain.dto.SignUpDto;
-import com.octopus.domain.dto.UpdateDto;
 import com.octopus.domain.type.PlatformType;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -68,8 +64,8 @@ public class User {
         this.userPoint = signUpDto.getUserPoint();
     }
 
-    public void updateAvatar(String userId, String userAvatar){
-        this.userAvatar = userAvatar;
+    public void updateAvatar(String avatar){
+        this.userAvatar = avatar;
     }
  /*   public void update(UpdateDto updateDto){
        // this.userPassword = updateDto.getUserPassword();
@@ -77,11 +73,11 @@ public class User {
         this.userAvatar = updateDto.getUserAvatar();
     }*/
 
-    public void changePassword(final String newPassword){
+    public void updatePassword(final String newPassword){
         this.userPassword = newPassword;
     }
 
-    public void changeNickname(NicknameDto nicknameDto) {
-        this.userNickname = nicknameDto.getNickname();
+    public void changeNickname(String newNickname) {
+        this.userNickname = newNickname;
     }
 }

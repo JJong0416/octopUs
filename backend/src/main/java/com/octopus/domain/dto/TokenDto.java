@@ -1,6 +1,6 @@
 package com.octopus.domain.dto;
 
-import lombok.*;
+import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
 
@@ -10,7 +10,7 @@ public class TokenDto {
     @NotNull
     private final String token;
 
-    public TokenDto(String token){
+    public TokenDto(String token) {
         this.token = token;
     }
 }

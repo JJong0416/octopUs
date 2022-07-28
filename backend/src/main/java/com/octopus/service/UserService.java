@@ -1,6 +1,7 @@
 package com.octopus.service;
 
 import com.octopus.domain.User;
+import com.octopus.domain.dto.LoginDto;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.dto.UpdateDto;
 import com.octopus.exception.SignUpException;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserService {
 
     private final UserRepository userRepository;
@@ -45,14 +47,7 @@ public class UserService {
         });
     }
 
-/*    @Transactional
-    public User updateUser(UpdateDto updateDto) {
 
-        User user = userRepository.findByUserId(updateDto.getUserId())
-                .orElseThrow(() -> new UsernameNotFoundException(updateDto.getUserId() + " -> 데이터베이스에서 찾을 수 없습니다."));
-        user.update(updateDto);
-        return userRepository.save(user);
-    }*/
 
     public String changeUserAvatar(String newAvatar){
         String userId = "jjong04161";
@@ -60,6 +55,24 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException(userId + " -> 데이터베이스에서 찾을 수 없습니다."));
         user.updateAvatar(userId, newAvatar);
         return user.getUserAvatar();
+
+    @Transactional
+    public boolean isPasswordEqualDbPassword(LoginDto logindto) {
+        User findUser = findUserByUserId(logindto);
+        // 입력받은 id, pw조합이 존재한다면 - 삭제
+        if (passwordEncoder.matches(logindto.getUserPassword(), findUser.getUserPassword())) {
+            userRepository.delete(findUser);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional(readOnly = true)
+    protected User findUserByUserId(LoginDto loginDto) {
+        return userRepository.findByUserId(loginDto.getUserId()).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
+
     }
 
     private User createUser(SignUpDto signUpDto) {
@@ -67,4 +80,6 @@ public class UserService {
                 .signUpDto(signUpDto)
                 .build();
     }
+
+
 }

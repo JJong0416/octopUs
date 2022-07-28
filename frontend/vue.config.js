@@ -2,14 +2,17 @@
 // module.exports = defineConfig({
 //   transpileDependencies: ["vuetify"],
 // });
-
 module.exports = {
+  outputDir: "../src/main/resources/static",
+  indexPath: "../static/index.html",
+
   devServer: {
     proxy: {
-      // proxyTable 설정
-      "/api": {
-        target: "https://localhost:7070",
+      "/": {
+        target: "http://localhost:8080/",
+        pathRewrite: { "^/": "" },
         changeOrigin: true,
+        secure: false,
       },
     },
   },

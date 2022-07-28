@@ -92,7 +92,12 @@
 </template>
 
 <script>
-import http from "@/utils/http-common.js";
+import { apiInstance } from "../api/index.js";
+
+// import http from "../utils/http-common.js";
+
+const api = apiInstance();
+
 export default {
   data: () => ({
     user: {
@@ -124,8 +129,8 @@ export default {
   }),
   methods: {
     idcheck() {
-      http
-        .get(`/user/idcheck/${this.user.userid}`)
+      api
+        .get(`api/user/idcheck/${this.user.userid}`)
         .then(({ data }) => {
           let msg = "중복된 아이디입니다. 다시 입력해주세요";
           if (data === "success") {
@@ -146,7 +151,7 @@ export default {
         });
     },
     movePage() {
-      this.$router.push({ name: "LoginView" });
+      this.$router.push({ name: "Login" });
     },
 
     goToMain() {
@@ -172,13 +177,13 @@ export default {
         this.errorMsg = "이메일과 닉네임과 비밀번호를 모두 입력해주세요.";
         return;
       }
-      http
-        .post("/user/register/", {
-          userid: this.user.userid,
-          userpwd: this.user.userpwd,
-          usernickname: this.user.usernickname,
-          email: this.user.email,
-          avatar: this.user.avatar,
+      api
+        .post(`api/register/domain`, {
+          userId: this.user.userid,
+          userPassword: this.user.userpwd,
+          userEmail: this.user.email,
+          userNickname: this.user.usernickname,
+          userAvatar: this.user.avatar,
         })
         .then(({ data }) => {
           let msg = "등록 처리시 문제가 발생했습니다.";

@@ -31,14 +31,12 @@ public class Mission {
     @Column(name = "mission_name", length = 30, nullable = false)
     private String missionName;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "mission_type", nullable = false)
     private MissionType missionType;
 
     @Column(name = "mission_point", nullable = false)
     private Integer missionPoint;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "mission_status", nullable = false)
     private MissionStatus missionStatus;
 
@@ -51,7 +49,6 @@ public class Mission {
     @Column(name = "mission_content", length = 300, nullable = false)
     private String missionContent;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "mission_open", nullable = false)
     private MissionOpenType missionOpen;
 

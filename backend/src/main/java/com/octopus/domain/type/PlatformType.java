@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 @Getter
 public enum PlatformType {
+
     DOMAIN("octopus",0),
     KAKAO("kakao",1),
     GOOGLE("google",2);

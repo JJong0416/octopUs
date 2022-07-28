@@ -14,14 +14,28 @@
           <div class="pa-5">
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-text-field
-                v-model="formData.email"
+                v-model="user.email"
                 :rules="emailRules"
                 label="Enter E-mail"
                 required
               ></v-text-field>
 
               <v-text-field
-                v-model="formData.name"
+                v-model="user.userid"
+                label="userid"
+                required
+              ></v-text-field>
+              중복검사
+              <v-icon @click="idcheck">mdi-check-bold</v-icon>
+
+              <v-text-field
+                v-model="user.avatar"
+                label="Avatar"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                v-model="user.usernickname"
                 :counter="10"
                 :rules="nameRules"
                 label="Name"
@@ -29,7 +43,7 @@
               ></v-text-field>
 
               <v-text-field
-                v-model="formData.password"
+                v-model="user.userpwd"
                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[rules.required, rules.min]"
                 :type="show ? 'text' : 'password'"
@@ -64,7 +78,7 @@
                   :disabled="!valid"
                   color="blue"
                   class="mr-4"
-                  @click="register(formData)"
+                  @click="register()"
                 >
                   회원가입
                 </v-btn>
@@ -78,11 +92,18 @@
 </template>
 
 <script>
-import RegisterObj from "../models/registerObj";
-import axios from "axios";
+import http from "@/utils/http-common.js";
 export default {
   data: () => ({
-    formData: new RegisterObj("", "", ""),
+    user: {
+      userid: null,
+      userpwd: null,
+      usernickname: null,
+      email: null,
+      avatar: null,
+    },
+    userIdChk: true,
+
     valid: false,
     nameRules: [
       (v) => !!v || "Name is required",
@@ -102,38 +123,81 @@ export default {
     },
   }),
   methods: {
+    idcheck() {
+      http
+        .get(`/user/idcheck/${this.user.userid}`)
+        .then(({ data }) => {
+          let msg = "중복된 아이디입니다. 다시 입력해주세요";
+          if (data === "success") {
+            msg = "사용가능한 아이디입니다.";
+            this.userIdChk = true;
+            alert(msg);
+          } else {
+            alert(msg);
+            this.$router.push({ name: "signUp" });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("ID중복체크에 실패했습니다..");
+        })
+        .finally(() => {
+          console.log(this.user.userid);
+        });
+    },
+    movePage() {
+      this.$router.push({ name: "LoginView" });
+    },
+
     goToMain() {
       this.$router.push({
-        name: "login",
+        name: "MainView",
       });
     },
     sameChk(password) {
-      if (this.formData.password == password) return true;
+      if (this.user.userpwd == password) return true;
       else {
         this.valid = false;
         return false;
       }
     },
-    register(RegisterObj) {
+    register() {
       if (
-        !this.formData.email ||
-        !this.formData.name ||
-        !this.formData.password
+        !this.user.email ||
+        !this.user.usernickname ||
+        !this.user.userpwd ||
+        !this.user.avatar
       ) {
         this.isError = true;
         this.errorMsg = "이메일과 닉네임과 비밀번호를 모두 입력해주세요.";
         return;
       }
-      axios
-        .post("/signup", RegisterObj)
-        .then(() => {
-          this.goToMain();
+      http
+        .post("/user/register/", {
+          userid: this.user.userid,
+          userpwd: this.user.userpwd,
+          usernickname: this.user.usernickname,
+          email: this.user.email,
+          avatar: this.user.avatar,
         })
-        .catch((err) => {
-          if (err.response) {
-            this.isError = true;
-            this.errorMsg = err.response.data.message;
+        .then(({ data }) => {
+          let msg = "등록 처리시 문제가 발생했습니다.";
+          if (data === "success") {
+            msg = "등록이 완료되었습니다.";
+            console.log(msg);
           }
+          console.log(data);
+          alert(msg);
+          this.movePage();
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("등록 실패입니다.");
+        })
+        .finally(() => {
+          console.log(this.user.userid);
+          console.log(this.user.userpwd);
+          console.log(this.user.username);
         });
     },
     validate() {

@@ -34,6 +34,7 @@ const routes = [
   {
     path: "/mypage",
     name: "Mypage",
+    onlyAuthUser,
     component: () => import("@/views/MypageView.vue"),
   },
   {
@@ -44,7 +45,7 @@ const routes = [
   {
     path: "/signup",
     name: "Signup",
-    component: () => import("@/views/Signup.vue"),
+    component: () => import("@/views/SignupView.vue"),
   },
   {
     path: "/login",

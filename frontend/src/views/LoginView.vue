@@ -17,7 +17,7 @@
                       <div class="mx-1">
                         <v-text-field
                           placeholder="userId"
-                          v-model="userId"
+                          v-model="user.userid"
                           required
                         ></v-text-field>
                       </div>
@@ -29,24 +29,22 @@
                         <v-text-field
                           placeholder="userPassword"
                           type="password"
-                          v-model="userPassword"
+                          v-model="user.userpwd"
                           required
                         ></v-text-field>
                       </div>
                     </div>
 
                     <v-card-actions>
-                      <v-btn
-                        color="#ff809d"
-                        dark
-                        large
-                        block
-                        @click="loginSubmit"
+                      <v-btn color="#ff809d" dark large block @click="confirm"
                         >Login</v-btn
                       >
                     </v-card-actions>
                     <v-card-actions>
-                      <v-img src="../assets/kakaologin.png"></v-img>
+                      <v-img
+                        @click="KakaoLogin"
+                        src="../assets/kakaologin.png"
+                      ></v-img>
                     </v-card-actions>
                   </v-form>
                 </v-col>
@@ -60,34 +58,106 @@
 </template>
 
 <script>
-import { config } from "../api/index.js";
+import { mapActions, mapState } from "vuex";
+import http from "@/utils/http-common.js";
+
 export default {
   data() {
     return {
-      userId: null,
-      userPassword: null,
+      user: {
+        userid: "",
+        userpwd: "",
+      },
+      kakaouser: {
+        userid: null,
+        userpwd: null,
+        username: null,
+        email: null,
+      },
     };
   },
-  methods: {
-    loginSubmit() {
-      let saveData = {};
-      saveData.userId = this.userId;
-      saveData.userPassword = this.userPassword;
 
-      try {
-        this.$axios
-          .post(config.baseUrl + "/signin", JSON.stringify(saveData), {
-            headers: {
-              "Content-Type": `application/json`,
-            },
-          })
-          .then((res) => {
-            if (res.status === 200) {
-              // 로그인 성공시 처리해줘야할 부분
-            }
-          });
-      } catch (error) {
-        console.error(error);
+  computed: {
+    ...mapState("memberStore", ["isLogin", "isLoginError"]),
+  },
+  methods: {
+    ...mapActions("memberStore", ["userConfirm", "getUserInfo"]),
+
+    async confirm() {
+      console.log(this.user);
+      await this.userConfirm(this.user);
+      let token = sessionStorage.getItem("access-token");
+      console.log(this.isLogin);
+      if (this.isLogin) {
+        await this.getUserInfo(token);
+        this.$router.push({ name: "MainView" });
+      } else {
+        this.$swal("로그인 정보가 잘못되었습니다.", { icon: "error" });
+      }
+    },
+    movePage() {
+      this.$router.push({ name: "signUp" });
+    },
+    KakaoLogin() {
+      console.log(window.Kakao);
+      window.Kakao.Auth.login({
+        scope: "account_email, gender, profile_nickname",
+        success: this.GetMe,
+        fail: function (error) {
+          console.log(error);
+        },
+      });
+    },
+    GetMe(authObj) {
+      console.log(authObj);
+      window.Kakao.API.request({
+        url: "/v2/user/me",
+        success: (res) => {
+          const kakao_account = res.kakao_account;
+          console.log(kakao_account);
+          alert("로그인 성공 !!");
+          console.log(kakao_account);
+          this.login(kakao_account);
+        },
+      });
+    },
+    async login(kakao_account) {
+      const loginuser = {
+        userid: kakao_account.email,
+        userpwd: "kakao",
+        username: kakao_account.profile.nickname,
+        email: kakao_account.email,
+      };
+      http
+        .get("/user/idcheck/" + loginuser.userid)
+        .then(({ data }) => {
+          console.log(data);
+          this.registerKakao(loginuser);
+        })
+        .catch(({ error }) => {
+          console.log(error);
+          this.confirmKakao(loginuser);
+        });
+    },
+    registerKakao(login_user) {
+      http
+        .post("/user/register", login_user)
+        .then(({ data }) => {
+          console.log(data);
+          this.confirmKakao(login_user);
+        })
+        .catch(({ error }) => {
+          console.log(error);
+          this.confirmKakao(login_user);
+        });
+    },
+    async confirmKakao(loginuser) {
+      await this.userConfirm(loginuser);
+      let token = sessionStorage.getItem("access-token");
+
+      if (this.isLogin) {
+        await this.getUserInfo(token);
+        this.$router.push({ name: "MainView" });
       }
     },
   },

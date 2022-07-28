@@ -1,6 +1,7 @@
 package com.octopus.domain;
 
 import com.octopus.domain.dto.SignUpDto;
+import com.octopus.domain.dto.UpdateDto;
 import com.octopus.domain.type.PlatformType;
 import lombok.*;
 
@@ -45,7 +46,7 @@ public class User {
     @Column(name = "platform_access_token")
     private Long platformAccessToken;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "octopus_table",
             joinColumns = @JoinColumn(name = "user_no"),
@@ -62,4 +63,13 @@ public class User {
         this.userAvatar = signUpDto.getUserAvatar();
         this.userPoint = signUpDto.getUserPoint();
     }
+
+    public void updateAvatar(String userId, String userAvatar){
+        this.userAvatar = userAvatar;
+    }
+ /*   public void update(UpdateDto updateDto){
+       // this.userPassword = updateDto.getUserPassword();
+        this.userNickname = updateDto.getUserNickname();;
+        this.userAvatar = updateDto.getUserAvatar();
+    }*/
 }

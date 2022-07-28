@@ -3,11 +3,14 @@ package com.octopus.service;
 import com.octopus.domain.User;
 import com.octopus.domain.dto.LoginDto;
 import com.octopus.domain.dto.SignUpDto;
+import com.octopus.domain.dto.UpdateDto;
 import com.octopus.exception.SignUpException;
+
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.UserRepository;
 import com.octopus.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +47,15 @@ public class UserService {
         });
     }
 
+
+
+    public String changeUserAvatar(String newAvatar){
+        String userId = "jjong04161";
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(userId + " -> 데이터베이스에서 찾을 수 없습니다."));
+        user.updateAvatar(userId, newAvatar);
+        return user.getUserAvatar();
+
     @Transactional
     public boolean isPasswordEqualDbPassword(LoginDto logindto) {
         User findUser = findUserByUserId(logindto);
@@ -60,6 +72,7 @@ public class UserService {
         return userRepository.findByUserId(loginDto.getUserId()).orElseThrow(() -> {
             throw new UserNotFoundException();
         });
+
     }
 
     private User createUser(SignUpDto signUpDto) {

@@ -1,6 +1,5 @@
 package com.octopus.domain;
 
-import com.octopus.domain.dto.AvatarUpdateDto;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.type.PlatformType;
 import lombok.*;

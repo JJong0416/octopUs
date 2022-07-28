@@ -1,9 +1,9 @@
 package com.octopus.service;
 
 import com.octopus.domain.User;
-import com.octopus.domain.dto.AvatarUpdateDto;
-import com.octopus.domain.dto.PasswordUpdateDto;
 import com.octopus.domain.dto.SignUpDto;
+import com.octopus.domain.dto.UserUpdateInfoDto;
+import com.octopus.domain.dto.UserUpdatePasswordDto;
 import com.octopus.exception.SignUpException;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.UserRepository;
@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static com.octopus.utils.SecurityUtil.getCurrentUsername;
 
@@ -40,16 +38,15 @@ public class UserService {
     }
 
     @Transactional
-    public void changeUserAvatar(String avatar) {
+    public void changeUserAvatar(String userAvatar) {
         User user = getUserInfo(getCurrentUsername().get());
-        user.updateAvatar(avatar);
-        userRepository.save(user);
+        user.updateAvatar(userAvatar);
     }
 
     // 패스워드 중복 체크 후, 삭제
     @Transactional
     public boolean isPasswordEqualDbPassword(String password) {
-        User user = getUserInfo(String.valueOf(getCurrentUsername()));
+        User user = getUserInfo(getCurrentUsername().get());
         // 입력받은 id, pw조합이 존재한다면 - 삭제
         if (isCurrentPasswordAndDbPasswordEquals(password, user.getUserPassword())) {
             userRepository.delete(user);
@@ -65,13 +62,12 @@ public class UserService {
     }
 
     @Transactional
-    public boolean checkUserNickname(String newNickname) {
-        if (isUserInfoByNickname(newNickname))
-            return false;
-        else {
-            changeUserNickname(newNickname);
+    public boolean updateUserNickname(String newNickname) {
+        if (isUserByNicknameExist(newNickname)) {
             return true;
         }
+        changeUserNickname(newNickname);
+        return false;
     }
 
     @Transactional
@@ -81,12 +77,12 @@ public class UserService {
     }
 
     @Transactional
-    public boolean changeUserPassword(PasswordUpdateDto passwordUpdateDto) {
+    public boolean changeUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
 
-        User user = getUserInfo(String.valueOf(getCurrentUsername()));
+        User user = getUserInfo(getCurrentUsername().get());
 
-        if (isCurrentPasswordAndDbPasswordEquals(passwordUpdateDto.getCurrentPassword(), user.getUserPassword())) {
-            user.updatePassword(passwordEncoder.encode(passwordUpdateDto.getNewPassword()));
+        if (isCurrentPasswordAndDbPasswordEquals(userUpdatePasswordDto.getCurrentPassword(), user.getUserPassword())) {
+            user.updatePassword(passwordEncoder.encode(userUpdatePasswordDto.getNewPassword()));
             return true;
         } else {
             return false;
@@ -97,6 +93,7 @@ public class UserService {
         return passwordEncoder.matches(currentPassword, dbPassword);
     }
 
+    @Transactional(readOnly = true)
     protected User getUserInfo(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() -> {
             throw new UserNotFoundException();
@@ -104,9 +101,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    protected boolean isUserInfoByNickname(String nickname) {
+    protected boolean isUserByNicknameExist(String nickname) {
         return userRepository.findByUserNickname(nickname).isPresent();
     }
-
-
 }

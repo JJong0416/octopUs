@@ -1,8 +1,8 @@
 package com.octopus.controller;
 
-import com.octopus.domain.dto.AvatarUpdateDto;
-import com.octopus.domain.dto.PasswordUpdateDto;
+import com.octopus.domain.dto.UserUpdateInfoDto;
 import com.octopus.domain.dto.SignUpDto;
+import com.octopus.domain.dto.UserUpdatePasswordDto;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,35 +32,35 @@ public class UserController {
     // 아바타 수정
     @PatchMapping("/user/modify/avatar")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> modifyAvatar(String avatar) {
-        System.out.println("hello!!!!!");
-        userService.changeUserAvatar(avatar);
-
+    public ResponseEntity<HttpStatus> modifyAvatar(@RequestBody UserUpdateInfoDto userUpdateInfoDto) {
+        userService.changeUserAvatar(userUpdateInfoDto.getUserAvatar());
         return ResponseEntity.ok().build();
+    }
+    // 닉네임 변경
+    @PatchMapping("/user/modify/nickname")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> changeNickname(@RequestBody UserUpdateInfoDto userUpdateInfoDto) {
+        System.out.println(userUpdateInfoDto.toString());
+        return (userService.updateUserNickname(userUpdateInfoDto.getUserNickname()))
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
+    }
+
+    // 패스워드 변경
+    @PatchMapping("/user/modify/password")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> checkPassword(@Valid @RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
+        System.out.println("hellloooooo");
+        return (userService.changeUserPassword(userUpdatePasswordDto))
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 
     // 유저 삭제
     @PostMapping("/user")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> userDelete(@RequestParam String password) {
-        return userService.isPasswordEqualDbPassword(password)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
-    }
-
-
-    @PutMapping("/user/modify/password")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> checkPassword(@Valid @RequestBody PasswordUpdateDto passwordUpdateDto) {
-        return (userService.changeUserPassword(passwordUpdateDto))
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
-    }
-
-    @PutMapping("/user/modify/nickname")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> changeNickname(@RequestParam String newNickname) {
-        return (userService.checkUserNickname(newNickname))
+    public ResponseEntity<HttpStatus> userDelete(@RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
+        return userService.isPasswordEqualDbPassword(userUpdatePasswordDto.getCurrentPassword())
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }

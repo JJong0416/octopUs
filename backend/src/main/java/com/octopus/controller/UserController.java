@@ -1,6 +1,7 @@
 package com.octopus.controller;
 
 import com.octopus.domain.User;
+import com.octopus.domain.dto.LoginDto;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,5 +35,13 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<User> getUserInfo(@PathVariable String userId) {
         return ResponseEntity.ok(userService.getUserWithUserId(userId));
+    }
+
+    @PostMapping("/users/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> userDelete(@PathVariable String userId, @RequestBody LoginDto loginDto){
+        return userService.checkUserIdAndPw(new LoginDto(userId, loginDto.getUserPassword()))
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 }

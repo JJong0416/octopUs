@@ -1,6 +1,7 @@
 package com.octopus.service;
 
 import com.octopus.domain.User;
+import com.octopus.domain.dto.LoginDto;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.exception.SignUpException;
 import com.octopus.exception.UserNotFoundException;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserService {
 
     private final UserRepository userRepository;
@@ -40,6 +42,17 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(() ->{
             throw userNotFoundException;
         });
+    }
+
+    @Transactional
+    public boolean checkUserIdAndPw(LoginDto logindto){
+        Optional<User> tmp = userRepository.findByUserId(logindto.getUserId());
+        // 입력받은 id, pw조합이 존재한다면 - 삭제
+        if(tmp.isPresent() && passwordEncoder.matches(logindto.getUserPassword(), tmp.get().getUserPassword())) {
+            userRepository.delete(tmp.get());
+            return true;
+        }
+        return false;
     }
 
     private User createUser(SignUpDto signUpDto) {

@@ -2,10 +2,7 @@ package com.octopus.domain;
 
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.type.PlatformType;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@ToString
 @Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {

@@ -1,5 +1,6 @@
 package com.octopus.domain.dto;
 
+import com.octopus.domain.type.PlatformType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -30,6 +31,8 @@ public class SignUpDto {
     private final String userAvatar;
 
     private final Integer userPoint = 1000;
+
+    private final PlatformType platformType = PlatformType.DOMAIN;
 
     public void dtoEncodePassword(String encodePassword){
         this.userPassword = encodePassword;

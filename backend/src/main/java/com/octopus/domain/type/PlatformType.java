@@ -1,5 +1,20 @@
 package com.octopus.domain.type;
 
+import lombok.Getter;
+
+import java.util.Arrays;
+
+@Getter
 public enum PlatformType {
-    DOMAIN, KAKAO, GOOGLE
+    DOMAIN("octopus",0),
+    KAKAO("kakao",1),
+    GOOGLE("google",2);
+
+    private final String desc;
+    private final Integer stateCode;
+
+    PlatformType(String desc, Integer stateCode){
+        this.desc = desc;
+        this.stateCode = stateCode;
+    }
 }

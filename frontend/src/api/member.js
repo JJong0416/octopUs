@@ -13,9 +13,7 @@ async function login(user, success, fail) {
         "Content-Type": "application/json",
       },
     })
-    .then((success) => {
-      console.log(success);
-    })
+    .then(success)
     .catch(fail);
 }
 

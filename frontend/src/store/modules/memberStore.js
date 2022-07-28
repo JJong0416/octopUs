@@ -33,9 +33,11 @@ const memberStore = {
         user,
         (response) => {
           console.log(response);
-          if (response === "OK") {
-            let token = response.data["access-token"];
-            console.log(token);
+          console.log("login은 일단됨, 근데 response모름");
+          if (response.status === 200) {
+            console.log("rd ? " + response.data);
+            console.log("rdt ? " + response.data.token);
+            let token = response.data.token;
             commit("SET_IS_LOGIN", true);
             commit("SET_IS_LOGIN_ERROR", false);
             sessionStorage.setItem("access-token", token);

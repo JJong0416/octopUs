@@ -2,6 +2,7 @@ package com.octopus.controller;
 
 import com.octopus.domain.User;
 import com.octopus.domain.dto.SignUpDto;
+import com.octopus.domain.dto.UpdateDto;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,9 +31,21 @@ public class UserController {
 
 
     // 로그인 권한 테스트
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<User> getUserInfo(@PathVariable String userId) {
         return ResponseEntity.ok(userService.getUserWithUserId(userId));
     }
+
+    @PatchMapping("/user/modify/avatar")
+    public ResponseEntity<String> modifyAvatar(String newAvatar){
+        return ResponseEntity.ok(userService.changeUserAvatar(newAvatar));
+
+    }
+ /*   @PatchMapping("/users/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public  ResponseEntity<User> updateUserInfo(@Valid @RequestBody UpdateDto updateDto){
+        return ResponseEntity.ok(userService.updateUser(updateDto));
+    }
+*/
 }

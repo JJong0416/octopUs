@@ -63,7 +63,7 @@ public class UserService {
 
     @Transactional
     public boolean updateUserNickname(String newNickname) {
-        if (isUserByNicknameExist(newNickname)) {
+        if (!isUserByNicknameExist(newNickname)) {
             return true;
         }
         changeUserNickname(newNickname);

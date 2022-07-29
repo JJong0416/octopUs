@@ -1,6 +1,7 @@
 package com.octopus.controller;
 
 import com.octopus.domain.User;
+import com.octopus.domain.dto.UserMyPageDto;
 import com.octopus.domain.dto.UserUpdateInfoDto;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.dto.UserUpdatePasswordDto;
@@ -66,6 +67,12 @@ public class UserController {
                 : ResponseEntity.badRequest().build();
     }
 
+    // 유저 myPage
+    @GetMapping("/user/info")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserMyPageDto> userMyPage() {
+        return ResponseEntity.ok(userService.getUserMyPageInfo());
+    }
 
 /*  테스트용 API
     @GetMapping("/user/{userId}")

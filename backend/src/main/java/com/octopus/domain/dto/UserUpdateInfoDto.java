@@ -8,6 +8,7 @@ import lombok.ToString;
 public class UserUpdateInfoDto {
 
     private final String userAvatar;
+
     private final String userNickname;
 
     public UserUpdateInfoDto(String userNickname, String userAvatar) {

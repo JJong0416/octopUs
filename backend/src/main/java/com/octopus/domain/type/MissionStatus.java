@@ -4,9 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum MissionStatus {
-    OPEN("모집중",0),
-    ONGOING("진행중",1),
-    CLOSE("종료",2);
+    UNACTIVATED("비활성화",0),
+    OPEN("모집중",1),
+    ONGOING("진행중",2),
+    CLOSE("종료",3);
 
     private final String desc;
     private final Integer stateCode;

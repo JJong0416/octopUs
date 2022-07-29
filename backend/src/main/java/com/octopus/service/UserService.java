@@ -2,7 +2,7 @@ package com.octopus.service;
 
 import com.octopus.domain.User;
 import com.octopus.domain.dto.SignUpDto;
-import com.octopus.domain.dto.UserUpdateInfoDto;
+import com.octopus.domain.dto.UserMyPageDto;
 import com.octopus.domain.dto.UserUpdatePasswordDto;
 import com.octopus.exception.SignUpException;
 import com.octopus.exception.UserNotFoundException;
@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.octopus.utils.SecurityUtil.getCurrentUsername;
+import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 
 @Service
 @RequiredArgsConstructor
@@ -89,8 +89,18 @@ public class UserService {
         }
     }
 
-    private boolean isCurrentPasswordAndDbPasswordEquals(String currentPassword, String dbPassword) {
-        return passwordEncoder.matches(currentPassword, dbPassword);
+    @Transactional(readOnly = true)
+    public UserMyPageDto getUserMyPageInfo(){
+
+        User user = getUserInfo(getCurrentUsername().get());
+
+        return UserMyPageDto.builder()
+                .userId(user.getUserId())
+                .userNickname(user.getUserNickname())
+                .userEmail(user.getUserEmail())
+                .userPoint(user.getUserPoint())
+                .build();
+
     }
 
     @Transactional(readOnly = true)
@@ -104,4 +114,9 @@ public class UserService {
     protected boolean isUserByNicknameExist(String nickname) {
         return userRepository.findByUserNickname(nickname).isPresent();
     }
+
+    private boolean isCurrentPasswordAndDbPasswordEquals(String currentPassword, String dbPassword) {
+        return passwordEncoder.matches(currentPassword, dbPassword);
+    }
+
 }

@@ -1,18 +1,17 @@
 package com.octopus.domain;
 
+import com.octopus.domain.dto.MissionCreateDto;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.domain.type.MissionType;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
+@Getter @ToString
 @Table(name = "mission")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mission {
@@ -29,7 +28,7 @@ public class Mission {
     private String missionLeaderId;
 
     @Column(name = "mission_name", length = 30, nullable = false)
-    private String missionName;
+    private String missionTitle;
 
     @Column(name = "mission_type", nullable = false)
     private MissionType missionType;
@@ -60,4 +59,18 @@ public class Mission {
     )
     private final Set<User> users = new HashSet<>();
 
+    // TODO: 2022-07-29 MapStruct 고민해보기 너무 길긴 하다..
+    @Builder(builderMethodName = "createMission")
+    Mission(MissionCreateDto missionCreateDto) {
+        this.missionCode = missionCreateDto.getMissionCode();
+        this.missionLeaderId = missionCreateDto.getMissionLeaderId();
+        this.missionTitle = missionCreateDto.getMissionTitle();
+        this.missionType = missionCreateDto.getMissionType();
+        this.missionPoint = missionCreateDto.getMissionPoint();
+        this.missionStatus = missionCreateDto.getMissionStatus();
+        this.missionLimitPersonnel = missionCreateDto.getMissionLimitPersonnel();
+        this.missionUsers = missionCreateDto.getMissionUser();
+        this.missionContent = missionCreateDto.getMissionContent();
+        this.missionOpen = missionCreateDto.getMissionOpen();
+    }
 }

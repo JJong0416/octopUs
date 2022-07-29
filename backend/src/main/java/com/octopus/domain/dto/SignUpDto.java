@@ -4,16 +4,12 @@ import com.octopus.domain.type.PlatformType;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Getter
 public class SignUpDto {
 
-    @NotBlank
-    @Size(min = 6, max = 15)
+    @Pattern(regexp="[a-z0-9]{6,15}")
     private final String userId;
 
     @NotBlank

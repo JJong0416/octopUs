@@ -14,7 +14,7 @@ import java.util.Optional;
  */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SecurityUtil {
+public class SecurityUtils {
 
     // Security Context의 Authentication 객체를 userId에 매칭시켜 리턴
     public static Optional<String> getCurrentUsername() {

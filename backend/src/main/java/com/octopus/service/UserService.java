@@ -94,7 +94,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    protected User getUserInfo(String userId) {
+    public User getUserInfo(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() -> {
             throw new UserNotFoundException();
         });

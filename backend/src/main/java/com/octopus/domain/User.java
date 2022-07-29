@@ -38,7 +38,6 @@ public class User {
     @Column(name = "user_avatar", nullable = false)
     private String userAvatar;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "platform_type")
     private PlatformType platformType;
 
@@ -61,6 +60,7 @@ public class User {
         this.userEmail = signUpDto.getUserEmail();
         this.userAvatar = signUpDto.getUserAvatar();
         this.userPoint = signUpDto.getUserPoint();
+        this.platformType = signUpDto.getPlatformType();
     }
 
     public void updateAvatar(String avatar){

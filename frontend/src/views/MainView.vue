@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app>
     <!-- 왕문어 -->
     <v-container>
       <v-row>
@@ -13,7 +13,7 @@
       <!-- 검색창 -->
       <v-row>
         <v-col cols="4">
-          <v-select :items="items" label="코드 입력"></v-select>
+          <v-select :items="items" label="검색 선택"></v-select>
         </v-col>
         <v-col cols="5">
           <v-text-field hide-details single-line></v-text-field>
@@ -50,7 +50,7 @@
           </div></v-col
         >
       </v-row>
-      <v-spacer></v-spacer>
+      <br><br>
       <!-- login -->
       <v-row>
         <v-col cols="2"></v-col>
@@ -78,15 +78,15 @@
         <v-col cols="2"></v-col>
       </v-row>
     </v-container>
-  </div>
+  </v-app>
 </template>
 
 <script>
 export default {
   data: () => ({
-    items: ["코드 입력", "테마 검색", "제목 검색"],
+    items: ['코드 입력', '제목 검색', '테마 검색'],
   }),
-};
+}
 </script>
 
 <style>
@@ -107,7 +107,9 @@ export default {
   color: black;
 }
 body {
-  background-color: #ffdede;
+  background-color:#EBEBEB
+
+;
 }
 .more a {
   text-decoration: none;

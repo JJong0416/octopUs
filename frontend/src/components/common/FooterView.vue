@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tabs fixed-tabs background-color="#FCF8E8">
+    <v-tabs fixed-tabs background-color="#FFF4F2">
       <!-- 홈 화면 탭 -->
       <v-tab href="#mobile-tabs-5-1" class="primary--text">
         <router-link :to="`/`"> <v-icon>mdi-home</v-icon></router-link>

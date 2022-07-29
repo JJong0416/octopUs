@@ -61,7 +61,7 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-
+        <!-- 왼쪽 탭 닫기 버튼 -->
         <template v-slot:append>
           <div class="pa-2" @click="drawer = false">
             <v-btn block>

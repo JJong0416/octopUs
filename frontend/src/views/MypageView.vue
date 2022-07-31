@@ -14,7 +14,9 @@
       </v-img>
       <!-- Nickname -->
       <v-row>
-        <v-col cols="10"> <v-card-title>Nickname</v-card-title></v-col>
+        <v-col cols="10">
+          <v-card-title>{{ userInfo.userNickname }}</v-card-title></v-col
+        >
         <v-col cols="2">
           <v-btn small class="ma-2">
             <v-icon>mdi-pencil</v-icon>
@@ -46,4 +48,35 @@
     </v-btn>
   </v-container>
 </template>
-<script></script>
+<script>
+import axios from "axios";
+import cookie from "vue-cookies";
+
+export default {
+  data() {
+    return {
+      userInfo: [],
+    };
+  },
+  created() {
+    var vm = this;
+    let token = cookie.get("token");
+    console.log("쿠키는?" + token);
+
+    axios
+      .get(`api/user/info`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+        vm.userInfo = response.data;
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  },
+};
+</script>

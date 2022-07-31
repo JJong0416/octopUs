@@ -1,7 +1,8 @@
 import jwt_decode from "jwt-decode";
 import { login } from "@/api/member.js";
 import { findById } from "../../api/member";
-
+import cookie from "vue-cookies";
+import axios from "axios";
 const memberStore = {
   namespaced: true,
   state: {
@@ -38,9 +39,15 @@ const memberStore = {
             console.log("rd ? " + response.data);
             console.log("rdt ? " + response.data.token);
             let token = response.data.token;
+            cookie.set("token", token);
+            console.log("쿠키가 없는것같기도...");
+            console.log("쿠키있나요?" + cookie.isKey("token"));
             commit("SET_IS_LOGIN", true);
             commit("SET_IS_LOGIN_ERROR", false);
-            sessionStorage.setItem("access-token", token);
+            localStorage.setItem("token", token);
+            axios.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${response.data.token}`;
           } else {
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);

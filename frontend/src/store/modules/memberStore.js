@@ -45,6 +45,7 @@ const memberStore = {
             commit("SET_IS_LOGIN", true);
             commit("SET_IS_LOGIN_ERROR", false);
             localStorage.setItem("token", token);
+            // header에 토큰 담기
             axios.defaults.headers.common[
               "Authorization"
             ] = `Bearer ${response.data.token}`;

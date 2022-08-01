@@ -1,5 +1,6 @@
 package com.octopus.domain;
 
+import com.octopus.domain.PK.OctopusPK;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -25,11 +26,4 @@ public class Octopus {
     @JoinColumn(name = "mission_no", referencedColumnName = "mission_no")
     private Mission mission;
 
-}
-
-
-@Data
-class OctopusPK implements Serializable{
-    private User user;
-    private Mission mission;
 }

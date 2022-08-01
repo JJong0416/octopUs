@@ -4,6 +4,7 @@ import com.octopus.domain.Mission;
 import com.octopus.domain.dto.MissionListDto;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
+import com.octopus.exception.MissionNotFoundException;
 import com.octopus.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,8 @@ public class MissionService {
     public List<MissionListDto> getHotMissions() {
         //모집중이면서 공개방 리스트가져오기
         List<Mission> missions = missionRepository.findByMissionStatusAndMissionOpen(MissionStatus.OPEN, MissionOpenType.OPEN_ROOM);
-
+        if(missions == null || missions.isEmpty())
+            throw new MissionNotFoundException();
         List<MissionListDto> missionList = missions.stream()
                 .filter(mission -> mission.getMissionLimitPersonnel() -
                         (mission.getMissionUsers().length() - (mission.getMissionUsers().replaceAll(",", "").length()) + 1) > 0)
@@ -37,4 +39,6 @@ public class MissionService {
 
         return missionList.size() < 5 ? missionList : missionList.subList(0, 5);
     }
+
+
 }

@@ -1,12 +1,9 @@
 package com.octopus.domain;
 
-import com.octopus.domain.dto.MissionListDto;
-import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.domain.type.MissionType;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +15,7 @@ import java.util.Set;
 @Getter
 @Table(name = "mission")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Mission implements Comparable<Mission>{
+public class Mission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,11 +59,5 @@ public class Mission implements Comparable<Mission>{
             inverseJoinColumns = @JoinColumn(name = "user_no")
     )
     private final Set<User> users = new HashSet<>();
-
-    @Override
-    public int compareTo(Mission o) {
-        return (this.missionLimitPersonnel - (this.missionUsers.length() - (this.missionUsers.replaceAll(",", "").length()) + 1)) -
-                (o.missionLimitPersonnel - (o.missionUsers.length() - (o.missionUsers.replaceAll(",", "").length()) + 1));
-    }
 
 }

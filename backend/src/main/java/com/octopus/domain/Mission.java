@@ -51,13 +51,8 @@ public class Mission {
     @Column(name = "mission_open", nullable = false)
     private MissionOpenType missionOpen;
 
-    @ManyToMany
-    @JoinTable(
-            name = "octopus_table",
-            joinColumns = @JoinColumn(name = "mission_no"),
-            inverseJoinColumns = @JoinColumn(name = "user_no")
-    )
-    private final Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "mission")
+    private final Set<Octopus> octopus = new HashSet<>();
 
     // TODO: 2022-07-29 MapStruct 고민해보기 너무 길긴 하다..
     @Builder(builderMethodName = "createMission")
@@ -73,4 +68,6 @@ public class Mission {
         this.missionContent = missionCreateDto.getMissionContent();
         this.missionOpen = missionCreateDto.getMissionOpen();
     }
+
+    public void updateMissionUsers(String missionUsers){this.missionUsers = missionUsers;}
 }

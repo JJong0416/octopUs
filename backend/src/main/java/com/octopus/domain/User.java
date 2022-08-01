@@ -44,13 +44,8 @@ public class User {
     @Column(name = "platform_access_token")
     private Long platformAccessToken;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "octopus_table",
-            joinColumns = @JoinColumn(name = "user_no"),
-            inverseJoinColumns = @JoinColumn(name = "mission_no")
-    )
-    private final Set<Mission> missions = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private final Set<Octopus> octopus = new HashSet<>();
 
     @Builder(builderMethodName = "signUpBuilder")
     public User(SignUpDto signUpDto) {

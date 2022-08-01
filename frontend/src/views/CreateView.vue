@@ -34,11 +34,15 @@
         </v-container>
       </v-card-text>
     </v-card>
-    <v-card>
-      <v-card-text>
-        <v-slider v-model="slider" step="8"></v-slider>
-      </v-card-text>
-    </v-card>
+    <v-text-field
+      label="인원수를 1~8사이의 숫자로 입력해주세요"
+      :rules="personrules"
+      type="number"
+      min="1"
+      hide-details="auto"
+      oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
+      :value="personnum"
+    ></v-text-field>
     <v-form>
       <v-container>
         <v-row>
@@ -55,12 +59,32 @@
         </v-row>
       </v-container>
     </v-form>
+    <v-text-field
+      label="참가하기 위한 Point를 숫자로 입력해주세요"
+      :rules="pointrules"
+      type="number"
+      min="1"
+      hide-details="auto"
+      oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
+      :value="pointnum"
+    ></v-text-field>
   </div>
 </template>
 
 <script>
 export default {
   data: () => ({
+    pointnum: "",
+    personnum: "",
+    pointrules: [
+      (value) => !!value || "입력해주세요",
+      (value) => (value && value.length >= 3) || "Min 3 characters",
+    ],
+    personrules: [
+      (value) => !!value || "입력해주세요",
+      (value) =>
+        (value && value >= 1 && value <= 8) || "1~8사이의 숫자로 입력해주세요",
+    ],
     items: ["foo", "bar", "fizz", "buzz"],
     values: ["foo", "bar"],
     value: null,
@@ -73,6 +97,11 @@ export default {
     description: "이방은 어쩌구 저쩌구 솰라솰라",
     descriprules: [(v) => v.length <= 25 || "Max 25 characters"],
   }),
+  computed: {
+    dateRangeText() {
+      return this.dates.join(" ~ ");
+    },
+  },
 };
 </script>
 

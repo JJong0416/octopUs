@@ -19,7 +19,7 @@ public class MissionService {
     private final MissionRepository missionRepository;
 
     @Transactional
-    public List<MissionListDto> getHotRoom() {
+    public List<MissionListDto> getHotMissions() {
         //모집중이면서 공개방 리스트가져오기
         List<Mission> missions = missionRepository.findByMissionStatusAndMissionOpen(MissionStatus.OPEN, MissionOpenType.OPEN_ROOM);
 
@@ -35,8 +35,6 @@ public class MissionService {
                         .missionName(mission.getMissionName()).build())
                 .collect(Collectors.toList());
 
-
         return missionList.size() < 5 ? missionList : missionList.subList(0, 5);
-
     }
 }

@@ -1,10 +1,7 @@
 package com.octopus.domain;
 
 import com.octopus.domain.PK.OctopusPK;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;

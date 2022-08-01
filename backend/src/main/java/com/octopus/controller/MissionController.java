@@ -34,12 +34,12 @@ public class MissionController {
         return ResponseEntity.ok(missionService.getNewMissions());
     }
 
-    @DeleteMapping("/{missionNo}/user")
-    public ResponseEntity<HttpStatus> kickOutUser(@PathVariable String userId, @PathVariable Long missionNo){
+    @DeleteMapping("/{missionNo}/user/{userId}")
+    public ResponseEntity kickOutUser(@PathVariable String userId, @PathVariable Long missionNo){
 
         String message = missionService.deleteUserFromMission(userId,missionNo);
         return message.equals("성공")
-                ?ResponseEntity.ok().build()
-                :ResponseEntity.badRequest().build();
+                ?new ResponseEntity<>(message,HttpStatus.OK)
+                :new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
     }
 }

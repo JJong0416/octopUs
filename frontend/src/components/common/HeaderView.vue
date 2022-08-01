@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="header-nav-wrap">
     <v-card class="mx-auto overflow-hidden">
       <v-app-bar>
         <!-- 좌측 메뉴 바 -->
@@ -26,7 +26,7 @@
         </div>
       </v-app-bar>
 
-      <v-navigation-drawer v-model="drawer" absolute temporary height="667px">
+      <v-navigation-drawer v-model="drawer" absolute temporary height="100vh">
         <v-list nav dense>
           <v-list-item-group
             v-model="group"

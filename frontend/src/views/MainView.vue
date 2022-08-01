@@ -3,11 +3,9 @@
     <!-- 왕문어 -->
     <v-container>
       <v-row>
-        <v-col></v-col>
-        <v-col>
-          <v-img src="../assets/Logo.png" max-width="200"></v-img>
+        <v-col class="logo-img-wrapper">
+          <v-img src="../assets/Logo.png" max-width="60%"></v-img>
         </v-col>
-        <v-col></v-col>
       </v-row>
 
       <!-- 검색창 -->
@@ -79,6 +77,7 @@
       </v-row>
     </v-container>
   </v-app>
+  
 </template>
 
 <script>
@@ -135,4 +134,12 @@ body {
   text-decoration: none;
   color: white;
 }
+.logo-img-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* .v-application--wrap{
+  min-height: 80vh !important;
+} */
 </style>

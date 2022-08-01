@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="footer-nav">
     <v-tabs fixed-tabs background-color="#FFF4F2">
       <!-- 홈 화면 탭 -->
       <v-tab href="#mobile-tabs-5-1" class="primary--text">

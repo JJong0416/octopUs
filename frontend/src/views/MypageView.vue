@@ -25,15 +25,15 @@
       </v-row>
       <!-- id, Email -->
       <v-card-text>
-        <div>Id</div>
-        <div>Email</div>
+        <div>Id : {{ userInfo.userId }}</div>
+        <div>Email : {{ userInfo.userEmail }}</div>
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
 
       <v-row>
         <v-col cols="6">
-          <v-card-title>5000 P</v-card-title>
+          <v-card-title>{{ userInfo.userPoint }} Point</v-card-title>
         </v-col>
         <v-col cols="3"> 충전하기 </v-col>
         <v-col cols="3">

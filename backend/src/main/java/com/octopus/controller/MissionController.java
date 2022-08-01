@@ -33,4 +33,13 @@ public class MissionController {
     public ResponseEntity<List> newMissions(){
         return ResponseEntity.ok(missionService.getNewMissions());
     }
+
+    @DeleteMapping("/{missionNo}/user")
+    public ResponseEntity<HttpStatus> kickOutUser(@PathVariable String userId, @PathVariable Long missionNo){
+
+        String message = missionService.deleteUserFromMission(userId,missionNo);
+        return message.equals("성공")
+                ?ResponseEntity.ok().build()
+                :ResponseEntity.badRequest().build();
+    }
 }

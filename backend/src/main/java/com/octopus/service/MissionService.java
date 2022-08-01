@@ -1,9 +1,14 @@
 package com.octopus.service;
 
 import com.octopus.domain.Mission;
+import com.octopus.domain.Octopus;
+import com.octopus.domain.PK.OctopusPK;
+import com.octopus.domain.User;
 import com.octopus.domain.dto.MissionListDto;
 import com.octopus.domain.dto.MissionCreateDto;
 import com.octopus.repository.MissionRepository;
+import com.octopus.repository.Octopus_tableRepository;
+import com.octopus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -11,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
+
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 
@@ -21,6 +29,8 @@ import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 public class MissionService {
 
     private final MissionRepository missionRepository;
+    private final UserRepository userRepository;
+    private final Octopus_tableRepository octopus_tableRepository;
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
@@ -46,6 +56,37 @@ public class MissionService {
                 MissionStatus.OPEN,
                 MissionOpenType.OPEN_ROOM
         );
+    }
 
+    @Transactional
+    public String deleteUserFromMission(String userId, Long missionNo){
+        //변경할 점 : 방은 진행 전 상태여야한다.?
+        // 1. mission table의 MissionUser에서 해당하는 id의 이름을 제거한다.
+        Optional<Mission> missionNullCheck = missionRepository.findByMissionNo(missionNo);
+        Optional<User> userNullCheck = userRepository.findByUserId(userId);
+        if(!missionNullCheck.isPresent() || !userNullCheck.isPresent()) return "해당 미션이 없습니다.";
+        Mission mission = missionNullCheck.get();
+        User user = userNullCheck.get();
+        //방장이 자신을 추방하기는 불가능
+        if(mission.getMissionLeaderId().toLowerCase().equals(userId)) return "방장은 강퇴할 수 없습니다.";
+
+        int idLocation = mission.getMissionUsers().indexOf(userId.toLowerCase());
+        // MissionUser에 userId가 없다면 잘못된 입력
+        if(idLocation<0){
+            return "미션에 등록되지 않은 user입니다.";
+        }
+
+        // Users에서 삭제하기 로직(확인필요)
+        String newUsers = mission.getMissionUsers().substring(0,idLocation-1)+
+                mission.getMissionUsers().substring(idLocation+userId.length());
+
+        mission.updateMissionUsers(newUsers);
+
+        missionRepository.save(mission);
+        // 2. octopus_table 에서 해당하는 userNo, missionNo의 조합을 삭제한다
+        octopus_tableRepository.deleteById(new OctopusPK(user, mission));
+
+        // 3. 사진에서 삭제한다???
+        return "성공";
     }
 }

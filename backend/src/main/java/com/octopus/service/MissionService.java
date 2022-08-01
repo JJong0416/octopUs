@@ -1,6 +1,7 @@
 package com.octopus.service;
 
 import com.octopus.domain.Mission;
+import com.octopus.domain.dto.MissionListDto;
 import com.octopus.domain.dto.MissionCreateDto;
 import com.octopus.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.octopus.domain.type.MissionOpenType;
+import com.octopus.domain.type.MissionStatus;
 import java.util.List;
 
 import static com.octopus.utils.SecurityUtils.getCurrentUsername;
@@ -37,7 +40,12 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Mission> getNewMissions(){
-        return missionRepository.findTop5By(Sort.by(Sort.Direction.DESC,"missionNo"));
+    public List<MissionListDto> getNewMissions(){
+        return missionRepository.findTop5ByMissionStatusAndMissionOpen(
+                Sort.by(Sort.Direction.DESC,"missionNo"),
+                MissionStatus.OPEN,
+                MissionOpenType.OPEN_ROOM
+        );
+
     }
 }

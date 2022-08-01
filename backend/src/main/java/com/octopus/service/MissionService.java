@@ -20,13 +20,11 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public List<MissionListDto> getNewMissions(){
-//        return missionRepository.findTop5ByMissionStatusAndMissionOpen(
-//                Sort.by(Sort.Direction.DESC,"missionNo"),
-//                MissionStatus.OPEN,
-//                MissionOpenType.OPEN_ROOM
-//        );
-        return missionRepository.findTop5By(
-                Sort.by(Sort.Direction.DESC,"missionNo")
+        return missionRepository.findTop5ByMissionStatusAndMissionOpen(
+                Sort.by(Sort.Direction.DESC,"missionNo"),
+                MissionStatus.OPEN,
+                MissionOpenType.OPEN_ROOM
         );
+
     }
 }

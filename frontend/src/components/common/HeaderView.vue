@@ -100,4 +100,7 @@ export default {
   text-decoration: none;
   color: none;
 }
+.header-nav-wrap{
+  height: 6.2vh;
+}
 </style>

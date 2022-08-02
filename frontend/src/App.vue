@@ -1,7 +1,8 @@
 <template>
   <div>
       <header-view></header-view>
-      <router-view></router-view>
+      <div class="wrapper">
+      <router-view></router-view></div>
       <footer-view></footer-view>
   </div>
 </template>
@@ -29,5 +30,8 @@ export default {
 .routing-fade-enter, .routing-fade-leave-to
 /* .routing-fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.wrapper{
+  height: 88.4vh;
 }
 </style>

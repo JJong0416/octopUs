@@ -34,4 +34,7 @@ export default {};
   text-decoration: none;
   color: #ff2456;
 }
+.footer-nav{
+  height: 5.4vh;
+}
 </style>

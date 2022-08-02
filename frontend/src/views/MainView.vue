@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="main-wrap">
     <!-- 왕문어 -->
     <v-container>
       <v-row>
@@ -139,7 +139,4 @@ body {
     justify-content: center;
     align-items: center;
 }
-/* .v-application--wrap{
-  min-height: 80vh !important;
-} */
 </style>

@@ -63,7 +63,7 @@ public class MissionService {
     }
 
     @Transactional
-    public String deleteUserFromMission(String userId, Long missionNo){
+    public String deleteUserFromMission(String userId, Long missionNo, String loginedUserId){
         // 1. mission table의 MissionUser에서 해당하는 id의 이름을 제거한다.
         Optional<Mission> missionNullCheck = missionRepository.findByMissionNo(missionNo);
         Optional<User> userNullCheck = userRepository.findByUserId(userId);
@@ -71,6 +71,9 @@ public class MissionService {
         if(!missionNullCheck.isPresent() || !userNullCheck.isPresent()) return "해당 미션, 혹은 사용자가 없습니다.";
         Mission mission = missionNullCheck.get();
         User user = userNullCheck.get();
+
+
+        if(!loginedUserId.contains(mission.getMissionLeaderId())) return "해당 미션의 방장만 강퇴할수 있습니다.";
 
         //변경할 점 : 방은 진행 전 상태여야한다.?
         if(!mission.getMissionStatus().equals(MissionStatus.OPEN)) return "모집중인 방에서만 강퇴할 수 있습니다.";
@@ -80,9 +83,8 @@ public class MissionService {
         int idLocation = mission.getMissionUsers().indexOf(userId.toLowerCase());
 
         // MissionUser에 userId가 없다면 잘못된 입력
-        if(idLocation<0){
-            return "미션에 등록되지 않은 user입니다.";
-        }
+        if(idLocation<0) return "미션에 등록되지 않은 user입니다.";
+
         // Users에서 삭제하기 로직
         String newUsers = mission.getMissionUsers().substring(0,idLocation-1)+
                 mission.getMissionUsers().substring(idLocation+userId.length()+2);

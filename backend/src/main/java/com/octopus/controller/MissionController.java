@@ -35,9 +35,9 @@ public class MissionController {
     }
 
     @DeleteMapping("/{missionNo}/user/{userId}")
-    public ResponseEntity kickOutUser(@PathVariable String userId, @PathVariable Long missionNo){
-
-        String message = missionService.deleteUserFromMission(userId,missionNo);
+    public ResponseEntity kickOutUser(@PathVariable String userId, @PathVariable Long missionNo, @RequestBody String loginedUserId){
+        // 지금로그인된 사용자의 아이디를 받아오는 것이 아닌 토큰에서 id를 꺼내오는거로 변경 필요
+        String message = missionService.deleteUserFromMission(userId,missionNo,loginedUserId);
         return message.equals("성공")
                 ?new ResponseEntity<>(message,HttpStatus.OK)
                 :new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);

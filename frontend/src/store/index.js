@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
+import EasyCamera from 'easy-vue-camera';
 Vue.use(Vuex);
-
+Vue.use(EasyCamera);
 import memberStore from "@/store/modules/memberStore.js";
 
 const store = new Vuex.Store({

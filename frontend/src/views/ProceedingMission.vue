@@ -165,7 +165,9 @@
         </div>
       </v-expand-transition>
     </v-card>
-    <div>
+    <v-easy-camera
+    v-model="picture">hi</v-easy-camera>
+    <!-- <div>
       <video ref="video" id="video" width="500" height="500" autoplay></video>
       <div>
         <button color="info" id="snap" v-on:click="capture()">
@@ -178,7 +180,7 @@
           <img v-bind:src="c" height="50" />
         </li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 

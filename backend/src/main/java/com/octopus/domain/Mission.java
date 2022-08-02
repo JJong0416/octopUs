@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter @ToString
+@Getter
 @Table(name = "mission")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mission {

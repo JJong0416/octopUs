@@ -68,6 +68,8 @@
       oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
       :value="pointnum"
     ></v-text-field>
+    <br>
+    <v-btn>Create</v-btn>
   </div>
 </template>
 

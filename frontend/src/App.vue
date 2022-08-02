@@ -1,9 +1,10 @@
 <template>
   <div>
+    <v-app id="app">
       <header-view></header-view>
-      <div class="wrapper">
-      <router-view></router-view></div>
+      <router-view></router-view>
       <footer-view></footer-view>
+    </v-app>
   </div>
 </template>
 
@@ -31,7 +32,7 @@ export default {
 /* .routing-fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-.wrapper{
+.wrapper {
   height: 88.4vh;
 }
 </style>

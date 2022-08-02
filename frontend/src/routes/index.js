@@ -31,6 +31,7 @@ const routes = [
     name: "MainView",
     component: MainView,
   },
+
   {
     path: "/mypage",
     name: "Mypage",
@@ -61,6 +62,21 @@ const routes = [
     path: "/create",
     name: "Create",
     component: () => import("@/views/CreateView.vue"),
+  },
+  {
+    path: "/before",
+    name: "before",
+    component: () => import("@/views/BeforeStart.vue"),
+  },
+  {
+    path: "/proceeding",
+    name: "proceeding",
+    component: () => import("@/views/ProceedingMission.vue"),
+  },
+  {
+    path: "/finished",
+    name: "finished",
+    component: () => import("@/views/FinishedMission.vue"),
   },
 ];
 

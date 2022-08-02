@@ -6,6 +6,8 @@ import com.octopus.domain.PK.OctopusPK;
 import com.octopus.domain.User;
 import com.octopus.domain.dto.MissionListDto;
 import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.exception.MissionNotFoundException;
+import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.MissionRepository;
 import com.octopus.repository.Octopus_tableRepository;
 import com.octopus.repository.UserRepository;
@@ -65,24 +67,19 @@ public class MissionService {
     @Transactional
     public String deleteUserFromMission(String userId, Long missionNo, String loginedUserId){
         // 1. mission table의 MissionUser에서 해당하는 id의 이름을 제거한다.
-        Optional<Mission> missionNullCheck = missionRepository.findByMissionNo(missionNo);
-        Optional<User> userNullCheck = userRepository.findByUserId(userId);
+        Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(()->{
+            throw new MissionNotFoundException();
+        });
+        User user = userRepository.findByUserId(userId).orElseThrow(()->{
+            throw new UserNotFoundException();
+        });
 
-        if(!missionNullCheck.isPresent() || !userNullCheck.isPresent()) return "해당 미션, 혹은 사용자가 없습니다.";
-        Mission mission = missionNullCheck.get();
-        User user = userNullCheck.get();
-
-
-        if(!loginedUserId.contains(mission.getMissionLeaderId())) return "해당 미션의 방장만 강퇴할수 있습니다.";
-
-        //변경할 점 : 방은 진행 전 상태여야한다.?
-        if(!mission.getMissionStatus().equals(MissionStatus.OPEN)) return "모집중인 방에서만 강퇴할 수 있습니다.";
-        //방장이 자신을 추방하기는 불가능
-        if(mission.getMissionLeaderId().toLowerCase().equals(userId)) return "방장은 강퇴할 수 없습니다.";
-
-        int idLocation = mission.getMissionUsers().indexOf(userId.toLowerCase());
+        if(!checkUserIdEqualLeaderId(mission,loginedUserId)) return "해당 미션의 방장만 강퇴할수 있습니다.";
+        if(!checkMissionStatusIsOPEN(mission)) return "모집중인 방에서만 강퇴할 수 있습니다.";
+        if(checkUserIdEqualLeaderId(mission, userId.toLowerCase())) return "방장은 강퇴할 수 없습니다.";
 
         // MissionUser에 userId가 없다면 잘못된 입력
+        int idLocation = checkMissionContainsUserId(mission,userId);
         if(idLocation<0) return "미션에 등록되지 않은 user입니다.";
 
         // Users에서 삭제하기 로직
@@ -93,11 +90,20 @@ public class MissionService {
 
         missionRepository.save(mission);
         // 2. octopus_table 에서 해당하는 user, mission의 조합을 삭제한다
-        Query query = em.createQuery("delete from Octopus o where o.user = :user and o.mission = :mission")
-                .setParameter("user", user).setParameter("mission",mission);
-
-        int rows = query.executeUpdate();
-        // 3. 사진에서 삭제한다???
+        octopus_tableRepository.deleteByUserAndMissionInQuery(user,mission);
         return "성공";
+    }
+
+    // TODO: 2022-08-02 contains말고 다른거
+    public boolean checkUserIdEqualLeaderId(Mission mission, String loginedUserId){
+        return loginedUserId.contains(mission.getMissionLeaderId());
+    }
+
+    public boolean checkMissionStatusIsOPEN(Mission mission){
+        return mission.getMissionStatus().equals(MissionStatus.OPEN);
+    }
+
+    public Integer checkMissionContainsUserId(Mission mission, String userId){
+        return mission.getMissionUsers().indexOf(userId.toLowerCase());
     }
 }

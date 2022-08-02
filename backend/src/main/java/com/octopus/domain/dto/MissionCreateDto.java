@@ -16,7 +16,6 @@ public class MissionCreateDto {
     @Size(max = 8)
     private final String missionCode;
 
-    @NotNull
     private String missionLeaderId;
 
     @NotNull
@@ -53,7 +52,6 @@ public class MissionCreateDto {
 
 
     MissionCreateDto(
-            String missionLeaderId,
             String missionTitle,
             MissionType missionType,
             Integer missionPoint,
@@ -63,7 +61,6 @@ public class MissionCreateDto {
     ) {
         /* 외부 주입*/
         this.missionCode = createMissionCode(CODE_SIZE);
-        this.missionLeaderId = missionLeaderId;
         this.missionTitle = missionTitle;
         this.missionType = missionType;
         this.missionPoint = missionPoint;

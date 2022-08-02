@@ -6,7 +6,7 @@
         <v-img src="../assets/Logo.png" max-width="60%"></v-img>
       </v-col>
     </v-row>
-
+    <router-link :to="`/proceeding`">proceeding</router-link>
     <!-- 검색창 -->
     <v-row>
       <v-col cols="4">

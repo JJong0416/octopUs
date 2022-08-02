@@ -165,33 +165,22 @@
         </div>
       </v-expand-transition>
     </v-card>
-    <v-easy-camera
-    v-model="picture">hi</v-easy-camera>
-    <!-- <div>
-      <video ref="video" id="video" width="500" height="500" autoplay></video>
-      <div>
-        <button color="info" id="snap" v-on:click="capture()">
-          Snap Photo
-        </button>
-      </div>
-      <canvas ref="canvas" id="canvas" width="500" height="500"></canvas>
-      <ul>
-        <li class="capture" v-for="c in captures" v-bind:key="c.d">
-          <img v-bind:src="c" height="50" />
-        </li>
-      </ul>
-    </div> -->
+    <v-btn depressed color="primary" @click="camerashow"> Primary </v-btn>
+    <v-easy-camera v-if="cameraon" v-model="picture">hi</v-easy-camera>
+    <v-btn @click="cameraAction('start')">Start</v-btn>
+    <v-btn @click="cameraAction('snap')">Snap</v-btn>
+    <v-btn @click="cameraAction('stop')">Stop</v-btn>
+    <v-btn @click="cameraAction('close')">Close</v-btn>
   </div>
 </template>
-
 <script>
+import EasyCamera from "easy-vue-camera";
 export default {
   data: () => ({
-    video: {},
-    canvas: {},
-    captures: [],
+    picture: "",
     show: false,
     calendarShow: false,
+    cameraon: false,
     focus: "",
     type: "month",
     typeToLabel: {
@@ -224,23 +213,96 @@ export default {
       "Party",
     ],
   }),
-  mounted() {
-    this.$refs.calendar.checkChange();
-    this.video = this.$refs.video;
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-        this.video.srcObject = stream;
-        this.video.play();
-      });
-    }
+  components: {
+    "v-easy-camera": EasyCamera,
   },
   methods: {
-    capture() {
-      this.canvas = this.$refs.canvas;
-      this.canvas.getContext("2d").drawImage(this.video, 0, 0, 500, 500);
-      this.captures.push(this.canvas.toDataURL("image/png"));
-      console.log(this.captures);
+    camerashow() {
+      this.cameraon = !this.cameraon;
     },
+    cameraAction(opt) {
+      if (opt === "start") {
+        this.$refs.picpreview.start();
+      } else if (opt === "snap") {
+        this.$refs.picpreview.snap();
+
+        setTimeout(() => {
+          this.processFile(this.picture);
+        }, 2000);
+      } else if (opt === "stop") {
+        this.$refs.picpreview.stop();
+      } else if (opt === "close") {
+        this.$refs.picpreview.close();
+      }
+    },
+    processFile(blob) {
+      // read the files
+      var reader = new FileReader();
+
+      if (blob instanceof Blob) {
+        reader.readAsArrayBuffer(blob);
+
+        reader.onload = function (event) {
+          // blob stuff
+          var blob = new Blob([event.target.result]); // create blob...
+          window.URL = window.URL || window.webkitURL;
+          var blobURL = window.URL.createObjectURL(blob); // and get it's URL
+
+          console.log(blob);
+
+          // helper Image object
+          var image = new Image();
+          image.src = blobURL;
+          image.onload = function () {
+            // have to wait till it's loaded
+            var canvas = document.createElement("canvas");
+            var width = image.width;
+            var height = image.height;
+
+            // calculate the width and height, constraining the proportions
+            if (width > height) {
+              if (width > 100) {
+                //height *= max_width / width;
+                height = Math.round((height *= 100 / width));
+                width = 100;
+              }
+            } else {
+              if (height > 100) {
+                //width *= max_height / height;
+                width = Math.round((width *= 100 / height));
+                height = 100;
+              }
+            }
+
+            // resize the canvas and draw the image data into it
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(image, 0, 0, width, height);
+
+            canvas.toBlob(function (blob) {
+              const newImg = document.createElement("img");
+              const url = URL.createObjectURL(blob);
+
+              console.log(blob);
+              //send this blob to API
+
+              newImg.onload = function () {
+                // no longer need to read the blob so it's revoked
+                URL.revokeObjectURL(url);
+              };
+
+              newImg.src = url;
+              document.body.appendChild(newImg);
+            });
+          };
+        };
+      } else {
+        console.log(this.picture);
+      }
+    },
+
+    // 달력과 관련된 methods
     viewDay({ date }) {
       this.focus = date;
       this.type = "day";

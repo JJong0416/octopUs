@@ -64,40 +64,35 @@ public class MissionService {
 
     @Transactional
     public String deleteUserFromMission(String userId, Long missionNo){
-        //변경할 점 : 방은 진행 전 상태여야한다.?
         // 1. mission table의 MissionUser에서 해당하는 id의 이름을 제거한다.
         Optional<Mission> missionNullCheck = missionRepository.findByMissionNo(missionNo);
         Optional<User> userNullCheck = userRepository.findByUserId(userId);
-        System.out.println("mission : "+missionNullCheck.get());
-        System.out.println("user : "+userNullCheck.get());
-        if(!missionNullCheck.isPresent() || !userNullCheck.isPresent()) return "해당 미션이 없습니다.";
+
+        if(!missionNullCheck.isPresent() || !userNullCheck.isPresent()) return "해당 미션, 혹은 사용자가 없습니다.";
         Mission mission = missionNullCheck.get();
         User user = userNullCheck.get();
+
+        //변경할 점 : 방은 진행 전 상태여야한다.?
+        if(!mission.getMissionStatus().equals(MissionStatus.OPEN)) return "모집중인 방에서만 강퇴할 수 있습니다.";
         //방장이 자신을 추방하기는 불가능
         if(mission.getMissionLeaderId().toLowerCase().equals(userId)) return "방장은 강퇴할 수 없습니다.";
 
         int idLocation = mission.getMissionUsers().indexOf(userId.toLowerCase());
-        System.out.println("idLocation :"+idLocation);
+
         // MissionUser에 userId가 없다면 잘못된 입력
         if(idLocation<0){
             return "미션에 등록되지 않은 user입니다.";
         }
-        // Users에서 삭제하기 로직(확인필요)
+        // Users에서 삭제하기 로직
         String newUsers = mission.getMissionUsers().substring(0,idLocation-1)+
                 mission.getMissionUsers().substring(idLocation+userId.length()+2);
-        System.out.println("newUsers : "+newUsers);
+
         mission.updateMissionUsers(newUsers);
-        System.out.println("missionUsers입력확인 :"+mission.getMissionUsers());
-        System.out.println("mission확인 :"+mission);
+
         missionRepository.save(mission);
-        // 2. octopus_table 에서 해당하는 userNo, missionNo의 조합을 삭제한다
-//        Octopus current = octopus_tableRepository.findByMissionAndUser(mission,user).get();
-        Octopus current = octopus_tableRepository.findById(new OctopusPK(user,mission)).get();
-        System.out.println(current.getMission() +"   ====   "+current.getUser());
-//        octopus_tableRepository.delete(current);
-//        octopus_tableRepository.deleteById(new OctopusPK(user,mission));
-        Query query = em.createQuery("delete from Octopus o where o.user = :user_no and o.mission = :mission_no")
-                .setParameter("user_no", current.getUser()).setParameter("mission_no",current.getMission());
+        // 2. octopus_table 에서 해당하는 user, mission의 조합을 삭제한다
+        Query query = em.createQuery("delete from Octopus o where o.user = :user and o.mission = :mission")
+                .setParameter("user", user).setParameter("mission",mission);
 
         int rows = query.executeUpdate();
         // 3. 사진에서 삭제한다???

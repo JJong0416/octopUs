@@ -1,8 +1,12 @@
 package com.octopus.service;
 
+import com.octopus.domain.AuthenticationInfo;
 import com.octopus.domain.Mission;
+import com.octopus.domain.dto.AuthenticationDto;
 import com.octopus.domain.dto.MissionListDto;
 import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.exception.MissionNotFoundException;
+import com.octopus.repository.AuthenticationRepository;
 import com.octopus.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -21,6 +25,7 @@ import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 public class MissionService {
 
     private final MissionRepository missionRepository;
+    private final AuthenticationRepository authenticationRepository;
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
@@ -48,4 +53,42 @@ public class MissionService {
         );
 
     }
+
+    @Transactional
+    public boolean createAuthentication(Long missionNo, AuthenticationDto authenticationDto) {
+        Mission mission = getMissionByMissionNo(missionNo);
+        if (!isAuthorizedMissionUser(mission) || haveAuthentication(missionNo)) {
+            return false;
+        }
+        AuthenticationInfo authenticationInfo = AuthenticationInfo.createAuthenticationInfo()
+                .mission(mission)
+                .authenticationStartTime(authenticationDto.getAuthenticationStartTime())
+                .authenticationEndTime(authenticationDto.getAuthenticationEndTime())
+                .build();
+
+        authenticationRepository.save(authenticationInfo);
+        return true;
+    }
+
+    @Transactional(readOnly = true)
+    public Mission getMissionByMissionNo(Long missionNo) {
+        return missionRepository.findMissionByMissionNo(missionNo).orElseThrow(() -> {
+            //MissionNotFoundException 쓰는건 안좋을지?
+            throw new RuntimeException("Not found Mission");
+        });
+    }
+    @Transactional(readOnly = true)
+    public boolean haveAuthentication(Long missionNo) {
+        return authenticationRepository.findAuthenticationInfoByMissionNo(missionNo);
+    }
+
+    public boolean isAuthorizedMissionUser(Mission mission) {
+        String currentUser = getCurrentUsername().get();
+        return mission.getMissionLeaderId().equals(currentUser);
+    }
+
+
+
+
+
 }

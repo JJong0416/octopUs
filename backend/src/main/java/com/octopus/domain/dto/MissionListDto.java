@@ -6,13 +6,14 @@ import lombok.Getter;
 
 @Getter
 public class MissionListDto {
-
+    private final Long missionNo;
     private final String missionCode;
 
     private final String missionName;
 
     @Builder
-    public MissionListDto(String missionCode,String missionName){
+    public MissionListDto(long missionNo, String missionCode,String missionName){
+        this.missionNo = missionNo;
         this.missionCode = missionCode;
         this.missionName = missionName;
     }

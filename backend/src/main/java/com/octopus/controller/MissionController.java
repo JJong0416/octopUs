@@ -2,6 +2,7 @@ package com.octopus.controller;
 
 import com.octopus.service.MissionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ public class MissionController {
     @GetMapping("/hot")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List> hotMissions() {
-        return ResponseEntity.ok(missionService.getHotMissions());
+        return new ResponseEntity<>(
+                missionService.getHotMissions(), HttpStatus.OK);
     }
 }

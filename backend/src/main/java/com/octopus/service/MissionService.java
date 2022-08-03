@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,11 +29,9 @@ public class MissionService {
         List<MissionListDto> missionList = missions.stream()
                 .filter(mission -> mission.getMissionLimitPersonnel() -
                         (mission.getMissionUsers().length() - (mission.getMissionUsers().replaceAll(",", "").length()) + 1) > 0)
-                .sorted((m1, m2) -> ((m1.getMissionLimitPersonnel() - (m1.getMissionUsers().length()
-                        - (m1.getMissionUsers().replaceAll(",", "").length()) + 1)) -
-                        (m2.getMissionLimitPersonnel() - (m2.getMissionUsers().length()
-                                - (m2.getMissionUsers().replaceAll(",", "").length()) + 1))))
+                .sorted(missionComparator)
                 .map(mission -> MissionListDto.builder()
+                        .missionNo(mission.getMissionNo())
                         .missionCode(mission.getMissionCode())
                         .missionName(mission.getMissionName()).build())
                 .collect(Collectors.toList());
@@ -40,5 +39,9 @@ public class MissionService {
         return missionList.size() < 5 ? missionList : missionList.subList(0, 5);
     }
 
+    Comparator<Mission> missionComparator = (m1, m2) -> (m1.getMissionLimitPersonnel() - (m1.getMissionUsers().length()
+            - (m1.getMissionUsers().replaceAll(",", "").length()) + 1)) -
+            (m2.getMissionLimitPersonnel() - (m2.getMissionUsers().length()
+                    - (m2.getMissionUsers().replaceAll(",", "").length()) + 1));
 
 }

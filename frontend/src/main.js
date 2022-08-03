@@ -5,6 +5,7 @@ import store from "./store/index.js";
 import vuetify from "./plugins/vuetify";
 import vueCookies from "vue-cookies";
 import EasyCamera from "easy-vue-camera";
+
 Vue.config.productionTip = false;
 Vue.use(vueCookies);
 Vue.$cookies.config("7d");

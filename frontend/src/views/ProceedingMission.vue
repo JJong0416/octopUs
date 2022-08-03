@@ -166,7 +166,12 @@
       </v-expand-transition>
     </v-card>
     <v-btn depressed color="primary" @click="camerashow"> Primary </v-btn>
-    <v-easy-camera v-if="cameraon" v-model="picture">hi</v-easy-camera>
+    <v-easy-camera
+      v-model="picture"
+      ref="picpreview"
+      :startOnMounted="cameraon"
+      output="blob"
+    ></v-easy-camera>
     <v-btn @click="cameraAction('start')">Start</v-btn>
     <v-btn @click="cameraAction('snap')">Snap</v-btn>
     <v-btn @click="cameraAction('stop')">Stop</v-btn>
@@ -180,7 +185,8 @@ export default {
     picture: "",
     show: false,
     calendarShow: false,
-    cameraon: false,
+    cameraon: true,
+    bURL: "blob:",
     focus: "",
     type: "month",
     typeToLabel: {
@@ -222,10 +228,10 @@ export default {
     },
     cameraAction(opt) {
       if (opt === "start") {
+        console.log("start");
         this.$refs.picpreview.start();
       } else if (opt === "snap") {
         this.$refs.picpreview.snap();
-
         setTimeout(() => {
           this.processFile(this.picture);
         }, 2000);
@@ -247,8 +253,6 @@ export default {
           var blob = new Blob([event.target.result]); // create blob...
           window.URL = window.URL || window.webkitURL;
           var blobURL = window.URL.createObjectURL(blob); // and get it's URL
-
-          console.log(blob);
 
           // helper Image object
           var image = new Image();
@@ -294,6 +298,8 @@ export default {
 
               newImg.src = url;
               document.body.appendChild(newImg);
+              console.log(newImg);
+              console.log(typeof newImg);
             });
           };
         };

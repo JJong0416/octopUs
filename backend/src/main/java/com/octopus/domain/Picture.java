@@ -27,6 +27,9 @@ public class Picture {
     @JoinColumn(name = "user_no")
     private User userNo;
 
+    @Column(name = "picture_url", nullable = false)
+    private String pictureUrl;
+
     @Column(name = "picture_date", nullable = false)
     private Date date;
 

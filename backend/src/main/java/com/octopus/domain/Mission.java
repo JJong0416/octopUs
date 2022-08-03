@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter @ToString
+@Getter
 @Table(name = "mission")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mission {
@@ -53,13 +53,11 @@ public class Mission {
     @Column(name = "mission_open", nullable = false)
     private MissionOpenType missionOpen;
 
-    @ManyToMany
-    @JoinTable(
-            name = "octopus_table",
-            joinColumns = @JoinColumn(name = "mission_no"),
-            inverseJoinColumns = @JoinColumn(name = "user_no")
-    )
-    private final Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "mission")
+    private final Set<Octopus> octopus = new HashSet<>();
+
+    @OneToOne(mappedBy = "mission", cascade = CascadeType.ALL)
+    private MissionTime missionTime;
 
 
 
@@ -88,4 +86,6 @@ public class Mission {
         else
         {this.missionLimitPersonnel = missionUpdateInfoDto.getMissionLimitPersonnel();}
     }
+
+    public void updateMissionUsers(String missionUsers){this.missionUsers = missionUsers;}
 }

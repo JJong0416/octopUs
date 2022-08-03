@@ -1,9 +1,8 @@
 package com.octopus.controller;
 
-import com.octopus.domain.User;
+import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.dto.UserMyPageDto;
 import com.octopus.domain.dto.UserUpdateInfoDto;
-import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.dto.UserUpdatePasswordDto;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;

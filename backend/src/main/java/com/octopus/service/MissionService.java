@@ -1,7 +1,11 @@
 package com.octopus.service;
 
 import com.octopus.domain.Mission;
+import com.octopus.domain.User;
 import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.domain.dto.MissionDto;
+import com.octopus.domain.dto.MissionUpdateInfoDto;
+import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -40,4 +44,39 @@ public class MissionService {
     public List<Mission> getNewMissions(){
         return missionRepository.findTop5By(Sort.by(Sort.Direction.DESC,"missionNo"));
     }
+
+    @Transactional(readOnly = true)
+    public MissionDto getMissionByMissionNo(Long missionNo){
+        Mission mission = getMissionInfo(missionNo);
+
+        return MissionDto.builder()
+                .missionCode(mission.getMissionCode())
+                .missionContent(mission.getMissionContent())
+                .missionTitle(mission.getMissionTitle())
+                .missionLeaderId(mission.getMissionLeaderId())
+                .missionOpen(mission.getMissionOpen())
+                .missionPoint(mission.getMissionPoint())
+                .missionType(mission.getMissionType())
+                .missionStatus(mission.getMissionStatus())
+                .missionLimitPersonnel(mission.getMissionLimitPersonnel())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public Mission getMissionInfo(Long missionNo) {
+        return missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
+    }
+
+    @Transactional
+    public void modifyMission(MissionUpdateInfoDto missionUpdateInfoDto, long missionNo){
+        Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
+        mission.updateMission(missionUpdateInfoDto);
+    }
+
+
+
 }

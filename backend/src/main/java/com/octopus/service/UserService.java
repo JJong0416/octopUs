@@ -119,4 +119,10 @@ public class UserService {
         return passwordEncoder.matches(currentPassword, dbPassword);
     }
 
+    @Transactional
+    public void joinMission(long missionNo){
+        User user = getUserInfo(getCurrentUsername().get());
+
+    }
+
 }

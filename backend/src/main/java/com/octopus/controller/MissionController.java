@@ -2,12 +2,17 @@ package com.octopus.controller;
 
 import com.octopus.domain.Mission;
 import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.domain.dto.MissionDto;
+import com.octopus.domain.dto.MissionUpdateInfoDto;
 import com.octopus.service.MissionService;
+import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,6 +23,7 @@ import java.util.List;
 public class MissionController {
 
     private final MissionService missionService;
+    private final UserService userService;
 
     // 비활성화 미션 생성
     @PostMapping("/mission")
@@ -33,4 +39,28 @@ public class MissionController {
     public ResponseEntity<List> newMissions(){
         return ResponseEntity.ok(missionService.getNewMissions());
     }
+
+    @GetMapping("/{missionNo}")
+    public ResponseEntity<MissionDto> getMission(@PathVariable long missionNo){
+        MissionDto missionInfo = missionService.getMissionByMissionNo(missionNo);
+        return ResponseEntity.ok(missionInfo);
+    }
+
+    @PatchMapping ("/{missionNo}")
+    public ResponseEntity<HttpStatus> modifyMission(
+            @Valid @RequestBody MissionUpdateInfoDto missionUpdateInfoDto, @PathVariable long missionNo) {
+        missionService.modifyMission(missionUpdateInfoDto, missionNo);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{missionNo}/join")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> joinMission(
+            @PathVariable long missionNo
+    ){
+        userService.joinMission(missionNo);
+        return ResponseEntity.ok().build();
+    }
+
+
 }

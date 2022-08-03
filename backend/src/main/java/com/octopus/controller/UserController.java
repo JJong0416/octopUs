@@ -38,6 +38,7 @@ public class UserController {
         userService.changeUserAvatar(userUpdateInfoDto.getUserAvatar());
         return ResponseEntity.ok().build();
     }
+
     // 닉네임 변경
     @PatchMapping("/user/modify/nickname")
     @PreAuthorize("hasRole('USER')")

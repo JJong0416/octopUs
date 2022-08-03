@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Long> {
+
     List<MissionListDto> findTop5ByMissionStatusAndMissionOpen(
             Sort sort, MissionStatus missionStatus, MissionOpenType missionOpenType);
 

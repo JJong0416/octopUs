@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface Octopus_tableRepository extends JpaRepository<Octopus, OctopusPK> {
+public interface OctopusTableRepository extends JpaRepository<Octopus, OctopusPK> {
 
     @Modifying
     @Transactional

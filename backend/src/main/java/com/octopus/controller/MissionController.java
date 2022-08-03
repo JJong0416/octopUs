@@ -1,6 +1,7 @@
 package com.octopus.controller;
 
 import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.domain.dto.MissionPictureRes;
 import com.octopus.domain.dto.MissionTimeDto;
 import com.octopus.service.MissionService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/mission")
@@ -59,5 +61,11 @@ public class MissionController {
         return missionService.createMissionTime(missionNo, missionTimeDto)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/{missionNo}/picture")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<MissionPictureRes>> getMissionPictures(@PathVariable Long missionNo){
+        return ResponseEntity.ok(missionService.getMissionPictureMatchingUser(missionNo));
     }
 }

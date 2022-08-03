@@ -37,12 +37,10 @@ public class UserController {
         userService.changeUserAvatar(userUpdateInfoDto.getUserAvatar());
         return ResponseEntity.ok().build();
     }
-
     // 닉네임 변경
     @PatchMapping("/user/modify/nickname")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> changeNickname(@RequestBody UserUpdateInfoDto userUpdateInfoDto) {
-        System.out.println(userUpdateInfoDto.toString());
         return (userService.updateUserNickname(userUpdateInfoDto.getUserNickname()))
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
@@ -52,7 +50,6 @@ public class UserController {
     @PatchMapping("/user/modify/password")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> checkPassword(@Valid @RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
-        System.out.println("hellloooooo");
         return (userService.changeUserPassword(userUpdatePasswordDto))
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
@@ -73,13 +70,4 @@ public class UserController {
     public ResponseEntity<UserMyPageDto> userMyPage() {
         return ResponseEntity.ok(userService.getUserMyPageInfo());
     }
-
-/*  테스트용 API
-    @GetMapping("/user/{userId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<User> searchUser(@PathVariable String userId){
-        User userInfo = userService.getUserInfo(userId);
-        return ResponseEntity.ok(userInfo);
-    }
-    */
 }

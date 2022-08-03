@@ -170,7 +170,7 @@
       v-model="picture"
       ref="picpreview"
       :startOnMounted="cameraon"
-      output="blob"
+      output="dataUrl"
     ></v-easy-camera>
     <v-btn @click="cameraAction('start')">Start</v-btn>
     <v-btn @click="cameraAction('snap')">Snap</v-btn>
@@ -183,6 +183,7 @@ import EasyCamera from "easy-vue-camera";
 export default {
   data: () => ({
     picture: "",
+    content: "",
     show: false,
     calendarShow: false,
     cameraon: true,
@@ -232,79 +233,12 @@ export default {
         this.$refs.picpreview.start();
       } else if (opt === "snap") {
         this.$refs.picpreview.snap();
-        setTimeout(() => {
-          this.processFile(this.picture);
-        }, 2000);
+        console.log("사진은?" + this.picture);
+        console.log("사진 타입은??? " + typeof this.picture);
       } else if (opt === "stop") {
         this.$refs.picpreview.stop();
       } else if (opt === "close") {
         this.$refs.picpreview.close();
-      }
-    },
-    processFile(blob) {
-      // read the files
-      var reader = new FileReader();
-
-      if (blob instanceof Blob) {
-        reader.readAsArrayBuffer(blob);
-
-        reader.onload = function (event) {
-          // blob stuff
-          var blob = new Blob([event.target.result]); // create blob...
-          window.URL = window.URL || window.webkitURL;
-          var blobURL = window.URL.createObjectURL(blob); // and get it's URL
-
-          // helper Image object
-          var image = new Image();
-          image.src = blobURL;
-          image.onload = function () {
-            // have to wait till it's loaded
-            var canvas = document.createElement("canvas");
-            var width = image.width;
-            var height = image.height;
-
-            // calculate the width and height, constraining the proportions
-            if (width > height) {
-              if (width > 100) {
-                //height *= max_width / width;
-                height = Math.round((height *= 100 / width));
-                width = 100;
-              }
-            } else {
-              if (height > 100) {
-                //width *= max_height / height;
-                width = Math.round((width *= 100 / height));
-                height = 100;
-              }
-            }
-
-            // resize the canvas and draw the image data into it
-            canvas.width = width;
-            canvas.height = height;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(image, 0, 0, width, height);
-
-            canvas.toBlob(function (blob) {
-              const newImg = document.createElement("img");
-              const url = URL.createObjectURL(blob);
-
-              console.log(blob);
-              //send this blob to API
-
-              newImg.onload = function () {
-                // no longer need to read the blob so it's revoked
-                URL.revokeObjectURL(url);
-              };
-
-              newImg.src = url;
-              document.body.appendChild(newImg);
-              console.log(newImg);
-              console.log(typeof newImg);
-            });
-          };
-        };
-      } else {
-        console.log(this.picture);
       }
     },
 

@@ -7,14 +7,6 @@ import com.octopus.domain.type.MissionStatus;
 import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.*;
-import com.octopus.domain.AuthenticationInfo;
-import com.octopus.domain.Mission;
-import com.octopus.domain.dto.AuthenticationDto;
-import com.octopus.domain.dto.MissionListDto;
-import com.octopus.domain.dto.MissionCreateDto;
-import com.octopus.exception.MissionNotFoundException;
-import com.octopus.repository.AuthenticationRepository;
-import com.octopus.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -41,7 +33,7 @@ public class MissionService {
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
-    public void createMission(MissionCreateDto missionCreateDto){
+    public void createMission(MissionCreateDto missionCreateDto) {
 
         String currentUserId = getCurrentUsername().get();
 
@@ -154,25 +146,9 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
-    public Mission getMissionByMissionNo(Long missionNo) {
-        return missionRepository.findMissionByMissionNo(missionNo).orElseThrow(() -> {
-            //MissionNotFoundException 쓰는건 안좋을지?
-            throw new RuntimeException("Not found Mission");
-        });
-    }
-    @Transactional(readOnly = true)
     public boolean haveAuthentication(Long missionNo) {
         return authenticationRepository.findAuthenticationInfoByMissionNo(missionNo);
     }
-
-    public boolean isAuthorizedMissionUser(Mission mission) {
-        String currentUser = getCurrentUsername().get();
-        return mission.getMissionLeaderId().equals(currentUser);
-    }
-
-
-
-
 
 
     // TODO: 2022-08-02 contains말고 다른거
@@ -224,11 +200,12 @@ public class MissionService {
         String currentUser = getCurrentUsername().get();
         return mission.getMissionLeaderId().equals(currentUser);
     }
+
     @Transactional
     public List<MissionListDto> getHotMissions() {
         //모집중이면서 공개방 리스트가져오기
         List<Mission> missions = missionRepository.findByMissionStatusAndMissionOpen(MissionStatus.OPEN, MissionOpenType.OPEN_ROOM);
-        if(missions == null || missions.isEmpty())
+        if (missions == null || missions.isEmpty())
             throw new MissionNotFoundException();
         List<MissionListDto> missionList = missions.stream()
                 .filter(mission -> mission.getMissionLimitPersonnel() -
@@ -250,7 +227,7 @@ public class MissionService {
 
 
     @Transactional(readOnly = true)
-    public MissionDto getMissionDtoByMissionNo(Long missionNo){
+    public MissionDto getMissionDtoByMissionNo(Long missionNo) {
         Mission mission = getMissionByMissionNo(missionNo);
 
         return MissionDto.builder()
@@ -267,7 +244,7 @@ public class MissionService {
     }
 
     @Transactional
-    public void modifyMission(MissionUpdateInfoDto missionUpdateInfoDto, long missionNo){
+    public void modifyMission(MissionUpdateInfoDto missionUpdateInfoDto, long missionNo) {
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
             throw new UserNotFoundException();
         });
@@ -275,8 +252,8 @@ public class MissionService {
     }
 
     @Transactional
-    public void joinMission(Long missionNo){
-        User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(()->{
+    public void joinMission(Long missionNo) {
+        User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(() -> {
             throw new UserNotFoundException();
         });
 
@@ -288,6 +265,4 @@ public class MissionService {
                 .signUpDto(signUpDto)
                 .build();
     }
-
-
 }

@@ -72,16 +72,12 @@ public class UserService {
     @Transactional
     public boolean updateUserNickname(String newNickname) {
         if (!isUserByNicknameExist(newNickname)) {
+            System.out.println("1234");
+            User user = getUserInfo(getCurrentUsername().get());
+            user.changeNickname(newNickname);
             return true;
         }
-        changeUserNickname(newNickname);
         return false;
-    }
-
-    @Transactional
-    public void changeUserNickname(String newNickname) {
-        User user = getUserInfo(String.valueOf(getCurrentUsername()));
-        user.changeNickname(newNickname);
     }
 
     @Transactional

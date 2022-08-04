@@ -94,17 +94,8 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-item @click="type = 'day'">
-                        <v-list-item-title>Day</v-list-item-title>
-                      </v-list-item>
-                      <v-list-item @click="type = 'week'">
-                        <v-list-item-title>Week</v-list-item-title>
-                      </v-list-item>
                       <v-list-item @click="type = 'month'">
                         <v-list-item-title>Month</v-list-item-title>
-                      </v-list-item>
-                      <v-list-item @click="type = '4day'">
-                        <v-list-item-title>4 days</v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
@@ -119,8 +110,7 @@
                   :event-color="getEventColor"
                   :type="type"
                   @click:event="showEvent"
-                  @click:more="viewDay"
-                  @click:date="viewDay"
+                  @click:more="showAllEvent"
                   @change="updateRange"
                 ></v-calendar>
                 <v-menu
@@ -129,18 +119,14 @@
                   :activator="selectedElement"
                   offset-x
                 >
+                  <!-- 클릭하면 나오는 상세 창 -->
+                  <!-- ----------------------------------------------------- -->
                   <v-card color="grey lighten-4" min-width="350px" flat>
                     <v-toolbar :color="selectedEvent.color" dark>
-                      <v-btn icon>
-                        <v-icon>mdi-pencil</v-icon>
-                      </v-btn>
                       <v-toolbar-title
                         v-html="selectedEvent.name"
                       ></v-toolbar-title>
                       <v-spacer></v-spacer>
-                      <v-btn icon>
-                        <v-icon>mdi-heart</v-icon>
-                      </v-btn>
                       <v-btn icon>
                         <v-icon>mdi-dots-vertical</v-icon>
                       </v-btn>
@@ -158,6 +144,7 @@
                       </v-btn>
                     </v-card-actions>
                   </v-card>
+                  <!-- -------------------------------------------------- -->
                 </v-menu>
               </v-sheet>
             </v-col>
@@ -311,13 +298,11 @@ export default {
       this.$refs.webcam.start();
     },
     onSave() {
-      // img 저장하기
       console.log(this.img);
-      // ------------------------
       this.$refs.webcam.stop();
       this.cameraShow = false;
       console.log(this.img);
-      // 서버에 img 전송하기
+      // 서버에 img 전송하는 코드 추가........ㅠ_ㅠ
       this.img = null;
       this.$refs.webcam.start();
     },
@@ -357,6 +342,9 @@ export default {
 
       nativeEvent.stopPropagation();
     },
+    // showAllEvent({nativeEvent, event}){
+    //   // 해당 요일 모든 이벤트를 출력해주는 함수 생성
+    // },
     updateRange({ start, end }) {
       const events = [];
 

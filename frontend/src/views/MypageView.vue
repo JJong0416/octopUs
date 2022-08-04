@@ -46,6 +46,8 @@
     <v-btn small class="ma-2">
       <v-icon>mdi-pencil</v-icon>
     </v-btn>
+    <br />
+    <router-link :to="`/proceeding`">참여 중인 방</router-link>
   </v-container>
 </template>
 <script>

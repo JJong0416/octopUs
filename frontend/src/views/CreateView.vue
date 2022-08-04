@@ -68,7 +68,7 @@
       oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
       :value="pointnum"
     ></v-text-field>
-    <br>
+    <br />
     <v-btn>Create</v-btn>
   </div>
 </template>
@@ -87,8 +87,8 @@ export default {
       (value) =>
         (value && value >= 1 && value <= 8) || "1~8사이의 숫자로 입력해주세요",
     ],
-    items: ["foo", "bar", "fizz", "buzz"],
-    values: ["foo", "bar"],
+    items: ["미라클모닝", "공부", "코딩", "운동", "기타"],
+    values: ["기타"],
     value: null,
     rules: [
       (value) => !!value || "제목을 입력해주세요",

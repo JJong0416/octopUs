@@ -9,12 +9,12 @@ public class MissionListDto {
     private final Long missionNo;
     private final String missionCode;
 
-    private final String missionName;
+    private final String missionTitle;
 
     @Builder
-    public MissionListDto(long missionNo, String missionCode,String missionName){
+    public MissionListDto(long missionNo, String missionCode,String missionTitle){
         this.missionNo = missionNo;
         this.missionCode = missionCode;
-        this.missionName = missionName;
+        this.missionTitle = missionTitle;
     }
 }

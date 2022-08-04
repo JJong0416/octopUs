@@ -4,6 +4,7 @@ import com.octopus.domain.dto.*;
 import com.octopus.domain.dto.MissionCreateDto;
 import com.octopus.domain.dto.UploadPictureDto;
 import com.octopus.service.MissionService;
+import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ import java.util.List;
 public class MissionController {
 
     private final MissionService missionService;
+
+    private final UserService userService;
 
     // 비활성화 미션 생성
     @PostMapping
@@ -77,6 +80,9 @@ public class MissionController {
 
         return ResponseEntity.ok().build();
     }
+
+
+
 
     @PostMapping("/{missionNo}/mission-time")
     @PreAuthorize("hasRole('USER')")

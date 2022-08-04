@@ -2,16 +2,21 @@ package com.octopus.service;
 
 import com.octopus.domain.Mission;
 import com.octopus.domain.User;
+import com.octopus.domain.dto.MissionInfoDto;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.dto.UserMyPageDto;
 import com.octopus.domain.dto.UserUpdatePasswordDto;
 import com.octopus.exception.SignUpException;
 import com.octopus.exception.UserNotFoundException;
+import com.octopus.repository.OctopusTableRepository;
 import com.octopus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 
@@ -21,6 +26,8 @@ import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    private final OctopusTableRepository octopusTableRepository;
     private final PasswordEncoder passwordEncoder;
 
     /* Exception Bean*/
@@ -119,6 +126,35 @@ public class UserService {
     private boolean isCurrentPasswordAndDbPasswordEquals(String currentPassword, String dbPassword) {
         return passwordEncoder.matches(currentPassword, dbPassword);
     }
+
+    @Transactional(readOnly = true)
+    public List<MissionInfoDto> getUserMissions(String userId){
+
+        User user = getUserInfo(userId);
+        List<Mission> missions = octopusTableRepository.findMissionByUser(user);
+        List<MissionInfoDto> missionInfoDto = new ArrayList<>();
+
+        for(Mission mission : missions){
+            MissionInfoDto mid = MissionInfoDto.builder()
+                    .missionCode(mission.getMissionCode())
+                    .missionLeaderId(mission.getMissionLeaderId())
+                    .missionTitle(mission.getMissionTitle())
+                    .missionType(mission.getMissionType())
+                    .missionPoint(mission.getMissionPoint())
+                    .missionStatus(mission.getMissionStatus())
+                    .missionLimitPersonnel(mission.getMissionLimitPersonnel())
+                    .missionUser(mission.getMissionUsers())
+                    .missionContent(mission.getMissionContent())
+                    .missionOpen(mission.getMissionOpen())
+                    .build();
+
+            missionInfoDto.add(mid);
+        }
+
+        return missionInfoDto;
+
+    }
+
 
 
 }

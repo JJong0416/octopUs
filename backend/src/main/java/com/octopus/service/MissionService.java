@@ -221,7 +221,7 @@ public class MissionService {
                 .map(mission -> MissionListDto.builder()
                         .missionNo(mission.getMissionNo())
                         .missionCode(mission.getMissionCode())
-                        .missionName(mission.getMissionTitle()).build())
+                        .missionTitle(mission.getMissionTitle()).build())
                 .collect(Collectors.toList());
 
         return missionList.size() < 5 ? missionList : missionList.subList(0, 5);

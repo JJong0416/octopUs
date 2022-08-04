@@ -197,8 +197,8 @@
           <figure class="figure">
             <img :src="img" width="100%" />
           </figure>
-          <v-btn @click="onSave">올리기</v-btn>
-          <v-btn @click="onRestart">다시 찍기</v-btn>
+          <v-btn v-if="img != null" @click="onSave">올리기</v-btn>
+          <v-btn v-if="img != null" @click="onRestart">다시 찍기</v-btn>
         </div>
       </v-expand-transition>
     </v-card>
@@ -312,6 +312,8 @@ export default {
     },
     onSave() {
       // img 저장하기
+      console.log(this.img);
+      // ------------------------
       this.$refs.webcam.stop();
       this.cameraShow = false;
       console.log(this.img);

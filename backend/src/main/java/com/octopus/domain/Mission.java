@@ -51,11 +51,13 @@ public class Mission {
     @Column(name = "mission_open", nullable = false)
     private MissionOpenType missionOpen;
 
-    @OneToMany(mappedBy = "mission")
-    private final Set<Octopus> octopus = new HashSet<>();
-
-    @OneToOne(mappedBy = "mission", cascade = CascadeType.ALL)
-    private MissionTime missionTime;
+    @ManyToMany
+    @JoinTable(
+            name = "octopus_table",
+            joinColumns = @JoinColumn(name = "mission_no"),
+            inverseJoinColumns = @JoinColumn(name = "user_no")
+    )
+    private final Set<User> users = new HashSet<>();
 
     // TODO: 2022-07-29 MapStruct 고민해보기 너무 길긴 하다..
     @Builder(builderMethodName = "createMission")

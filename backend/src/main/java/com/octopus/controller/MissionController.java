@@ -59,5 +59,12 @@ public class MissionController {
         return missionService.createMissionTime(missionNo, missionTimeDto)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
+
+    }
+    @GetMapping("/hot")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List> hotMissions() {
+        return new ResponseEntity<>(
+                missionService.getHotMissions(), HttpStatus.OK);
     }
 }

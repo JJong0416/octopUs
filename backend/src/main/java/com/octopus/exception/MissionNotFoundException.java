@@ -1,14 +1,12 @@
 package com.octopus.exception;
 
 import org.springframework.stereotype.Component;
-
 @Component
 public class MissionNotFoundException extends RuntimeException{
-
-    private static final String Mission_NOT_FOUND_EXCEPTION_MESSAGE = "해당 미션은 존재하지 않습니다.";
+    private static final String MISSION_NOT_FOUND_EXCEPTION_MESSAGE = "미션이 존재하지 않습니다.";
 
     @Override
     public final String getMessage(){
-        return Mission_NOT_FOUND_EXCEPTION_MESSAGE;
+        return MISSION_NOT_FOUND_EXCEPTION_MESSAGE;
     }
 }

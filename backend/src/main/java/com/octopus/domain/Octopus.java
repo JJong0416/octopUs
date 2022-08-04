@@ -1,6 +1,7 @@
 package com.octopus.domain;
 
 import com.octopus.domain.PK.OctopusPK;
+import com.octopus.domain.dto.OctopusDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,5 +23,14 @@ public class Octopus {
     @ManyToOne
     @JoinColumn(name = "mission_no", referencedColumnName = "mission_no")
     private Mission mission;
+
+    @Builder(builderMethodName = "addToOctopus")
+    public Octopus(
+            User user, Mission mission
+    ) {
+        this.user = user;
+        this.mission = mission;
+    }
+
 
 }

@@ -1,15 +1,9 @@
 package com.octopus.service;
 
-import com.octopus.domain.Mission;
+import com.octopus.domain.*;
 import com.octopus.domain.User;
-import com.octopus.domain.MissionTime;
-import com.octopus.domain.User;
-import com.octopus.domain.dto.MissionCreateDto;
-import com.octopus.domain.dto.MissionDto;
-import com.octopus.domain.dto.MissionUpdateInfoDto;
+import com.octopus.domain.dto.*;
 import com.octopus.exception.UserNotFoundException;
-import com.octopus.domain.dto.MissionListDto;
-import com.octopus.domain.dto.MissionTimeDto;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.exception.MissionNotFoundException;
@@ -23,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.annotation.Target;
 import java.util.List;
 
 import static com.octopus.utils.SecurityUtils.getCurrentUsername;
@@ -35,6 +30,8 @@ public class MissionService {
     private final MissionRepository missionRepository;
     private final MissionTimeRepository missionTimeRepository;
     private final UserRepository userRepository;
+
+    private final UserService userService;
 
     private final OctopusTableRepository octopus_tableRepository;
 
@@ -150,8 +147,8 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
-    public MissionDto getMissionByMissionNo(Long missionNo){
-        Mission mission = getMissionInfo(missionNo);
+    public MissionDto getMissionDtoByMissionNo(Long missionNo){
+        Mission mission = getMissionByMissionNo(missionNo);
 
         return MissionDto.builder()
                 .missionCode(mission.getMissionCode())
@@ -166,13 +163,6 @@ public class MissionService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
-    public Mission getMissionInfo(Long missionNo) {
-        return missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
-            throw new UserNotFoundException();
-        });
-    }
-
     @Transactional
     public void modifyMission(MissionUpdateInfoDto missionUpdateInfoDto, long missionNo){
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
@@ -181,6 +171,35 @@ public class MissionService {
         mission.updateMission(missionUpdateInfoDto);
     }
 
+    public void joinMission(long missionNo){
+        Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(()->{
+            throw new MissionNotFoundException();
+        });
+        User user = userService.getUserInfo(getCurrentUsername().get());
+
+
+    }
+
+    private User createUser(SignUpDto signUpDto) {
+        return User.signUpBuilder()
+                .signUpDto(signUpDto)
+                .build();
+    }
+//    @Transactional
+//    public void createMission(MissionCreateDto missionCreateDto) {
+//
+//        String currentUserId = getCurrentUsername().get();
+//
+//        /* 미션에 방장 정보와 String 으로 유저 넣기 */
+//        missionCreateDto.addMissionLeaderIdAndUser(currentUserId);
+//
+//        /* DTO 를 통한 미션 생성 */
+//        Mission mission = Mission.createMission()
+//                .missionCreateDto(missionCreateDto)
+//                .build();
+//
+//        missionRepository.save(mission);
+//    }
 
 
 }

@@ -1,5 +1,6 @@
 package com.octopus.controller;
 
+import com.octopus.domain.Octopus;
 import com.octopus.domain.dto.MissionCreateDto;
 import com.octopus.domain.dto.MissionDto;
 import com.octopus.domain.dto.MissionUpdateInfoDto;
@@ -41,7 +42,7 @@ public class MissionController {
 
     @GetMapping("/{missionNo}")
     public ResponseEntity<MissionDto> getMission(@PathVariable long missionNo){
-        MissionDto missionInfo = missionService.getMissionByMissionNo(missionNo);
+        MissionDto missionInfo = missionService.getMissionDtoByMissionNo(missionNo);
         return ResponseEntity.ok(missionInfo);
     }
 
@@ -52,12 +53,15 @@ public class MissionController {
         return ResponseEntity.ok().build();
     }
 
+    //join
+    // octopus 테이블에 missionNo랑 userNo 추가
+    // mission에다가 add user할 거
     @PostMapping("/{missionNo}/join")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> joinMission(
+    public ResponseEntity<HttpStatus> addUserToMission(
             @PathVariable long missionNo
     ){
-        userService.joinMission(missionNo);
+        missionService.joinMission(missionNo);
         return ResponseEntity.ok().build();
     }
 

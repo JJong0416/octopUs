@@ -34,9 +34,10 @@ public class Picture {
     private Date date;
 
     @Builder(builderMethodName = "createPicture")
-    Picture(Mission missionNo, User userNo){
+    Picture(Mission missionNo, User userNo, String pictureUrl){
         this.missionNo = missionNo;
         this.userNo = userNo;
+        this.pictureUrl = pictureUrl;
         this.date = new Date();
     }
 }

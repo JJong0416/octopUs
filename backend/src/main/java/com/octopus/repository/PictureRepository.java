@@ -3,7 +3,6 @@ package com.octopus.repository;
 import com.octopus.domain.Mission;
 import com.octopus.domain.Picture;
 import com.octopus.domain.User;
-import com.octopus.domain.dto.PictureRes;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

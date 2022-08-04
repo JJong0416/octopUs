@@ -4,15 +4,38 @@ import com.octopus.domain.*;
 import com.octopus.domain.dto.*;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
+import com.google.cloud.storage.Acl;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.octopus.domain.Mission;
+import com.octopus.domain.Picture;
+import com.octopus.domain.User;
+import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.domain.dto.MissionListDto;
+import com.octopus.domain.dto.UploadPictureDto;
+import com.octopus.domain.type.MissionOpenType;
+import com.octopus.domain.type.MissionStatus;
 import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.*;
+import com.octopus.repository.MissionRepository;
+import com.octopus.repository.Octopus_tableRepository;
+import com.octopus.repository.PictureRepository;
+import com.octopus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
+import javax.persistence.EntityManager;
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +54,10 @@ public class MissionService {
     private final OctopusTableRepository octopusTableRepository;
     private final AuthenticationRepository authenticationRepository;
 
+    private final Storage storage;
+
+    @Value("${bucketname}")
+    private String bucketName;
     /* 미션 코드 중복은 안했음. */
     @Transactional
     public void createMission(MissionCreateDto missionCreateDto) {
@@ -265,4 +292,58 @@ public class MissionService {
                 .signUpDto(signUpDto)
                 .build();
     }
+
+    @Transactional
+    public boolean uploadPicture(Long missionNo, UploadPictureDto uploadPictureDto) {
+
+        StringBuilder filename = new StringBuilder();
+        User user = getUserByUserId(getCurrentUsername().get());
+        Mission mission = getMissionByMissionNo(missionNo);
+        filename.append(mission.getMissionNo())
+                .append("/")
+                .append(user.getUserId())
+                .append("/")
+                .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss")))
+                .append(".png");
+
+
+        byte decode[] = Base64.decodeBase64(uploadPictureDto.getEncodedImg());
+        BlobInfo blobInfo = storage.create(
+                BlobInfo.newBuilder(bucketName, filename.toString())
+                        .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
+                        .setContentType("image/png")
+                        .build(), decode);
+
+        if(blobInfo == null)
+            return false;
+
+        //TODO: 2022-08-4, 목, 1:35 StringBuilder 또 써도되나  -박지수
+        StringBuilder makeUrl = new StringBuilder();
+        Picture picture = Picture.createPicture()
+                .missionNo(mission)
+                .userNo(user)
+                .pictureUrl(makeUrl.append("https://storage.googleapis.com/")
+                        .append(bucketName).append("/")
+                        .append(filename).toString())
+                .build();
+        pictureRepository.save(picture);
+        return true;
+    }
+
+
+    @Transactional(readOnly = true)
+    public Mission getMissionByMissionNo(Long missionNo) {
+        return missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
+            throw new RuntimeException("Not found Mission");
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public User getUserByUserId(String userId) {
+        return userRepository.findByUserId(userId).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
+    }
+
+
 }

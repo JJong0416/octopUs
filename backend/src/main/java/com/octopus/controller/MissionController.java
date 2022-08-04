@@ -1,6 +1,8 @@
 package com.octopus.controller;
 
 import com.octopus.domain.dto.*;
+import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.domain.dto.UploadPictureDto;
 import com.octopus.service.MissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -110,6 +112,15 @@ public class MissionController {
         return missionService.createAuthentication(missionNo, authenticationDto)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
+    }
+
+
+    @PostMapping("/{missionNo}/picture")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> uploadPicture(@PathVariable Long missionNo, @Valid @RequestBody UploadPictureDto uploadPictureDto) {
+        return missionService.uploadPicture(missionNo, uploadPictureDto)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.internalServerError().build();
     }
 
 }

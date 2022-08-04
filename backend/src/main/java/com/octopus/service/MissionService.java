@@ -83,6 +83,8 @@ public class MissionService {
 
         missionTimeRepository.save(missionTime);
 
+        if(haveAuthentication(missionNo)) mission.updateMissionStatus(MissionStatus.OPEN);
+
         return true;
     }
 
@@ -155,6 +157,7 @@ public class MissionService {
                 .build();
 
         authenticationRepository.save(authenticationInfo);
+        if(haveMissionTime(missionNo)) mission.updateMissionStatus(MissionStatus.OPEN);
         return true;
     }
 

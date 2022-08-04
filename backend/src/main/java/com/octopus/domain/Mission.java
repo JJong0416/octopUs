@@ -90,4 +90,6 @@ public class Mission {
     }
 
     public void updateMissionUsers(String missionUsers){this.missionUsers = missionUsers;}
+
+    public void updateMissionStatus(MissionStatus missionStatus){this.missionStatus = missionStatus;}
 }

@@ -34,16 +34,11 @@
         <div v-show="show">
           <v-divider></v-divider>
 
-          <v-card-text>
-            I'm a thing. But, like most politicians, he promised more than he
-            could deliver. You won't have time for sleeping, soldier, not with
-            all the bed making you'll be doing. Then we'll go with that data
-            file! Hey, you add a one and two zeros to that or we walk! You're
-            going to do his laundry? I've got to find a way to escape.
-          </v-card-text>
+          <v-card-text> 방 설명 </v-card-text>
         </div>
       </v-expand-transition>
-      <!--  캘린더 열고 닫힘  -->
+
+      <!-- calendar 서랍 ---------------------------------------- -->
       <v-card-actions>
         <v-card-text color="orange" text> Calendar </v-card-text>
 
@@ -55,7 +50,8 @@
           }}</v-icon>
         </v-btn>
       </v-card-actions>
-
+      <!-- -------------------------------------------------------- -->
+      <!-- 캘린더 view --------------------------------------------- -->
       <v-expand-transition>
         <div v-show="calendarShow">
           <v-divider></v-divider>
@@ -63,6 +59,7 @@
             <v-col>
               <v-sheet height="64">
                 <v-toolbar flat>
+                  <!-- 오늘로 가는 버튼 -->
                   <v-btn
                     outlined
                     class="mr-4"
@@ -71,6 +68,7 @@
                   >
                     Today
                   </v-btn>
+                  <!-- --------------- -->
                   <v-btn fab text small color="grey darken-2" @click="prev">
                     <v-icon small> mdi-chevron-left </v-icon>
                   </v-btn>
@@ -80,32 +78,13 @@
                   <v-toolbar-title v-if="$refs.calendar">
                     {{ $refs.calendar.title }}
                   </v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-menu bottom right>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        outlined
-                        color="grey darken-2"
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                        <span>{{ typeToLabel[type] }}</span>
-                        <v-icon right> mdi-menu-down </v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item @click="type = 'month'">
-                        <v-list-item-title>Month</v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
                 </v-toolbar>
               </v-sheet>
               <v-sheet height="600">
                 <v-calendar
                   ref="calendar"
                   v-model="focus"
-                  color="primary"
+                  color="#E63946"
                   :events="events"
                   :event-color="getEventColor"
                   :type="type"
@@ -119,8 +98,7 @@
                   :activator="selectedElement"
                   offset-x
                 >
-                  <!-- 클릭하면 나오는 상세 창 -->
-                  <!-- ----------------------------------------------------- -->
+                  <!-- 클릭하면 나오는 상세 창 -------------------------------- -->
                   <v-card color="grey lighten-4" min-width="350px" flat>
                     <v-toolbar :color="selectedEvent.color" dark>
                       <v-toolbar-title
@@ -151,7 +129,9 @@
           </v-row>
         </div>
       </v-expand-transition>
+      <!-- -------------------------------------------------------------------- -->
 
+      <!-- 인증하기 서랍 ----------------------------------------- -->
       <v-card-actions>
         <v-card-text color="orange" text> 인증하기 </v-card-text>
 
@@ -163,7 +143,8 @@
           }}</v-icon>
         </v-btn>
       </v-card-actions>
-      <!-- camera -->
+      <!-- -------------------------------------------------------- -->
+      <!-- 카메라로 인증하기 --------------------------------------- -->
       <v-expand-transition>
         <div v-show="cameraShow">
           <web-cam
@@ -188,6 +169,7 @@
           <v-btn v-if="img != null" @click="onRestart">다시 찍기</v-btn>
         </div>
       </v-expand-transition>
+      <!-- -------------------------------------------------------- -->
     </v-card>
   </div>
 </template>
@@ -220,29 +202,24 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
+    // 캘린더 이벤트 색 8개
     colors: [
-      "blue",
-      "indigo",
-      "deep-purple",
-      "cyan",
-      "green",
-      "orange",
-      "grey darken-1",
+      "#F1FAEE",
+      "#A8DADC",
+      "#1D3557",
+      "#457B9D",
+      "#FDFFB6",
+      "#FFADAD",
+      "#ED7E9C",
+      "#A0BAD0",
     ],
-    names: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party",
-    ],
+    names: ["Nickname"],
+    // camera ----------
     img: null,
     camera: null,
     deviceId: null,
     devices: [],
+    // ------------------
   }),
   computed: {
     device() {
@@ -263,8 +240,7 @@ export default {
     },
   },
   methods: {
-    //camera methods
-    //-------------------------------------------
+    //camera methods-------------------------------------------
     onCapture() {
       this.img = this.$refs.webcam.capture();
     },
@@ -307,7 +283,8 @@ export default {
       this.$refs.webcam.start();
     },
     //------------------------------------------------
-    // 달력과 관련된 methods
+
+    // 달력과 관련된 methods---------------------------
     viewDay({ date }) {
       this.focus = date;
       this.type = "day";

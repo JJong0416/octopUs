@@ -40,14 +40,17 @@
           <v-img style="max-width: 70px" src="../assets/kakaopay.png"></v-img>
         </v-col>
       </v-row>
+
+      <br />
+      비밀번호 수정하기
+      <v-btn small class="ma-2">
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+      <v-divider class="mx-4"></v-divider>
+      <br />
+      <router-link :to="`/proceeding`">참여 중인 방</router-link>
+      <br />
     </v-card>
-    <br />
-    비밀번호 수정하기
-    <v-btn small class="ma-2">
-      <v-icon>mdi-pencil</v-icon>
-    </v-btn>
-    <br />
-    <router-link :to="`/proceeding`">참여 중인 방</router-link>
   </v-container>
 </template>
 <script>

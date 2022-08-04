@@ -123,4 +123,12 @@ public class MissionController {
                 : ResponseEntity.internalServerError().build();
     }
 
+    @GetMapping("/{missionNo}/users")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List> missionUsers(@PathVariable Long missionNo){
+        return new ResponseEntity<>(
+                missionService.getMissionUsers(missionNo), HttpStatus.OK);
+    }
+
+
 }

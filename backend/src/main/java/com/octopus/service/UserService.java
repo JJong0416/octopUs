@@ -1,5 +1,6 @@
 package com.octopus.service;
 
+import com.octopus.domain.Mission;
 import com.octopus.domain.User;
 import com.octopus.domain.dto.SignUpDto;
 import com.octopus.domain.dto.UserMyPageDto;
@@ -118,5 +119,6 @@ public class UserService {
     private boolean isCurrentPasswordAndDbPasswordEquals(String currentPassword, String dbPassword) {
         return passwordEncoder.matches(currentPassword, dbPassword);
     }
+
 
 }

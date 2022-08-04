@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 
@@ -131,15 +129,15 @@ public class MissionService {
     }
 
     // TODO: 2022-08-02 contains말고 다른거
-    public boolean checkUserIdEqualLeaderId(Mission mission, String loginedUserId){
+    public boolean checkUserIdEqualLeaderId(Mission mission, String loginedUserId) {
         return loginedUserId.contains(mission.getMissionLeaderId());
     }
 
-    public boolean checkMissionStatusIsOPEN(Mission mission){
+    public boolean checkMissionStatusIsOPEN(Mission mission) {
         return mission.getMissionStatus().equals(MissionStatus.OPEN);
     }
 
-    public Integer checkMissionContainsUserId(Mission mission, String userId){
+    public Integer checkMissionContainsUserId(Mission mission, String userId) {
         return mission.getMissionUsers().indexOf(userId.toLowerCase());
     }
 
@@ -202,5 +200,47 @@ public class MissionService {
             - (m1.getMissionUsers().replaceAll(",", "").length()) + 1)) -
             (m2.getMissionLimitPersonnel() - (m2.getMissionUsers().length()
                     - (m2.getMissionUsers().replaceAll(",", "").length()) + 1));
+
+
+    @Transactional(readOnly = true)
+    public MissionDto getMissionDtoByMissionNo(Long missionNo){
+        Mission mission = getMissionByMissionNo(missionNo);
+
+        return MissionDto.builder()
+                .missionCode(mission.getMissionCode())
+                .missionContent(mission.getMissionContent())
+                .missionTitle(mission.getMissionTitle())
+                .missionLeaderId(mission.getMissionLeaderId())
+                .missionOpen(mission.getMissionOpen())
+                .missionPoint(mission.getMissionPoint())
+                .missionType(mission.getMissionType())
+                .missionStatus(mission.getMissionStatus())
+                .missionLimitPersonnel(mission.getMissionLimitPersonnel())
+                .build();
+    }
+
+    @Transactional
+    public void modifyMission(MissionUpdateInfoDto missionUpdateInfoDto, long missionNo){
+        Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
+        mission.updateMission(missionUpdateInfoDto);
+    }
+
+    @Transactional
+    public void joinMission(Long missionNo){
+        User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(()->{
+            throw new UserNotFoundException();
+        });
+
+        octopusTableRepository.insertToOctopusTable(user.getUserNo(), missionNo);
+    }
+
+    private User createUser(SignUpDto signUpDto) {
+        return User.signUpBuilder()
+                .signUpDto(signUpDto)
+                .build();
+    }
+
 
 }

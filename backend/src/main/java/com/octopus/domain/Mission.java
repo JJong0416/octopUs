@@ -1,9 +1,11 @@
 package com.octopus.domain;
 
 import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.domain.dto.MissionUpdateInfoDto;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.domain.type.MissionType;
+import com.octopus.exception.LimitLessThanBeforeException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -59,6 +61,8 @@ public class Mission {
     )
     private final Set<User> users = new HashSet<>();
 
+
+
     // TODO: 2022-07-29 MapStruct 고민해보기 너무 길긴 하다..
     @Builder(builderMethodName = "createMission")
     Mission(MissionCreateDto missionCreateDto) {
@@ -72,6 +76,17 @@ public class Mission {
         this.missionUsers = missionCreateDto.getMissionUser();
         this.missionContent = missionCreateDto.getMissionContent();
         this.missionOpen = missionCreateDto.getMissionOpen();
+    }
+
+    public void updateMission(MissionUpdateInfoDto missionUpdateInfoDto){
+        this.missionTitle = missionUpdateInfoDto.getMissionTitle();
+        this.missionContent = missionUpdateInfoDto.getMissionContent();
+        this.missionType = missionUpdateInfoDto.getMissionType();
+        if (missionUpdateInfoDto.getMissionLimitPersonnel() < this.missionLimitPersonnel){
+            //throw LimitLessThanBeforeException;
+        }
+        else
+        {this.missionLimitPersonnel = missionUpdateInfoDto.getMissionLimitPersonnel();}
     }
 
     public void updateMissionUsers(String missionUsers){this.missionUsers = missionUsers;}

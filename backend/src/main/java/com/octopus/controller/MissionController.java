@@ -1,10 +1,15 @@
 package com.octopus.controller;
 
+import com.octopus.domain.Octopus;
 import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.domain.dto.MissionDto;
+import com.octopus.domain.dto.MissionUpdateInfoDto;
 import com.octopus.domain.dto.MissionPictureRes;
 import com.octopus.domain.dto.MissionTimeDto;
 import com.octopus.service.MissionService;
+import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +40,33 @@ public class MissionController {
     public ResponseEntity<List> newMissions(){
         return ResponseEntity.ok(missionService.getNewMissions());
     }
+
+    @GetMapping("/{missionNo}")
+    public ResponseEntity<MissionDto> getMission(@PathVariable long missionNo){
+        MissionDto missionInfo = missionService.getMissionDtoByMissionNo(missionNo);
+        return ResponseEntity.ok(missionInfo);
+    }
+
+    @PatchMapping ("/{missionNo}")
+    public ResponseEntity<HttpStatus> modifyMission(
+            @Valid @RequestBody MissionUpdateInfoDto missionUpdateInfoDto, @PathVariable long missionNo) {
+        missionService.modifyMission(missionUpdateInfoDto, missionNo);
+        return ResponseEntity.ok().build();
+    }
+
+    //join
+    // octopus 테이블에 missionNo랑 userNo 추가
+    // mission에다가 add user할 거
+    @PostMapping("/{missionNo}/join")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> addUserToMission(
+            @PathVariable long missionNo
+    ){
+        missionService.joinMission(missionNo);
+        return ResponseEntity.ok().build();
+    }
+
+
 
     @DeleteMapping("/{missionNo}/user/{userId}")
     @PreAuthorize("hasRole('USER')")

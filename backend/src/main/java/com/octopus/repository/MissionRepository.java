@@ -1,6 +1,8 @@
 package com.octopus.repository;
 
 import com.octopus.domain.Mission;
+import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.domain.dto.MissionDto;
 import com.octopus.domain.dto.MissionListDto;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
@@ -15,11 +17,12 @@ import java.util.Optional;
 
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Long> {
+    List<Mission> findTop5By(Sort sort);
+
+    Optional<Mission> findByMissionNo(Long missionNo);
 
     List<MissionListDto> findTop5ByMissionStatusAndMissionOpen(
             Sort sort, MissionStatus missionStatus, MissionOpenType missionOpenType);
-
-    Optional<Mission> findByMissionNo(Long missionNo);
 
     Optional<Mission> findMissionByMissionNo(Long missionNo);
    List<Mission> findByMissionStatusAndMissionOpen(MissionStatus missionStatus, MissionOpenType missionOpenType);

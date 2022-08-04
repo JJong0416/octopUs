@@ -316,6 +316,7 @@ export default {
       // ------------------------
       this.$refs.webcam.stop();
       this.cameraShow = false;
+      console.log(this.img);
       // 서버에 img 전송하기
       this.img = null;
       this.$refs.webcam.start();

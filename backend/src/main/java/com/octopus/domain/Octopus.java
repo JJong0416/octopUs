@@ -1,11 +1,9 @@
 package com.octopus.domain;
 
 import com.octopus.domain.PK.OctopusPK;
-import com.octopus.domain.dto.OctopusDto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Getter

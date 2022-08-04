@@ -171,12 +171,22 @@ public class MissionService {
         mission.updateMission(missionUpdateInfoDto);
     }
 
+    @Transactional
     public void joinMission(long missionNo){
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(()->{
             throw new MissionNotFoundException();
         });
-        User user = userService.getUserInfo(getCurrentUsername().get());
+        User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(()->{
+            throw new UserNotFoundException();
+        });
 
+
+        Octopus octopus = Octopus.addToOctopus()
+                .user(user)
+                .mission(mission)
+                .build();
+        System.out.println(octopus.toString());
+        octopus_tableRepository.save(octopus);
 
     }
 
@@ -185,21 +195,6 @@ public class MissionService {
                 .signUpDto(signUpDto)
                 .build();
     }
-//    @Transactional
-//    public void createMission(MissionCreateDto missionCreateDto) {
-//
-//        String currentUserId = getCurrentUsername().get();
-//
-//        /* 미션에 방장 정보와 String 으로 유저 넣기 */
-//        missionCreateDto.addMissionLeaderIdAndUser(currentUserId);
-//
-//        /* DTO 를 통한 미션 생성 */
-//        Mission mission = Mission.createMission()
-//                .missionCreateDto(missionCreateDto)
-//                .build();
-//
-//        missionRepository.save(mission);
-//    }
 
 
 }

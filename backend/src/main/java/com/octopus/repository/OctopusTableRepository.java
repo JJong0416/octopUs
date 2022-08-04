@@ -21,4 +21,11 @@ public interface OctopusTableRepository extends JpaRepository<Octopus, OctopusPK
     @Transactional
     @Query("delete from Octopus o where o.user = :user and o.mission = :mission")
     void deleteByUserAndMissionInQuery(@Param("user") User user, @Param("mission") Mission mission);
+
+//    @Modifying
+//    @Transactional
+//    @Query("")
+//    void insertToOctopusTable(@Param("user") User user, @Param("mission") Mission mission) {
+//
+//    }
 }

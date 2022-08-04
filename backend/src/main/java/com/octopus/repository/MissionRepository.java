@@ -1,14 +1,10 @@
 package com.octopus.repository;
 
 import com.octopus.domain.Mission;
-import com.octopus.domain.dto.MissionCreateDto;
-import com.octopus.domain.dto.MissionDto;
 import com.octopus.domain.dto.MissionListDto;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import org.springframework.data.domain.Sort;
-import com.octopus.domain.type.MissionOpenType;
-import com.octopus.domain.type.MissionStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +21,11 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
             Sort sort, MissionStatus missionStatus, MissionOpenType missionOpenType);
 
     Optional<Mission> findMissionByMissionNo(Long missionNo);
-   List<Mission> findByMissionStatusAndMissionOpen(MissionStatus missionStatus, MissionOpenType missionOpenType);
 
+    List<Mission> findByMissionStatusAndMissionOpen(MissionStatus missionStatus, MissionOpenType missionOpenType);
+
+    List<MissionListDto> findTop5ByMissionStatusAndMissionOpen(Sort sort, MissionStatus missionStatus, MissionOpenType missionOpenType);
+
+    Optional<Mission> findMissionByMissionNo(Long missionNo);
+    //boolean existsByMissionNo(Long missionNo);
 }

@@ -7,6 +7,14 @@ import com.octopus.domain.type.MissionStatus;
 import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.*;
+import com.octopus.domain.AuthenticationInfo;
+import com.octopus.domain.Mission;
+import com.octopus.domain.dto.AuthenticationDto;
+import com.octopus.domain.dto.MissionListDto;
+import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.exception.MissionNotFoundException;
+import com.octopus.repository.AuthenticationRepository;
+import com.octopus.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -29,10 +37,11 @@ public class MissionService {
 
     private final PictureRepository pictureRepository;
     private final OctopusTableRepository octopusTableRepository;
+    private final AuthenticationRepository authenticationRepository;
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
-    public void createMission(MissionCreateDto missionCreateDto) {
+    public void createMission(MissionCreateDto missionCreateDto){
 
         String currentUserId = getCurrentUsername().get();
 
@@ -127,6 +136,44 @@ public class MissionService {
         octopusTableRepository.deleteByUserAndMissionInQuery(user, mission);
         return "성공";
     }
+
+    @Transactional
+    public boolean createAuthentication(Long missionNo, AuthenticationDto authenticationDto) {
+        Mission mission = getMissionByMissionNo(missionNo);
+        if (!isAuthorizedMissionUser(mission) || haveAuthentication(missionNo)) {
+            return false;
+        }
+        AuthenticationInfo authenticationInfo = AuthenticationInfo.createAuthenticationInfo()
+                .mission(mission)
+                .authenticationStartTime(authenticationDto.getAuthenticationStartTime())
+                .authenticationEndTime(authenticationDto.getAuthenticationEndTime())
+                .build();
+
+        authenticationRepository.save(authenticationInfo);
+        return true;
+    }
+
+    @Transactional(readOnly = true)
+    public Mission getMissionByMissionNo(Long missionNo) {
+        return missionRepository.findMissionByMissionNo(missionNo).orElseThrow(() -> {
+            //MissionNotFoundException 쓰는건 안좋을지?
+            throw new RuntimeException("Not found Mission");
+        });
+    }
+    @Transactional(readOnly = true)
+    public boolean haveAuthentication(Long missionNo) {
+        return authenticationRepository.findAuthenticationInfoByMissionNo(missionNo);
+    }
+
+    public boolean isAuthorizedMissionUser(Mission mission) {
+        String currentUser = getCurrentUsername().get();
+        return mission.getMissionLeaderId().equals(currentUser);
+    }
+
+
+
+
+
 
     // TODO: 2022-08-02 contains말고 다른거
     public boolean checkUserIdEqualLeaderId(Mission mission, String loginedUserId) {

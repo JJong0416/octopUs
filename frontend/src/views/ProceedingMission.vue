@@ -190,8 +190,8 @@
             @camera-change="onCameraChange"
           />
           <v-btn type="button" class="btn btn-primary" @click="onCapture">
-            찍기 </v-btn
-          >d
+            찍기
+          </v-btn>
           <v-spacer></v-spacer>
           미리보기
           <figure class="figure">
@@ -276,6 +276,7 @@ export default {
     },
   },
   methods: {
+    //camera methods
     onCapture() {
       this.img = this.$refs.webcam.capture();
     },

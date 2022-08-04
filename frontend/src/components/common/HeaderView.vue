@@ -1,6 +1,6 @@
 <template>
   <div class="header-nav-wrap">
-    <v-card class="mx-auto overflow-hidden">
+    <v-card class="mx-auto overflow-hidden" height="100vh">
       <v-app-bar>
         <!-- 좌측 메뉴 바 -->
         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
@@ -100,7 +100,7 @@ export default {
   text-decoration: none;
   color: none;
 }
-.header-nav-wrap{
+.header-nav-wrap {
   height: 6.2vh;
 }
 </style>

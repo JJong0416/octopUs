@@ -172,22 +172,12 @@ public class MissionService {
     }
 
     @Transactional
-    public void joinMission(long missionNo){
-        Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(()->{
-            throw new MissionNotFoundException();
-        });
+    public void joinMission(Long missionNo){
         User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(()->{
             throw new UserNotFoundException();
         });
 
-
-        Octopus octopus = Octopus.addToOctopus()
-                .user(user)
-                .mission(mission)
-                .build();
-        System.out.println(octopus.toString());
-        octopus_tableRepository.save(octopus);
-
+        octopus_tableRepository.insertToOctopusTable(user.getUserNo(), missionNo);
     }
 
     private User createUser(SignUpDto signUpDto) {

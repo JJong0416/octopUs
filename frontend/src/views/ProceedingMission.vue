@@ -164,28 +164,60 @@
           </v-row>
         </div>
       </v-expand-transition>
+
+      <v-card-actions>
+        <v-card-text color="orange" text> 인증하기 </v-card-text>
+
+        <v-spacer></v-spacer>
+
+        <v-btn icon @click="cameraShow = !cameraShow">
+          <v-icon>{{
+            cameraShow ? "mdi-chevron-up" : "mdi-chevron-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-actions>
+      <!-- camera -->
+      <v-expand-transition>
+        <div v-show="cameraShow">
+          <web-cam
+            ref="webcam"
+            :device-id="deviceId"
+            width="100%"
+            @started="onStarted"
+            @stopped="onStopped"
+            @error="onError"
+            @cameras="onCameras"
+            @camera-change="onCameraChange"
+          />
+          <v-btn type="button" class="btn btn-primary" @click="onCapture">
+            찍기 </v-btn
+          >d
+          <v-spacer></v-spacer>
+          미리보기
+          <figure class="figure">
+            <img :src="img" width="100%" />
+          </figure>
+          <v-btn>올리기</v-btn>
+          <v-btn @click="onStart">다시 찍기</v-btn>
+        </div>
+      </v-expand-transition>
     </v-card>
-    <v-btn depressed color="primary" @click="camerashow"> Primary </v-btn>
-    <v-easy-camera
-      v-model="picture"
-      ref="picpreview"
-      :startOnMounted="cameraon"
-      output="dataUrl"
-    ></v-easy-camera>
-    <v-btn @click="cameraAction('start')">Start</v-btn>
-    <v-btn @click="cameraAction('snap')">Snap</v-btn>
-    <v-btn @click="cameraAction('stop')">Stop</v-btn>
-    <v-btn @click="cameraAction('close')">Close</v-btn>
   </div>
 </template>
+
 <script>
-import EasyCamera from "easy-vue-camera";
+import { WebCam } from "vue-web-cam";
+import { find, head } from "lodash";
 export default {
+  components: {
+    WebCam,
+  },
   data: () => ({
     picture: "",
     content: "",
     show: false,
     calendarShow: false,
+    cameraShow: false,
     cameraon: true,
     bURL: "blob:",
     focus: "",
@@ -195,6 +227,7 @@ export default {
       week: "Week",
       day: "Day",
       "4day": "4 Days",
+      imageBase64: null,
     },
     selectedEvent: {},
     selectedElement: null,
@@ -219,29 +252,57 @@ export default {
       "Conference",
       "Party",
     ],
+    img: null,
+    camera: null,
+    deviceId: null,
+    devices: [],
   }),
-  components: {
-    "v-easy-camera": EasyCamera,
-  },
-  methods: {
-    camerashow() {
-      this.cameraon = !this.cameraon;
+  computed: {
+    device() {
+      return find(this.devices, (n) => n.deviceId == this.deviceId);
     },
-    cameraAction(opt) {
-      if (opt === "start") {
-        console.log("start");
-        this.$refs.picpreview.start();
-      } else if (opt === "snap") {
-        this.$refs.picpreview.snap();
-        console.log("사진은?" + this.picture);
-        console.log("사진 타입은??? " + typeof this.picture);
-      } else if (opt === "stop") {
-        this.$refs.picpreview.stop();
-      } else if (opt === "close") {
-        this.$refs.picpreview.close();
+  },
+  watch: {
+    camera: function (id) {
+      this.deviceId = id;
+    },
+    devices: function () {
+      // Once we have a list select the first one
+      let first = head(this.devices);
+      if (first) {
+        this.camera = first.deviceId;
+        this.deviceId = first.deviceId;
       }
     },
-
+  },
+  methods: {
+    onCapture() {
+      this.img = this.$refs.webcam.capture();
+    },
+    onStarted(stream) {
+      console.log("On Started Event", stream);
+    },
+    onStopped(stream) {
+      console.log("On Stopped Event", stream);
+    },
+    onStop() {
+      this.$refs.webcam.stop();
+    },
+    onStart() {
+      this.$refs.webcam.start();
+    },
+    onError(error) {
+      console.log("On Error Event", error);
+    },
+    onCameras(cameras) {
+      this.devices = cameras;
+      console.log("On Cameras Event", cameras);
+    },
+    onCameraChange(deviceId) {
+      this.deviceId = deviceId;
+      this.camera = deviceId;
+      console.log("On Camera Change Event", deviceId);
+    },
     // 달력과 관련된 methods
     viewDay({ date }) {
       this.focus = date;
@@ -309,3 +370,19 @@ export default {
   },
 };
 </script>
+<style scoped>
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+</style>

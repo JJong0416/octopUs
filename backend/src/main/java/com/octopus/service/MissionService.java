@@ -1,10 +1,7 @@
 package com.octopus.service;
 
 import com.octopus.domain.*;
-import com.octopus.domain.dto.MissionCreateDto;
-import com.octopus.domain.dto.MissionListDto;
-import com.octopus.domain.dto.MissionPictureRes;
-import com.octopus.domain.dto.MissionTimeDto;
+import com.octopus.domain.dto.*;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.exception.MissionNotFoundException;
@@ -126,14 +123,9 @@ public class MissionService {
                 .collect(Collectors.toList());
 
         // User에 따라서 picture를 가져와 MissionPictureRes에 넣고 반환
-        List<MissionPictureRes> collect = joinedMissionUsers.stream()
+        return joinedMissionUsers.stream()
                 .map(user -> new MissionPictureRes(user.getUserNickname(), getPictureByUserAndMission(mission, user)))
                 .collect(Collectors.toList());
-
-        for (MissionPictureRes missionPictureRes : collect) {
-            System.out.println(missionPictureRes);
-        }
-        return collect;
     }
 
     @Transactional(readOnly = true)
@@ -156,11 +148,16 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<Picture> getPictureByUserAndMission(Mission mission, User user) {
-        return pictureRepository.findPicturesByMissionNoAndUserNo(mission, user)
+    public List<PictureRes> getPictureByUserAndMission(Mission mission, User user) {
+
+        List<Picture> pictures = pictureRepository.findPicturesByMissionNoAndUserNo(mission, user)
                 .orElseThrow(() -> {
                     throw new RuntimeException("Not found Picture");
                 });
+
+        return pictures.stream()
+                .map(PictureRes::new)
+                .collect(Collectors.toList());
     }
 
     // TODO: 2022-08-02 contains말고 다른거

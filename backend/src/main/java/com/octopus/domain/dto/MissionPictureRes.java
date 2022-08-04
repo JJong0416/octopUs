@@ -14,9 +14,9 @@ public class MissionPictureRes {
 
     private final String userNickname;
 
-    private final List<Picture> userPictures;
+    private final List<PictureRes> userPictures;
 
-    public MissionPictureRes(String userNickname, List<Picture> userPictures) {
+    public MissionPictureRes(String userNickname, List<PictureRes> userPictures) {
         this.userNickname = userNickname;
         this.userPictures = userPictures;
     }

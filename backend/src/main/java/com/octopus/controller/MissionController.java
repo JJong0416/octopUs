@@ -66,6 +66,7 @@ public class MissionController {
     @GetMapping("/{missionNo}/picture")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<MissionPictureRes>> getMissionPictures(@PathVariable Long missionNo){
+        System.out.println("hello");
         return ResponseEntity.ok(missionService.getMissionPictureMatchingUser(missionNo));
     }
 }

@@ -54,6 +54,9 @@ public class Mission {
     @OneToMany(mappedBy = "mission")
     private final Set<Octopus> octopus = new HashSet<>();
 
+    @OneToOne(mappedBy = "mission", cascade = CascadeType.ALL)
+    private MissionTime missionTime;
+
     // TODO: 2022-07-29 MapStruct 고민해보기 너무 길긴 하다..
     @Builder(builderMethodName = "createMission")
     Mission(MissionCreateDto missionCreateDto) {

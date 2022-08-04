@@ -1,29 +1,25 @@
 package com.octopus.service;
 
 import com.octopus.domain.Mission;
-import com.octopus.domain.Octopus;
-import com.octopus.domain.PK.OctopusPK;
+import com.octopus.domain.MissionTime;
 import com.octopus.domain.User;
-import com.octopus.domain.dto.MissionListDto;
 import com.octopus.domain.dto.MissionCreateDto;
+import com.octopus.domain.dto.MissionListDto;
+import com.octopus.domain.dto.MissionTimeDto;
+import com.octopus.domain.type.MissionOpenType;
+import com.octopus.domain.type.MissionStatus;
 import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.MissionRepository;
-import com.octopus.repository.Octopus_tableRepository;
+import com.octopus.repository.MissionTimeRepository;
+import com.octopus.repository.OctopusTableRepository;
 import com.octopus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.octopus.domain.type.MissionOpenType;
-import com.octopus.domain.type.MissionStatus;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 
 import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 
@@ -33,14 +29,14 @@ import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 public class MissionService {
 
     private final MissionRepository missionRepository;
+    private final MissionTimeRepository missionTimeRepository;
     private final UserRepository userRepository;
 
-    private final EntityManager em;
-    private final Octopus_tableRepository octopus_tableRepository;
+    private final OctopusTableRepository octopus_tableRepository;
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
-    public void createMission(MissionCreateDto missionCreateDto){
+    public void createMission(MissionCreateDto missionCreateDto) {
 
         String currentUserId = getCurrentUsername().get();
 
@@ -55,10 +51,35 @@ public class MissionService {
         missionRepository.save(mission);
     }
 
+    @Transactional
+    public boolean createMissionTime(Long missionNo, MissionTimeDto missionTimeDto) {
+
+        // 미션을 가지고 와서
+        Mission mission = getMissionByMissionNo(missionNo);
+
+        // 권한이 있으면서 동시에 기존에 MissionTime을 안가지고 있다면
+        // 권한이 없거나 이미 미션이 존재한다면
+        if (!isAuthorizedMissionUser(mission) || haveMissionTime(missionNo)) {
+            return false;
+        }
+
+        // 미션 타임 생성
+        MissionTime missionTime = MissionTime.createMTBuilder()
+                .mission(mission)
+                .missionTimeWeek(missionTimeDto.getMissionTimeWeek())
+                .missionTimeDPW(missionTimeDto.getMissionTimeDPW())
+                .missionTimeTPD(missionTimeDto.getMissionTimeTPD())
+                .build();
+
+        missionTimeRepository.save(missionTime);
+
+        return true;
+    }
+
     @Transactional(readOnly = true)
-    public List<MissionListDto> getNewMissions(){
+    public List<MissionListDto> getNewMissions() {
         return missionRepository.findTop5ByMissionStatusAndMissionOpen(
-                Sort.by(Sort.Direction.DESC,"missionNo"),
+                Sort.by(Sort.Direction.DESC, "missionNo"),
                 MissionStatus.OPEN,
                 MissionOpenType.OPEN_ROOM
         );
@@ -105,5 +126,22 @@ public class MissionService {
 
     public Integer checkMissionContainsUserId(Mission mission, String userId){
         return mission.getMissionUsers().indexOf(userId.toLowerCase());
+    }
+
+    @Transactional(readOnly = true)
+    public Mission getMissionByMissionNo(Long missionNo) {
+        return missionRepository.findMissionByMissionNo(missionNo).orElseThrow(() -> {
+            throw new RuntimeException("Not found Mission");
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public boolean haveMissionTime(Long missionNo) {
+        return missionTimeRepository.findMissionTimeByMissionNo(missionNo);
+    }
+
+    public boolean isAuthorizedMissionUser(Mission mission) {
+        String currentUser = getCurrentUsername().get();
+        return mission.getMissionLeaderId().equals(currentUser);
     }
 }

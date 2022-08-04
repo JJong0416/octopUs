@@ -1,8 +1,14 @@
 package com.octopus.controller;
 
+
 import com.octopus.domain.Mission;
 import com.octopus.domain.User;
 import com.octopus.domain.dto.*;
+
+import com.octopus.domain.dto.SignUpDto;
+import com.octopus.domain.dto.UserMyPageDto;
+import com.octopus.domain.dto.UserUpdateInfoDto;
+import com.octopus.domain.dto.UserUpdatePasswordDto;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,6 +43,7 @@ public class UserController {
         userService.changeUserAvatar(userUpdateInfoDto.getUserAvatar());
         return ResponseEntity.ok().build();
     }
+
     // 닉네임 변경
     @PatchMapping("/user/modify/nickname")
     @PreAuthorize("hasRole('USER')")

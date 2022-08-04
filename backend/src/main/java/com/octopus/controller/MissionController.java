@@ -54,7 +54,9 @@ public class MissionController {
     @PostMapping("/{missionNo}/picture")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> uploadPicture(@PathVariable Long missionNo, @Valid @RequestBody UploadPictureDto uploadPictureDto) {
-        missionService.uploadPicture(missionNo, uploadPictureDto);
-        return ResponseEntity.ok().build();
+        return missionService.uploadPicture(missionNo, uploadPictureDto)
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.internalServerError().build();
     }
+
 }

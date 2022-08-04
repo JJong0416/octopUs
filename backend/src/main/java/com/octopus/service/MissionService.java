@@ -1,5 +1,8 @@
 package com.octopus.service;
 
+import com.google.cloud.storage.Acl;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
 import com.octopus.domain.Mission;
 import com.octopus.domain.Picture;
 import com.octopus.domain.User;
@@ -15,11 +18,18 @@ import com.octopus.repository.Octopus_tableRepository;
 import com.octopus.repository.PictureRepository;
 import com.octopus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.octopus.utils.SecurityUtils.getCurrentUsername;
@@ -36,6 +46,9 @@ public class MissionService {
 
     private final EntityManager em;
     private final Octopus_tableRepository octopus_tableRepository;
+    private final Storage storage;
+    @Value("${bucketname}")
+    private String bucketName;
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
@@ -106,17 +119,43 @@ public class MissionService {
         return mission.getMissionUsers().indexOf(userId.toLowerCase());
     }
 
-    public void uploadPicture(Long missionNo, UploadPictureDto uploadPictureDto) {
+    @Transactional
+    public boolean uploadPicture(Long missionNo, UploadPictureDto uploadPictureDto) {
+
+        StringBuilder filename = new StringBuilder();
         User user = getUserByUserId(getCurrentUsername().get());
         Mission mission = getMissionByMissionNo(missionNo);
+        filename.append(mission.getMissionNo())
+                .append("/")
+                .append(user.getUserId())
+                .append("/")
+                .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss")))
+                .append(".png");
+
+
+        byte decode[] = Base64.decodeBase64(uploadPictureDto.getEncodedImg());
+        BlobInfo blobInfo = storage.create(
+                BlobInfo.newBuilder(bucketName, filename.toString())
+                        .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
+                        .setContentType("image/png")
+                        .build(), decode);
+
+        if(blobInfo == null)
+            return false;
+
+        //TODO: 2022-08-4, 목, 1:35 StringBuilder 또 써도되나  -박지수
+        StringBuilder makeUrl = new StringBuilder();
         Picture picture = Picture.createPicture()
                 .missionNo(mission)
                 .userNo(user)
-                .pictureUrl(uploadPictureDto.getUrl())
+                .pictureUrl(makeUrl.append("https://storage.googleapis.com/")
+                        .append(bucketName).append("/")
+                        .append(filename).toString())
                 .build();
         pictureRepository.save(picture);
-
+        return true;
     }
+
 
     @Transactional(readOnly = true)
     public Mission getMissionByMissionNo(Long missionNo) {
@@ -131,5 +170,6 @@ public class MissionService {
             throw new UserNotFoundException();
         });
     }
+
 
 }

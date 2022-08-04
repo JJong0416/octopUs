@@ -323,4 +323,15 @@ public class MissionService {
             throw new RuntimeException("Not found Mission");
         });
     }
+
+    public CalenderTotalDto getCalenderTotalInfo(Long missionNo) {
+
+        //
+
+        // 2.
+
+        // 3.
+
+        return null;
+    }
 }

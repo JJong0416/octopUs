@@ -197,8 +197,8 @@
           <figure class="figure">
             <img :src="img" width="100%" />
           </figure>
-          <v-btn>올리기</v-btn>
-          <v-btn @click="onStart">다시 찍기</v-btn>
+          <v-btn @click="onSave">올리기</v-btn>
+          <v-btn @click="onRestart">다시 찍기</v-btn>
         </div>
       </v-expand-transition>
     </v-card>
@@ -277,6 +277,7 @@ export default {
   },
   methods: {
     //camera methods
+    //-------------------------------------------
     onCapture() {
       this.img = this.$refs.webcam.capture();
     },
@@ -304,6 +305,20 @@ export default {
       this.camera = deviceId;
       console.log("On Camera Change Event", deviceId);
     },
+    onRestart() {
+      this.$refs.webcam.stop();
+      this.img = null;
+      this.$refs.webcam.start();
+    },
+    onSave() {
+      // img 저장하기
+      this.$refs.webcam.stop();
+      this.cameraShow = false;
+      // 서버에 img 전송하기
+      this.img = null;
+      this.$refs.webcam.start();
+    },
+    //------------------------------------------------
     // 달력과 관련된 methods
     viewDay({ date }) {
       this.focus = date;

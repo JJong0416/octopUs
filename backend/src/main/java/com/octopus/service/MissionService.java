@@ -83,6 +83,23 @@ public class MissionService {
         );
     }
 
+    // mission에 userNickname - pictures 매핑시킨 MissionPictureRes로 반환
+    public List<MissionPictureRes> getMissionPictureMatchingUser(Long missionNo) {
+
+        // mission에 가입한 UserId을 받기
+        Mission mission = getMissionByMissionNo(missionNo);
+
+        // 해당 미션에 join된 User객체들 가져오기
+        List<User> joinedMissionUsers = getOctopusByMission(mission).stream()
+                .map(Octopus::getUser)
+                .collect(Collectors.toList());
+
+        // User에 따라서 picture를 가져와 MissionPictureRes에 넣고 반환
+        return joinedMissionUsers.stream()
+                .map(user -> new MissionPictureRes(user.getUserNickname(), getPictureByUserAndMission(mission, user)))
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public String deleteUserFromMission(String userId, Long missionNo, String loginedUserId) {
         // 1. mission table의 MissionUser에서 해당하는 id의 이름을 제거한다.
@@ -156,19 +173,6 @@ public class MissionService {
         return pictures.stream()
                 .map(PictureRes::new)
                 .collect(Collectors.toList());
-    }
-
-    // TODO: 2022-08-02 contains말고 다른거
-    public boolean checkUserIdEqualLeaderId(Mission mission, String loginedUserId) {
-        return loginedUserId.contains(mission.getMissionLeaderId());
-    }
-
-    public boolean checkMissionStatusIsOPEN(Mission mission) {
-        return mission.getMissionStatus().equals(MissionStatus.OPEN);
-    }
-
-    public Integer checkMissionContainsUserId(Mission mission, String userId) {
-        return mission.getMissionUsers().indexOf(userId.toLowerCase());
     }
 
     public boolean isAuthorizedMissionUser(Mission mission) {

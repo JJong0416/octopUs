@@ -1,27 +1,15 @@
 package com.octopus.service;
 
-import com.octopus.domain.*;
-import com.octopus.domain.dto.*;
-import com.octopus.domain.type.MissionOpenType;
-import com.octopus.domain.type.MissionStatus;
 import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import com.octopus.domain.Mission;
-import com.octopus.domain.Picture;
-import com.octopus.domain.User;
-import com.octopus.domain.dto.MissionCreateDto;
-import com.octopus.domain.dto.MissionListDto;
-import com.octopus.domain.dto.UploadPictureDto;
+import com.octopus.domain.*;
+import com.octopus.domain.dto.*;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.*;
-import com.octopus.repository.MissionRepository;
-import com.octopus.repository.Octopus_tableRepository;
-import com.octopus.repository.PictureRepository;
-import com.octopus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,13 +17,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import javax.persistence.EntityManager;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -191,12 +177,6 @@ public class MissionService {
         return mission.getMissionUsers().indexOf(userId.toLowerCase());
     }
 
-    @Transactional(readOnly = true)
-    public Mission getMissionByMissionNo(Long missionNo) {
-        return missionRepository.findMissionByMissionNo(missionNo).orElseThrow(() -> {
-            throw new RuntimeException("Not found Mission");
-        });
-    }
 
     public List<Octopus> getOctopusByMission(Mission mission) {
         return octopusTableRepository.findOctopusByMission(mission)
@@ -314,7 +294,7 @@ public class MissionService {
                         .setContentType("image/png")
                         .build(), decode);
 
-        if(blobInfo == null)
+        if (blobInfo == null)
             return false;
 
         //TODO: 2022-08-4, 목, 1:35 StringBuilder 또 써도되나  -박지수
@@ -330,14 +310,6 @@ public class MissionService {
         return true;
     }
 
-
-    @Transactional(readOnly = true)
-    public Mission getMissionByMissionNo(Long missionNo) {
-        return missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
-            throw new RuntimeException("Not found Mission");
-        });
-    }
-
     @Transactional(readOnly = true)
     public User getUserByUserId(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() -> {
@@ -345,5 +317,10 @@ public class MissionService {
         });
     }
 
-
+    @Transactional(readOnly = true)
+    public Mission getMissionByMissionNo(Long missionNo) {
+        return missionRepository.findMissionByMissionNo(missionNo).orElseThrow(() -> {
+            throw new RuntimeException("Not found Mission");
+        });
+    }
 }

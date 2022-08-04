@@ -14,12 +14,12 @@ import java.io.Serializable;
 public class Octopus {
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", referencedColumnName = "user_no")
     private User user;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mission_no", referencedColumnName = "mission_no")
     private Mission mission;
 

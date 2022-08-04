@@ -1,10 +1,8 @@
 package com.octopus.controller;
 
+import com.octopus.domain.Mission;
 import com.octopus.domain.User;
-import com.octopus.domain.dto.UserMyPageDto;
-import com.octopus.domain.dto.UserUpdateInfoDto;
-import com.octopus.domain.dto.SignUpDto;
-import com.octopus.domain.dto.UserUpdatePasswordDto;
+import com.octopus.domain.dto.*;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 회원가입, 회원정보 수정에 대한 컨트롤러(Login X)
@@ -72,6 +71,12 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserMyPageDto> userMyPage() {
         return ResponseEntity.ok(userService.getUserMyPageInfo());
+    }
+
+    @GetMapping("/user/mission/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<MissionInfoDto>> userJoinedMissions(@PathVariable String userId) {
+        return ResponseEntity.ok(userService.getUserMissions(userId));
     }
 
 /*  테스트용 API

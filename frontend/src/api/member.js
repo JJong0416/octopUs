@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 import { apiInstance } from "./index.js";
 
 // import http from "../utils/http-common.js";
@@ -6,7 +6,7 @@ import { apiInstance } from "./index.js";
 const api = apiInstance();
 
 async function login(user, success, fail) {
-  await axios
+  await api
     .post(`api/login/domain`, JSON.stringify(user), {
       headers: {
         "Access-Control-Allow-Origin": "*",

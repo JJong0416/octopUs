@@ -86,10 +86,10 @@ export default {
     async confirm() {
       console.log(this.user);
       await this.userConfirm(this.user);
-      let token = sessionStorage.getItem("access-token");
+      // let token = sessionStorage.getItem("access-token");
       console.log(this.isLogin);
       if (this.isLogin) {
-        await this.getUserInfo(token);
+        // await this.getUserInfo(token);
         this.$router.push({ name: "MainView" });
       } else {
         alert("로그인 정보가 잘못되었습니다.", { icon: "error" });

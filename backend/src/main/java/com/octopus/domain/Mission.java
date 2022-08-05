@@ -29,7 +29,7 @@ public class Mission {
     @Column(name = "mission_leader_id", length = 15, nullable = false)
     private String missionLeaderId;
 
-    @Column(name = "mission_name", length = 30, nullable = false)
+    @Column(name = "mission_title", length = 30, nullable = false)
     private String missionTitle;
 
     @Column(name = "mission_type", nullable = false)
@@ -52,6 +52,7 @@ public class Mission {
 
     @Column(name = "mission_open", nullable = false)
     private MissionOpenType missionOpen;
+
 
     @OneToOne(mappedBy = "mission")
     private MissionTime missionTime;
@@ -87,4 +88,6 @@ public class Mission {
     public void updateMissionUsers(String missionUsers){this.missionUsers = missionUsers;}
 
     public void updateMissionStatus(MissionStatus missionStatus){this.missionStatus = missionStatus;}
+
+
 }

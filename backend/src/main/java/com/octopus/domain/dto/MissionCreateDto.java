@@ -45,9 +45,10 @@ public class MissionCreateDto {
 
     private String missionUser;
 
-    public void addMissionLeaderIdAndUser(String leaderId) {
+    public void addMissionLeaderIdAndUser(String leaderId, String leaderNickname) {
         this.missionLeaderId = leaderId;
-        this.missionUser = leaderId + ", ";
+
+        this.missionUser = leaderNickname;
     }
 
 

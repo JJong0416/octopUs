@@ -47,18 +47,21 @@ public class MissionService {
     /* 미션 코드 중복은 안했음. */
     @Transactional
     public void createMission(MissionCreateDto missionCreateDto) {
-
-        String currentUserId = getCurrentUsername().get();
+        User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
 
         /* 미션에 방장 정보와 String 으로 유저 넣기 */
-        missionCreateDto.addMissionLeaderIdAndUser(currentUserId);
+        missionCreateDto.addMissionLeaderIdAndUser(user.getUserId(), user.getUserNickname());
 
         /* DTO 를 통한 미션 생성 */
         Mission mission = Mission.createMission()
                 .missionCreateDto(missionCreateDto)
                 .build();
-
         missionRepository.save(mission);
+
+        octopusTableRepository.insertToOctopusTable(user.getUserNo(), mission.getMissionNo());
+
     }
 
     @Transactional
@@ -250,6 +253,7 @@ public class MissionService {
                 .missionType(mission.getMissionType())
                 .missionStatus(mission.getMissionStatus())
                 .missionLimitPersonnel(mission.getMissionLimitPersonnel())
+                .missionUsers(mission.getMissionUsers())
                 .build();
     }
 
@@ -267,14 +271,17 @@ public class MissionService {
             throw new UserNotFoundException();
         });
 
+        Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
+        StringBuilder sb = new StringBuilder();
+        sb.append(mission.getMissionUsers()).append(", ").append(user.getUserNickname());
+        String newList = sb.toString();
+        mission.updateMissionUsers(newList);
+
         octopusTableRepository.insertToOctopusTable(user.getUserNo(), missionNo);
     }
 
-    private User createUser(SignUpDto signUpDto) {
-        return User.signUpBuilder()
-                .signUpDto(signUpDto)
-                .build();
-    }
 
     @Transactional
     public boolean uploadPicture(Long missionNo, UploadPictureDto uploadPictureDto) {

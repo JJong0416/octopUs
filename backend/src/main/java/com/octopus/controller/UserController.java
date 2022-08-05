@@ -38,7 +38,7 @@ public class UserController {
     // 닉네임 변경
     @PatchMapping("/user/modify/nickname")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> changeNickname(@RequestBody UserUpdateInfoDto userUpdateInfoDto) {
+    public ResponseEntity<HttpStatus> modifyNickname(@RequestBody UserUpdateInfoDto userUpdateInfoDto) {
         return (userService.updateUserNickname(userUpdateInfoDto.getUserNickname()))
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
@@ -47,16 +47,16 @@ public class UserController {
     // 패스워드 변경
     @PatchMapping("/user/modify/password")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> checkPassword(@Valid @RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
+    public ResponseEntity<HttpStatus> modifyPassword(@Valid @RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
         return (userService.changeUserPassword(userUpdatePasswordDto))
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
 
-    // 유저 삭제
+    // 유저 삭제 /user/delete가 더 낫지 않나?
     @PostMapping("/user")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> userDelete(@Valid @RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
+    public ResponseEntity<HttpStatus> deleteUser(@Valid @RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
         return userService.isPasswordEqualDbPassword(userUpdatePasswordDto.getCurrentPassword())
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
@@ -69,6 +69,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserMyPageInfo());
     }
 
+    //참여 미션 목록
     @GetMapping("/user/mission/{userId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<MissionInfoDto>> userJoinedMissions(@PathVariable String userId) {

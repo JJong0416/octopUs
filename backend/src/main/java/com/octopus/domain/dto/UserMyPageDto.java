@@ -14,11 +14,14 @@ public class UserMyPageDto {
 
     private final Integer userPoint;
 
+    private final String userAvatar;
+
     @Builder
-    UserMyPageDto(String userId, String userNickname, String userEmail, Integer userPoint){
+    UserMyPageDto(String userId, String userNickname, String userEmail, Integer userPoint, String userAvatar){
         this.userId = userId;
         this.userNickname = userNickname;
         this.userEmail = userEmail;
         this.userPoint = userPoint;
+        this.userAvatar = userAvatar;
     }
 }

@@ -21,7 +21,6 @@ public class MissionController {
 
     private final MissionService missionService;
 
-    private final UserService userService;
 
     // 비활성화 미션 생성
     @PostMapping
@@ -33,17 +32,20 @@ public class MissionController {
         return ResponseEntity.ok().build();
     }
 
+    //new 미션 5개 가져오기
     @GetMapping("/new")
     public ResponseEntity<List> newMissions() {
         return ResponseEntity.ok(missionService.getNewMissions());
     }
 
+    //미션 정보 가져오기
     @GetMapping("/{missionNo}")
     public ResponseEntity<MissionDto> getMission(@PathVariable long missionNo) {
         MissionDto missionInfo = missionService.getMissionDtoByMissionNo(missionNo);
         return ResponseEntity.ok(missionInfo);
     }
 
+    //미션 수정하기
     @PatchMapping("/{missionNo}")
     public ResponseEntity<HttpStatus> modifyMission(
             @Valid @RequestBody MissionUpdateInfoDto missionUpdateInfoDto, @PathVariable long missionNo) {
@@ -51,9 +53,7 @@ public class MissionController {
         return ResponseEntity.ok().build();
     }
 
-    //join
-    // octopus 테이블에 missionNo랑 userNo 추가
-    // mission에다가 add user할 거
+    //미션에 참여하기
     @PostMapping("/{missionNo}/join")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> addUserToMission(
@@ -63,7 +63,7 @@ public class MissionController {
         return ResponseEntity.ok().build();
     }
 
-
+    //참여 유저 강퇴하기
     @DeleteMapping("/{missionNo}/user/{userId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity kickOutUser(@PathVariable String userId, @PathVariable Long missionNo, @RequestBody String loginedUserId) {
@@ -74,6 +74,7 @@ public class MissionController {
                 : new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
+    //캘린더에서 user 확인하기
     @GetMapping("/{missionNo}/calender/{userId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> calenderUserInfoDetail(@PathVariable Long missionNo, @PathVariable String userId) {
@@ -81,9 +82,7 @@ public class MissionController {
         return ResponseEntity.ok().build();
     }
 
-
-
-
+    //미션 time 생성
     @PostMapping("/{missionNo}/mission-time")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> createMissionTime(
@@ -95,20 +94,20 @@ public class MissionController {
 
     }
 
+    //hot 미션 5개 가져오기
     @GetMapping("/hot")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List> hotMissions() {
         return new ResponseEntity<>(
                 missionService.getHotMissions(), HttpStatus.OK);
     }
 
+    //로그인 유저가 해당 미션에 등록한 사진들 불러오기
     @GetMapping("/{missionNo}/picture")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<MissionPictureRes>> getMissionPictures(@PathVariable Long missionNo) {
-        System.out.println("hello");
         return ResponseEntity.ok(missionService.getMissionPictureMatchingUser(missionNo));
     }
 
+    //인증 시작 시간 & 끝나는 시간 생성하기
     @PostMapping("/{missionNo}/authentication")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> createAuthentication(
@@ -120,7 +119,7 @@ public class MissionController {
                 : ResponseEntity.badRequest().build();
     }
 
-
+    //사진 업로드 하기
     @PostMapping("/{missionNo}/picture")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> uploadPicture(@PathVariable Long missionNo, @Valid @RequestBody UploadPictureDto uploadPictureDto) {
@@ -129,6 +128,7 @@ public class MissionController {
                 : ResponseEntity.internalServerError().build();
     }
 
+    //현재 미션에 참여 중인 유저 목록
     @GetMapping("/{missionNo}/users")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List> missionUsers(@PathVariable Long missionNo){

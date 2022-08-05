@@ -103,6 +103,7 @@ public class UserService {
                 .userNickname(user.getUserNickname())
                 .userEmail(user.getUserEmail())
                 .userPoint(user.getUserPoint())
+                .userAvatar(user.getUserAvatar())
                 .build();
 
     }

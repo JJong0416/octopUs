@@ -72,6 +72,7 @@ import axios from "axios";
 export default {
   data: () => ({
     mission: {
+      // missionType, missionOpen 수정필요
       missionTitle: null,
       missionType: "LIFE",
       missionPoint: null,

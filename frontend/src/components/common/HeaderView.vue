@@ -93,7 +93,7 @@ export default {
       this.SET_IS_LOGIN(false);
       this.SET_USER_INFO(null);
       cookie.remove("token");
-      console.log("로그아웃됐나요? " + this.isLogin);
+
       alert("로그아웃됐습니다");
       if (this.$route.path != "/") this.$router.push({ name: "MainView" });
       this.drawer = false;

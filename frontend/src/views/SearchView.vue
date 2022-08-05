@@ -122,7 +122,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   // data 속성 전체 코드
   data() {
@@ -136,52 +135,11 @@ export default {
       ],
       slides: ["hot", "new", "mission", "is waiting for", "you"],
       items: ["코드 입력", "제목 검색", "테마 검색"],
-      searchkeyword: "", // 검색키워드
-      searchfinish: false, // 검색완료시 true로 바뀌고, 이때부터 표 생성
-      searchoption: ["코드입력", "작성자"], // 검색옵션
-      searchoptionselected: "코드입력", // 검색옵션값 받아오기, 기본값은 제목으로 지정
-      searchcnt: 0, // 검색된 게시글 갯수
-      contentlist: [], // 게시글 리스트
-      dialog: false,
-      show: false,
+      missionList: null,
     };
   },
-  methods: {
-    // method 속성 추가 코드
-    movetocontent(boardnum, id) {
-      // 검색된 게시글 클릭시 해당 게시글로 이동
-      window.location.href =
-        "http://127.0.0.1:8080/board/" + boardnum + "/content?id=" + id;
-    },
-    searchstart() {
-      // 검색버튼 눌렀을때 실행
-      if (this.searchkeyword == "") {
-        alert("키워드가 없습니다!");
-      } else {
-        axios({
-          url: "http://127.0.0.1:52273/content/search/",
-          method: "POST",
-          data: {
-            // 선택된 검색옵션과 검색키워드 넘겨줌
-            searchoption: this.searchoptionselected,
-            searchkeyword: this.searchkeyword,
-          },
-        })
-          .then((res) => {
-            this.contentlist = res.data;
-            this.searchcnt =
-              this.contentlist[Object.keys(this.contentlist).length - 1].cnt;
-            this.contentlist.pop();
-            alert("검색완료!");
-            this.searchfinish = true;
-            this.searchkeyword = "";
-          })
-          .catch((err) => {
-            alert(err);
-          });
-      }
-    },
-  },
+  computed: {},
+  methods: {},
 };
 </script>
 

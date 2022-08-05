@@ -78,6 +78,11 @@ const routes = [
     name: "finished",
     component: () => import("@/views/FinishedMission.vue"),
   },
+  {
+    path: "/hotnew",
+    name: "hotnew",
+    component: () => import("@/views/HotnewView.vue"),
+  },
 ];
 
 const router = new VueRouter({

@@ -7,7 +7,7 @@
       </v-tab>
       <!-- Hot 탭 -->
       <v-tab href="#mobile-tabs-5-2" class="primary--text">
-        <router-link :to="`/search`"> <v-icon>mdi-fire</v-icon></router-link>
+        <router-link :to="`/hotnew`"> <v-icon>mdi-fire</v-icon></router-link>
       </v-tab>
       <!-- 검색 탭 -->
       <v-tab href="#mobile-tabs-5-3" class="primary--text">
@@ -34,7 +34,7 @@ export default {};
   text-decoration: none;
   color: #ff2456;
 }
-.footer-nav{
+.footer-nav {
   height: 5.4vh;
 }
 </style>

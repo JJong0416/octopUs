@@ -53,11 +53,8 @@ public class Mission {
     @Column(name = "mission_open", nullable = false)
     private MissionOpenType missionOpen;
 
-
     @OneToOne(mappedBy = "mission")
     private MissionTime missionTime;
-
-
 
     // TODO: 2022-07-29 MapStruct 고민해보기 너무 길긴 하다..
     @Builder(builderMethodName = "createMission")

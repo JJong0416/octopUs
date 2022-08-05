@@ -1,8 +1,7 @@
 package com.octopus.controller;
 
 import com.octopus.domain.dto.*;
-import com.octopus.domain.dto.MissionCreateDto;
-import com.octopus.domain.dto.UploadPictureDto;
+import com.octopus.domain.dto.response.CalenderUserInfoRes;
 import com.octopus.service.MissionService;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import java.util.List;
 public class MissionController {
 
     private final MissionService missionService;
-
 
     // 비활성화 미션 생성
     @PostMapping
@@ -137,4 +135,9 @@ public class MissionController {
     }
 
 
+    @GetMapping("/{missionNo}/calender")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<CalenderUserInfoRes>> missionTableInfo(@PathVariable Long missionNo){
+        return ResponseEntity.ok(missionService.getCalenderInfo(missionNo));
+    }
 }

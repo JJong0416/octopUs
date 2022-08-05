@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -31,13 +33,13 @@ public class Picture {
     private String pictureUrl;
 
     @Column(name = "picture_date", nullable = false)
-    private Date date;
+    private LocalDateTime date;
 
     @Builder(builderMethodName = "createPicture")
     Picture(Mission missionNo, User userNo, String pictureUrl){
         this.missionNo = missionNo;
         this.userNo = userNo;
         this.pictureUrl = pictureUrl;
-        this.date = new Date();
+        this.date = LocalDateTime.now();
     }
 }

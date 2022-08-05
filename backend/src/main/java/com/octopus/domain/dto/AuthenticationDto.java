@@ -2,19 +2,21 @@ package com.octopus.domain.dto;
 
 import com.octopus.domain.Mission;
 import lombok.Getter;
+import net.bytebuddy.asm.Advice;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.time.LocalTime;
 
 @Getter
 public class AuthenticationDto {
 
-    private final Time authenticationStartTime;
+    private final LocalTime authenticationStartTime;
 
-    private final Time authenticationEndTime;
+    private final LocalTime authenticationEndTime;
 
     AuthenticationDto(
-            Time authenticationStartTime, Time authenticationEndTime
+            LocalTime authenticationStartTime, LocalTime authenticationEndTime
     ){
         this.authenticationStartTime = authenticationStartTime;
         this.authenticationEndTime = authenticationEndTime;

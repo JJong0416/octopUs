@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -25,14 +26,14 @@ public class AuthenticationInfo {
     private Mission mission;
 
     @Column(name = "authentication_start_time")
-    private Time authenticationStartTime;
+    private LocalTime authenticationStartTime;
 
     @Column(name = "authentication_end_time")
-    private Time authenticationEndTime;
+    private LocalTime authenticationEndTime;
 
     @Builder(builderMethodName = "createAuthenticationInfo")
     public AuthenticationInfo(
-            Mission mission, Time authenticationStartTime, Time authenticationEndTime
+            Mission mission, LocalTime authenticationStartTime, LocalTime authenticationEndTime
     ){
         this.mission = mission;
         this.authenticationStartTime = authenticationStartTime;

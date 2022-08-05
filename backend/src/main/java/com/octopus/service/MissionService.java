@@ -5,6 +5,7 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.octopus.domain.*;
 import com.octopus.domain.dto.*;
+import com.octopus.domain.dto.response.CalenderUserInfoRes;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.exception.MissionNotFoundException;
@@ -19,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.octopus.utils.SecurityUtils.getCurrentUsername;
@@ -44,6 +42,42 @@ public class MissionService {
 
     @Value("${bucketname}")
     private String bucketName;
+
+    // mission에 userNickname - pictures 매핑시킨 CalenderUserInfoRes로 반환
+    public List<CalenderUserInfoRes> getCalenderInfo(Long missionNo) {
+
+        // 1. mission과 해당 미션 Time 가지고 오기
+        Mission mission = getMissionByMissionNo(missionNo);
+        MissionTime missionTime = mission.getMissionTime();
+
+        // 2. 해당 미션에 join된 User객체들 가져오기
+        List<User> joinedMissionUsers = getOctopusByMission(mission).stream()
+                .map(Octopus::getUser)
+                .collect(Collectors.toList());
+
+        // 3. 해당 미션의 전체 인증 숫자를 파악
+        int totalMissionSize =
+                missionTime.getMissionTimeWeek() * missionTime.getMissionTimeDPW() * missionTime.getMissionTimeTPD();
+
+        System.out.println("totalMissionSize = " + totalMissionSize);
+
+        // 4. 미리 UserInfoRes 생성
+        List<CalenderUserInfoRes> calenderUserInfos = new ArrayList<>(8);
+
+        // 5. foreach 돌리면서 calenderUserInfos에 넣기
+        for (User user: joinedMissionUsers) {
+            List<PictureRes> pictureByUser = getPictureByUserAndMission(mission, user);
+
+            calenderUserInfos.add(new CalenderUserInfoRes(user.getUserNickname(),
+                    user.getUserAvatar(),
+                    (float) pictureByUser.size()/ (float) totalMissionSize * 100 ,
+                    pictureByUser
+            ));
+        }
+
+        return calenderUserInfos;
+    }
+
     /* 미션 코드 중복은 안했음. */
     @Transactional
     public void createMission(MissionCreateDto missionCreateDto) {
@@ -163,7 +197,6 @@ public class MissionService {
         return authenticationRepository.findAuthenticationInfoByMissionNo(missionNo);
     }
 
-
     // TODO: 2022-08-02 contains말고 다른거
     public boolean checkUserIdEqualLeaderId(Mission mission, String loginedUserId) {
         return loginedUserId.contains(mission.getMissionLeaderId());
@@ -227,10 +260,8 @@ public class MissionService {
         return missionList.size() < 5 ? missionList : missionList.subList(0, 5);
     }
 
-    Comparator<Mission> missionComparator = (m1, m2) -> (m1.getMissionLimitPersonnel() - (m1.getMissionUsers().length()
-            - (m1.getMissionUsers().replaceAll(",", "").length()) + 1)) -
-            (m2.getMissionLimitPersonnel() - (m2.getMissionUsers().length()
-                    - (m2.getMissionUsers().replaceAll(",", "").length()) + 1));
+    Comparator<Mission> missionComparator = Comparator.comparingInt(m -> (m.getMissionLimitPersonnel() - (m.getMissionUsers().length()
+            - (m.getMissionUsers().replaceAll(",", "").length()) + 1)));
 
 
     @Transactional(readOnly = true)
@@ -302,7 +333,7 @@ public class MissionService {
         Picture picture = Picture.createPicture()
                 .missionNo(mission)
                 .userNo(user)
-                .pictureUrl(makeUrl.append("https://storage.googleapis.com/")
+                .pictureUrl(makeUrl.append("https://storage.googleapㅐis.com/")
                         .append(bucketName).append("/")
                         .append(filename).toString())
                 .build();
@@ -322,16 +353,5 @@ public class MissionService {
         return missionRepository.findMissionByMissionNo(missionNo).orElseThrow(() -> {
             throw new RuntimeException("Not found Mission");
         });
-    }
-
-    public CalenderTotalDto getCalenderTotalInfo(Long missionNo) {
-
-        //
-
-        // 2.
-
-        // 3.
-
-        return null;
     }
 }

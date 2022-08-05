@@ -53,7 +53,7 @@ public class MissionCreateDto {
 
     MissionCreateDto(
             String missionTitle,
-            MissionType missionType,
+            MissionType missionType, // 타입 여러개
             Integer missionPoint,
             Integer missionLimitPersonnel,
             String missionContent,

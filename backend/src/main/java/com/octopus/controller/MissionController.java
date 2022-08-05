@@ -1,8 +1,7 @@
 package com.octopus.controller;
 
 import com.octopus.domain.dto.*;
-import com.octopus.domain.dto.MissionCreateDto;
-import com.octopus.domain.dto.UploadPictureDto;
+import com.octopus.domain.dto.response.CalenderUserInfoRes;
 import com.octopus.service.MissionService;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -131,6 +128,7 @@ public class MissionController {
 
     @GetMapping("/{missionNo}/calender")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> missionTableInfo(@PathVariable Long missionNo){
+    public ResponseEntity<List<CalenderUserInfoRes>> missionTableInfo(@PathVariable Long missionNo){
+        return ResponseEntity.ok(missionService.getCalenderInfo(missionNo));
     }
 }

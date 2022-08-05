@@ -27,10 +27,11 @@ public interface OctopusTableRepository extends JpaRepository<Octopus, OctopusPK
     @Query(value = "Insert into octopus_table Values(:userNo, :missionNo)", nativeQuery = true)
     void insertToOctopusTable(@Param("userNo") Long userNo, @Param("missionNo") Long missionNo);
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Query("select o.mission from Octopus o where o.user = :user")
     List<Mission> findMissionByUser(@Param("user") User user);
 
+    @Transactional(readOnly = true)
     Optional<List<Octopus>> findOctopusByMission(Mission mission);
-
+    
 }

@@ -50,7 +50,9 @@
               <v-list-item-icon>
                 <v-icon>mdi-logout</v-icon>
               </v-list-item-icon>
-              <v-list-item-title>Logout</v-list-item-title>
+              <v-list-item-title @click="onClickLogout"
+                >Logout</v-list-item-title
+              >
             </v-list-item>
 
             <v-list-item>
@@ -75,11 +77,31 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
+import cookie from "vue-cookies";
+const memberStore = "memberStore";
+
 export default {
   data: () => ({
     drawer: false,
     group: null,
   }),
+  methods: {
+    ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
+    onClickLogout() {
+      // console.log("memberStore : ", ms);
+      this.SET_IS_LOGIN(false);
+      this.SET_USER_INFO(null);
+      cookie.remove("token");
+      console.log("로그아웃됐나요? " + this.isLogin);
+      alert("로그아웃됐습니다");
+      if (this.$route.path != "/") this.$router.push({ name: "MainView" });
+      this.drawer = false;
+    },
+  },
+  computed: {
+    ...mapState(memberStore, ["isLogin", "userInfo"]),
+  },
 };
 </script>
 

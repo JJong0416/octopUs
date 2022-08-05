@@ -5,7 +5,7 @@
         <v-row align="center">
           <v-col cols="12">
             <v-autocomplete
-              v-model="values"
+              v-model="mission.missionType"
               :items="items"
               dense
               chips
@@ -18,37 +18,28 @@
         </v-row>
       </v-container>
     </v-card>
-    <v-text-field :rules="rules"></v-text-field>
-    <v-card flat>
-      <v-card-text>
-        <v-container fluid>
-          <v-row>
-            <v-col cols="12" sm="4" md="4">
-              <v-checkbox
-                label="공개방"
-                color="#ff2456"
-                hide-details
-              ></v-checkbox>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-    </v-card>
+    <v-text-field v-model="mission.missionTitle" :rules="rules"></v-text-field>
+    <v-container class="px-0" fluid>
+      <v-checkbox
+        v-model="mission.missionOpen"
+        :label="`공개방 설정 여부: ${mission.missionOpen.toString()}`"
+      ></v-checkbox>
+    </v-container>
     <v-text-field
+      v-model="mission.missionLimitPersonnel"
       label="인원수를 1~8사이의 숫자로 입력해주세요"
       :rules="personrules"
       type="number"
       min="1"
       hide-details="auto"
       oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-      :value="personnum"
     ></v-text-field>
     <v-form>
       <v-container>
         <v-row>
           <v-col cols="12" sm="6">
             <v-text-field
-              v-model="description"
+              v-model="mission.missionContent"
               :rules="descriprules"
               counter
               maxlength="25"
@@ -65,19 +56,29 @@
       type="number"
       min="1"
       hide-details="auto"
+      v-model="mission.missionPoint"
       oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-      :value="pointnum"
     ></v-text-field>
     <br />
-    <v-btn>Create</v-btn>
+    <!-- <v-row justify="center">
+      <v-date-picker v-model="mission.missionOpen"></v-date-picker>
+    </v-row> -->
+    <v-btn @click="createmission">Create</v-btn>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
-    pointnum: "",
-    personnum: "",
+    mission: {
+      missionTitle: null,
+      missionType: "LIFE",
+      missionPoint: null,
+      missionLimitPersonnel: null,
+      missionContent: null,
+      missionOpen: "OPEN_ROOM",
+    },
     pointrules: [
       (value) => !!value || "입력해주세요",
       (value) => (value && value.length >= 3) || "Min 3 characters",
@@ -88,8 +89,7 @@ export default {
         (value && value >= 1 && value <= 8) || "1~8사이의 숫자로 입력해주세요",
     ],
     items: ["미라클모닝", "공부", "코딩", "운동", "기타"],
-    values: ["기타"],
-    value: null,
+
     rules: [
       (value) => !!value || "제목을 입력해주세요",
       (value) => (value || "").length <= 20 || "Max 20 characters",
@@ -102,6 +102,46 @@ export default {
   computed: {
     dateRangeText() {
       return this.dates.join(" ~ ");
+    },
+  },
+  methods: {
+    createmission() {
+      if (
+        !this.mission.missionTitle ||
+        !this.mission.missionPoint ||
+        !this.mission.missionLimitPersonnel ||
+        !this.mission.missionContent
+      ) {
+        console.log(this.mission.missionTitle);
+        console.log(this.mission.missionType);
+        console.log(this.mission.missionPoint);
+        console.log(this.mission.missionLimitPersonnel);
+        console.log(this.mission.missionContent);
+        console.log(this.mission.missionOpen);
+        alert("정보를 다 입력해주세요");
+        return;
+      }
+      axios
+        .post(`api/mission`, {
+          missionTitle: this.mission.missionTitle,
+          missionType: this.mission.missionType,
+          missionPoint: this.mission.missionPoint,
+          missionLimitPersonnel: this.mission.missionLimitPersonnel,
+          missionContent: this.mission.missionContent,
+          missionOpen: this.mission.missionOpen,
+        })
+        .then(() => {
+          alert("미션생성완료");
+        })
+        .catch(() => {
+          alert("미션생성실패");
+          console.log(this.mission.missionTitle);
+          console.log(this.mission.missionType);
+          console.log(this.mission.missionPoint);
+          console.log(this.mission.missionLimitPersonnel);
+          console.log(this.mission.missionContent);
+          console.log(this.mission.missionOpen);
+        });
     },
   },
 };

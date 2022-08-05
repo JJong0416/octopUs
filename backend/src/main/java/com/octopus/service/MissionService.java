@@ -326,4 +326,15 @@ public class MissionService {
             throw new RuntimeException("Not found Mission");
         });
     }
+
+    @Transactional(readOnly = true)
+    public List<String> getMissionUsers(Long missionNo){
+        Mission mission = missionRepository.findByMissionNo(missionNo)
+                .orElseThrow(() -> new MissionNotFoundException());
+
+        List<String> users = Arrays.stream(mission.getMissionUsers().split(", "))
+                .collect(Collectors.toList());
+
+        return users;
+    }
 }

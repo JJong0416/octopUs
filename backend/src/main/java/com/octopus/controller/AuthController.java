@@ -32,4 +32,5 @@ public class AuthController {
         return new ResponseEntity<>(
                 new TokenDto(jwt), authService.createJwtHttpHeader(jwt), HttpStatus.OK);
     }
+
 }

@@ -73,8 +73,9 @@ export default {
   },
   created() {
     var vm = this;
+
     console.log("missionNo는 뭘까요?");
-    console.log(this.$route.params.missionNo);
+    console.log("missionNo는 : " + this.$route.params.missionNo);
     axios
       .get(`api/mission/${this.$route.params.missionNo}`, {
         headers: {

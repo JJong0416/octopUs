@@ -67,6 +67,7 @@ const routes = [
     path: "/before",
     name: "before",
     component: () => import("@/views/BeforeStart.vue"),
+    props: true,
   },
   {
     path: "/proceeding",

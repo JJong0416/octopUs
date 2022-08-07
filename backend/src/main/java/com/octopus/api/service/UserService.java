@@ -65,7 +65,7 @@ public class UserService {
 
     private User createUser(UserSignUpReq userSignUpReq) {
         return User.signUpBuilder()
-                .signUpDto(userSignUpReq)
+                .userSignUpReq(userSignUpReq)
                 .build();
     }
 

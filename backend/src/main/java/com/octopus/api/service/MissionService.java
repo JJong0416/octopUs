@@ -167,7 +167,7 @@ public class MissionService {
 
         /* DTO 를 통한 미션 생성 */
         Mission mission = Mission.createMission()
-                .missionCreateDto(missionCreateReq)
+                .missionCreateReq(missionCreateReq)
                 .build();
         missionRepository.save(mission);
 

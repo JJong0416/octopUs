@@ -1,6 +1,5 @@
 package com.octopus.domain;
 
-import com.octopus.composite.MissionId;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,14 +7,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
 @Table(name = "mission_time")
-//@IdClass(MissionId.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionTime implements Serializable {
 
@@ -24,7 +20,7 @@ public class MissionTime implements Serializable {
     @Column(name = "mission_time_no")
     private Long missionTimeNo;
 
-//    @Id
+    //    @Id
     @OneToOne
     @JoinColumn(name = "mission_no")
     private Mission mission;

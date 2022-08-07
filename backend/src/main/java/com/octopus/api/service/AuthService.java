@@ -2,7 +2,7 @@ package com.octopus.api.service;
 
 import com.octopus.dto.request.LoginReq;
 import com.octopus.jwt.JwtFilter;
-import com.octopus.jwt.TokenProvider;
+import com.octopus.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     // JwtString 만들면서 Security에도 정보를 넣는다.
     public String createJwtString(LoginReq loginReq) {
-        return tokenProvider.createToken(getAuthentication(loginReq));
+        return jwtTokenProvider.createToken(getAuthentication(loginReq));
     }
 
     public HttpHeaders createJwtHttpHeader(String jwt) {

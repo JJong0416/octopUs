@@ -1,4 +1,4 @@
-package com.octopus.service;
+package com.octopus.api.service;
 
 import com.octopus.dto.request.LoginReq;
 import com.octopus.jwt.JwtFilter;

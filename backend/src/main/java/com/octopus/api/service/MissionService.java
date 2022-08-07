@@ -1,4 +1,4 @@
-package com.octopus.service;
+package com.octopus.api.service;
 
 import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
@@ -15,7 +15,7 @@ import com.octopus.dto.response.MissionPictureRes;
 import com.octopus.dto.response.MissionRes;
 import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
-import com.octopus.repository.*;
+import com.octopus.api.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;

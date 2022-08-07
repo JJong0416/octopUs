@@ -1,4 +1,4 @@
-package com.octopus.controller;
+package com.octopus.api.controller;
 
 import com.octopus.dto.request.AuthenticationReq;
 import com.octopus.dto.request.MissionTimeReq;
@@ -7,7 +7,7 @@ import com.octopus.dto.request.UploadPictureReq;
 import com.octopus.dto.response.CalenderRes;
 import com.octopus.dto.response.MissionPictureRes;
 import com.octopus.dto.response.MissionRes;
-import com.octopus.service.MissionService;
+import com.octopus.api.service.MissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

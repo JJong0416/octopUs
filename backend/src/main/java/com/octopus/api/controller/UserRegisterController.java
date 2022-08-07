@@ -1,7 +1,7 @@
-package com.octopus.controller;
+package com.octopus.api.controller;
 
 import com.octopus.dto.request.UserSignUpReq;
-import com.octopus.service.UserService;
+import com.octopus.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

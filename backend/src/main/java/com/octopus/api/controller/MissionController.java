@@ -1,7 +1,7 @@
-package com.octopus.controller;
+package com.octopus.api.controller;
 
 import com.octopus.dto.request.MissionCreateReq;
-import com.octopus.service.MissionService;
+import com.octopus.api.service.MissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

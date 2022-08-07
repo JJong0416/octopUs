@@ -1,8 +1,8 @@
-package com.octopus.controller;
+package com.octopus.api.controller;
 
 import com.octopus.dto.request.LoginReq;
 import com.octopus.dto.request.TokenReq;
-import com.octopus.service.AuthService;
+import com.octopus.api.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

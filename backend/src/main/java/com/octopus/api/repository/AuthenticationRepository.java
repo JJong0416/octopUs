@@ -1,4 +1,4 @@
-package com.octopus.repository;
+package com.octopus.api.repository;
 
 import com.octopus.domain.AuthenticationInfo;
 import org.springframework.data.jpa.repository.Query;

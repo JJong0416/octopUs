@@ -1,4 +1,4 @@
-package com.octopus.service;
+package com.octopus.api.service;
 
 import com.octopus.domain.Mission;
 import com.octopus.domain.User;
@@ -8,8 +8,8 @@ import com.octopus.dto.response.UserMyPageRes;
 import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.exception.SignUpException;
 import com.octopus.exception.UserNotFoundException;
-import com.octopus.repository.OctopusTableRepository;
-import com.octopus.repository.UserRepository;
+import com.octopus.api.repository.OctopusTableRepository;
+import com.octopus.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.octopus.converter;
+package com.octopus.utils.converter;
 
 import com.octopus.domain.type.CommonType;
 import com.octopus.utils.EnumValueConvertUtils;

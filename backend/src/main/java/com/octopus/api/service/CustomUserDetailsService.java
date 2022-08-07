@@ -1,7 +1,7 @@
-package com.octopus.service;
+package com.octopus.api.service;
 
 import com.octopus.domain.User;
-import com.octopus.repository.UserRepository;
+import com.octopus.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

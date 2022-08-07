@@ -1,4 +1,4 @@
-package com.octopus.repository;
+package com.octopus.api.repository;
 
 import com.octopus.domain.Mission;
 import com.octopus.domain.Octopus;

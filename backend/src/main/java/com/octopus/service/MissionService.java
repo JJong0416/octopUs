@@ -256,6 +256,11 @@ public class MissionService {
 
     @Transactional
     public boolean createAuthentication(Long missionNo, AuthenticationDto authenticationDto) {
+        if(authenticationDto.getAuthenticationEndTime()
+                .isBefore(authenticationDto.getAuthenticationStartTime())
+                || authenticationDto.getAuthenticationEndTime()
+                        .equals(authenticationDto.getAuthenticationStartTime()))
+            return false;
         Mission mission = getMissionByMissionNo(missionNo);
         if (!isAuthorizedMissionUser(mission)) {
             return false;

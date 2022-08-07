@@ -405,8 +405,8 @@ public class MissionService {
                 .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss")))
                 .append(".png");
 
-
-        byte[] decode = Base64.decodeBase64(uploadPictureDto.getEncodedImg());
+        String encodedImg = uploadPictureDto.getEncodedImg().split(",")[1];
+        byte[] decode = Base64.decodeBase64(encodedImg);
         BlobInfo blobInfo = storage.create(
                 BlobInfo.newBuilder(bucketName, filename.toString())
                         .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))

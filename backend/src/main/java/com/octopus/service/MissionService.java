@@ -5,6 +5,7 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.octopus.domain.*;
 import com.octopus.domain.dto.*;
+import com.octopus.domain.dto.response.CalenderRes;
 import com.octopus.domain.dto.response.CalenderUserInfoRes;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
@@ -43,28 +44,46 @@ public class MissionService {
     @Value("${bucketname}")
     private String bucketName;
 
-    // mission에 userNickname - pictures 매핑시킨 CalenderUserInfoRes로 반환
-    public List<CalenderUserInfoRes> getCalenderInfo(Long missionNo) {
+    public CalenderRes getCalenderRes(Long missionNo){
 
         // 1. mission과 해당 미션 Time 가지고 오기
         Mission mission = getMissionByMissionNo(missionNo);
         MissionTime missionTime = mission.getMissionTime();
 
-        // 2. 해당 미션에 join된 User객체들 가져오기
+        // 2. 해당 미션에 Join된 User 객체들 가져오기
         List<User> joinedMissionUsers = getOctopusByMission(mission).stream()
                 .map(Octopus::getUser)
                 .collect(Collectors.toList());
 
-        // 3. 해당 미션의 전체 인증 숫자를 파악
-        int totalMissionSize =
-                missionTime.getMissionTimeWeek() * missionTime.getMissionTimeDPW() * missionTime.getMissionTimeTPD();
+        // 3. 그 후, CalenderUserInfos를 가져오기
+        List<CalenderUserInfoRes> calenderUserInfos =
+                getCalenderUserInfos(mission, missionTime, joinedMissionUsers);
 
-        System.out.println("totalMissionSize = " + totalMissionSize);
 
-        // 4. 미리 UserInfoRes 생성
+        // 4. calenderUserInfos를 통해서 팀 전체 진행률을 계산해준다.
+        Float successTeamRate = 0.0f;
+        for (CalenderUserInfoRes calenderUserInfo : calenderUserInfos) {
+            successTeamRate += calenderUserInfo.getSuccessUserRate();
+        }
+        successTeamRate = successTeamRate / joinedMissionUsers.size();
+
+        // 4. 마지막으로 추가해준다.
+        return new CalenderRes(1,successTeamRate,true,calenderUserInfos);
+    }
+
+
+    // mission에 userNickname - pictures 매핑시킨 CalenderUserInfoRes로 반환
+    public List<CalenderUserInfoRes> getCalenderUserInfos(Mission mission,
+                                                          MissionTime missionTime,
+                                                          List<User> joinedMissionUsers
+    ) {
+        // 1. 해당 미션의 전체 인증 숫자를 파악
+        int totalMissionSize = getTotalMissionAuthenticationCount(missionTime);
+
+        // 2. 미리 UserInfoRes 생성
         List<CalenderUserInfoRes> calenderUserInfos = new ArrayList<>(8);
 
-        // 5. foreach 돌리면서 calenderUserInfos에 넣기
+        // 3. foreach 돌리면서 calenderUserInfos에 넣기
         for (User user: joinedMissionUsers) {
             List<PictureRes> pictureByUser = getPictureByUserAndMission(mission, user);
 
@@ -74,7 +93,6 @@ public class MissionService {
                     pictureByUser
             ));
         }
-
         return calenderUserInfos;
     }
 
@@ -328,7 +346,7 @@ public class MissionService {
                 .append(".png");
 
 
-        byte decode[] = Base64.decodeBase64(uploadPictureDto.getEncodedImg());
+        byte[] decode = Base64.decodeBase64(uploadPictureDto.getEncodedImg());
         BlobInfo blobInfo = storage.create(
                 BlobInfo.newBuilder(bucketName, filename.toString())
                         .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
@@ -368,11 +386,15 @@ public class MissionService {
     @Transactional(readOnly = true)
     public List<String> getMissionUsers(Long missionNo){
         Mission mission = missionRepository.findByMissionNo(missionNo)
-                .orElseThrow(() -> new MissionNotFoundException());
+                .orElseThrow(MissionNotFoundException::new);
 
-        List<String> users = Arrays.stream(mission.getMissionUsers().split(", "))
+        return Arrays.stream(mission.getMissionUsers().split(", "))
                 .collect(Collectors.toList());
+    }
 
-        return users;
+    private Integer getTotalMissionAuthenticationCount(MissionTime missionTime){
+        return missionTime.getMissionTimeWeek() *
+                missionTime.getMissionTimeDPW() *
+                missionTime.getMissionTimeTPD();
     }
 }

@@ -3,6 +3,8 @@ package com.octopus.domain.dto;
 import com.octopus.domain.Picture;
 import lombok.Getter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -16,7 +18,7 @@ public class PictureRes {
 
     private final String pictureUrl;
 
-    private final Date date;
+    private final LocalDateTime date;
 
     public PictureRes(Picture picture){
         this.pictureNo = picture.getPictureNo();

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -28,7 +30,7 @@ public class MissionTime implements Serializable {
     private Mission mission;
 
     @Column(name = "mission_time_start_time")
-    private Date missionTimeStartTime;
+    private LocalDateTime missionTimeStartTime;
 
     @Column(name = "mission_time_week")
     private Integer missionTimeWeek;
@@ -44,7 +46,7 @@ public class MissionTime implements Serializable {
             Mission mission, Integer missionTimeWeek, Integer missionTimeDPW, Integer missionTimeTPD
     ) {
         this.mission = mission;
-        this.missionTimeStartTime = new Date();
+        this.missionTimeStartTime = LocalDateTime.now();
         this.missionTimeWeek = missionTimeWeek;
         this.missionTimeDPW = missionTimeDPW;
         this.missionTimeTPD = missionTimeTPD;

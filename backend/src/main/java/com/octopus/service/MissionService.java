@@ -19,8 +19,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,12 +45,65 @@ public class MissionService {
     @Value("${bucketname}")
     private String bucketName;
 
+
+    public Long getCurrentWeek(LocalDateTime startDate){
+        LocalDate today = LocalDate.now();
+        LocalDate start = startDate.toLocalDate();
+        return (ChronoUnit.DAYS.between(start, today))/7 + 1;
+    }
+
+    public boolean getPostPossible(List<CalenderUserInfoRes> calenderUserInfos, MissionTime missionTime, List<AuthenticationInfo> authenticationInfos){
+        User user = getUserByUserId(getCurrentUsername().get());
+
+        int weekAuthentication = 0;
+        int todayAuthentication = 0;
+        boolean isParticipated = false;
+        boolean isPossibleTime = false;
+        boolean isPossibleCnt = false;
+
+        LocalDate thisWeekStart = missionTime.getMissionTimeStartTime()
+                .plusDays((int)(getCurrentWeek(missionTime.getMissionTimeStartTime()) - 1) * 7).toLocalDate();
+        System.out.println("thisWeekStart = " + thisWeekStart);
+        LocalDate today = LocalDate.now();
+        for(CalenderUserInfoRes calenderUserInfoRes : calenderUserInfos){
+            if(calenderUserInfoRes.getUserNickname().equals(user.getUserNickname())){
+                isParticipated = true;
+                for(PictureRes pictureRes : calenderUserInfoRes.getUserPictures()){
+                    LocalDate pictureDate = pictureRes.getDate().toLocalDate();
+                    if((pictureDate.isAfter(thisWeekStart) || pictureDate.equals(thisWeekStart))
+                            && (pictureDate.isBefore(today) || pictureDate.equals(today))){
+                        weekAuthentication++;
+                    }
+                    if(pictureRes.getDate().toLocalDate().equals(today))
+                        todayAuthentication++;
+                }
+                break;
+            }
+        }
+
+        LocalTime nowTime = LocalTime.now();
+        for(AuthenticationInfo authenticationInfo : authenticationInfos){
+            if(nowTime.isAfter(authenticationInfo.getAuthenticationStartTime()) && nowTime.isBefore(authenticationInfo.getAuthenticationEndTime())){
+                System.out.println("authenticationInfo.getAuthenticationStartTime() = " + authenticationInfo.getAuthenticationStartTime());
+                System.out.println("authenticationInfo.getAuthenticationEndTime() = " + authenticationInfo.getAuthenticationEndTime());
+                isPossibleTime = true;
+                break;
+            }
+        }
+        if(missionTime.getMissionTimeDPW() > weekAuthentication && missionTime.getMissionTimeTPD() > todayAuthentication) {
+            System.out.println("todayAuthentication = " + todayAuthentication);
+            System.out.println("weekAuthentication = " + weekAuthentication);
+            isPossibleCnt = true;
+        }
+
+        return isParticipated && isPossibleTime && isPossibleCnt;
+   }
     public CalenderRes getCalenderRes(Long missionNo){
 
         // 1. mission과 해당 미션 Time 가지고 오기
         Mission mission = getMissionByMissionNo(missionNo);
         MissionTime missionTime = mission.getMissionTime();
-
+        List<AuthenticationInfo> authenticationInfos = authenticationRepository.findAuthenticationInfoByMissionNo(missionNo);
         // 2. 해당 미션에 Join된 User 객체들 가져오기
         List<User> joinedMissionUsers = getOctopusByMission(mission).stream()
                 .map(Octopus::getUser)
@@ -59,7 +113,6 @@ public class MissionService {
         List<CalenderUserInfoRes> calenderUserInfos =
                 getCalenderUserInfos(mission, missionTime, joinedMissionUsers);
 
-
         // 4. calenderUserInfos를 통해서 팀 전체 진행률을 계산해준다.
         Float successTeamRate = 0.0f;
         for (CalenderUserInfoRes calenderUserInfo : calenderUserInfos) {
@@ -67,8 +120,10 @@ public class MissionService {
         }
         successTeamRate = successTeamRate / joinedMissionUsers.size();
 
+        boolean checkPostPossible = getPostPossible(calenderUserInfos,missionTime, authenticationInfos);
+        Integer weekInProgress  = Math.toIntExact(getCurrentWeek(missionTime.getMissionTimeStartTime()));
         // 4. 마지막으로 추가해준다.
-        return new CalenderRes(1,successTeamRate,true,calenderUserInfos);
+        return new CalenderRes(weekInProgress ,successTeamRate, checkPostPossible,calenderUserInfos);
     }
 
 
@@ -201,8 +256,13 @@ public class MissionService {
 
     @Transactional
     public boolean createAuthentication(Long missionNo, AuthenticationDto authenticationDto) {
+        if(authenticationDto.getAuthenticationEndTime()
+                .isBefore(authenticationDto.getAuthenticationStartTime())
+                || authenticationDto.getAuthenticationEndTime()
+                        .equals(authenticationDto.getAuthenticationStartTime()))
+            return false;
         Mission mission = getMissionByMissionNo(missionNo);
-        if (!isAuthorizedMissionUser(mission) || haveAuthentication(missionNo)) {
+        if (!isAuthorizedMissionUser(mission)) {
             return false;
         }
         AuthenticationInfo authenticationInfo = AuthenticationInfo.createAuthenticationInfo()
@@ -218,7 +278,7 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public boolean haveAuthentication(Long missionNo) {
-        return authenticationRepository.findAuthenticationInfoByMissionNo(missionNo);
+        return authenticationRepository.haveAuthenticationInfoByMissionNo(missionNo);
     }
 
     // TODO: 2022-08-02 contains말고 다른거

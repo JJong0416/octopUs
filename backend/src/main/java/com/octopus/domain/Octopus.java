@@ -1,6 +1,6 @@
 package com.octopus.domain;
 
-import com.octopus.domain.PK.OctopusPK;
+import com.octopus.domain.pk.OctopusPK;
 import lombok.*;
 
 import javax.persistence.*;

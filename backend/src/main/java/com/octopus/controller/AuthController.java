@@ -33,4 +33,12 @@ public class AuthController {
                 new TokenDto(jwt), authService.createJwtHttpHeader(jwt), HttpStatus.OK);
     }
 
+/*    @PostMapping("/login/kakao")
+    public ResponseEntity<TokenDto> loginFromKakao(@Valid @RequestBody LoginDto loginDto) {
+        String jwt = authService.createJwtString(loginDto);
+
+        return new ResponseEntity<>(
+                new TokenDto(jwt), authService.createJwtHttpHeader(jwt), HttpStatus.OK);
+    }
+*/
 }

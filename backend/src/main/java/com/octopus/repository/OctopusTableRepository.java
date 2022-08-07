@@ -2,7 +2,7 @@ package com.octopus.repository;
 
 import com.octopus.domain.Mission;
 import com.octopus.domain.Octopus;
-import com.octopus.domain.PK.OctopusPK;
+import com.octopus.domain.pk.OctopusPK;
 import com.octopus.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

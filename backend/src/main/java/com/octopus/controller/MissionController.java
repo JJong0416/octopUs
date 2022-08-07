@@ -1,8 +1,6 @@
 package com.octopus.controller;
 
-import com.octopus.domain.dto.*;
-import com.octopus.domain.dto.response.CalenderRes;
-import com.octopus.domain.dto.response.CalenderUserInfoRes;
+import com.octopus.dto.request.MissionCreateReq;
 import com.octopus.service.MissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +21,8 @@ public class MissionController {
     // 비활성화 미션 생성
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> createMission(@Valid @RequestBody MissionCreateDto missionCreateDto) {
-        missionService.createMission(missionCreateDto);
+    public ResponseEntity<HttpStatus> createMission(@Valid @RequestBody MissionCreateReq missionCreateReq) {
+        missionService.createMission(missionCreateReq);
         return ResponseEntity.ok().build();
     }
 

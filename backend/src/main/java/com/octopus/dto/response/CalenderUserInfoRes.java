@@ -1,26 +1,30 @@
-package com.octopus.domain.dto.response;
+package com.octopus.dto.response;
 
-import com.octopus.domain.dto.PictureRes;
+import com.octopus.dto.layer.PictureDto;
 import lombok.Getter;
-import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Getter @ToString
+@Getter
 public class CalenderUserInfoRes {
 
+    @NotBlank
     private final String userNickname;
 
+    @NotNull
     private final String userAvatar;
 
+    @NotNull
     private final Float successUserRate;
 
-    private final List<PictureRes> userPictures;
+    private final List<PictureDto> userPictures;
 
     public CalenderUserInfoRes(String userNickname,
                                String userAvatar,
                                Float successUserRate,
-                               List<PictureRes> userPictures
+                               List<PictureDto> userPictures
     ) {
         this.userNickname = userNickname;
         this.userAvatar = userAvatar;

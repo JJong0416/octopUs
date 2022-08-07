@@ -1,12 +1,11 @@
-package com.octopus.domain.dto;
+package com.octopus.dto.request;
 
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
-public class MissionTimeDto {
+public class MissionTimeReq {
 
     private final LocalDateTime missionTimeStartTime;
 
@@ -16,7 +15,7 @@ public class MissionTimeDto {
 
     private final Integer missionTimeTPD;
 
-    MissionTimeDto(
+    MissionTimeReq(
             Integer missionTimeWeek, Integer missionTimeDPW, Integer missionTimeTPD
     ) {
         this.missionTimeStartTime = LocalDateTime.now();

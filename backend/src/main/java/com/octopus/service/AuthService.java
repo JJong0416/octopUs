@@ -1,6 +1,6 @@
 package com.octopus.service;
 
-import com.octopus.domain.dto.LoginDto;
+import com.octopus.dto.request.LoginReq;
 import com.octopus.jwt.JwtFilter;
 import com.octopus.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     // JwtString 만들면서 Security에도 정보를 넣는다.
-    public String createJwtString(LoginDto loginDto) {
-        return tokenProvider.createToken(getAuthentication(loginDto));
+    public String createJwtString(LoginReq loginReq) {
+        return tokenProvider.createToken(getAuthentication(loginReq));
     }
 
     public HttpHeaders createJwtHttpHeader(String jwt) {
@@ -30,9 +30,9 @@ public class AuthService {
     }
 
     // SecurityContextHolder에 user 정보의 토큰을 넣고 반환
-    private Authentication getAuthentication(LoginDto loginDto) {
+    private Authentication getAuthentication(LoginReq loginReq) {
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUserId(), loginDto.getUserPassword());
+                new UsernamePasswordAuthenticationToken(loginReq.getUserId(), loginReq.getUserPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);

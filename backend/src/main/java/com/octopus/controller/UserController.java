@@ -1,9 +1,8 @@
 package com.octopus.controller;
 
-import com.octopus.domain.dto.MissionInfoDto;
-import com.octopus.domain.dto.SignUpDto;
-import com.octopus.domain.dto.UserMyPageDto;
-import com.octopus.domain.dto.UserUpdatePasswordDto;
+import com.octopus.dto.response.MissionInfoReq;
+import com.octopus.dto.response.UserMyPageRes;
+import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +23,8 @@ public class UserController {
     // TODO: 2022-08-07 Controller 리팩토링
     @PostMapping("/user")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> deleteUser(@Valid @RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
-        return userService.isPasswordEqualDbPassword(userUpdatePasswordDto.getCurrentPassword())
+    public ResponseEntity<HttpStatus> deleteUser(@Valid @RequestBody UserUpdatePasswordReq userUpdatePasswordReq) {
+        return userService.isPasswordEqualDbPassword(userUpdatePasswordReq.getCurrentPassword())
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
@@ -33,14 +32,14 @@ public class UserController {
     // 유저 myPage
     @GetMapping("/user/info")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<UserMyPageDto> userMyPage() {
+    public ResponseEntity<UserMyPageRes> userMyPage() {
         return ResponseEntity.ok(userService.getUserMyPageInfo());
     }
 
     //참여 미션 목록
     @GetMapping("/user/mission/{userId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<MissionInfoDto>> userJoinedMissions(@PathVariable String userId) {
+    public ResponseEntity<List<MissionInfoReq>> userJoinedMissions(@PathVariable String userId) {
         return ResponseEntity.ok(userService.getUserMissions(userId));
     }
 }

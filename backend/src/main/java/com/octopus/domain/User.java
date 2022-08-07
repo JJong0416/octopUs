@@ -1,6 +1,6 @@
 package com.octopus.domain;
 
-import com.octopus.domain.dto.SignUpDto;
+import com.octopus.dto.request.UserSignUpReq;
 import com.octopus.domain.type.PlatformType;
 import lombok.*;
 
@@ -48,14 +48,14 @@ public class User {
     private final Set<Octopus> octopus = new HashSet<>();
 
     @Builder(builderMethodName = "signUpBuilder")
-    public User(SignUpDto signUpDto) {
-        this.userId = signUpDto.getUserId();
-        this.userPassword = signUpDto.getUserPassword();
-        this.userNickname = signUpDto.getUserNickname();
-        this.userEmail = signUpDto.getUserEmail();
-        this.userAvatar = signUpDto.getUserAvatar();
-        this.userPoint = signUpDto.getUserPoint();
-        this.platformType = signUpDto.getPlatformType();
+    public User(UserSignUpReq userSignUpReq) {
+        this.userId = userSignUpReq.getUserId();
+        this.userPassword = userSignUpReq.getUserPassword();
+        this.userNickname = userSignUpReq.getUserNickname();
+        this.userEmail = userSignUpReq.getUserEmail();
+        this.userAvatar = userSignUpReq.getUserAvatar();
+        this.userPoint = userSignUpReq.getUserPoint();
+        this.platformType = userSignUpReq.getPlatformType();
     }
 
     public void updateAvatar(String avatar){

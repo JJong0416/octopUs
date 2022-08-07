@@ -1,7 +1,7 @@
 package com.octopus.controller;
 
-import com.octopus.domain.dto.UserUpdateInfoDto;
-import com.octopus.domain.dto.UserUpdatePasswordDto;
+import com.octopus.dto.request.UserUpdateInfoReq;
+import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,16 +24,16 @@ public class UserModificationController {
     // 아바타 수정
     @PatchMapping("/avatar")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> modifyAvatar(@RequestBody UserUpdateInfoDto userUpdateInfoDto) {
-        userService.changeUserAvatar(userUpdateInfoDto.getUserAvatar());
+    public ResponseEntity<HttpStatus> modifyAvatar(@RequestBody UserUpdateInfoReq userUpdateInfoReq) {
+        userService.changeUserAvatar(userUpdateInfoReq.getUserAvatar());
         return ResponseEntity.ok().build();
     }
 
     // 닉네임 변경
     @PatchMapping("/nickname")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> modifyNickname(@RequestBody UserUpdateInfoDto userUpdateInfoDto) {
-        return (userService.updateUserNickname(userUpdateInfoDto.getUserNickname()))
+    public ResponseEntity<HttpStatus> modifyNickname(@RequestBody UserUpdateInfoReq userUpdateInfoReq) {
+        return (userService.updateUserNickname(userUpdateInfoReq.getUserNickname()))
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
@@ -41,8 +41,8 @@ public class UserModificationController {
     // 패스워드 변경
     @PatchMapping("/password")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> modifyPassword(@Valid @RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
-        return (userService.changeUserPassword(userUpdatePasswordDto))
+    public ResponseEntity<HttpStatus> modifyPassword(@Valid @RequestBody UserUpdatePasswordReq userUpdatePasswordReq) {
+        return (userService.changeUserPassword(userUpdatePasswordReq))
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }

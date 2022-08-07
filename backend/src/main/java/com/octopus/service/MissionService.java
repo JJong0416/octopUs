@@ -4,11 +4,15 @@ import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.octopus.domain.*;
-import com.octopus.domain.dto.*;
-import com.octopus.domain.dto.response.CalenderRes;
-import com.octopus.domain.dto.response.CalenderUserInfoRes;
+import com.octopus.dto.layer.MissionListDto;
+import com.octopus.dto.layer.PictureDto;
+import com.octopus.dto.request.*;
+import com.octopus.dto.response.CalenderRes;
+import com.octopus.dto.response.CalenderUserInfoRes;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
+import com.octopus.dto.response.MissionPictureRes;
+import com.octopus.dto.response.MissionRes;
 import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.*;
@@ -68,13 +72,13 @@ public class MissionService {
         for(CalenderUserInfoRes calenderUserInfoRes : calenderUserInfos){
             if(calenderUserInfoRes.getUserNickname().equals(user.getUserNickname())){
                 isParticipated = true;
-                for(PictureRes pictureRes : calenderUserInfoRes.getUserPictures()){
-                    LocalDate pictureDate = pictureRes.getDate().toLocalDate();
+                for(PictureDto pictureDto : calenderUserInfoRes.getUserPictures()){
+                    LocalDate pictureDate = pictureDto.getDate().toLocalDate();
                     if((pictureDate.isAfter(thisWeekStart) || pictureDate.equals(thisWeekStart))
                             && (pictureDate.isBefore(today) || pictureDate.equals(today))){
                         weekAuthentication++;
                     }
-                    if(pictureRes.getDate().toLocalDate().equals(today))
+                    if(pictureDto.getDate().toLocalDate().equals(today))
                         todayAuthentication++;
                 }
                 break;
@@ -140,7 +144,7 @@ public class MissionService {
 
         // 3. foreach 돌리면서 calenderUserInfos에 넣기
         for (User user: joinedMissionUsers) {
-            List<PictureRes> pictureByUser = getPictureByUserAndMission(mission, user);
+            List<PictureDto> pictureByUser = getPictureByUserAndMission(mission, user);
 
             calenderUserInfos.add(new CalenderUserInfoRes(user.getUserNickname(),
                     user.getUserAvatar(),
@@ -153,17 +157,17 @@ public class MissionService {
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
-    public void createMission(MissionCreateDto missionCreateDto) {
+    public void createMission(MissionCreateReq missionCreateReq) {
         User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(() -> {
             throw new UserNotFoundException();
         });
 
         /* 미션에 방장 정보와 String 으로 유저 넣기 */
-        missionCreateDto.addMissionLeaderIdAndUser(user.getUserId(), user.getUserNickname());
+        missionCreateReq.addMissionLeaderIdAndUser(user.getUserId(), user.getUserNickname());
 
         /* DTO 를 통한 미션 생성 */
         Mission mission = Mission.createMission()
-                .missionCreateDto(missionCreateDto)
+                .missionCreateDto(missionCreateReq)
                 .build();
         missionRepository.save(mission);
 
@@ -172,7 +176,7 @@ public class MissionService {
     }
 
     @Transactional
-    public boolean createMissionTime(Long missionNo, MissionTimeDto missionTimeDto) {
+    public boolean createMissionTime(Long missionNo, MissionTimeReq missionTimeReq) {
 
         // 미션을 가지고 와서
         Mission mission = getMissionByMissionNo(missionNo);
@@ -186,9 +190,9 @@ public class MissionService {
         // 미션 타임 생성
         MissionTime missionTime = MissionTime.createMTBuilder()
                 .mission(mission)
-                .missionTimeWeek(missionTimeDto.getMissionTimeWeek())
-                .missionTimeDPW(missionTimeDto.getMissionTimeDPW())
-                .missionTimeTPD(missionTimeDto.getMissionTimeTPD())
+                .missionTimeWeek(missionTimeReq.getMissionTimeWeek())
+                .missionTimeDPW(missionTimeReq.getMissionTimeDPW())
+                .missionTimeTPD(missionTimeReq.getMissionTimeTPD())
                 .build();
 
         missionTimeRepository.save(missionTime);
@@ -255,11 +259,11 @@ public class MissionService {
     }
 
     @Transactional
-    public boolean createAuthentication(Long missionNo, AuthenticationDto authenticationDto) {
-        if(authenticationDto.getAuthenticationEndTime()
-                .isBefore(authenticationDto.getAuthenticationStartTime())
-                || authenticationDto.getAuthenticationEndTime()
-                        .equals(authenticationDto.getAuthenticationStartTime()))
+    public boolean createAuthentication(Long missionNo, AuthenticationReq authenticationReq) {
+        if(authenticationReq.getAuthenticationEndTime()
+                .isBefore(authenticationReq.getAuthenticationStartTime())
+                || authenticationReq.getAuthenticationEndTime()
+                        .equals(authenticationReq.getAuthenticationStartTime()))
             return false;
         Mission mission = getMissionByMissionNo(missionNo);
         if (!isAuthorizedMissionUser(mission)) {
@@ -267,8 +271,8 @@ public class MissionService {
         }
         AuthenticationInfo authenticationInfo = AuthenticationInfo.createAuthenticationInfo()
                 .mission(mission)
-                .authenticationStartTime(authenticationDto.getAuthenticationStartTime())
-                .authenticationEndTime(authenticationDto.getAuthenticationEndTime())
+                .authenticationStartTime(authenticationReq.getAuthenticationStartTime())
+                .authenticationEndTime(authenticationReq.getAuthenticationEndTime())
                 .build();
 
         authenticationRepository.save(authenticationInfo);
@@ -308,7 +312,7 @@ public class MissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<PictureRes> getPictureByUserAndMission(Mission mission, User user) {
+    public List<PictureDto> getPictureByUserAndMission(Mission mission, User user) {
 
         List<Picture> pictures = pictureRepository.findPicturesByMissionNoAndUserNo(mission, user)
                 .orElseThrow(() -> {
@@ -316,7 +320,7 @@ public class MissionService {
                 });
 
         return pictures.stream()
-                .map(PictureRes::new)
+                .map(PictureDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -349,10 +353,10 @@ public class MissionService {
 
 
     @Transactional(readOnly = true)
-    public MissionDto getMissionDtoByMissionNo(Long missionNo) {
+    public MissionRes getMissionDtoByMissionNo(Long missionNo) {
         Mission mission = getMissionByMissionNo(missionNo);
 
-        return MissionDto.builder()
+        return MissionRes.builder()
                 .missionCode(mission.getMissionCode())
                 .missionContent(mission.getMissionContent())
                 .missionTitle(mission.getMissionTitle())
@@ -367,11 +371,11 @@ public class MissionService {
     }
 
     @Transactional
-    public void modifyMission(MissionUpdateInfoDto missionUpdateInfoDto, long missionNo) {
+    public void modifyMission(MissionUpdateInfoReq missionUpdateInfoReq, long missionNo) {
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
             throw new UserNotFoundException();
         });
-        mission.updateMission(missionUpdateInfoDto);
+        mission.updateMission(missionUpdateInfoReq);
     }
 
     @Transactional
@@ -393,7 +397,7 @@ public class MissionService {
 
 
     @Transactional
-    public boolean uploadPicture(Long missionNo, UploadPictureDto uploadPictureDto) {
+    public boolean uploadPicture(Long missionNo, UploadPictureReq uploadPictureReq) {
 
         StringBuilder filename = new StringBuilder();
         User user = getUserByUserId(getCurrentUsername().get());
@@ -406,7 +410,7 @@ public class MissionService {
                 .append(".png");
 
 
-        byte[] decode = Base64.decodeBase64(uploadPictureDto.getEncodedImg());
+        byte[] decode = Base64.decodeBase64(uploadPictureReq.getEncodedImg());
         BlobInfo blobInfo = storage.create(
                 BlobInfo.newBuilder(bucketName, filename.toString())
                         .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))

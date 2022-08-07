@@ -1,6 +1,6 @@
 package com.octopus.controller;
 
-import com.octopus.domain.dto.SignUpDto;
+import com.octopus.dto.request.UserSignUpReq;
 import com.octopus.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,8 +21,8 @@ public class UserRegisterController {
 
     // Domain 회원가입
     @PostMapping("/register/domain")
-    public ResponseEntity<HttpStatus> domainSignUp(@Valid @RequestBody SignUpDto signUpDto) {
-        userService.signup(signUpDto);
+    public ResponseEntity<HttpStatus> domainSignUp(@Valid @RequestBody UserSignUpReq userSignUpReq) {
+        userService.signup(userSignUpReq);
         return ResponseEntity.ok().build();
     }
 

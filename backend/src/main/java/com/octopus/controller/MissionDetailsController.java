@@ -1,7 +1,12 @@
 package com.octopus.controller;
 
-import com.octopus.domain.dto.*;
-import com.octopus.domain.dto.response.CalenderRes;
+import com.octopus.dto.request.AuthenticationReq;
+import com.octopus.dto.request.MissionTimeReq;
+import com.octopus.dto.request.MissionUpdateInfoReq;
+import com.octopus.dto.request.UploadPictureReq;
+import com.octopus.dto.response.CalenderRes;
+import com.octopus.dto.response.MissionPictureRes;
+import com.octopus.dto.response.MissionRes;
 import com.octopus.service.MissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,18 +26,18 @@ public class MissionDetailsController {
 
     //미션 정보 가져오기
     @GetMapping
-    public ResponseEntity<MissionDto> getMission(@PathVariable long missionNo) {
-        MissionDto missionInfo = missionService.getMissionDtoByMissionNo(missionNo);
+    public ResponseEntity<MissionRes> getMission(@PathVariable long missionNo) {
+        MissionRes missionInfo = missionService.getMissionDtoByMissionNo(missionNo);
         return ResponseEntity.ok(missionInfo);
     }
 
     //미션 수정하기
     @PatchMapping
     public ResponseEntity<HttpStatus> modifyMission(
-            @Valid @RequestBody MissionUpdateInfoDto missionUpdateInfoDto,
+            @Valid @RequestBody MissionUpdateInfoReq missionUpdateInfoReq,
             @PathVariable long missionNo
     ) {
-        missionService.modifyMission(missionUpdateInfoDto, missionNo);
+        missionService.modifyMission(missionUpdateInfoReq, missionNo);
         return ResponseEntity.ok().build();
     }
 
@@ -41,9 +46,9 @@ public class MissionDetailsController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> createMissionTime(
             @PathVariable Long missionNo,
-            @Valid @RequestBody MissionTimeDto missionTimeDto
+            @Valid @RequestBody MissionTimeReq missionTimeReq
     ) {
-        return missionService.createMissionTime(missionNo, missionTimeDto)
+        return missionService.createMissionTime(missionNo, missionTimeReq)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
@@ -53,9 +58,9 @@ public class MissionDetailsController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> createAuthentication(
             @PathVariable Long missionNo,
-            @Valid @RequestBody AuthenticationDto authenticationDto
+            @Valid @RequestBody AuthenticationReq authenticationReq
     ) {
-        return missionService.createAuthentication(missionNo, authenticationDto)
+        return missionService.createAuthentication(missionNo, authenticationReq)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
@@ -73,9 +78,9 @@ public class MissionDetailsController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> uploadPicture(
             @PathVariable Long missionNo,
-            @Valid @RequestBody UploadPictureDto uploadPictureDto
+            @Valid @RequestBody UploadPictureReq uploadPictureReq
     ) {
-        return missionService.uploadPicture(missionNo, uploadPictureDto)
+        return missionService.uploadPicture(missionNo, uploadPictureReq)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.internalServerError().build();
     }

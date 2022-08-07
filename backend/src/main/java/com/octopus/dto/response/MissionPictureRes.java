@@ -1,18 +1,18 @@
-package com.octopus.domain.dto;
+package com.octopus.dto.response;
 
+import com.octopus.dto.layer.PictureDto;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.List;
 
-@Getter @ToString
+@Getter
 public class MissionPictureRes {
 
     private final String userNickname;
 
-    private final List<PictureRes> userPictures;
+    private final List<PictureDto> userPictures;
 
-    public MissionPictureRes(String userNickname, List<PictureRes> userPictures) {
+    public MissionPictureRes(String userNickname, List<PictureDto> userPictures) {
         this.userNickname = userNickname;
         this.userPictures = userPictures;
     }

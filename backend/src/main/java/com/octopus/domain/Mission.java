@@ -1,16 +1,13 @@
 package com.octopus.domain;
 
-import com.octopus.domain.dto.MissionCreateDto;
-import com.octopus.domain.dto.MissionUpdateInfoDto;
+import com.octopus.dto.request.MissionCreateReq;
+import com.octopus.dto.request.MissionUpdateInfoReq;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.domain.type.MissionType;
-import com.octopus.exception.LimitLessThanBeforeException;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -58,28 +55,28 @@ public class Mission {
 
     // TODO: 2022-07-29 MapStruct 고민해보기 너무 길긴 하다..
     @Builder(builderMethodName = "createMission")
-    Mission(MissionCreateDto missionCreateDto) {
-        this.missionCode = missionCreateDto.getMissionCode();
-        this.missionLeaderId = missionCreateDto.getMissionLeaderId();
-        this.missionTitle = missionCreateDto.getMissionTitle();
-        this.missionType = missionCreateDto.getMissionType();
-        this.missionPoint = missionCreateDto.getMissionPoint();
-        this.missionStatus = missionCreateDto.getMissionStatus();
-        this.missionLimitPersonnel = missionCreateDto.getMissionLimitPersonnel();
-        this.missionUsers = missionCreateDto.getMissionUser();
-        this.missionContent = missionCreateDto.getMissionContent();
-        this.missionOpen = missionCreateDto.getMissionOpen();
+    Mission(MissionCreateReq missionCreateReq) {
+        this.missionCode = missionCreateReq.getMissionCode();
+        this.missionLeaderId = missionCreateReq.getMissionLeaderId();
+        this.missionTitle = missionCreateReq.getMissionTitle();
+        this.missionType = missionCreateReq.getMissionType();
+        this.missionPoint = missionCreateReq.getMissionPoint();
+        this.missionStatus = missionCreateReq.getMissionStatus();
+        this.missionLimitPersonnel = missionCreateReq.getMissionLimitPersonnel();
+        this.missionUsers = missionCreateReq.getMissionUser();
+        this.missionContent = missionCreateReq.getMissionContent();
+        this.missionOpen = missionCreateReq.getMissionOpen();
     }
 
-    public void updateMission(MissionUpdateInfoDto missionUpdateInfoDto){
-        this.missionTitle = missionUpdateInfoDto.getMissionTitle();
-        this.missionContent = missionUpdateInfoDto.getMissionContent();
-        this.missionType = missionUpdateInfoDto.getMissionType();
-        if (missionUpdateInfoDto.getMissionLimitPersonnel() < this.missionLimitPersonnel){
+    public void updateMission(MissionUpdateInfoReq missionUpdateInfoReq){
+        this.missionTitle = missionUpdateInfoReq.getMissionTitle();
+        this.missionContent = missionUpdateInfoReq.getMissionContent();
+        this.missionType = missionUpdateInfoReq.getMissionType();
+        if (missionUpdateInfoReq.getMissionLimitPersonnel() < this.missionLimitPersonnel){
             //throw LimitLessThanBeforeException;
         }
         else
-        {this.missionLimitPersonnel = missionUpdateInfoDto.getMissionLimitPersonnel();}
+        {this.missionLimitPersonnel = missionUpdateInfoReq.getMissionLimitPersonnel();}
     }
 
     public void updateMissionUsers(String missionUsers){this.missionUsers = missionUsers;}

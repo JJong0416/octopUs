@@ -2,10 +2,10 @@ package com.octopus.service;
 
 import com.octopus.domain.Mission;
 import com.octopus.domain.User;
-import com.octopus.domain.dto.MissionInfoDto;
-import com.octopus.domain.dto.SignUpDto;
-import com.octopus.domain.dto.UserMyPageDto;
-import com.octopus.domain.dto.UserUpdatePasswordDto;
+import com.octopus.dto.response.MissionInfoReq;
+import com.octopus.dto.request.UserSignUpReq;
+import com.octopus.dto.response.UserMyPageRes;
+import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.exception.SignUpException;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.repository.OctopusTableRepository;
@@ -36,12 +36,12 @@ public class UserService {
 
     /* 도메인 회원가입 */
     @Transactional
-    public void signup(SignUpDto signUpDto) {
-        if (userRepository.findByUserId(signUpDto.getUserId()).isPresent()) {
+    public void signup(UserSignUpReq userSignUpReq) {
+        if (userRepository.findByUserId(userSignUpReq.getUserId()).isPresent()) {
             throw signUpException;
         }
-        signUpDto.dtoEncodePassword(passwordEncoder.encode(signUpDto.getUserPassword()));
-        User user = createUser(signUpDto);
+        userSignUpReq.dtoEncodePassword(passwordEncoder.encode(userSignUpReq.getUserPassword()));
+        User user = createUser(userSignUpReq);
         userRepository.save(user);
     }
 
@@ -63,9 +63,9 @@ public class UserService {
         return false;
     }
 
-    private User createUser(SignUpDto signUpDto) {
+    private User createUser(UserSignUpReq userSignUpReq) {
         return User.signUpBuilder()
-                .signUpDto(signUpDto)
+                .signUpDto(userSignUpReq)
                 .build();
     }
 
@@ -81,12 +81,12 @@ public class UserService {
     }
 
     @Transactional
-    public boolean changeUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
+    public boolean changeUserPassword(UserUpdatePasswordReq userUpdatePasswordReq) {
 
         User user = getUserInfo(getCurrentUsername().get());
 
-        if (isCurrentPasswordAndDbPasswordEquals(userUpdatePasswordDto.getCurrentPassword(), user.getUserPassword())) {
-            user.updatePassword(passwordEncoder.encode(userUpdatePasswordDto.getNewPassword()));
+        if (isCurrentPasswordAndDbPasswordEquals(userUpdatePasswordReq.getCurrentPassword(), user.getUserPassword())) {
+            user.updatePassword(passwordEncoder.encode(userUpdatePasswordReq.getNewPassword()));
             return true;
         } else {
             return false;
@@ -94,11 +94,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserMyPageDto getUserMyPageInfo(){
+    public UserMyPageRes getUserMyPageInfo(){
 
         User user = getUserInfo(getCurrentUsername().get());
 
-        return UserMyPageDto.builder()
+        return UserMyPageRes.builder()
                 .userId(user.getUserId())
                 .userNickname(user.getUserNickname())
                 .userEmail(user.getUserEmail())
@@ -125,14 +125,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<MissionInfoDto> getUserMissions(String userId){
+    public List<MissionInfoReq> getUserMissions(String userId){
 
         User user = getUserInfo(userId);
         List<Mission> missions = octopusTableRepository.findMissionByUser(user);
-        List<MissionInfoDto> missionInfoDto = new ArrayList<>();
+        List<MissionInfoReq> missionInfoReq = new ArrayList<>();
 
         for(Mission mission : missions){
-            MissionInfoDto mid = MissionInfoDto.builder()
+            MissionInfoReq mid = MissionInfoReq.builder()
                     .missionCode(mission.getMissionCode())
                     .missionLeaderId(mission.getMissionLeaderId())
                     .missionTitle(mission.getMissionTitle())
@@ -145,10 +145,10 @@ public class UserService {
                     .missionOpen(mission.getMissionOpen())
                     .build();
 
-            missionInfoDto.add(mid);
+            missionInfoReq.add(mid);
         }
 
-        return missionInfoDto;
+        return missionInfoReq;
 
     }
 

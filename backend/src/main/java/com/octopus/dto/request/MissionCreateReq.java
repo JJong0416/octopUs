@@ -1,4 +1,4 @@
-package com.octopus.domain.dto;
+package com.octopus.dto.request;
 
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
@@ -11,7 +11,7 @@ import static com.octopus.utils.MissionUtils.CODE_SIZE;
 import static com.octopus.utils.MissionUtils.createMissionCode;
 
 @Getter
-public class MissionCreateDto {
+public class MissionCreateReq {
 
     @Size(max = 8)
     private final String missionCode;
@@ -52,7 +52,7 @@ public class MissionCreateDto {
     }
 
 
-    MissionCreateDto(
+    MissionCreateReq(
             String missionTitle,
             MissionType missionType, // 타입 여러개
             Integer missionPoint,

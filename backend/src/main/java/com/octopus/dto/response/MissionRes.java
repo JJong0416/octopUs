@@ -1,15 +1,16 @@
-package com.octopus.domain.dto;
+package com.octopus.dto.response;
 
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.domain.type.MissionType;
+import com.octopus.dto.request.MissionUpdateInfoReq;
 import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.*;
 
 @Getter
-public class MissionDto {
+public class MissionRes {
     @Size(max = 8)
     final private String missionCode;
 
@@ -43,19 +44,19 @@ public class MissionDto {
 
     final private String missionUsers;
 
-    public void updateMission(MissionUpdateInfoDto missionUpdateInfoDto){
-        this.missionTitle = missionUpdateInfoDto.getMissionTitle();
-        this.missionContent = missionUpdateInfoDto.getMissionContent();
-        this.missionType = missionUpdateInfoDto.getMissionType();
-        if (missionUpdateInfoDto.getMissionLimitPersonnel() < this.missionLimitPersonnel){
+    public void updateMission(MissionUpdateInfoReq missionUpdateInfoReq){
+        this.missionTitle = missionUpdateInfoReq.getMissionTitle();
+        this.missionContent = missionUpdateInfoReq.getMissionContent();
+        this.missionType = missionUpdateInfoReq.getMissionType();
+        if (missionUpdateInfoReq.getMissionLimitPersonnel() < this.missionLimitPersonnel){
             //throw LimitLessThanBeforeException;
         }
         else
-        {this.missionLimitPersonnel = missionUpdateInfoDto.getMissionLimitPersonnel();}
+        {this.missionLimitPersonnel = missionUpdateInfoReq.getMissionLimitPersonnel();}
     }
 
     @Builder
-    public MissionDto(
+    public MissionRes(
             String missionCode,
             String missionLeaderId,
             String missionTitle,

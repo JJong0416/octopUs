@@ -1,14 +1,12 @@
-package com.octopus.domain.dto;
+package com.octopus.dto.layer;
 
 import com.octopus.domain.Picture;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
-public class PictureRes {
+public class PictureDto {
 
     private final Long pictureNo;
 
@@ -20,7 +18,7 @@ public class PictureRes {
 
     private final LocalDateTime date;
 
-    public PictureRes(Picture picture){
+    public PictureDto(Picture picture){
         this.pictureNo = picture.getPictureNo();
         this.missionNo = picture.getMissionNo().getMissionNo();
         this.userNo = picture.getUserNo().getUserNo();

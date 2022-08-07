@@ -1,4 +1,4 @@
-package com.octopus.domain.dto;
+package com.octopus.dto.request;
 
 import com.octopus.domain.type.PlatformType;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Getter;
 import javax.validation.constraints.*;
 
 @Getter
-public class SignUpDto {
+public class UserSignUpReq {
 
     @Pattern(regexp="[a-z0-9]{6,15}")
     private final String userId;
@@ -35,7 +35,7 @@ public class SignUpDto {
     }
 
     @Builder
-    public SignUpDto(
+    public UserSignUpReq(
             String userId, String userPassword, String userEmail, String userNickname, String userAvatar
     ) {
         this.userId = userId;

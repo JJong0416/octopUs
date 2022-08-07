@@ -1,4 +1,4 @@
-package com.octopus.domain.dto;
+package com.octopus.dto.response;
 
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
@@ -7,33 +7,47 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 @Getter
 @NoArgsConstructor
-public class MissionInfoDto {
+public class MissionInfoReq {
 
+    @NotBlank
     private String missionCode;
 
+    @NotNull
     private String missionLeaderId;
 
+    @NotNull
     private String missionTitle;
 
+    @NotBlank
     private MissionType missionType;
 
+    @Positive
     private Integer missionPoint;
 
+    @NotNull
     private MissionStatus missionStatus;
 
+    @NotNull
     private Integer missionLimitPersonnel;
 
+    @NotNull
     private String missionContent;
 
+    @NotNull
     private MissionOpenType missionOpen;
 
+    @NotNull
     private String missionUser;
 
 
     @Builder
-    public MissionInfoDto(
+    public MissionInfoReq(
             String missionCode,
             String missionLeaderId,
             String missionTitle,
@@ -44,7 +58,7 @@ public class MissionInfoDto {
             String missionContent,
             MissionOpenType missionOpen,
             String missionUser
-    ){
+    ) {
         this.missionCode = missionCode;
         this.missionLeaderId = missionLeaderId;
         this.missionTitle = missionTitle;

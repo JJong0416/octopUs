@@ -1,7 +1,7 @@
 package com.octopus.controller;
 
-import com.octopus.domain.dto.LoginDto;
-import com.octopus.domain.dto.TokenDto;
+import com.octopus.dto.request.LoginReq;
+import com.octopus.dto.request.TokenReq;
 import com.octopus.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +26,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login/domain")
-    public ResponseEntity<TokenDto> loginFromDomain(@Valid @RequestBody LoginDto loginDto) {
-        String jwt = authService.createJwtString(loginDto);
+    public ResponseEntity<TokenReq> loginFromDomain(@Valid @RequestBody LoginReq loginReq) {
+        String jwt = authService.createJwtString(loginReq);
 
         return new ResponseEntity<>(
-                new TokenDto(jwt), authService.createJwtHttpHeader(jwt), HttpStatus.OK);
+                new TokenReq(jwt), authService.createJwtHttpHeader(jwt), HttpStatus.OK);
     }
 
 /*    @PostMapping("/login/kakao")

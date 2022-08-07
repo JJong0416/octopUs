@@ -1,7 +1,7 @@
 package com.octopus.repository;
 
 import com.octopus.domain.Mission;
-import com.octopus.domain.dto.MissionListDto;
+import com.octopus.dto.layer.MissionListDto;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import org.springframework.data.domain.Sort;

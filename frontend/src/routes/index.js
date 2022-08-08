@@ -70,7 +70,7 @@ const routes = [
     props: true,
   },
   {
-    path: "/proceeding",
+    path: "/proceeding/:missionNo",
     name: "proceeding",
     component: () => import("@/views/ProceedingMission.vue"),
   },

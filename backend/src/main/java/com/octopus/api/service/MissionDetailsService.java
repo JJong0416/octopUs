@@ -7,6 +7,8 @@ import com.octopus.dto.request.AuthenticationReq;
 import com.octopus.dto.request.MissionTimeReq;
 import com.octopus.dto.request.MissionUpdateInfoReq;
 import com.octopus.dto.response.MissionRes;
+import com.octopus.exception.CustomException;
+import com.octopus.exception.ErrorCode;
 import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -27,22 +29,22 @@ public class MissionDetailsService {
     private final MissionTimeRepository missionTimeRepository;
     private final UserRepository userRepository;
 
-    private final PictureRepository pictureRepository;
     private final OctopusTableRepository octopusTableRepository;
+
     private final AuthenticationRepository authenticationRepository;
 
-
     @Transactional
-    public boolean createMissionTime(Long missionNo, MissionTimeReq missionTimeReq) {
+    public void createMissionTime(Long missionNo, MissionTimeReq missionTimeReq) {
 
         // 미션을 가지고 와서
         Mission mission = getMissionByMissionNo(missionNo);
 
         // 권한이 있으면서 동시에 기존에 MissionTime을 안가지고 있다면
         // 권한이 없거나 이미 미션이 존재한다면
-        if (!isAuthorizedMissionUser(mission) || haveMissionTime(missionNo)) {
-            return false;
-        }
+        if (!isAuthorizedMissionUser(mission))
+            throw new CustomException(ErrorCode.ACCESS_NOT_ALLOWED);
+        if (haveMissionTime(missionNo))
+            throw new CustomException(ErrorCode.BAD_REQUEST);
 
         // 미션 타임 생성
         MissionTime missionTime = MissionTime.createMTBuilder()
@@ -56,7 +58,6 @@ public class MissionDetailsService {
 
         if (haveAuthentication(missionNo)) mission.updateMissionStatus(MissionStatus.OPEN);
 
-        return true;
     }
 
     @Transactional
@@ -75,48 +76,52 @@ public class MissionDetailsService {
 
         octopusTableRepository.insertToOctopusTable(user.getUserNo(), missionNo);
     }
-    
+
     @Transactional
-    public String deleteUserFromMission(String userId, Long missionNo, String loginedUserId) {
+    public void deleteUserFromMission(String userId, Long missionNo) {
         // 1. mission table의 MissionUser에서 해당하는 id의 이름을 제거한다.
+
+        String loginedUserId = getCurrentUsername().get();
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
-            throw new MissionNotFoundException();
+            throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
         });
         User user = userRepository.findByUserId(userId).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
 
-        if (!checkUserIdEqualLeaderId(mission, loginedUserId)) return "해당 미션의 방장만 강퇴할수 있습니다.";
-        if (!checkMissionStatusIsOPEN(mission)) return "모집중인 방에서만 강퇴할 수 있습니다.";
-        if (checkUserIdEqualLeaderId(mission, userId.toLowerCase())) return "방장은 강퇴할 수 없습니다.";
+        if (!checkUserIdEqualLeaderId(mission, loginedUserId))
+            throw new CustomException(ErrorCode.ACCESS_NOT_ALLOWED);
+
+        if (!checkMissionStatusIsOPEN(mission))
+            throw new CustomException(ErrorCode.MISSION_NOT_OPENED);
 
         // MissionUser에 userId가 없다면 잘못된 입력
-        int idLocation = checkMissionContainsUserId(mission, userId);
-        if (idLocation < 0) return "미션에 등록되지 않은 user입니다.";
+        int nicknameLocation = checkMissionContainsUserNickname(mission, user.getUserNickname());
+        if (nicknameLocation < 0)
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
         // Users에서 삭제하기 로직
-        String newUsers = mission.getMissionUsers().substring(0, idLocation - 1) +
-                mission.getMissionUsers().substring(idLocation + userId.length() + 2);
+        String newUsers = mission.getMissionUsers().substring(0, nicknameLocation - 2) +
+                mission.getMissionUsers().substring(nicknameLocation + user.getUserNickname().length());
 
         mission.updateMissionUsers(newUsers);
 
         missionRepository.save(mission);
         // 2. octopus_table 에서 해당하는 user, mission의 조합을 삭제한다
         octopusTableRepository.deleteByUserAndMissionInQuery(user, mission);
-        return "성공";
     }
 
     @Transactional
-    public boolean createAuthentication(Long missionNo, AuthenticationReq authenticationReq) {
+    public void createAuthentication(Long missionNo, AuthenticationReq authenticationReq) {
         if (isValidAuthenticationRequest(authenticationReq))
-            return false;
-        
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+
         Mission mission = getMissionByMissionNo(missionNo);
-        
+
         if (!isAuthorizedMissionUser(mission)) {
-            return false;
+            throw new CustomException(ErrorCode.ACCESS_NOT_ALLOWED);
         }
-        
+
         AuthenticationInfo authenticationInfo = AuthenticationInfo.createAuthenticationInfo()
                 .mission(mission)
                 .authenticationStartTime(authenticationReq.getAuthenticationStartTime())
@@ -124,9 +129,8 @@ public class MissionDetailsService {
                 .build();
 
         authenticationRepository.save(authenticationInfo);
-        
+
         if (haveMissionTime(missionNo)) mission.updateMissionStatus(MissionStatus.OPEN);
-        return true;
     }
 
     @Transactional(readOnly = true)
@@ -138,29 +142,29 @@ public class MissionDetailsService {
     public List<Octopus> getOctopusByMission(Mission mission) {
         return octopusTableRepository.findOctopusByMission(mission)
                 .orElseThrow(() -> {
-                    throw new RuntimeException("Not found Octopus");
+                    throw new CustomException(ErrorCode.OCTOPUS_NOT_FOUND);
                 });
     }
 
     @Transactional
     public void modifyMission(MissionUpdateInfoReq missionUpdateInfoReq, long missionNo) {
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
         });
         mission.updateMission(missionUpdateInfoReq);
     }
-    
+
     @Transactional(readOnly = true)
     public Mission getMissionByMissionNo(Long missionNo) {
         return missionRepository.findMissionByMissionNo(missionNo).orElseThrow(() -> {
-            throw new RuntimeException("Not found Mission");
+            throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
         });
     }
 
     @Transactional(readOnly = true)
     public List<String> getMissionUsers(Long missionNo) {
         Mission mission = missionRepository.findByMissionNo(missionNo)
-                .orElseThrow(MissionNotFoundException::new);
+                .orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
 
         return Arrays.stream(mission.getMissionUsers().split(", "))
                 .collect(Collectors.toList());
@@ -202,11 +206,11 @@ public class MissionDetailsService {
         return mission.getMissionStatus().equals(MissionStatus.OPEN);
     }
 
-    private Integer checkMissionContainsUserId(Mission mission, String userId) {
-        return mission.getMissionUsers().indexOf(userId.toLowerCase());
+    private Integer checkMissionContainsUserNickname(Mission mission, String userNickname) {
+        return mission.getMissionUsers().indexOf(userNickname.toLowerCase());
     }
 
-    private Boolean isValidAuthenticationRequest(AuthenticationReq authenticationReq){
+    private Boolean isValidAuthenticationRequest(AuthenticationReq authenticationReq) {
         return authenticationReq.getAuthenticationEndTime()
                 .isBefore(authenticationReq.getAuthenticationStartTime()) || authenticationReq.getAuthenticationEndTime()
                 .equals(authenticationReq.getAuthenticationStartTime());

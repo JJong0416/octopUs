@@ -1,10 +1,10 @@
 package com.octopus.api.controller;
 
+import com.octopus.api.service.MissionDetailsService;
 import com.octopus.dto.request.AuthenticationReq;
 import com.octopus.dto.request.MissionTimeReq;
 import com.octopus.dto.request.MissionUpdateInfoReq;
 import com.octopus.dto.response.MissionRes;
-import com.octopus.api.service.MissionDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +45,8 @@ public class MissionDetailsController {
             @PathVariable Long missionNo,
             @Valid @RequestBody MissionTimeReq missionTimeReq
     ) {
-        return missionDetailsService.createMissionTime(missionNo, missionTimeReq)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        missionDetailsService.createMissionTime(missionNo, missionTimeReq);
+        return ResponseEntity.ok().build();
     }
 
     //인증 시작 시간 & 끝나는 시간 생성하기
@@ -57,9 +56,8 @@ public class MissionDetailsController {
             @PathVariable Long missionNo,
             @Valid @RequestBody AuthenticationReq authenticationReq
     ) {
-        return missionDetailsService.createAuthentication(missionNo, authenticationReq)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        missionDetailsService.createAuthentication(missionNo, authenticationReq);
+        return ResponseEntity.ok().build();
     }
 
     //미션에 참여하기
@@ -83,13 +81,10 @@ public class MissionDetailsController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity kickOutUser(
             @PathVariable String userId,
-            @PathVariable Long missionNo,
-            @RequestBody String loginedUserId
+            @PathVariable Long missionNo
     ) {
-        // 지금로그인된 사용자의 아이디를 받아오는 것이 아닌 토큰에서 id를 꺼내오는거로 변경 필요
-        String message = missionDetailsService.deleteUserFromMission(userId, missionNo, loginedUserId);
-        return message.equals("성공")
-                ? new ResponseEntity<>(message, HttpStatus.OK)
-                : new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        missionDetailsService.deleteUserFromMission(userId, missionNo);
+        return ResponseEntity.ok().build();
+
     }
 }

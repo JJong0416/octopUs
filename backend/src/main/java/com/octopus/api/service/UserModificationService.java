@@ -3,6 +3,8 @@ package com.octopus.api.service;
 import com.octopus.api.repository.UserRepository;
 import com.octopus.domain.User;
 import com.octopus.dto.request.UserUpdatePasswordReq;
+import com.octopus.exception.CustomException;
+import com.octopus.exception.ErrorCode;
 import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,32 +27,31 @@ public class UserModificationService {
     }
 
     @Transactional
-    public boolean changeUserNickname(String newNickname) {
+    public void changeUserNickname(String newNickname) {
         if (!isUserByNicknameExist(newNickname)) {
             User user = getUserInfo(getCurrentUsername().get());
             user.changeNickname(newNickname);
-            return true;
+        }else {
+            throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXISTS);
         }
-        return false;
     }
 
     @Transactional
-    public boolean changeUserPassword(UserUpdatePasswordReq userUpdatePasswordReq) {
+    public void changeUserPassword(UserUpdatePasswordReq userUpdatePasswordReq) {
 
         User user = getUserInfo(getCurrentUsername().get());
 
         if (isCurrentPasswordAndDbPasswordEquals(userUpdatePasswordReq.getCurrentPassword(), user.getUserPassword())) {
             user.updatePassword(passwordEncoder.encode(userUpdatePasswordReq.getNewPassword()));
-            return true;
         } else {
-            return false;
+            throw new CustomException(ErrorCode.PASSWORD_NOT_VALID);
         }
     }
 
     @Transactional(readOnly = true)
     public User getUserInfo(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
     }
 

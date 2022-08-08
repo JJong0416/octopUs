@@ -2,6 +2,8 @@ package com.octopus.api.service;
 
 import com.octopus.domain.User;
 import com.octopus.api.repository.UserRepository;
+import com.octopus.exception.CustomException;
+import com.octopus.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String userId) {
         return userRepository.findByUserId(userId)
                 .map(this::createUser)
-                .orElseThrow(() -> new UsernameNotFoundException(userId + " -> 데이터베이스에서 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 
     private org.springframework.security.core.userdetails.User createUser(User user) {

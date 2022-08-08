@@ -33,17 +33,15 @@ public class UserModificationController {
     @PatchMapping("/nickname")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> modifyNickname(@RequestBody UserUpdateInfoReq userUpdateInfoReq) {
-        return (userModificationService.changeUserNickname(userUpdateInfoReq.getUserNickname()))
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        userModificationService.changeUserNickname(userUpdateInfoReq.getUserNickname());
+        return ResponseEntity.ok().build();
     }
 
     // 패스워드 변경
     @PatchMapping("/password")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> modifyPassword(@Valid @RequestBody UserUpdatePasswordReq userUpdatePasswordReq) {
-        return (userModificationService.changeUserPassword(userUpdatePasswordReq))
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        userModificationService.changeUserPassword(userUpdatePasswordReq);
+        return ResponseEntity.ok().build();
     }
 }

@@ -40,9 +40,8 @@ public class MissionCalenderController {
             @PathVariable Long missionNo,
             @Valid @RequestBody UploadPictureReq uploadPictureReq
     ) {
-        return missionCalenderService.uploadPicture(missionNo, uploadPictureReq)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.internalServerError().build();
+        missionCalenderService.uploadPicture(missionNo, uploadPictureReq);
+        return ResponseEntity.ok().build();
     }
 
     //캘린더에서 user 확인하기

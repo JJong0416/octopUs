@@ -9,6 +9,8 @@ import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.dto.layer.MissionListDto;
 import com.octopus.dto.request.MissionCreateReq;
+import com.octopus.exception.CustomException;
+import com.octopus.exception.ErrorCode;
 import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,7 @@ public class MissionService {
     @Transactional
     public void createMission(MissionCreateReq missionCreateReq) {
         User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
 
         /* 미션에 방장 정보와 String 으로 유저 넣기 */

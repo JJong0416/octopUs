@@ -4,6 +4,8 @@ import com.octopus.domain.Mission;
 import com.octopus.domain.User;
 import com.octopus.dto.response.MissionInfoRes;
 import com.octopus.dto.response.UserMyPageRes;
+import com.octopus.exception.CustomException;
+import com.octopus.exception.ErrorCode;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.api.repository.OctopusTableRepository;
 import com.octopus.api.repository.UserRepository;
@@ -28,14 +30,14 @@ public class UserService {
 
     // 패스워드 중복 체크 후, 삭제
     @Transactional
-    public boolean isPasswordEqualDbPassword(String password) {
+    public void isPasswordEqualDbPassword(String password) {
         User user = getUserInfo(getCurrentUsername().get());
         // 입력받은 id, pw조합이 존재한다면 - 삭제
         if (isCurrentPasswordAndDbPasswordEquals(password, user.getUserPassword())) {
             userRepository.delete(user);
-            return true;
         }
-        return false;
+        else
+            throw new CustomException(ErrorCode.PASSWORD_NOT_VALID);
     }
 
     @Transactional(readOnly = true)

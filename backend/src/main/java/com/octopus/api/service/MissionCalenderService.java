@@ -10,6 +10,8 @@ import com.octopus.dto.request.UploadPictureReq;
 import com.octopus.dto.response.CalenderRes;
 import com.octopus.dto.response.CalenderUserInfoRes;
 import com.octopus.dto.response.MissionPictureRes;
+import com.octopus.exception.CustomException;
+import com.octopus.exception.ErrorCode;
 import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
@@ -115,7 +117,7 @@ public class MissionCalenderService {
     }
 
     @Transactional
-    public boolean uploadPicture(Long missionNo, UploadPictureReq uploadPictureReq) {
+    public void uploadPicture(Long missionNo, UploadPictureReq uploadPictureReq) {
 
         User user = getUserByUserId(getCurrentUsername().get());
         Mission mission = getMissionByMissionNo(missionNo);
@@ -131,7 +133,7 @@ public class MissionCalenderService {
                         .build(), decode);
 
         if (blobInfo == null)
-            return false;
+            throw new CustomException(ErrorCode.BAD_REQUEST);
 
         //TODO: 2022-08-4, 목, 1:35 StringBuilder 또 써도되나  -박지수
         StringBuilder makeUrl = new StringBuilder();
@@ -143,7 +145,6 @@ public class MissionCalenderService {
                         .append(filename).toString())
                 .build();
         pictureRepository.save(picture);
-        return true;
     }
 
     public boolean getPostPossible(List<CalenderUserInfoRes> calenderUserInfos, MissionTime missionTime, List<AuthenticationInfo> authenticationInfos){
@@ -191,7 +192,7 @@ public class MissionCalenderService {
     @Transactional(readOnly = true)
     public Mission getMissionByMissionNo(Long missionNo) {
         return missionRepository.findMissionByMissionNo(missionNo).orElseThrow(() -> {
-            throw new RuntimeException("Not found Mission");
+            throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
         });
     }
 

@@ -24,9 +24,8 @@ public class UserController {
     @PostMapping("/user")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> deleteUser(@Valid @RequestBody UserUpdatePasswordReq userUpdatePasswordReq) {
-        return userService.isPasswordEqualDbPassword(userUpdatePasswordReq.getCurrentPassword())
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.badRequest().build();
+        userService.isPasswordEqualDbPassword(userUpdatePasswordReq.getCurrentPassword());
+        return ResponseEntity.ok().build();
     }
 
     // 유저 myPage

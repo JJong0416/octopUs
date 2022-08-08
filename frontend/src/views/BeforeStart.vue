@@ -263,6 +263,8 @@ export default {
           console.log(this.start);
           console.log(this.end);
           this.dialog2 = false;
+          this.start = null;
+          this.end = null;
         });
     },
     sendMissionTimeInfo() {

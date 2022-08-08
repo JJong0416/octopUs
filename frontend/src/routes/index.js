@@ -84,6 +84,11 @@ const routes = [
     name: "hotnew",
     component: () => import("@/views/HotnewView.vue"),
   },
+  {
+    path: "/camera",
+    name: "camera",
+    component: () => import("@/views/CameraView.vue"),
+  },
 ];
 
 const router = new VueRouter({

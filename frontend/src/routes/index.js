@@ -70,7 +70,7 @@ const routes = [
     props: true,
   },
   {
-    path: "/proceeding",
+    path: "/proceeding/:missionNo",
     name: "proceeding",
     component: () => import("@/views/ProceedingMission.vue"),
     props: true,
@@ -84,6 +84,11 @@ const routes = [
     path: "/hotnew",
     name: "hotnew",
     component: () => import("@/views/HotnewView.vue"),
+  },
+  {
+    path: "/camera",
+    name: "camera",
+    component: () => import("@/views/CameraView.vue"),
   },
 ];
 

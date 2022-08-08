@@ -31,6 +31,7 @@
                           type="password"
                           v-model="user.userPassword"
                           required
+                          @keyup.enter="confirm"
                         ></v-text-field>
                       </div>
                     </div>

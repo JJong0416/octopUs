@@ -139,7 +139,9 @@ export default {
     };
   },
   computed: {},
-  methods: {},
+  methods: {
+    serachMission() {},
+  },
 };
 </script>
 

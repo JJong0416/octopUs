@@ -1,8 +1,11 @@
 package com.octopus.api.controller;
 
 import com.octopus.api.service.MissionService;
+import com.octopus.domain.type.MissionType;
 import com.octopus.dto.request.MissionCreateReq;
+import com.octopus.dto.response.MissionRes;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,5 +39,20 @@ public class MissionController {
     @GetMapping("/hot")
     public ResponseEntity<List> hotMissions() {
         return new ResponseEntity<>(missionService.getHotMissions(), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/code/{missionCode}")
+    public ResponseEntity<List<MissionRes>> getMissionByMissionCode(@PathVariable String missionCode){
+        return new ResponseEntity<>(missionService.getMissionByMissionCode(missionCode), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/title/{missionTitle}")
+    public ResponseEntity<List<MissionRes>> getMissionsByMissionTitle(@PathVariable String missionTitle){
+        return new ResponseEntity<>(missionService.getMissionByMissionTitle(missionTitle), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/type/{missionType}")
+    public ResponseEntity<List<MissionRes>> getMissionsByMissionType(@PathVariable MissionType missionType){
+        return new ResponseEntity<>(missionService.getMissionsByMissionType(missionType), HttpStatus.OK);
     }
 }

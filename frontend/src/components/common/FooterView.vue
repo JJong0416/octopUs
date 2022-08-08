@@ -1,40 +1,41 @@
 <template>
-  <div class="footer-nav">
-    <v-tabs fixed-tabs background-color="#FFF4F2">
-      <!-- 홈 화면 탭 -->
-      <v-tab href="#mobile-tabs-5-1" class="primary--text">
-        <router-link :to="`/`"> <v-icon>mdi-home</v-icon></router-link>
-      </v-tab>
-      <!-- Hot 탭 -->
-      <v-tab href="#mobile-tabs-5-2" class="primary--text">
-        <router-link :to="`/hotnew`"> <v-icon>mdi-fire</v-icon></router-link>
-      </v-tab>
-      <!-- 검색 탭 -->
-      <v-tab href="#mobile-tabs-5-3" class="primary--text">
-        <router-link :to="`/search`"><v-icon>mdi-magnify</v-icon></router-link>
-      </v-tab>
-      <!-- 마이페이지 탭 -->
-      <v-tab href="#mobile-tabs-5-4" class="primary--text">
-        <router-link :to="`/mypage`"><v-icon>mdi-account</v-icon></router-link>
-      </v-tab>
-    </v-tabs>
-  </div>
+  <v-card>
+    <v-footer fixed padless>
+      <v-card flat tile width="100%" class="text-center">
+        <v-card-text>
+          <v-btn v-for="icon in icons" :key="icon" class="mx-4" icon>
+            <router-link :to="icon[1]">
+              <v-icon size="24px">
+                {{ icon[0] }}
+              </v-icon></router-link
+            >
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-footer>
+  </v-card>
 </template>
 
 <script>
-export default {};
+export default {
+  data: () => ({
+    icons: [
+      ["mdi-home", "/"],
+      ["mdi-fire", "/hotnew"],
+      ["mdi-magnify", "/search"],
+      ["mdi-account", "mypage"],
+    ],
+  }),
+};
 </script>
 
 <style>
-.v-tab a {
+.v-btn a {
   text-decoration: none;
   color: #ff2456;
 }
-.v-tab a:hover {
+.v-btn a:hover {
   text-decoration: none;
   color: #ff2456;
-}
-.footer-nav {
-  height: 5.4vh;
 }
 </style>

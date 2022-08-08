@@ -63,8 +63,6 @@ public class MissionService {
     public List<MissionListDto> getHotMissions() {
         //모집중이면서 공개방 리스트가져오기
         List<Mission> missions = missionRepository.findByMissionStatusAndMissionOpen(MissionStatus.OPEN, MissionOpenType.OPEN_ROOM);
-        if (missions == null || missions.isEmpty())
-            throw new MissionNotFoundException();
         List<MissionListDto> missionList = missions.stream()
                 .filter(mission -> mission.getMissionLimitPersonnel() -
                         (mission.getMissionUsers().length() - (mission.getMissionUsers().replaceAll(",", "").length()) + 1) > 0)

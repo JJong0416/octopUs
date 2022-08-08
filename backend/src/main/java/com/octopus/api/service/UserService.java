@@ -2,11 +2,8 @@ package com.octopus.api.service;
 
 import com.octopus.domain.Mission;
 import com.octopus.domain.User;
-import com.octopus.dto.response.MissionInfoReq;
-import com.octopus.dto.request.UserSignUpReq;
+import com.octopus.dto.response.MissionInfoRes;
 import com.octopus.dto.response.UserMyPageRes;
-import com.octopus.dto.request.UserUpdatePasswordReq;
-import com.octopus.exception.SignUpException;
 import com.octopus.exception.UserNotFoundException;
 import com.octopus.api.repository.OctopusTableRepository;
 import com.octopus.api.repository.UserRepository;
@@ -64,14 +61,15 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<MissionInfoReq> getUserMissions(String userId){
+    public List<MissionInfoRes> getUserMissions(String userId){
 
         User user = getUserInfo(userId);
         List<Mission> missions = octopusTableRepository.findMissionByUser(user);
-        List<MissionInfoReq> missionInfoReq = new ArrayList<>();
+        List<MissionInfoRes> missionInfoRes = new ArrayList<>();
 
         for(Mission mission : missions){
-            MissionInfoReq mid = MissionInfoReq.builder()
+            MissionInfoRes mid = MissionInfoRes.builder()
+                    .missionNo(mission.getMissionNo())
                     .missionCode(mission.getMissionCode())
                     .missionLeaderId(mission.getMissionLeaderId())
                     .missionTitle(mission.getMissionTitle())
@@ -84,9 +82,9 @@ public class UserService {
                     .missionOpen(mission.getMissionOpen())
                     .build();
 
-            missionInfoReq.add(mid);
+            missionInfoRes.add(mid);
         }
-        return missionInfoReq;
+        return missionInfoRes;
     }
 
     private boolean isCurrentPasswordAndDbPasswordEquals(String currentPassword, String dbPassword) {

@@ -32,4 +32,6 @@ public class UserRegisterService {
                 .userSignUpReq(userSignUpReq)
                 .build();
     }
+
+    /* 카카오 회원가입 */
 }

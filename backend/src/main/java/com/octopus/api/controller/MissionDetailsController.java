@@ -3,11 +3,8 @@ package com.octopus.api.controller;
 import com.octopus.dto.request.AuthenticationReq;
 import com.octopus.dto.request.MissionTimeReq;
 import com.octopus.dto.request.MissionUpdateInfoReq;
-import com.octopus.dto.request.UploadPictureReq;
-import com.octopus.dto.response.CalenderRes;
-import com.octopus.dto.response.MissionPictureRes;
 import com.octopus.dto.response.MissionRes;
-import com.octopus.api.service.MissionService;
+import com.octopus.api.service.MissionDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MissionDetailsController {
 
-    private final MissionService missionService;
+    private final MissionDetailsService missionDetailsService;
 
     //미션 정보 가져오기
     @GetMapping
     public ResponseEntity<MissionRes> getMission(@PathVariable long missionNo) {
-        MissionRes missionInfo = missionService.getMissionDtoByMissionNo(missionNo);
+        MissionRes missionInfo = missionDetailsService.getMissionDtoByMissionNo(missionNo);
         return ResponseEntity.ok(missionInfo);
     }
 
@@ -37,7 +34,7 @@ public class MissionDetailsController {
             @Valid @RequestBody MissionUpdateInfoReq missionUpdateInfoReq,
             @PathVariable long missionNo
     ) {
-        missionService.modifyMission(missionUpdateInfoReq, missionNo);
+        missionDetailsService.modifyMission(missionUpdateInfoReq, missionNo);
         return ResponseEntity.ok().build();
     }
 
@@ -48,7 +45,7 @@ public class MissionDetailsController {
             @PathVariable Long missionNo,
             @Valid @RequestBody MissionTimeReq missionTimeReq
     ) {
-        return missionService.createMissionTime(missionNo, missionTimeReq)
+        return missionDetailsService.createMissionTime(missionNo, missionTimeReq)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
@@ -60,7 +57,7 @@ public class MissionDetailsController {
             @PathVariable Long missionNo,
             @Valid @RequestBody AuthenticationReq authenticationReq
     ) {
-        return missionService.createAuthentication(missionNo, authenticationReq)
+        return missionDetailsService.createAuthentication(missionNo, authenticationReq)
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
@@ -69,20 +66,8 @@ public class MissionDetailsController {
     @PostMapping("/join")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> addUserToMission(@PathVariable long missionNo) {
-        missionService.joinMission(missionNo);
+        missionDetailsService.joinMission(missionNo);
         return ResponseEntity.ok().build();
-    }
-
-    //사진 업로드 하기
-    @PostMapping("/picture")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> uploadPicture(
-            @PathVariable Long missionNo,
-            @Valid @RequestBody UploadPictureReq uploadPictureReq
-    ) {
-        return missionService.uploadPicture(missionNo, uploadPictureReq)
-                ? ResponseEntity.ok().build()
-                : ResponseEntity.internalServerError().build();
     }
 
     //현재 미션에 참여 중인 유저 목록
@@ -90,21 +75,7 @@ public class MissionDetailsController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List> missionUsers(@PathVariable Long missionNo) {
         return new ResponseEntity<>(
-                missionService.getMissionUsers(missionNo), HttpStatus.OK);
-    }
-
-    // 미션 캘린더 조회
-    @GetMapping("/calender")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<CalenderRes> missionTableInfo(@PathVariable Long missionNo) {
-        return ResponseEntity.ok(missionService.getCalenderRes(missionNo));
-    }
-
-
-    //로그인 유저가 해당 미션에 등록한 사진들 불러오기
-    @GetMapping("/picture")
-    public ResponseEntity<List<MissionPictureRes>> getMissionPictures(@PathVariable Long missionNo) {
-        return ResponseEntity.ok(missionService.getMissionPictureMatchingUser(missionNo));
+                missionDetailsService.getMissionUsers(missionNo), HttpStatus.OK);
     }
 
     //참여 유저 강퇴하기
@@ -116,19 +87,9 @@ public class MissionDetailsController {
             @RequestBody String loginedUserId
     ) {
         // 지금로그인된 사용자의 아이디를 받아오는 것이 아닌 토큰에서 id를 꺼내오는거로 변경 필요
-        String message = missionService.deleteUserFromMission(userId, missionNo, loginedUserId);
+        String message = missionDetailsService.deleteUserFromMission(userId, missionNo, loginedUserId);
         return message.equals("성공")
                 ? new ResponseEntity<>(message, HttpStatus.OK)
                 : new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
-    }
-
-    //캘린더에서 user 확인하기
-    @GetMapping("/calender/{userId}")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> calenderUserInfoDetail(
-            @PathVariable Long missionNo,
-            @PathVariable String userId
-    ) {
-        return ResponseEntity.ok().build();
     }
 }

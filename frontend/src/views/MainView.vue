@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 왕문어 -->
-    <v-container>
+    <v-container class="mainwrap">
       <v-row>
         <v-col class="logo-img-wrapper">
           <v-img src="../assets/Logo.png" max-width="60%"></v-img>
@@ -16,11 +16,9 @@
           <v-text-field hide-details single-line></v-text-field>
         </v-col>
         <v-col cols="">
-          <v-card-text>
-            <v-btn icon>
-              <v-icon> mdi-magnify </v-icon>
-            </v-btn>
-          </v-card-text>
+          <v-btn icon>
+            <v-icon> mdi-magnify </v-icon>
+          </v-btn>
         </v-col>
       </v-row>
 
@@ -160,5 +158,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.mainwrap {
+  height: 90vh;
 }
 </style>

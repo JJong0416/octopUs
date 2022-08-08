@@ -8,6 +8,7 @@
           prominent
           fade-img-on-scroll
           height="50px"
+          color="#a8dadc"
         >
           <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
@@ -142,5 +143,8 @@ export default {
 }
 .routerpadding {
   height: 50px;
+}
+#app {
+  background-color: "#f1faee";
 }
 </style>

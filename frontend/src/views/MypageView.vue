@@ -189,7 +189,38 @@
                   <v-list-item two-line>
                     <v-list-item-content>
                       <v-list-item-title>인증 사진</v-list-item-title>
-                      <img :src=URL style="height:120px" class="mx-4" />
+                      
+                      <!-- <img v-if="URL!=Null" :src=URL style="height:120px" class="mx-4" /> -->
+
+
+                      <template>
+                        <v-carousel
+                          cycle
+                          height="400"
+                          hide-delimiter-background
+                          show-arrows-on-hover
+                        >
+                          <v-carousel-item
+                            v-for="(slide, i) in userPictures"
+                            :key="i"
+                          >
+                            <v-sheet
+                              :color="colors[i]"
+                              height="100%"
+                            >
+                              <v-row
+                                class="fill-height"
+                                align="center"
+                                justify="center"
+                              >
+                                <div class="text-h2">
+                                  {{ slide.pictureUrl }} 사진
+                                </div>
+                              </v-row>
+                            </v-sheet>
+                          </v-carousel-item>
+                        </v-carousel>
+                      </template>
                     </v-list-item-content>
                   </v-list-item>
               </template>
@@ -230,7 +261,8 @@ export default {
       openexpanded: [],
       closeexpanded: [],
       singleExpand: true,
-      URL:"",
+      URL:null,
+      userPictures:[],
     };
   },
 
@@ -254,9 +286,11 @@ export default {
           console.log(response);
           // 내부에 받은 이미지 확인필요
           console.log(response.data[0].userPictures[0].pictureUrl);
+          console.log(response.data[0].userPictures);
+          vm.userPictures = response.data[0].userPictures;
+          // vm.URL = response.data[0].userPictures[0].pictureUrl;
+          // console.log(vm.URL)
 
-          vm.URL = response.data[0].userPictures[0].pictureUrl;
-          console.log(vm.URL)
         })
         .catch(function(err){
           console.log(err);

@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-footer fixed padless>
-      <v-card flat tile width="100%" class="text-center">
+      <v-card flat tile width="100%" class="text-center" height="10vh">
         <v-card-text>
           <v-btn v-for="icon in icons" :key="icon" class="mx-4" icon>
             <router-link :to="icon[1]">

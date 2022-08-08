@@ -1,7 +1,7 @@
 <template>
-  <div class="header-nav-wrap">
-    <v-card class="mx-auto overflow-hidden" height="100vh">
-      <v-app-bar>
+  <div>
+    <v-card class="overflow-hidden">
+      <v-app-bar absolute shrink-on-scroll prominent fade-img-on-scroll>
         <!-- 좌측 메뉴 바 -->
         <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
         <!-- 여백 -->
@@ -121,8 +121,5 @@ export default {
 .create a:hover {
   text-decoration: none;
   color: none;
-}
-.header-nav-wrap {
-  height: 6.2vh;
 }
 </style>

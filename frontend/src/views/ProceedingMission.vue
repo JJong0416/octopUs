@@ -190,7 +190,7 @@ export default {
     cameraon: true,
     bURL: "blob:",
     focus: "",
-    type: "month",
+    type: "week",
     typeToLabel: {
       month: "Month",
       week: "Week",

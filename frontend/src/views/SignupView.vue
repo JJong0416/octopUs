@@ -1,5 +1,5 @@
 <template>
-  <v-container style="width: 450px">
+  <v-container>
     <v-layout align-center row wrap>
       <v-flex xs12>
         <v-alert v-if="isError" type="error">

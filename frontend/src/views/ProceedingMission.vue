@@ -113,8 +113,10 @@
                     <v-spacer></v-spacer>
                   </v-toolbar>
                   <v-card-text class="text-center">
-                    오늘 {{}} 번 인증하셨습니다.
-                    <v-img src="../assets/img/1.png" max-width="30vh"></v-img>
+                    오늘 {{pictures.length}} 번 인증하셨습니다.
+                    <div v-for="index in pictures" :key="index">
+                      <v-img :src="index" max-width="30vh"></v-img> 
+                    </div>
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -142,7 +144,7 @@
 
 <script>
 import axios from "axios";
-//import { apiInstance } from "@/api/index.js"
+
 export default {
   data: () => ({
     missionTitle: "",
@@ -155,6 +157,8 @@ export default {
     weekInProgress: 0,
     isCurrentUserPicutrePost: false,
     calendarUserInfos: [],
+    pictureList : {},
+    pictures : [],
     picture: "",
     content: "",
     show: false,
@@ -175,52 +179,7 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [
-      // {
-      //     name: 'Event 1',
-      //     // start: '2022-08-09T03:00:00',
-      //     // end: '2022-08-09T06:00:00',
-      //     start : '2022-08-08',
-      //     color : "#A0BAD0",
-      //     timed: true,
- 
-      //   },
-      //    {
-      //     name: 'Event 2',
-      //     // start: '2022-08-09T03:00:00',
-      //     // end: '2022-08-09T06:00:00',
-      //     start : '2022-08-08',
-      //     color : "#A0BAD0",
-      //     timed: true,
- 
-      //   },
-      //    {
-      //     name: 'Event 3',
-      //     // start: '2022-08-09T03:00:00',
-      //     // end: '2022-08-09T06:00:00',
-      //     start : '2022-08-08',
-      //     color : "#A0BAD0",
-      //     timed: true,
- 
-      //   },
-      //    {
-      //     name: 'Event 4',
-      //     // start: '2022-08-09T03:00:00',
-      //     // end: '2022-08-09T06:00:00',
-      //     start : '2022-08-08',
-      //     color : "#A0BAD0",
-      //     timed: true,
- 
-      //   },
-      //    {
-      //     name: 'Event 5',
-      //     // start: '2022-08-09T03:00:00',
-      //     // end: '2022-08-09T06:00:00',
-      //     start : '2022-08-08',
-      //     color : "#A0BAD0",
-      //     timed: true,
- 
-      //   },
-         
+     
     ],
     // 캘린더 이벤트 색 8개
     colors: [
@@ -236,7 +195,7 @@ export default {
     names: ["Nickname"],
   }),
   created() {
-    //const api = apiInstance();
+    
     axios
       .get(`../api/mission/${this.$route.params.missionNo}`, {
         headers: {
@@ -281,26 +240,36 @@ export default {
     },
     getInfo() {
       const events = [];
-      
+      var vm = this;
+      vm.pictureList = {};
       for(let i = 0; i < this.calendarUserInfos.length; i++){
-         
-        for(let j = 0; j < this.calendarUserInfos[i].userPictures.length; j++){
-          
-          console.log(this.calendarUserInfos[i].userPictures[j].date);
-          const first = this.calendarUserInfos[i].userPictures[j].date.split('T')[0];
         
-          events.push({
-            name: this.calendarUserInfos[i].userNickname,
-            start: first,
-            timed : true,
-            color: this.colors[this.calendarUserInfos[i].userAvatar -1],   
+        for(let j = 0; j < this.calendarUserInfos[i].userPictures.length; j++){
+         
+          const nickname = this.calendarUserInfos[i].userNickname;
+          const date = this.calendarUserInfos[i].userPictures[j].date.split('T')[0];
+          const avartar = this.calendarUserInfos[i].userAvatar;
+          if(vm.pictureList[(nickname +" " + date+" " + avartar)] == undefined){
+            vm.pictureList[(nickname +" " + date+" " + avartar)] = [this.calendarUserInfos[i].userPictures[j].pictureUrl];
+          }else{
+            var tempList = vm.pictureList[(nickname +" " + date+" " + avartar)];
+            tempList.push(this.calendarUserInfos[i].userPictures[j].pictureUrl);
+            vm.pictureList[(nickname +" " + date+" " + avartar)] = tempList;
+          }
           
-          });     
-        console.log(this.calendarUserInfos[i].userPictures[j].date);
         }
       }
+      for(var key in vm.pictureList){
+        events.push({
+            name: key.split(" ")[0],
+            start:  key.split(" ")[1],
+            timed : true,
+            color: this.colors[key.split(" ")[2]-1], 
+          });     
+
+      }
+     
        this.events = events;
-       console.log("-----" + this.events);
       this.calendarShow = !this.calendarShow;
     },
     viewDay({ date }) {
@@ -320,7 +289,9 @@ export default {
       this.$refs.calendar.next();
     },
     showEvent({ nativeEvent, event }) {
+      const temp = event.name + " " + event.start + " " + (this.colors.indexOf(event.color)+1);
       const open = () => {
+        this.pictures = this.pictureList[temp];
         this.selectedEvent = event;
         this.selectedElement = nativeEvent.target;
         requestAnimationFrame(() =>
@@ -340,38 +311,7 @@ export default {
     // showAllEvent({nativeEvent, event}){
     //   // 해당 요일 모든 이벤트를 출력해주는 함수 생성
     // },
-    updateRange({ start, end }) {
-      const events = [];
-
-      const min = new Date(`${start.date}T00:00:00`);
-      const max = new Date(`${end.date}T23:59:59`);
-      const days = (max.getTime() - min.getTime()) / 86400000;
-      const eventCount = this.rnd(days, days + 20);
-      console.log(this.calendarUserInfos.length);
-      for (let i = 0; i < this.calendarUserInfos.length; i++) {
-        console.log(i);
-      }
-      for (let i = 0; i < eventCount; i++) {
-        const allDay = this.rnd(0, 3) === 0;
-        const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-        const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-        const second = new Date(first.getTime() + secondTimestamp);
-
-        events.push({
-          name: this.names[this.rnd(0, this.names.length - 1)],
-          start: first,
-          end: second,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
-          timed: !allDay,
-        });
-      }
-
-      this.events = events;
-    },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a;
-    },
+    
   },
 };
 </script>

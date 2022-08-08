@@ -93,10 +93,19 @@
         hide-delimiter-background
         show-arrows-on-hover
       >
-        <v-carousel-item v-for="(slide, i) in slides" :key="i">
+        <v-carousel-item v-for="(item, i) in hotmissions" :key="i">
           <v-sheet :color="colors[i]" height="100%">
             <v-row class="fill-height" align="center" justify="center">
-              <div class="text-h2">{{ slide }}</div>
+              <div class="text-h2">
+                <router-link
+                  :to="{
+                    name: 'before',
+                    params: { missionNo: item.missionNo },
+                  }"
+                  style="text-decoration: none; color: white"
+                  >{{ item.missionTitle }}</router-link
+                >
+              </div>
             </v-row>
           </v-sheet>
         </v-carousel-item>
@@ -109,10 +118,19 @@
         hide-delimiter-background
         show-arrows-on-hover
       >
-        <v-carousel-item v-for="(slide, i) in slides" :key="i">
+        <v-carousel-item v-for="(item, i) in newmissions" :key="i">
           <v-sheet :color="colors[i]" height="100%">
             <v-row class="fill-height" align="center" justify="center">
-              <div class="text-h2">{{ slide }}</div>
+              <div class="text-h2">
+                <router-link
+                  :to="{
+                    name: 'before',
+                    params: { missionNo: item.missionNo },
+                  }"
+                  style="text-decoration: none; color: white"
+                  >{{ item.missionTitle }}</router-link
+                >
+              </div>
             </v-row>
           </v-sheet>
         </v-carousel-item>
@@ -122,6 +140,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   // data 속성 전체 코드
   data() {
@@ -135,8 +154,59 @@ export default {
       ],
       slides: ["hot", "new", "mission", "is waiting for", "you"],
       items: ["코드 입력", "제목 검색", "테마 검색"],
-      missionList: null,
+      hotmissions: [],
+      newmissions: [],
+      headers: [
+        {
+          text: "missionTitle",
+          align: "start",
+          sortable: false,
+          value: "missionTitle",
+        },
+        { text: "missionCode", value: "missionCode" },
+        { text: "missionNo", value: "missionNo" },
+      ],
     };
+  },
+  created() {
+    var vm = this;
+    axios
+      .get(`api/mission/new`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+
+        console.log("여기는 뉴미션");
+        console.log(response.data[0]);
+        vm.newmissions = response.data;
+        console.log(vm.newmissions);
+      })
+      .catch(function (err) {
+        console.log(err);
+      })
+      .finally({});
+    axios
+      .get(`api/mission/hot`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+
+        console.log("여기는 hotmission");
+        console.log(response.data[0]);
+        vm.hotmissions = response.data;
+        console.log(vm.newmissions);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   },
   computed: {},
   methods: {

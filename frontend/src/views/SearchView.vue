@@ -9,14 +9,18 @@
       <!-- 검색창 -->
       <v-row>
         <v-col cols="4">
-          <v-select :items="items" label="검색 선택"></v-select>
+          <v-select :items="items" v-model="theme" label="검색 선택"></v-select>
         </v-col>
         <v-col cols="5">
-          <v-text-field hide-details single-line></v-text-field>
+          <v-text-field
+            v-model="tofindsearch"
+            hide-details
+            single-line
+          ></v-text-field>
         </v-col>
         <v-col cols="">
           <v-card-text>
-            <v-btn icon>
+            <v-btn icon @click="transmit">
               <v-icon> mdi-magnify </v-icon>
             </v-btn>
           </v-card-text>
@@ -152,8 +156,11 @@ export default {
         "red lighten-1",
         "deep-purple accent-4",
       ],
+      theme: "",
+      tofindsearch: "",
       slides: ["hot", "new", "mission", "is waiting for", "you"],
-      items: ["코드 입력", "제목 검색", "테마 검색"],
+      searchtype: "",
+      items: ["코드입력", "제목검색", "테마검색"],
       hotmissions: [],
       newmissions: [],
       headers: [
@@ -210,7 +217,39 @@ export default {
   },
   computed: {},
   methods: {
-    serachMission() {},
+    transmit() {
+      if (this.theme === "코드입력") {
+        this.searchtype = "code";
+      } else if (this.theme === "제목검색") {
+        this.searchtype = "title";
+      } else if (this.theme === "테마검색") {
+        this.searchtype = "type";
+      }
+      this.serachMission(this.searchtype);
+    },
+    serachMission(search) {
+      const find = this.tofindsearch;
+      axios
+        .get(`api/mission/search/${search}/${find}`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+        })
+        .then(function (response) {
+          console.log(response);
+
+          console.log("여기는 hotmission");
+          console.log(response.data[0]);
+        })
+        .catch(function (err) {
+          console.log(err);
+        })
+        .finally(function () {
+          console.log(search);
+          console.log(find);
+        });
+    },
   },
 };
 </script>

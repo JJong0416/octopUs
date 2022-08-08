@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="mypagewrap">
     <v-card style="background-color: #ffdede">
       <v-img height="250" src="../assets/img/1.png">
         <!-- 이미지 수정 버튼 -->
@@ -48,109 +48,113 @@
       </v-btn>
       <v-divider class="mx-4"></v-divider>
       <br />
-        <v-data-table
-          :headers="Missionheaders"
-          :items="openedMissions" 
-          :items-per-page="5"
-          class="elevation-1"
-          :single-expand="singleExpand"
-          :expanded.sync="openexpanded" 
-          item-key="missionCode"
-          show-expand
-          @item-expanded="clickExpand"
-        >
-          <!-- 표 상단의 해더 문구 -->
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>참여중인 방</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <!-- <v-switch
+      <v-data-table
+        :headers="Missionheaders"
+        :items="openedMissions"
+        :items-per-page="5"
+        class="elevation-1"
+        :single-expand="singleExpand"
+        :expanded.sync="openexpanded"
+        item-key="missionCode"
+        show-expand
+        @item-expanded="clickExpand"
+      >
+        <!-- 표 상단의 해더 문구 -->
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>참여중인 방</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <!-- <v-switch
                 v-model="singleExpand"
                 label="하나만 펼치기"
                 class="mt-2"
               ></v-switch> -->
-            </v-toolbar>
-          </template>
+          </v-toolbar>
+        </template>
 
-          <template v-slot:[`item.missionPoint`]="{ item }">
-            <v-chip
-              :color="getColor(item.missionPoint)"
-              dark
-            >
-              {{ item.missionPoint }}
-            </v-chip>
-          </template>
-          <!-- <template v-slot:[`item.data-table-expand`]="{ item }">
+        <template v-slot:[`item.missionPoint`]="{ item }">
+          <v-chip :color="getColor(item.missionPoint)" dark>
+            {{ item.missionPoint }}
+          </v-chip>
+        </template>
+        <!-- <template v-slot:[`item.data-table-expand`]="{ item }">
             <tr @click="clickExpand(item.missionNo)">
               <td>{{item.data-table-expand}}</td>
             </tr>
             나오냐?
           </template> -->
 
-          <template v-slot:expanded-item="{ headers, item }">
-            <td :colspan="headers.length">
+        <template v-slot:expanded-item="{ headers, item }">
+          <td :colspan="headers.length">
+            <!-- 내부 내용 -->
+            <template>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>미션 내용</v-list-item-title>
+                  <v-list-item-subtitle>{{
+                    item.missionContent
+                  }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
 
-<!-- 내부 내용 -->
-              <template>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-list-item-title>미션 내용</v-list-item-title>
-                      <v-list-item-subtitle>{{item.missionContent}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title>입장 코드</v-list-item-title>
+                  <v-list-item-subtitle>{{
+                    item.missionCode
+                  }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
 
-                  <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title>입장 코드</v-list-item-title>
-                      <v-list-item-subtitle>{{item.missionCode}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title>분야</v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ item.missionType }}</v-list-item-subtitle
+                  >
+                </v-list-item-content>
+              </v-list-item>
 
-                  <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title>분야</v-list-item-title>
-                      <v-list-item-subtitle>  {{item.missionType}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title>인증 사진</v-list-item-title>
+                  <img :src="URL" style="height: 120px" class="mx-4" />
+                </v-list-item-content>
+              </v-list-item>
+            </template>
 
-                  <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title>인증 사진</v-list-item-title>
-                      <img :src=URL style="height:120px" class="mx-4" />
-                    </v-list-item-content>
-                  </v-list-item>
-              </template>
-
-<!-- 내부 내용 끝 -->
-              <router-link
-                :to="{ name: 'proceeding', params: { missionNo: item.missionNo } }"
-              >
-                자세히보기
-              </router-link>
-            </td>
-          </template>
-        </v-data-table>
-
+            <!-- 내부 내용 끝 -->
+            <router-link
+              :to="{
+                name: 'proceeding',
+                params: { missionNo: item.missionNo },
+              }"
+            >
+              자세히보기
+            </router-link>
+          </td>
+        </template>
+      </v-data-table>
 
       <br />
-        <v-data-table
-          :headers="Missionheaders"
-          :items="closedMissions"
-          :items-per-page="5"
-          class="elevation-1"
-          :single-expand="singleExpand"
-          :expanded.sync="closeexpanded" 
-          item-key="missionCode"
-          show-expand
-          @item-expanded="clickExpand"
-        >
-          <!-- 표 상단의 해더 문구 -->
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>종료된 방</v-toolbar-title>
-              <v-spacer></v-spacer>
-            </v-toolbar>
-          </template>
+      <v-data-table
+        :headers="Missionheaders"
+        :items="closedMissions"
+        :items-per-page="5"
+        class="elevation-1"
+        :single-expand="singleExpand"
+        :expanded.sync="closeexpanded"
+        item-key="missionCode"
+        show-expand
+        @item-expanded="clickExpand"
+      >
+        <!-- 표 상단의 해더 문구 -->
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>종료된 방</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+        </template>
 
           <template v-slot:[`item.missionPoint`]="{ item }">
             <v-chip
@@ -189,38 +193,7 @@
                   <v-list-item two-line>
                     <v-list-item-content>
                       <v-list-item-title>인증 사진</v-list-item-title>
-                      
-                      <!-- <img v-if="URL!=Null" :src=URL style="height:120px" class="mx-4" /> -->
-
-
-                      <template>
-                        <v-carousel
-                          cycle
-                          height="400"
-                          hide-delimiter-background
-                          show-arrows-on-hover
-                        >
-                          <v-carousel-item
-                            v-for="(slide, i) in userPictures"
-                            :key="i"
-                          >
-                            <v-sheet
-                              :color="colors[i]"
-                              height="100%"
-                            >
-                              <v-row
-                                class="fill-height"
-                                align="center"
-                                justify="center"
-                              >
-                                <div class="text-h2">
-                                  {{ slide.pictureUrl }} 사진
-                                </div>
-                              </v-row>
-                            </v-sheet>
-                          </v-carousel-item>
-                        </v-carousel>
-                      </template>
+                      <img :src=URL style="height:120px" class="mx-4" />
                     </v-list-item-content>
                   </v-list-item>
               </template>
@@ -255,34 +228,35 @@ export default {
           softable: false,
           value: `missionTitle`,
         },
-        {text:`포인트`,value:`missionPoint`},
-        {text: ``, value: `data-table-expand` },
+        { text: `포인트`, value: `missionPoint` },
+        { text: ``, value: `data-table-expand` },
       ],
       openexpanded: [],
       closeexpanded: [],
       singleExpand: true,
-      URL:null,
+      URL: null,
       userPictures:[],
     };
   },
 
   methods: {
-      getColor (point) {
-        if (point > 400) return 'red'
-        else if (point > 200) return 'orange'
-        else return 'green'
-      },
+    getColor(point) {
+      if (point > 400) return "red";
+      else if (point > 200) return "orange";
+      else return "green";
+    },
 
-      clickExpand({item}) {
-        var vm=this;
-        console.log(item);
-        axios.get(`api/mission/${item.missionNo}/picture`,{
+    clickExpand({ item }) {
+      var vm = this;
+      console.log(item);
+      axios
+        .get(`api/mission/${item.missionNo}/picture`, {
           headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
           },
         })
-        .then(function(response){
+        .then(function (response) {
           console.log(response);
           // 내부에 받은 이미지 확인필요
           console.log(response.data[0].userPictures[0].pictureUrl);
@@ -292,11 +266,11 @@ export default {
           // console.log(vm.URL)
 
         })
-        .catch(function(err){
+        .catch(function (err) {
           console.log(err);
         });
-      },
     },
+  },
   created() {
     var vm = this;
     let token = cookie.get("token");
@@ -322,11 +296,11 @@ export default {
           })
           .then(function (response) {
             console.log(response);
-            response.data.forEach(mission => {
-              if(mission.missionStatus==="CLOSE"){
-                vm.closedMissions.push(mission)
-              }else{
-                vm.openedMissions.push(mission)
+            response.data.forEach((mission) => {
+              if (mission.missionStatus === "CLOSE") {
+                vm.closedMissions.push(mission);
+              } else {
+                vm.openedMissions.push(mission);
               }
             });
             console.log("열린것" + vm.openedMissions);
@@ -339,8 +313,12 @@ export default {
       .catch(function (err) {
         console.log(err);
       });
-
-
   },
 };
 </script>
+<style>
+.mypagewrap {
+  height: 90vh;
+  background-color: "#f1faee";
+}
+</style>

@@ -1,7 +1,14 @@
 <template>
   <v-card>
     <v-footer fixed padless>
-      <v-card flat tile width="100%" class="text-center" height="10vh">
+      <v-card
+        flat
+        tile
+        width="100%"
+        class="text-center"
+        height="10vh"
+        color="#a8dadc"
+      >
         <v-card-text>
           <v-btn v-for="icon in icons" :key="icon" class="mx-4" icon>
             <router-link :to="icon[1]">
@@ -32,10 +39,10 @@ export default {
 <style>
 .v-btn a {
   text-decoration: none;
-  color: #ff2456;
+  color: #e63946;
 }
 .v-btn a:hover {
   text-decoration: none;
-  color: #ff2456;
+  color: #e63946;
 }
 </style>

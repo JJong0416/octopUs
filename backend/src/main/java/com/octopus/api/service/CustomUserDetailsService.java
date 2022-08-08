@@ -30,7 +30,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(userId + " -> 데이터베이스에서 찾을 수 없습니다."));
     }
 
-    
     private org.springframework.security.core.userdetails.User createUser(User user) {
         return new org.springframework.security.core.userdetails.User(user.getUserId(),
                 user.getUserPassword(),

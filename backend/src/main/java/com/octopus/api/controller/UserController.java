@@ -1,6 +1,6 @@
 package com.octopus.api.controller;
 
-import com.octopus.dto.response.MissionInfoReq;
+import com.octopus.dto.response.MissionInfoRes;
 import com.octopus.dto.response.UserMyPageRes;
 import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.api.service.UserService;
@@ -39,7 +39,7 @@ public class UserController {
     //참여 미션 목록
     @GetMapping("/user/mission/{userId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<MissionInfoReq>> userJoinedMissions(@PathVariable String userId) {
+    public ResponseEntity<List<MissionInfoRes>> userJoinedMissions(@PathVariable String userId) {
         return ResponseEntity.ok(userService.getUserMissions(userId));
     }
 }

@@ -13,7 +13,10 @@ import javax.validation.constraints.Positive;
 
 @Getter
 @NoArgsConstructor
-public class MissionInfoReq {
+public class MissionInfoRes {
+
+    @NotNull
+    private Long missionNo;
 
     @NotBlank
     private String missionCode;
@@ -47,7 +50,8 @@ public class MissionInfoReq {
 
 
     @Builder
-    public MissionInfoReq(
+    public MissionInfoRes(
+            Long missionNo,
             String missionCode,
             String missionLeaderId,
             String missionTitle,
@@ -59,6 +63,7 @@ public class MissionInfoReq {
             MissionOpenType missionOpen,
             String missionUser
     ) {
+        this.missionNo = missionNo;
         this.missionCode = missionCode;
         this.missionLeaderId = missionLeaderId;
         this.missionTitle = missionTitle;

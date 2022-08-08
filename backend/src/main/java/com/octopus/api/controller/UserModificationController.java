@@ -1,8 +1,8 @@
 package com.octopus.api.controller;
 
+import com.octopus.api.service.UserModificationService;
 import com.octopus.dto.request.UserUpdateInfoReq;
 import com.octopus.dto.request.UserUpdatePasswordReq;
-import com.octopus.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +19,13 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserModificationController {
 
-    private final UserService userService;
+    private final UserModificationService userModificationService;
 
     // 아바타 수정
     @PatchMapping("/avatar")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> modifyAvatar(@RequestBody UserUpdateInfoReq userUpdateInfoReq) {
-        userService.changeUserAvatar(userUpdateInfoReq.getUserAvatar());
+        userModificationService.changeUserAvatar(userUpdateInfoReq.getUserAvatar());
         return ResponseEntity.ok().build();
     }
 
@@ -33,7 +33,7 @@ public class UserModificationController {
     @PatchMapping("/nickname")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> modifyNickname(@RequestBody UserUpdateInfoReq userUpdateInfoReq) {
-        return (userService.updateUserNickname(userUpdateInfoReq.getUserNickname()))
+        return (userModificationService.changeUserNickname(userUpdateInfoReq.getUserNickname()))
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }
@@ -42,7 +42,7 @@ public class UserModificationController {
     @PatchMapping("/password")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> modifyPassword(@Valid @RequestBody UserUpdatePasswordReq userUpdatePasswordReq) {
-        return (userService.changeUserPassword(userUpdatePasswordReq))
+        return (userModificationService.changeUserPassword(userUpdatePasswordReq))
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().build();
     }

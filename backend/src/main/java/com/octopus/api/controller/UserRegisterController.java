@@ -1,7 +1,7 @@
 package com.octopus.api.controller;
 
+import com.octopus.api.service.UserRegisterService;
 import com.octopus.dto.request.UserSignUpReq;
-import com.octopus.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +17,12 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserRegisterController {
 
-    private final UserService userService;
+    private final UserRegisterService userRegisterService;
 
     // Domain 회원가입
     @PostMapping("/register/domain")
     public ResponseEntity<HttpStatus> domainSignUp(@Valid @RequestBody UserSignUpReq userSignUpReq) {
-        userService.signup(userSignUpReq);
+        userRegisterService.signup(userSignUpReq);
         return ResponseEntity.ok().build();
     }
 

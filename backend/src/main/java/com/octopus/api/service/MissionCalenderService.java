@@ -46,7 +46,7 @@ public class MissionCalenderService {
     private String bucketName;
 
 
-    public CalenderRes getCalenderRes(Long missionNo){
+    public CalenderRes getCalenderRes(Long missionNo) {
 
         // 1. mission과 해당 미션 Time 가지고 오기
         Mission mission = getMissionByMissionNo(missionNo);
@@ -68,10 +68,10 @@ public class MissionCalenderService {
         }
         successTeamRate = successTeamRate / joinedMissionUsers.size();
 
-        boolean checkPostPossible = getPostPossible(calenderUserInfos,missionTime, authenticationInfos);
-        Integer weekInProgress  = Math.toIntExact(getCurrentWeek(missionTime.getMissionTimeStartTime()));
+        boolean checkPostPossible = getPostPossible(calenderUserInfos, missionTime, authenticationInfos);
+        Integer weekInProgress = Math.toIntExact(getCurrentWeek(missionTime.getMissionTimeStartTime()));
         // 4. 마지막으로 추가해준다.
-        return new CalenderRes(weekInProgress ,successTeamRate, checkPostPossible,calenderUserInfos);
+        return new CalenderRes(weekInProgress, successTeamRate, checkPostPossible, calenderUserInfos);
     }
 
 
@@ -87,12 +87,12 @@ public class MissionCalenderService {
         List<CalenderUserInfoRes> calenderUserInfos = new ArrayList<>(8);
 
         // 3. foreach 돌리면서 calenderUserInfos에 넣기
-        for (User user: joinedMissionUsers) {
+        for (User user : joinedMissionUsers) {
             List<PictureDto> pictureByUser = getPictureByUserAndMission(mission, user);
 
             calenderUserInfos.add(new CalenderUserInfoRes(user.getUserNickname(),
                     user.getUserAvatar(),
-                    (float) pictureByUser.size()/ (float) totalMissionSize * 100 ,
+                    (float) pictureByUser.size() / (float) totalMissionSize * 100,
                     pictureByUser
             ));
         }
@@ -147,7 +147,7 @@ public class MissionCalenderService {
         pictureRepository.save(picture);
     }
 
-    public boolean getPostPossible(List<CalenderUserInfoRes> calenderUserInfos, MissionTime missionTime, List<AuthenticationInfo> authenticationInfos){
+    public boolean getPostPossible(List<CalenderUserInfoRes> calenderUserInfos, MissionTime missionTime, List<AuthenticationInfo> authenticationInfos) {
         User user = getUserByUserId(getCurrentUsername().get());
 
         int weekAuthentication = 0;
@@ -157,18 +157,18 @@ public class MissionCalenderService {
         boolean isPossibleCnt = false;
 
         LocalDate thisWeekStart = missionTime.getMissionTimeStartTime()
-                .plusDays((int)(getCurrentWeek(missionTime.getMissionTimeStartTime()) - 1) * 7).toLocalDate();
+                .plusDays((int) (getCurrentWeek(missionTime.getMissionTimeStartTime()) - 1) * 7).toLocalDate();
         LocalDate today = LocalDate.now();
-        for(CalenderUserInfoRes calenderUserInfoRes : calenderUserInfos){
-            if(calenderUserInfoRes.getUserNickname().equals(user.getUserNickname())){
+        for (CalenderUserInfoRes calenderUserInfoRes : calenderUserInfos) {
+            if (calenderUserInfoRes.getUserNickname().equals(user.getUserNickname())) {
                 isParticipated = true;
-                for(PictureDto pictureDto : calenderUserInfoRes.getUserPictures()){
+                for (PictureDto pictureDto : calenderUserInfoRes.getUserPictures()) {
                     LocalDate pictureDate = pictureDto.getDate().toLocalDate();
-                    if((pictureDate.isAfter(thisWeekStart) || pictureDate.equals(thisWeekStart))
-                            && (pictureDate.isBefore(today) || pictureDate.equals(today))){
+                    if ((pictureDate.isAfter(thisWeekStart) || pictureDate.equals(thisWeekStart))
+                            && (pictureDate.isBefore(today) || pictureDate.equals(today))) {
                         weekAuthentication++;
                     }
-                    if(pictureDto.getDate().toLocalDate().equals(today))
+                    if (pictureDto.getDate().toLocalDate().equals(today))
                         todayAuthentication++;
                 }
                 break;
@@ -176,13 +176,13 @@ public class MissionCalenderService {
         }
 
         LocalTime nowTime = LocalTime.now();
-        for(AuthenticationInfo authenticationInfo : authenticationInfos){
-            if(nowTime.isAfter(authenticationInfo.getAuthenticationStartTime()) && nowTime.isBefore(authenticationInfo.getAuthenticationEndTime())){
+        for (AuthenticationInfo authenticationInfo : authenticationInfos) {
+            if (nowTime.isAfter(authenticationInfo.getAuthenticationStartTime()) && nowTime.isBefore(authenticationInfo.getAuthenticationEndTime())) {
                 isPossibleTime = true;
                 break;
             }
         }
-        if(missionTime.getMissionTimeDPW() > weekAuthentication && missionTime.getMissionTimeTPD() > todayAuthentication) {
+        if (missionTime.getMissionTimeDPW() > weekAuthentication && missionTime.getMissionTimeTPD() > todayAuthentication) {
             isPossibleCnt = true;
         }
 
@@ -224,16 +224,16 @@ public class MissionCalenderService {
         });
     }
 
-    private Integer getTotalMissionAuthenticationCount(MissionTime missionTime){
+    private Integer getTotalMissionAuthenticationCount(MissionTime missionTime) {
         return missionTime.getMissionTimeWeek() *
                 missionTime.getMissionTimeDPW() *
                 missionTime.getMissionTimeTPD();
     }
 
-    private Long getCurrentWeek(LocalDateTime startDate){
+    private Long getCurrentWeek(LocalDateTime startDate) {
         LocalDate today = LocalDate.now();
         LocalDate start = startDate.toLocalDate();
-        return (ChronoUnit.DAYS.between(start, today))/7 + 1;
+        return (ChronoUnit.DAYS.between(start, today)) / 7 + 1;
     }
 
     private StringBuilder makeFileName(User user, Mission mission) {

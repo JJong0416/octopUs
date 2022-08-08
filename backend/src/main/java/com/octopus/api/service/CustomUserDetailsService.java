@@ -1,14 +1,13 @@
 package com.octopus.api.service;
 
-import com.octopus.domain.User;
 import com.octopus.api.repository.UserRepository;
+import com.octopus.domain.User;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -11,8 +11,6 @@ import com.octopus.dto.layer.MissionListDto;
 import com.octopus.dto.request.MissionCreateReq;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
-import com.octopus.exception.MissionNotFoundException;
-import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -78,8 +76,8 @@ public class MissionService {
         return missionList.size() < 5 ? missionList : missionList.subList(0, 5);
     }
 
-     Comparator<Mission> missionComparator =
-             Comparator.comparingInt(m -> (m.getMissionLimitPersonnel() - (m.getMissionUsers().length()
-            - (m.getMissionUsers().replaceAll(",", "").length()) + 1)));
+    Comparator<Mission> missionComparator =
+            Comparator.comparingInt(m -> (m.getMissionLimitPersonnel() - (m.getMissionUsers().length()
+                    - (m.getMissionUsers().replaceAll(",", "").length()) + 1)));
 
 }

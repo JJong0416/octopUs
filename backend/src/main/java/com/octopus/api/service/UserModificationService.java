@@ -5,7 +5,6 @@ import com.octopus.domain.User;
 import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
-import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class UserModificationService {
         if (!isUserByNicknameExist(newNickname)) {
             User user = getUserInfo(getCurrentUsername().get());
             user.changeNickname(newNickname);
-        }else {
+        } else {
             throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXISTS);
         }
     }

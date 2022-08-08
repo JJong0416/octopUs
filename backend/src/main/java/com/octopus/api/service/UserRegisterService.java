@@ -23,20 +23,18 @@ public class UserRegisterService {
     /* 도메인 회원가입 */
     @Transactional
     public void signup(UserSignUpReq userSignUpReq) {
-        List<UserListDto> allUsers = 
+        List<UserListDto> allUsers =
                 userRepository.findUserByUserIdOrUserEmailOrUserNickname(
                         userSignUpReq.getUserId(),
                         userSignUpReq.getUserEmail(),
                         userSignUpReq.getUserNickname());
 
-        for (UserListDto user: allUsers) {
+        for (UserListDto user : allUsers) {
             if (user.getUserId().equals(userSignUpReq.getUserId())) {
                 throw new CustomException(ErrorCode.ID_ALREADY_EXISTS);
-            }
-            else if (user.getUserNickname().equals(userSignUpReq.getUserNickname())) {
+            } else if (user.getUserNickname().equals(userSignUpReq.getUserNickname())) {
                 throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXISTS);
-            }
-            else if (user.getUserEmail().equals(userSignUpReq.getUserEmail())){
+            } else if (user.getUserEmail().equals(userSignUpReq.getUserEmail())) {
                 throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS);
             }
         }

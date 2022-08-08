@@ -9,7 +9,6 @@ import com.octopus.dto.request.MissionUpdateInfoReq;
 import com.octopus.dto.response.MissionRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
-import com.octopus.exception.MissionNotFoundException;
 import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
 package com.octopus.api.controller;
 
+import com.octopus.api.service.UserService;
+import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.dto.response.MissionInfoRes;
 import com.octopus.dto.response.UserMyPageRes;
-import com.octopus.dto.request.UserUpdatePasswordReq;
-import com.octopus.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

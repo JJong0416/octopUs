@@ -1,5 +1,7 @@
 package com.octopus.api.service;
 
+import com.octopus.api.repository.OctopusTableRepository;
+import com.octopus.api.repository.UserRepository;
 import com.octopus.domain.Mission;
 import com.octopus.domain.User;
 import com.octopus.dto.response.MissionInfoRes;
@@ -7,8 +9,6 @@ import com.octopus.dto.response.UserMyPageRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
 import com.octopus.exception.UserNotFoundException;
-import com.octopus.api.repository.OctopusTableRepository;
-import com.octopus.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,13 +35,12 @@ public class UserService {
         // 입력받은 id, pw조합이 존재한다면 - 삭제
         if (isCurrentPasswordAndDbPasswordEquals(password, user.getUserPassword())) {
             userRepository.delete(user);
-        }
-        else
+        } else
             throw new CustomException(ErrorCode.PASSWORD_NOT_VALID);
     }
 
     @Transactional(readOnly = true)
-    public UserMyPageRes getUserMyPageInfo(){
+    public UserMyPageRes getUserMyPageInfo() {
 
         User user = getUserInfo(getCurrentUsername().get());
 
@@ -63,13 +62,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<MissionInfoRes> getUserMissions(String userId){
+    public List<MissionInfoRes> getUserMissions(String userId) {
 
         User user = getUserInfo(userId);
         List<Mission> missions = octopusTableRepository.findMissionByUser(user);
         List<MissionInfoRes> missionInfoRes = new ArrayList<>();
 
-        for(Mission mission : missions){
+        for (Mission mission : missions) {
             MissionInfoRes mid = MissionInfoRes.builder()
                     .missionNo(mission.getMissionNo())
                     .missionCode(mission.getMissionCode())

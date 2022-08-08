@@ -142,6 +142,7 @@
           :expanded.sync="closeexpanded" 
           item-key="missionCode"
           show-expand
+          @item-expanded="clickExpand"
         >
           <!-- 표 상단의 해더 문구 -->
           <template v-slot:top>
@@ -188,7 +189,7 @@
                   <v-list-item two-line>
                     <v-list-item-content>
                       <v-list-item-title>인증 사진</v-list-item-title>
-                      <v-list-item-subtitle>{{item.missionCode}}</v-list-item-subtitle>
+                      <img :src=URL style="height:120px" class="mx-4" />
                     </v-list-item-content>
                   </v-list-item>
               </template>

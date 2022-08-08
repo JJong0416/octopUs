@@ -51,8 +51,9 @@ public class MissionRes {
         if (missionUpdateInfoReq.getMissionLimitPersonnel() < this.missionLimitPersonnel){
             //throw LimitLessThanBeforeException;
         }
-        else
-        {this.missionLimitPersonnel = missionUpdateInfoReq.getMissionLimitPersonnel();}
+        else {
+            this.missionLimitPersonnel = missionUpdateInfoReq.getMissionLimitPersonnel();
+        }
     }
 
     @Builder

@@ -1,9 +1,11 @@
 package com.octopus.api.repository;
 
 import com.octopus.domain.Mission;
+import com.octopus.domain.type.MissionType;
 import com.octopus.dto.layer.MissionListDto;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
+import com.octopus.dto.response.MissionRes;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -25,4 +27,33 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
     Optional<Mission> findMissionByMissionNo(Long missionNo);
 
     List<Mission> findByMissionStatusAndMissionOpen(MissionStatus missionStatus, MissionOpenType missionOpenType);
+
+    List<MissionRes> findMissionsByMissionCodeAndMissionOpen(String missionCode, MissionOpenType missionOpen);
+
+    List<MissionRes> findMissionsByMissionTitleAndMissionOpen(String missionTitle, MissionOpenType openRoom);
+
+    List<MissionRes> findMissionsByMissionType(MissionType missionType);
 }
+
+/**
+ * 	// 단순 조건
+ * 	public School findByName(String name); // where name = ?
+ * 	public List<School> findByRegion(String region); // where region = ?
+ *
+ * 	// not
+ * 	public List<School> findByRegionNot(String region); // where region <> ?
+ *
+ * 	// and
+ * 	public List<School> findByNameAndRanking(String name, int ranking); // where name = ? and ranking = ?
+ *
+ * 	// or
+ * 	public List<School> findByNameOrRanking(String name, int ranking); // where name = ? or ranking = ?
+ *
+ * 	// between
+ * 	public List<School> findByRankingBetween(int startRanking, int endRanking); // where ranking between ? and ?
+ *
+ * 	// 부등호
+ * 	public List<School> findByRankingLessThan(int ranking); // where ranking < ?
+ * 	public List<School> findByRankingLessThanEqual(int ranking); // where ranking <= ?
+ *
+ */

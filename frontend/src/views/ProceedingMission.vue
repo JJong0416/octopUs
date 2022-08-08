@@ -9,20 +9,20 @@
         ></v-progress-linear>
       </template>
 
-      <v-card-title>{{this.missionTitle}}</v-card-title>
+      <v-card-title>{{ this.missionTitle }}</v-card-title>
 
       <v-card-text>
         <div>미션 코드</div>
-        <div class="my-4 text-subtitle-1">{{this.missionCode}}</div>
+        <div class="my-4 text-subtitle-1">{{ this.missionCode }}</div>
       </v-card-text>
       <v-card-text>
         <div>참가자 명단</div>
-        <div class="my-4 text-subtitle-1">{{this.missionUsers}}</div>
+        <div class="my-4 text-subtitle-1">{{ this.missionUsers }}</div>
       </v-card-text>
 
       <v-card-text>
         <div>필요한 포인트</div>
-        <div class="my-4 text-subtitle-1">{{this.missionPoint}}</div>
+        <div class="my-4 text-subtitle-1">{{ this.missionPoint }}</div>
       </v-card-text>
 
       <v-card-actions>
@@ -39,7 +39,7 @@
         <div v-show="show">
           <v-divider></v-divider>
 
-          <v-card-text> {{this.missionContent}} </v-card-text>
+          <v-card-text> {{ this.missionContent }} </v-card-text>
         </div>
       </v-expand-transition>
 
@@ -93,9 +93,11 @@
                   :events="events"
                   :event-color="getEventColor"
                   :type="type"
+                  interval-height="2"
                   @click:event="showEvent"
                   @click:more="showAllEvent"
                   @change="updateRange"
+                  short-intervals
                 ></v-calendar>
                 <v-menu
                   v-model="selectedOpen"
@@ -110,9 +112,6 @@
                         v-html="selectedEvent.name"
                       ></v-toolbar-title>
                       <v-spacer></v-spacer>
-                      <v-btn icon>
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
                     </v-toolbar>
                     <v-card-text>
                       <span v-html="selectedEvent.details"></span>
@@ -133,9 +132,11 @@
             </v-col>
           </v-row>
           <v-card-text>
-              <div>팀성공률</div>
-              <div class="my-4 text-subtitle-1">{{this.missionTeamSuccess}}</div>
-           </v-card-text>
+            <div>팀성공률</div>
+            <div class="my-4 text-subtitle-1">
+              {{ this.missionTeamSuccess }}
+            </div>
+          </v-card-text>
         </div>
       </v-expand-transition>
       <!-- -------------------------------------------------------------------- -->
@@ -193,16 +194,16 @@ export default {
     WebCam,
   },
   data: () => ({
-    missionTitle :"",
-    missionContent : "",
-    missionCode : "",
-    missionUsers : "",
-    missionPoint : "",
+    missionTitle: "",
+    missionContent: "",
+    missionCode: "",
+    missionUsers: "",
+    missionPoint: "",
 
-    missionTeamSuccess : 0,
-    weekInProgress : 0,
-    isCurrentUserPicutrePost : false,
-    calendarUserInfos : [],
+    missionTeamSuccess: 0,
+    weekInProgress: 0,
+    isCurrentUserPicutrePost: false,
+    calendarUserInfos: [],
     picture: "",
     content: "",
     show: false,
@@ -240,11 +241,11 @@ export default {
     camera: null,
     deviceId: null,
     devices: [],
-   
+
     // ------------------
   }),
-  created(){
-   //const api = apiInstance();
+  created() {
+    //const api = apiInstance();
     axios
       .get(`../api/mission/${this.$route.params.missionNo}`, {
         headers: {
@@ -252,16 +253,16 @@ export default {
           "Content-Type": "application/json",
         },
       })
-       .then(({ data }) => {
-      this.missionTitle = data.missionTitle;
-      this.missionContent = data.missionContent;
-      this.missionCode = data.missionCode;
-      this.missionPoint = data.missionPoint;
-      this.missionUsers = data.missionUsers;
-       })
-       .catch(function (err) {
-         console.log(err);
-       });  
+      .then(({ data }) => {
+        this.missionTitle = data.missionTitle;
+        this.missionContent = data.missionContent;
+        this.missionCode = data.missionCode;
+        this.missionPoint = data.missionPoint;
+        this.missionUsers = data.missionUsers;
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   },
   computed: {
     device() {
@@ -321,42 +322,42 @@ export default {
       this.cameraShow = false;
       console.log(this.img);
       const encodedImg = this.img;
-     // const api = apiInstance();
-        axios
+      // const api = apiInstance();
+      axios
         .post(`../api/mission/${this.$route.params.missionNo}/picture`, {
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
           },
-         encodedImg
+          encodedImg,
         })
         .then((response) => {
-          console.log(response)
-        })
+          console.log(response);
+        });
     },
     //------------------------------------------------
 
     // 달력과 관련된 methods---------------------------
-    getInfo(){
-      if(!this.calendarShow){
+    getInfo() {
+      if (!this.calendarShow) {
         //const api = apiInstance();
         axios
-        .get(`../api/mission/${this.$route.params.missionNo}/calender`, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-          },
-        })
-        .then(({ data }) => {
-          console.log(data)
-          this.missionTeamSuccess = data.successTeamRate;
-          this.calendarUserInfos = data.calenderUserInfos;
-          this.weekInProgress = data.weekInProgress;
-          this.isCurrentUserPicutrePost = data.isCurrentUserPicutrePost;
-        })
-        .catch(function (err) {
-          console.log(err);
-        });  
+          .get(`../api/mission/${this.$route.params.missionNo}/calender`, {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+          })
+          .then(({ data }) => {
+            console.log(data);
+            this.missionTeamSuccess = data.successTeamRate;
+            this.calendarUserInfos = data.calenderUserInfos;
+            this.weekInProgress = data.weekInProgress;
+            this.isCurrentUserPicutrePost = data.isCurrentUserPicutrePost;
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
       }
       this.calendarShow = !this.calendarShow;
     },
@@ -405,7 +406,7 @@ export default {
       const days = (max.getTime() - min.getTime()) / 86400000;
       const eventCount = this.rnd(days, days + 20);
       console.log(this.calendarUserInfos.length);
-      for(let i = 0; i < this.calendarUserInfos.length; i++){
+      for (let i = 0; i < this.calendarUserInfos.length; i++) {
         console.log(i);
       }
       for (let i = 0; i < eventCount; i++) {
@@ -450,7 +451,10 @@ a {
 ::v-deep .v-calendar .v-calendar-daily__body {
   display: none;
 }
-::v-deep .v-calendar .v-calendar-daily__head .v-calendar-daily__intervals-head{
+::v-deep .v-calendar .v-calendar-daily__head .v-calendar-daily__intervals-head {
   display: none;
-} 
+}
+::v-deep .v-calendar v-calendar-daily theme--light v-calendar-events {
+  display: none;
+}
 </style>

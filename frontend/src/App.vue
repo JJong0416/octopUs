@@ -13,8 +13,9 @@
 
           <v-toolbar-title
             ><router-link :to="`/`">
-              <v-img src="/assets/Title.png"></v-img> </router-link
-          ></v-toolbar-title>
+              <v-img src="assets/Title.png"></v-img></router-link
+            >Title</v-toolbar-title
+          >
 
           <v-spacer></v-spacer>
           <div class="create">

@@ -9,16 +9,21 @@
         ></v-progress-linear>
       </template>
 
-      <v-card-title>MissionTitle</v-card-title>
+      <v-card-title>{{this.missionTitle}}</v-card-title>
 
       <v-card-text>
-        <div class="my-4 text-subtitle-1">룸 코드</div>
+        <div>미션 코드</div>
+        <div class="my-4 text-subtitle-1">{{this.missionCode}}</div>
       </v-card-text>
       <v-card-text>
-        <div class="my-4 text-subtitle-1">참가자 명단</div>
+        <div>참가자 명단</div>
+        <div class="my-4 text-subtitle-1">{{this.missionUsers}}</div>
       </v-card-text>
 
-      <v-card-title> 필요한 포인트 </v-card-title>
+      <v-card-text>
+        <div>필요한 포인트</div>
+        <div class="my-4 text-subtitle-1">{{this.missionPoint}}</div>
+      </v-card-text>
 
       <v-card-actions>
         <v-card-text color="orange" text> Explore </v-card-text>
@@ -34,7 +39,7 @@
         <div v-show="show">
           <v-divider></v-divider>
 
-          <v-card-text> 방 설명 </v-card-text>
+          <v-card-text> {{this.missionContent}} </v-card-text>
         </div>
       </v-expand-transition>
 
@@ -44,7 +49,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon @click="calendarShow = !calendarShow">
+        <v-btn icon @click="getInfo">
           <v-icon>{{
             calendarShow ? "mdi-chevron-up" : "mdi-chevron-down"
           }}</v-icon>
@@ -127,10 +132,14 @@
               </v-sheet>
             </v-col>
           </v-row>
+          <v-card-text>
+              <div>팀성공률</div>
+              <div class="my-4 text-subtitle-1">{{this.missionTeamSuccess}}</div>
+           </v-card-text>
         </div>
       </v-expand-transition>
       <!-- -------------------------------------------------------------------- -->
-
+      <v-divider></v-divider>
       <!-- 인증하기 서랍 ----------------------------------------- -->
       <v-card-actions>
         <v-card-text color="orange" text> 인증하기 </v-card-text>
@@ -177,11 +186,23 @@
 <script>
 import { WebCam } from "vue-web-cam";
 import { find, head } from "lodash";
+import axios from "axios";
+//import { apiInstance } from "@/api/index.js"
 export default {
   components: {
     WebCam,
   },
   data: () => ({
+    missionTitle :"",
+    missionContent : "",
+    missionCode : "",
+    missionUsers : "",
+    missionPoint : "",
+
+    missionTeamSuccess : 0,
+    weekInProgress : 0,
+    isCurrentUserPicutrePost : false,
+    calendarUserInfos : [],
     picture: "",
     content: "",
     show: false,
@@ -190,7 +211,7 @@ export default {
     cameraon: true,
     bURL: "blob:",
     focus: "",
-    type: "month",
+    type: "week",
     typeToLabel: {
       month: "Month",
       week: "Week",
@@ -219,8 +240,29 @@ export default {
     camera: null,
     deviceId: null,
     devices: [],
+   
     // ------------------
   }),
+  created(){
+   //const api = apiInstance();
+    axios
+      .get(`../api/mission/${this.$route.params.missionNo}`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+       .then(({ data }) => {
+      this.missionTitle = data.missionTitle;
+      this.missionContent = data.missionContent;
+      this.missionCode = data.missionCode;
+      this.missionPoint = data.missionPoint;
+      this.missionUsers = data.missionUsers;
+       })
+       .catch(function (err) {
+         console.log(err);
+       });  
+  },
   computed: {
     device() {
       return find(this.devices, (n) => n.deviceId == this.deviceId);
@@ -278,13 +320,46 @@ export default {
       this.$refs.webcam.stop();
       this.cameraShow = false;
       console.log(this.img);
-      // 서버에 img 전송하는 코드 추가........ㅠ_ㅠ
-      this.img = null;
-      this.$refs.webcam.start();
+      const encodedImg = this.img;
+     // const api = apiInstance();
+        axios
+        .post(`../api/mission/${this.$route.params.missionNo}/picture`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+         encodedImg
+        })
+        .then((response) => {
+          console.log(response)
+        })
     },
     //------------------------------------------------
 
     // 달력과 관련된 methods---------------------------
+    getInfo(){
+      if(!this.calendarShow){
+        //const api = apiInstance();
+        axios
+        .get(`../api/mission/${this.$route.params.missionNo}/calender`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+        })
+        .then(({ data }) => {
+          console.log(data)
+          this.missionTeamSuccess = data.successTeamRate;
+          this.calendarUserInfos = data.calenderUserInfos;
+          this.weekInProgress = data.weekInProgress;
+          this.isCurrentUserPicutrePost = data.isCurrentUserPicutrePost;
+        })
+        .catch(function (err) {
+          console.log(err);
+        });  
+      }
+      this.calendarShow = !this.calendarShow;
+    },
     viewDay({ date }) {
       this.focus = date;
       this.type = "day";
@@ -329,7 +404,10 @@ export default {
       const max = new Date(`${end.date}T23:59:59`);
       const days = (max.getTime() - min.getTime()) / 86400000;
       const eventCount = this.rnd(days, days + 20);
-
+      console.log(this.calendarUserInfos.length);
+      for(let i = 0; i < this.calendarUserInfos.length; i++){
+        console.log(i);
+      }
       for (let i = 0; i < eventCount; i++) {
         const allDay = this.rnd(0, 3) === 0;
         const firstTimestamp = this.rnd(min.getTime(), max.getTime());
@@ -369,4 +447,10 @@ li {
 a {
   color: #42b983;
 }
+::v-deep .v-calendar .v-calendar-daily__body {
+  display: none;
+}
+::v-deep .v-calendar .v-calendar-daily__head .v-calendar-daily__intervals-head{
+  display: none;
+} 
 </style>

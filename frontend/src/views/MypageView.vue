@@ -48,7 +48,7 @@
       </v-btn>
       <v-divider class="mx-4"></v-divider>
       <br />
-      <router-link :to="`/proceeding`">참여 중인 방</router-link>
+      <router-link :to="{name : 'proceeding', params : {missionNo : 1}}">참여 중인 방</router-link>
       <br />
     </v-card>
   </v-container>

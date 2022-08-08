@@ -93,10 +93,9 @@
                 :events="events"
                 :event-color="getEventColor"
                 :type="type"
-                interval-height="2"
                 @click:event="showEvent"
                 @click:more="showAllEvent"
-                @change="updateRange"
+                
                 short-intervals
               ></v-calendar>
               <v-menu
@@ -113,12 +112,14 @@
                     ></v-toolbar-title>
                     <v-spacer></v-spacer>
                   </v-toolbar>
-                  <v-card-text>
-                    <span v-html="selectedEvent.details"></span>
+                  <v-card-text class="text-center">
+                    오늘 {{}} 번 인증하셨습니다.
+                    <v-img src="../assets/img/1.png" max-width="30vh"></v-img>
                   </v-card-text>
                   <v-card-actions>
+                    <v-spacer></v-spacer>
                     <v-btn text color="secondary" @click="selectedOpen = false">
-                      Cancel
+                      확인
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -149,6 +150,7 @@ export default {
     missionCode: "",
     missionUsers: "",
     missionPoint: "",
+    missionType: "",
     missionTeamSuccess: 0,
     weekInProgress: 0,
     isCurrentUserPicutrePost: false,
@@ -172,17 +174,64 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    events: [],
+    events: [
+      // {
+      //     name: 'Event 1',
+      //     // start: '2022-08-09T03:00:00',
+      //     // end: '2022-08-09T06:00:00',
+      //     start : '2022-08-08',
+      //     color : "#A0BAD0",
+      //     timed: true,
+ 
+      //   },
+      //    {
+      //     name: 'Event 2',
+      //     // start: '2022-08-09T03:00:00',
+      //     // end: '2022-08-09T06:00:00',
+      //     start : '2022-08-08',
+      //     color : "#A0BAD0",
+      //     timed: true,
+ 
+      //   },
+      //    {
+      //     name: 'Event 3',
+      //     // start: '2022-08-09T03:00:00',
+      //     // end: '2022-08-09T06:00:00',
+      //     start : '2022-08-08',
+      //     color : "#A0BAD0",
+      //     timed: true,
+ 
+      //   },
+      //    {
+      //     name: 'Event 4',
+      //     // start: '2022-08-09T03:00:00',
+      //     // end: '2022-08-09T06:00:00',
+      //     start : '2022-08-08',
+      //     color : "#A0BAD0",
+      //     timed: true,
+ 
+      //   },
+      //    {
+      //     name: 'Event 5',
+      //     // start: '2022-08-09T03:00:00',
+      //     // end: '2022-08-09T06:00:00',
+      //     start : '2022-08-08',
+      //     color : "#A0BAD0",
+      //     timed: true,
+ 
+      //   },
+         
+    ],
     // 캘린더 이벤트 색 8개
     colors: [
-      "#F1FAEE",
-      "#A8DADC",
-      "#1D3557",
-      "#457B9D",
-      "#FDFFB6",
-      "#FFADAD",
-      "#ED7E9C",
-      "#A0BAD0",
+      "teal",
+      "orange",
+      "brown",
+      "gray",
+      "purple",
+      "indigo",
+      "red",
+      "lime",
     ],
     names: ["Nickname"],
   }),
@@ -201,18 +250,12 @@ export default {
         this.missionCode = data.missionCode;
         this.missionPoint = data.missionPoint;
         this.missionUsers = data.missionUsers;
+        this.missionType = data.missionType;
       })
       .catch(function (err) {
         console.log(err);
       });
-  },
-
-  methods: {
-    // 달력과 관련된 methods---------------------------
-    getInfo() {
-      if (!this.calendarShow) {
-        //const api = apiInstance();
-        axios
+      axios
           .get(`../api/mission/${this.$route.params.missionNo}/calender`, {
             headers: {
               "Access-Control-Allow-Origin": "*",
@@ -229,7 +272,35 @@ export default {
           .catch(function (err) {
             console.log(err);
           });
+  },
+
+  methods: {
+    // 달력과 관련된 methods---------------------------
+     uploadCalendar(){
+      
+    },
+    getInfo() {
+      const events = [];
+      
+      for(let i = 0; i < this.calendarUserInfos.length; i++){
+         
+        for(let j = 0; j < this.calendarUserInfos[i].userPictures.length; j++){
+          
+          console.log(this.calendarUserInfos[i].userPictures[j].date);
+          const first = this.calendarUserInfos[i].userPictures[j].date.split('T')[0];
+        
+          events.push({
+            name: this.calendarUserInfos[i].userNickname,
+            start: first,
+            timed : true,
+            color: this.colors[this.calendarUserInfos[i].userAvatar -1],   
+          
+          });     
+        console.log(this.calendarUserInfos[i].userPictures[j].date);
+        }
       }
+       this.events = events;
+       console.log("-----" + this.events);
       this.calendarShow = !this.calendarShow;
     },
     viewDay({ date }) {
@@ -322,10 +393,24 @@ a {
 ::v-deep .v-calendar .v-calendar-daily__body {
   display: none;
 }
+::v-deep .col .v-sheet.theme--light:nth-child(2){
+  height: 100% !important;
+}
 ::v-deep .v-calendar .v-calendar-daily__head .v-calendar-daily__intervals-head {
   display: none;
 }
 ::v-deep .v-calendar v-calendar-daily theme--light v-calendar-events {
   display: none;
+}
+::v-deep .v-event.v-event-start.v-event-end.white--text{
+  height: 30px !important;
+ 
+}
+/* ::v-deep .v-calendar-daily__head {
+  height: 100%;
+} */
+::v-deep .white--text{
+  height: 50px;
+ 
 }
 </style>

@@ -26,30 +26,8 @@ import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final OctopusTableRepository octopusTableRepository;
     private final PasswordEncoder passwordEncoder;
-
-    /* Exception Bean*/
-    private final SignUpException signUpException;
-    private final UserNotFoundException userNotFoundException;
-
-    /* 도메인 회원가입 */
-    @Transactional
-    public void signup(UserSignUpReq userSignUpReq) {
-        if (userRepository.findByUserId(userSignUpReq.getUserId()).isPresent()) {
-            throw signUpException;
-        }
-        userSignUpReq.dtoEncodePassword(passwordEncoder.encode(userSignUpReq.getUserPassword()));
-        User user = createUser(userSignUpReq);
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void changeUserAvatar(String userAvatar) {
-        User user = getUserInfo(getCurrentUsername().get());
-        user.updateAvatar(userAvatar);
-    }
 
     // 패스워드 중복 체크 후, 삭제
     @Transactional
@@ -61,36 +39,6 @@ public class UserService {
             return true;
         }
         return false;
-    }
-
-    private User createUser(UserSignUpReq userSignUpReq) {
-        return User.signUpBuilder()
-                .userSignUpReq(userSignUpReq)
-                .build();
-    }
-
-    @Transactional
-    public boolean updateUserNickname(String newNickname) {
-        if (!isUserByNicknameExist(newNickname)) {
-            System.out.println("1234");
-            User user = getUserInfo(getCurrentUsername().get());
-            user.changeNickname(newNickname);
-            return true;
-        }
-        return false;
-    }
-
-    @Transactional
-    public boolean changeUserPassword(UserUpdatePasswordReq userUpdatePasswordReq) {
-
-        User user = getUserInfo(getCurrentUsername().get());
-
-        if (isCurrentPasswordAndDbPasswordEquals(userUpdatePasswordReq.getCurrentPassword(), user.getUserPassword())) {
-            user.updatePassword(passwordEncoder.encode(userUpdatePasswordReq.getNewPassword()));
-            return true;
-        } else {
-            return false;
-        }
     }
 
     @Transactional(readOnly = true)
@@ -116,15 +64,6 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    protected boolean isUserByNicknameExist(String nickname) {
-        return userRepository.findByUserNickname(nickname).isPresent();
-    }
-
-    private boolean isCurrentPasswordAndDbPasswordEquals(String currentPassword, String dbPassword) {
-        return passwordEncoder.matches(currentPassword, dbPassword);
-    }
-
-    @Transactional(readOnly = true)
     public List<MissionInfoReq> getUserMissions(String userId){
 
         User user = getUserInfo(userId);
@@ -147,11 +86,10 @@ public class UserService {
 
             missionInfoReq.add(mid);
         }
-
         return missionInfoReq;
-
     }
 
-
-
+    private boolean isCurrentPasswordAndDbPasswordEquals(String currentPassword, String dbPassword) {
+        return passwordEncoder.matches(currentPassword, dbPassword);
+    }
 }

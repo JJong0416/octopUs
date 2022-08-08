@@ -410,7 +410,9 @@ public class MissionService {
                 .append(".png");
 
 
-        byte[] decode = Base64.decodeBase64(uploadPictureReq.getEncodedImg());
+        String encodedImg = uploadPictureReq.getEncodedImg().split(",")[1];
+        byte[] decode = Base64.decodeBase64(encodedImg);
+
         BlobInfo blobInfo = storage.create(
                 BlobInfo.newBuilder(bucketName, filename.toString())
                         .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))

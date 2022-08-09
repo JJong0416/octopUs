@@ -90,6 +90,18 @@ const routes = [
     name: "camera",
     component: () => import("@/views/CameraView.vue"),
   },
+  {
+    path: "/avatar",
+    name: "avatar",
+    component: () => import("@/views/AvatarView.vue"),
+    props: true,
+  },
+  {
+    path: "/refund",
+    name: "refund",
+    component: () => import("@/views/RefundView.vue"),
+    props: true,
+  },
 ];
 
 const router = new VueRouter({

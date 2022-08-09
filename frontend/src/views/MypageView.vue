@@ -1,7 +1,7 @@
 <template>
   <v-container class="mypagewrap">
     <v-card style="background-color: #ffdede">
-      <v-img height="250" src="../assets/img/1.png">
+      <v-img height="250" src="../assets/img/Ocsoon/Character/1.png">
         <!-- 이미지 수정 버튼 -->
         <v-row>
           <v-col cols="8"></v-col>
@@ -37,7 +37,7 @@
         </v-col>
         <v-col cols="3"> 충전하기 </v-col>
         <v-col cols="3">
-          <v-img style="max-width: 70px" src="../assets/kakaopay.png"></v-img>
+          <v-img style="max-width: 70px" src="../assets/img/Kakao/kakaopay.png"></v-img>
         </v-col>
       </v-row>
 

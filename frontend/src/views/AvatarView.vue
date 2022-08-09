@@ -1,6 +1,6 @@
 <template>
   <div align="center" justify="center">
-    <v-img src="../assets/img/1.png" width="200px" />
+    <v-img src="../assets/img/Ocsoon/Character/1.png" width="200px" />
     <v-btn-toggle v-model="toggle_exclusive">
       <v-row>
         <v-col cols="12" sm="6" class="py-1">

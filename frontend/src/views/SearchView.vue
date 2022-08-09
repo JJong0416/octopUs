@@ -11,20 +11,13 @@
         <v-col cols="4">
           <v-select :items="items" v-model="theme" label="검색 선택"></v-select>
         </v-col>
-        <v-col cols="4">
+        <v-col cols="8">
           <v-text-field
             v-model="tofindsearch"
             @keyup.enter="transmit"
             hide-details
             single-line
           ></v-text-field>
-        </v-col>
-        <v-col>
-          <v-card-text>
-            <v-btn icon @click="transmit" @keyup.enter="transmit">
-              <v-icon> mdi-magnify </v-icon>
-            </v-btn>
-          </v-card-text>
         </v-col>
       </v-row>
 

@@ -1,4 +1,4 @@
-package com.octopus.mail;
+package com.octopus.mail.init;
 
 import org.springframework.stereotype.Component;
 
@@ -24,5 +24,4 @@ public class StrategyFactory {
         strategySet.forEach(
                 strategy -> strategyMap.put(strategy.getStrategyName(), strategy));
     }
-
 }

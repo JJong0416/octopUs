@@ -1,4 +1,4 @@
-package com.octopus.mail.form;
+package com.octopus.mail.init.form;
 
 import lombok.Builder;
 import lombok.Getter;

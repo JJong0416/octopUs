@@ -35,8 +35,11 @@ dependencies {
 
 	/* MailSender */
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-
 	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+
+	/* TemplateEngine*/
+	implementation group: 'org.thymeleaf', name: 'thymeleaf-spring5', version: '3.0.11.RELEASE'
+
 
 	/* Mission Code 랜덤생성*/
 	implementation 'org.apache.commons:commons-lang3:3.12.0'

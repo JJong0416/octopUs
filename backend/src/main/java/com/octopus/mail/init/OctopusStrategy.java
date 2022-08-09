@@ -1,6 +1,6 @@
-package com.octopus.mail;
+package com.octopus.mail.init;
 
-import com.octopus.mail.form.MessageForm;
+import com.octopus.mail.init.form.MessageForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,7 +20,7 @@ public class OctopusStrategy implements SendStrategy {
 
     @Async
     @Override
-    public void sendNotice(MessageForm messageForm) {
+    public void sendEmail(MessageForm messageForm) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper mimeMessageHelper;

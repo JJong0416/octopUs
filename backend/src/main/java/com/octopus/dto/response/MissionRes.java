@@ -11,6 +11,10 @@ import javax.validation.constraints.*;
 
 @Getter
 public class MissionRes {
+
+    @NotNull
+    private final Long missionNo;
+
     @Size(max = 8)
     final private String missionCode;
 
@@ -25,14 +29,16 @@ public class MissionRes {
     private MissionType missionType;
 
     @Positive
-    @Min(100) @Max(100000)
+    @Min(100)
+    @Max(100000)
     final private Integer missionPoint;
 
     @NotNull
     final private MissionStatus missionStatus;
 
     @Positive
-    @Min(2) @Max(8)
+    @Min(2)
+    @Max(8)
     private Integer missionLimitPersonnel;
 
     @NotNull
@@ -44,20 +50,20 @@ public class MissionRes {
 
     final private String missionUsers;
 
-    public void updateMission(MissionUpdateInfoReq missionUpdateInfoReq){
+    public void updateMission(MissionUpdateInfoReq missionUpdateInfoReq) {
         this.missionTitle = missionUpdateInfoReq.getMissionTitle();
         this.missionContent = missionUpdateInfoReq.getMissionContent();
         this.missionType = missionUpdateInfoReq.getMissionType();
-        if (missionUpdateInfoReq.getMissionLimitPersonnel() < this.missionLimitPersonnel){
+        if (missionUpdateInfoReq.getMissionLimitPersonnel() < this.missionLimitPersonnel) {
             //throw LimitLessThanBeforeException;
-        }
-        else {
+        } else {
             this.missionLimitPersonnel = missionUpdateInfoReq.getMissionLimitPersonnel();
         }
     }
 
     @Builder
     public MissionRes(
+            Long missionNo,
             String missionCode,
             String missionLeaderId,
             String missionTitle,
@@ -67,7 +73,9 @@ public class MissionRes {
             String missionContent,
             MissionOpenType missionOpen,
             MissionStatus missionStatus,
-            String missionUsers) {
+            String missionUsers
+    ) {
+        this.missionNo = missionNo;
         this.missionCode = missionCode;
         this.missionLeaderId = missionLeaderId;
         this.missionTitle = missionTitle;

@@ -50,4 +50,14 @@ public class UserRegisterService {
     }
 
     /* 카카오 회원가입 */
+
+    @Transactional(readOnly = true)
+    public boolean isDuplicatedUserId(String id){
+        return userRepository.existsUserByUserId(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isDuplicatedUserNickname(String nickname){
+        return userRepository.existsUserByUserNickname(nickname);
+    }
 }

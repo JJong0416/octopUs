@@ -5,10 +5,7 @@ import com.octopus.dto.request.UserSignUpReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -26,11 +23,22 @@ public class UserRegisterController {
         return ResponseEntity.ok().build();
     }
 
+/*
     // 카카오 회원가입
-/*    @PostMapping("/register/kakao")
+    @PostMapping("/register/kakao")
     public ResponseEntity<HttpStatus> kakaoSignUp(@Valid @RequestBody SignUpDto signUpDto) {
         userService.signup(signUpDto);
         return ResponseEntity.ok().build();
     }
 */
+
+    @GetMapping("/register/check/id/{id}")
+    public ResponseEntity<Boolean> checkDuplicatedId(@PathVariable String id) {
+        return new ResponseEntity<>(userRegisterService.isDuplicatedUserId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/register/check/nickname/{nickname}")
+    public ResponseEntity<Boolean> checkDuplicatedNickname(@PathVariable String nickname) {
+        return new ResponseEntity<>(userRegisterService.isDuplicatedUserNickname(nickname), HttpStatus.OK);
+    }
 }

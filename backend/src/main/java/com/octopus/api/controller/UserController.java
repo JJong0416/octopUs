@@ -1,6 +1,8 @@
 package com.octopus.api.controller;
 
+import com.octopus.api.service.EmailTokenService;
 import com.octopus.api.service.UserService;
+import com.octopus.dto.request.UserFindPasswordReq;
 import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.dto.response.MissionInfoRes;
 import com.octopus.dto.response.UserMyPageRes;
@@ -19,6 +21,14 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final EmailTokenService emailTokenService;
+
+    // 잃어버린 패스워드 찾기
+    @PostMapping("/find-pw")
+    public ResponseEntity<HttpStatus> findPasswordThroughEmail(@Valid @RequestBody UserFindPasswordReq userFindPasswordReq){
+        userService.findPasswordThroughEmail(userFindPasswordReq);
+        return ResponseEntity.ok().build();
+    }
 
     // TODO: 2022-08-07 Controller 리팩토링
     @PostMapping("/user")

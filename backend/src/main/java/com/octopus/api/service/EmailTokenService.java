@@ -23,6 +23,12 @@ public class EmailTokenService {
     private final StrategyFactory strategyFactory;
     private final EmailFactory emailFactory;
 
+    // 패스워드 찾기 토큰 생성
+    public void createPasswordEmailToken(String userEmail, String userPassword){
+        EmailMessageDto emailMessageDto = emailFactory.makePasswordMessageForm(userEmail, userPassword);
+        sendEmail(emailMessageDto);
+    }
+
     // 이메일 인증 토큰 생성
     public Boolean createEmailToken(String userEmail) {
 

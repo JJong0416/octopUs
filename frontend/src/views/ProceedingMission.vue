@@ -307,11 +307,7 @@ export default {
       }
 
       nativeEvent.stopPropagation();
-    },
-    // showAllEvent({nativeEvent, event}){
-    //   // 해당 요일 모든 이벤트를 출력해주는 함수 생성
-    // },
-    
+    },    
   },
 };
 </script>
@@ -346,11 +342,7 @@ a {
   height: 30px !important;
  
 }
-/* ::v-deep .v-calendar-daily__head {
-  height: 100%;
-} */
 ::v-deep .white--text{
   height: 50px;
- 
 }
 </style>

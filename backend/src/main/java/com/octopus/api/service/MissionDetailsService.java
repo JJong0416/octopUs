@@ -179,6 +179,7 @@ public class MissionDetailsService {
         Mission mission = getMissionByMissionNo(missionNo);
 
         return MissionRes.builder()
+                .missionNo(missionNo)
                 .missionCode(mission.getMissionCode())
                 .missionContent(mission.getMissionContent())
                 .missionTitle(mission.getMissionTitle())

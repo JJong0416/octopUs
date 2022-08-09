@@ -13,15 +13,20 @@
           <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
           <v-toolbar-title
-            ><router-link :to="`/`">
-              <v-img src="assets/Title.png"></v-img></router-link
-            >Title</v-toolbar-title
+            ><router-link :to="`/`" style="text-decoration: none">
+              <v-img src="assets/Title.png"></v-img>Title
+            </router-link></v-toolbar-title
           >
 
           <v-spacer></v-spacer>
-          <div class="create">
+          <div v-if="userInfo" class="create">
             <router-link :to="`/create`">
               <v-btn elevation="2">Create</v-btn>
+            </router-link>
+          </div>
+          <div v-if="!userInfo" class="create">
+            <router-link :to="`/aboutus`">
+              <v-btn elevation="2">AboutUs</v-btn>
             </router-link>
           </div>
         </v-app-bar>
@@ -45,7 +50,7 @@
                 <v-list-item-title>My Page</v-list-item-title>
               </v-list-item>
 
-              <v-list-item>
+              <v-list-item v-if="userInfo">
                 <v-list-item-icon>
                   <v-icon>mdi-logout</v-icon>
                 </v-list-item-icon>
@@ -53,7 +58,7 @@
                   >Logout</v-list-item-title
                 >
               </v-list-item>
-              <v-list-item>
+              <v-list-item v-if="userInfo">
                 <v-list-item-icon>
                   <v-icon>mdi-information-variant</v-icon>
                 </v-list-item-icon>
@@ -98,6 +103,9 @@ export default {
     drawer: false,
     group: null,
   }),
+  computed: {
+    ...mapState(memberStore, ["isLogin", "userInfo"]),
+  },
   methods: {
     ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
     onClickLogout() {
@@ -111,9 +119,7 @@ export default {
       this.drawer = false;
     },
   },
-  computed: {
-    ...mapState(memberStore, ["isLogin", "userInfo"]),
-  },
+
   components: {
     FooterView,
   },

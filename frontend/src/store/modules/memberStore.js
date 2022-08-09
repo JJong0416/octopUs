@@ -44,7 +44,7 @@ const memberStore = {
             console.log("쿠키있나요?" + cookie.isKey("token"));
             commit("SET_IS_LOGIN", true);
             commit("SET_IS_LOGIN_ERROR", false);
-
+            commit("SET_USER_INFO", token);
             // header에 토큰 담기
             axios.defaults.headers.common[
               "Authorization"

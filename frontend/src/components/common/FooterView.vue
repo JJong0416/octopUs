@@ -10,11 +10,24 @@
         color="#a8dadc"
       >
         <v-card-text>
-          <v-btn v-for="icon in icons" :key="icon" class="mx-4" icon>
-            <router-link :to="icon[1]">
-              <v-icon size="24px">
-                {{ icon[0] }}
-              </v-icon></router-link
+          <v-btn class="mx-4" icon>
+            <router-link :to="'/'">
+              <v-icon size="24px"> mdi-home </v-icon></router-link
+            >
+          </v-btn>
+          <v-btn class="mx-4" icon>
+            <router-link :to="'/hotnew'">
+              <v-icon size="24px"> mdi-fire </v-icon></router-link
+            >
+          </v-btn>
+          <v-btn class="mx-4" icon>
+            <router-link :to="'/search'">
+              <v-icon size="24px"> mdi-magnify </v-icon></router-link
+            >
+          </v-btn>
+          <v-btn v-if="userInfo" class="mx-4" icon>
+            <router-link :to="'/mypage'">
+              <v-icon size="24px"> mdi-account </v-icon></router-link
             >
           </v-btn>
         </v-card-text>
@@ -24,6 +37,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+const memberStore = "memberStore";
 export default {
   data: () => ({
     icons: [
@@ -33,6 +48,9 @@ export default {
       ["mdi-account", "mypage"],
     ],
   }),
+  computed: {
+    ...mapState(memberStore, ["isLogin", "userInfo"]),
+  },
 };
 </script>
 

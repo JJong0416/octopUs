@@ -23,7 +23,7 @@
       </v-row>
 
       <!-- login -->
-      <v-row>
+      <v-row v-if="!userInfo">
         <v-col cols="2"></v-col>
         <v-col cols="4">
           <v-card-actions
@@ -102,11 +102,17 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+const memberStore = "memberStore";
+
 export default {
   data: () => ({
     items: ["코드 입력", "제목 검색", "테마 검색"],
     slides: ["First", "Second", "Third", "Fourth", "Fifth"],
   }),
+  computed: {
+    ...mapState(memberStore, ["isLogin", "userInfo"]),
+  },
 };
 </script>
 

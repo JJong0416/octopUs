@@ -19,7 +19,19 @@
                 label="Enter E-mail"
                 required
               ></v-text-field>
-
+              인증번호 전송
+              <v-icon @click="sendemail">mdi-check-bold</v-icon>
+          <!-- 이메일 인증 내용 추가 위치 -->
+              <div v-if="issendemail">
+                  <v-text-field
+                    v-model="aouthcode"
+                    label="인증번호 입력"
+                    required
+                  ></v-text-field>
+                  인증번호 확인
+                  <v-icon @click="codecheck">mdi-check-bold</v-icon>
+              </div>
+              <!--  -->
               <v-text-field
                 v-model="user.userid"
                 label="userid"
@@ -28,19 +40,60 @@
               중복검사
               <v-icon @click="idcheck">mdi-check-bold</v-icon>
 
-              <v-text-field
+              <!-- 아바타 선택 화면 변경 -->
+              <!-- <v-text-field
                 v-model="user.avatar"
                 label="Avatar"
                 required
-              ></v-text-field>
+              ></v-text-field> -->
+              <br>
+              <br>
+              아바타선택
+              <v-container class="pa-4 text-center">
+                  <v-row
+                    class="fill-height"
+                    align="center"
+                    justify="center"
+                  >
+                    <template v-for="(avatar, i) in avatars">
+                      <v-col
+                        :key="i"
+                        cols="3"
+                        md="4"
+                      >
+                        <v-hover v-slot="{ hover }">
+                          <v-card
+                            :elevation="hover ? 12 : 2"
+                            :class="{ 'on-hover': hover }"
+                            @click="setavater(i)"
+                          >
+                            <v-img
+                              :src="getimg(i)"
+                              height="55px"
+                              width="55px"
+                              object-fit=cover
+                            >
+                            </v-img>
+                          </v-card>
+                        </v-hover>
+                      </v-col>
+                    </template>
+                  </v-row>
+                </v-container>
 
+
+
+<!--  -->
               <v-text-field
                 v-model="user.usernickname"
                 :counter="10"
                 :rules="nameRules"
-                label="Name"
+                label="NickName"
                 required
               ></v-text-field>
+              <!-- 닉네임 중복검사 추가 -->
+              중복검사
+              <v-icon @click="nickcheck">mdi-check-bold</v-icon>
 
               <v-text-field
                 v-model="user.userpwd"
@@ -108,7 +161,24 @@ export default {
       email: null,
       avatar: null,
     },
+    aouthcode : null,
+    issendemail : false,
     userIdChk: true,
+    userNickChk : true,
+    codeChk : false,
+
+    // 아바타들
+    avatars:[
+      {img:"../assets/img/1.png", num:1},
+      {img:`../assets/img/2.png`, num:2},
+      {img:`../assets/img/3.png`, num:3},
+      {img:`../assets/img/4.png`, num:4},
+      {img:`../assets/img/5.png`, num:5},
+      {img:`../assets/img/6.png`, num:6},
+      {img:`../assets/img/7.png`, num:7},
+      {img:`../assets/img/8.png`, num:8},
+    ],
+    
 
     valid: false,
     nameRules: [
@@ -131,16 +201,18 @@ export default {
   methods: {
     idcheck() {
       axios
-        .get(`api/user/idcheck/${this.user.userid}`)
+        .get(`api/register/check/id/${this.user.userid}`)
         .then(({ data }) => {
+          console.log("아이디중복확인 리턴: "+ data)
           let msg = "중복된 아이디입니다. 다시 입력해주세요";
-          if (data === "success") {
+          if (data === false) {
             msg = "사용가능한 아이디입니다.";
             this.userIdChk = true;
             alert(msg);
           } else {
+            this.userIdChk = false;
             alert(msg);
-            this.$router.push({ name: "signUp" });
+
           }
         })
         .catch((error) => {
@@ -150,6 +222,74 @@ export default {
         .finally(() => {
           console.log(this.user.userid);
         });
+    },
+    nickcheck() {
+      axios
+        .get(`api/register/check/nickname/${this.user.usernickname}`)
+        .then(({ data }) => {
+          let msg = "중복된 닉네임입니다. 다시 입력해주세요";
+          if (data === false) {
+            msg = "사용가능한 닉네임입니다.";
+            this.userNickChk = true;
+            alert(msg);
+          } else {
+            this.userNickChk = false;
+            alert(msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("닉네임중복체크에 실패했습니다..");
+        })
+    },
+    //  인증코드 전송
+    codecheck() { 
+      axios
+        .post(`api/email/check`, {
+          userEmail: this.user.email,
+          emailCode: this.aouthcode,
+        })
+        .then(({ data }) => {
+          let msg = "인증오류";
+          console.log("인증코드 전송후 리턴 : "+data)
+          if (data===true) {
+            msg = "인증되었습니다.";
+            this.codeChk = true;
+            alert(msg);
+          } else {
+            this.codeChk = false;
+            alert(msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("ID중복체크에 실패했습니다..");
+        })
+        .finally(() => {
+          console.log(this.user.userid);
+        });
+    },
+    //  이메일 전송
+    sendemail() { 
+      axios
+        .post(`api/email`, {
+          userEmail: this.user.email,
+        })
+        .then(({ data }) => {
+          console.log(data);
+          let msg = "email 전송에 실패했습니다..";
+          if (data === true) {
+            msg = "인증번호가 전송되었습니다.";
+            this.issendemail=true;
+            alert(msg);
+          } else {
+            alert(msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("email 전송에 실패했습니다..");
+        })
     },
     movePage() {
       this.$router.push({ name: "Login" });
@@ -172,9 +312,13 @@ export default {
         !this.user.email ||
         !this.user.usernickname ||
         !this.user.userpwd ||
-        !this.user.avatar
+        !this.user.avatar ||
+        !this.codeChk ||
+        !this.userIdChk ||
+        !this.userNickChk
       ) {
         this.isError = true;
+
         this.errorMsg = "이메일과 닉네임과 비밀번호를 모두 입력해주세요.";
         return;
       }
@@ -215,6 +359,21 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
+    getimg(i){
+      i++;
+      return require('../assets/img/'+i+'.png')
+    },
+    setavater(i){
+      this.user.avatar=i+1;
+      console.log(this.user.avatar)
+    }
   },
 };
 </script>
+
+<style scoped>
+
+.v-card:not(.on-hover) {
+  opacity: 0.8;
+ }
+</style>

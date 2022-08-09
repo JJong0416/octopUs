@@ -95,7 +95,6 @@
                 :type="type"
                 @click:event="showEvent"
                 @click:more="showAllEvent"
-                
                 short-intervals
               ></v-calendar>
               <v-menu
@@ -113,9 +112,10 @@
                     <v-spacer></v-spacer>
                   </v-toolbar>
                   <v-card-text class="text-center">
-                    오늘 {{pictures.length}} 번 인증하셨습니다.
+                    <div>{{ clickDate }}</div>
+                     {{ pictures.length }} 번 인증하셨습니다.
                     <div v-for="index in pictures" :key="index">
-                      <v-img :src="index" max-width="30vh"></v-img> 
+                      <center><v-img :src="index" max-width="30vh"  style="margin-top : 3vh"></v-img></center>
                     </div>
                   </v-card-text>
                   <v-card-actions>
@@ -130,14 +130,29 @@
             </v-sheet>
           </v-col>
         </v-row>
+          <h3>현재 미션 {{weekInProgress}}주차 진행 중</h3>
         <v-card-text>
-          <div>팀성공률</div>
-          <div class="my-4 text-subtitle-1">{{ this.missionTeamSuccess }}%</div>
+          <h3>팀성공률</h3>
+          <v-progress-linear v-model="missionTeamSuccess" color="pink" height="25" style="pointer-events: none;">
+            <template v-slot:default="{ value }">
+              <strong>{{ value }}%</strong>
+            </template>
+          </v-progress-linear>
+        </v-card-text>
+        <v-card-text v-for="(user, i) in calendarUserInfos" :key="i">
+          <h5>{{user.userNickname}}</h5>
+          <v-progress-linear :value="user.successUserRate" :color="colors[user.userAvatar - 1]" height="25" style="pointer-events: none;">
+           
+              <strong>{{ user.successUserRate }}%</strong>
+       
+          </v-progress-linear>
         </v-card-text>
       </div>
     </v-expand-transition>
     <div class="text-center">
-      <router-link :to="`/camera`"> <v-btn>인증하기</v-btn></router-link>
+      <router-link :to="`/camera`">
+        <v-btn v-if="isCurrentUserPicturePost">인증하기</v-btn></router-link
+      >
     </div>
   </div>
 </template>
@@ -155,10 +170,12 @@ export default {
     missionType: "",
     missionTeamSuccess: 0,
     weekInProgress: 0,
-    isCurrentUserPicutrePost: false,
+    isCurrentUserPicturePost: false,
     calendarUserInfos: [],
-    pictureList : {},
-    pictures : [],
+    pictureList: {},
+    pictures: [],
+    clickDate: "",
+    clickSuccessRate: "",
     picture: "",
     content: "",
     show: false,
@@ -178,15 +195,13 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
-    events: [
-     
-    ],
+    events: [],
     // 캘린더 이벤트 색 8개
     colors: [
       "teal",
       "orange",
       "brown",
-      "gray",
+      "black",
       "purple",
       "indigo",
       "red",
@@ -195,7 +210,6 @@ export default {
     names: ["Nickname"],
   }),
   created() {
-    
     axios
       .get(`../api/mission/${this.$route.params.missionNo}`, {
         headers: {
@@ -214,63 +228,65 @@ export default {
       .catch(function (err) {
         console.log(err);
       });
-      axios
-          .get(`../api/mission/${this.$route.params.missionNo}/calender`, {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json",
-            },
-          })
-          .then(({ data }) => {
-            console.log(data);
-            this.missionTeamSuccess = data.successTeamRate;
-            this.calendarUserInfos = data.calenderUserInfos;
-            this.weekInProgress = data.weekInProgress;
-            this.isCurrentUserPicutrePost = data.isCurrentUserPicutrePost;
-          })
-          .catch(function (err) {
-            console.log(err);
-          });
+    axios
+      .get(`../api/mission/${this.$route.params.missionNo}/calender`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(({ data }) => {
+        console.log(data);
+        this.missionTeamSuccess = data.successTeamRate;
+        this.calendarUserInfos = data.calenderUserInfos;
+        this.weekInProgress = data.weekInProgress;
+        this.isCurrentUserPicturePost = data.isCurrentUserPicturePost;
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   },
 
   methods: {
     // 달력과 관련된 methods---------------------------
-     uploadCalendar(){
-      
-    },
+    uploadCalendar() {},
     getInfo() {
       const events = [];
       var vm = this;
       vm.pictureList = {};
-      for(let i = 0; i < this.calendarUserInfos.length; i++){
+      for (let i = 0; i < this.calendarUserInfos.length; i++) {
         
-        for(let j = 0; j < this.calendarUserInfos[i].userPictures.length; j++){
-         
+        for (let j = 0;j < this.calendarUserInfos[i].userPictures.length;j++ ) {
           const nickname = this.calendarUserInfos[i].userNickname;
-          const date = this.calendarUserInfos[i].userPictures[j].date.split('T')[0];
+          const date =
+            this.calendarUserInfos[i].userPictures[j].date.split("T")[0];
           const avartar = this.calendarUserInfos[i].userAvatar;
-          if(vm.pictureList[(nickname +" " + date+" " + avartar)] == undefined){
-            vm.pictureList[(nickname +" " + date+" " + avartar)] = [this.calendarUserInfos[i].userPictures[j].pictureUrl];
-          }else{
-            var tempList = vm.pictureList[(nickname +" " + date+" " + avartar)];
+          if (
+            vm.pictureList[nickname + " " + date + " " + avartar] == undefined
+          ) {
+            vm.pictureList[nickname + " " + date + " " + avartar] = [
+              this.calendarUserInfos[i].userPictures[j].pictureUrl,
+            ];
+          } else {
+            var tempList =
+              vm.pictureList[nickname + " " + date + " " + avartar];
             tempList.push(this.calendarUserInfos[i].userPictures[j].pictureUrl);
-            vm.pictureList[(nickname +" " + date+" " + avartar)] = tempList;
+            vm.pictureList[nickname + " " + date + " " + avartar] = tempList;
           }
-          
         }
       }
-     
-      for(var key in vm.pictureList){
+      console.log(this.pictureList);
+      for (var key in vm.pictureList) {
         events.push({
-            name: key.split(" ")[0],
-            start:  key.split(" ")[1],
-            timed : true,
-            color: this.colors[key.split(" ")[2]-1], 
-          });     
-
+          name: key.split(" ")[0],
+          start: key.split(" ")[1],
+          timed: true,
+          color: this.colors[key.split(" ")[2] - 1],
+        });
       }
-     
-       this.events = events;
+
+      this.events = events;
+      
       this.calendarShow = !this.calendarShow;
     },
     viewDay({ date }) {
@@ -290,11 +306,16 @@ export default {
       this.$refs.calendar.next();
     },
     showEvent({ nativeEvent, event }) {
-      const temp = event.name + " " + event.start + " " + (this.colors.indexOf(event.color)+1);
-      
+      const temp =
+        event.name +
+        " " +
+        event.start +
+        " " +
+        (this.colors.indexOf(event.color) + 1);
+
       const open = () => {
         this.pictures = this.pictureList[temp];
-       
+        this.clickDate = event.start;
         this.selectedEvent = event;
         this.selectedElement = nativeEvent.target;
         requestAnimationFrame(() =>
@@ -310,7 +331,7 @@ export default {
       }
 
       nativeEvent.stopPropagation();
-    },    
+    },
   },
 };
 </script>
@@ -332,7 +353,7 @@ a {
 ::v-deep .v-calendar .v-calendar-daily__body {
   display: none;
 }
-::v-deep .col .v-sheet.theme--light:nth-child(2){
+::v-deep .col .v-sheet.theme--light:nth-child(2) {
   height: 100% !important;
 }
 ::v-deep .v-calendar .v-calendar-daily__head .v-calendar-daily__intervals-head {
@@ -341,11 +362,10 @@ a {
 ::v-deep .v-calendar v-calendar-daily theme--light v-calendar-events {
   display: none;
 }
-::v-deep .v-event.v-event-start.v-event-end.white--text{
+::v-deep .v-event.v-event-start.v-event-end.white--text {
   height: 30px !important;
- 
 }
-::v-deep .white--text{
+::v-deep .white--text {
   height: 50px;
 }
 </style>

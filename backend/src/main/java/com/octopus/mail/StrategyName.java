@@ -1,4 +1,4 @@
-package com.octopus.mail.init;
+package com.octopus.mail;
 
 public enum StrategyName {
     GOOGLE_EMAIL,

@@ -1,5 +1,6 @@
-package com.octopus.mail;
+package com.octopus.api.repository;
 
+import com.octopus.domain.entity.EmailToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 

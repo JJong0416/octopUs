@@ -1,4 +1,4 @@
-package com.octopus.mail.init;
+package com.octopus.mail;
 
 import org.springframework.stereotype.Component;
 

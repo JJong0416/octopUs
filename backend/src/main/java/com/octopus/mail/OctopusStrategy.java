@@ -1,6 +1,6 @@
-package com.octopus.mail.init;
+package com.octopus.mail;
 
-import com.octopus.mail.init.form.MessageForm;
+import com.octopus.dto.layer.EmailMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,20 +20,20 @@ public class OctopusStrategy implements SendStrategy {
 
     @Async
     @Override
-    public void sendEmail(MessageForm messageForm) {
+    public void sendEmail(EmailMessageDto emailMessageDto) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper mimeMessageHelper;
         try {
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
-            mimeMessageHelper.setTo(messageForm.getTo());
-            mimeMessageHelper.setSubject(messageForm.getSubject());
-            mimeMessageHelper.setText(messageForm.getText(), true);
+            mimeMessageHelper.setTo(emailMessageDto.getTo());
+            mimeMessageHelper.setSubject(emailMessageDto.getSubject());
+            mimeMessageHelper.setText(emailMessageDto.getText(), true);
             javaMailSender.send(mimeMessage);
 
-            log.info("success send to email : {}", messageForm.getTo());
+            log.info("success send to email : {}", emailMessageDto.getTo());
         } catch (MessagingException e) {
-            log.info("fail send to email : {}", messageForm.getTo());
+            log.info("fail send to email : {}", emailMessageDto.getTo());
             throw new RuntimeException(e);
         }
     }

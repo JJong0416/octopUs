@@ -1,4 +1,4 @@
-package com.octopus.mail;
+package com.octopus.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

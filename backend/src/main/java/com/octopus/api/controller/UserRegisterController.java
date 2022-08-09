@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/register")
 @RequiredArgsConstructor
 public class UserRegisterController {
 
     private final UserRegisterService userRegisterService;
 
     // Domain 회원가입
-    @PostMapping("/register/domain")
+    @PostMapping("/domain")
     public ResponseEntity<HttpStatus> domainSignUp(@Valid @RequestBody UserSignUpReq userSignUpReq) {
         userRegisterService.signup(userSignUpReq);
         return ResponseEntity.ok().build();
@@ -32,12 +32,12 @@ public class UserRegisterController {
     }
 */
 
-    @GetMapping("/register/check/id/{id}")
+    @GetMapping("/check/id/{id}")
     public ResponseEntity<Boolean> checkDuplicatedId(@PathVariable String id) {
         return new ResponseEntity<>(userRegisterService.isDuplicatedUserId(id), HttpStatus.OK);
     }
 
-    @GetMapping("/register/check/nickname/{nickname}")
+    @GetMapping("/check/nickname/{nickname}")
     public ResponseEntity<Boolean> checkDuplicatedNickname(@PathVariable String nickname) {
         return new ResponseEntity<>(userRegisterService.isDuplicatedUserNickname(nickname), HttpStatus.OK);
     }

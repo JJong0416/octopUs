@@ -259,6 +259,7 @@ export default {
           
         }
       }
+     
       for(var key in vm.pictureList){
         events.push({
             name: key.split(" ")[0],
@@ -290,8 +291,10 @@ export default {
     },
     showEvent({ nativeEvent, event }) {
       const temp = event.name + " " + event.start + " " + (this.colors.indexOf(event.color)+1);
+      
       const open = () => {
         this.pictures = this.pictureList[temp];
+       
         this.selectedEvent = event;
         this.selectedElement = nativeEvent.target;
         requestAnimationFrame(() =>

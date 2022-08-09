@@ -11,84 +11,56 @@
         <v-col cols="4">
           <v-select :items="items" v-model="theme" label="검색 선택"></v-select>
         </v-col>
-        <v-col cols="5">
+        <v-col cols="4">
           <v-text-field
             v-model="tofindsearch"
+            @keyup.enter="transmit"
             hide-details
             single-line
           ></v-text-field>
         </v-col>
-        <v-col cols="">
+        <v-col>
           <v-card-text>
-            <v-btn icon @click="transmit">
+            <v-btn icon @click="transmit" @keyup.enter="transmit">
               <v-icon> mdi-magnify </v-icon>
             </v-btn>
           </v-card-text>
         </v-col>
       </v-row>
-      <!-- 여기서부터는 게시판 페이지와 거의 일치, 검색완료시에만 표가 나타나게 했고, 게시판 번호 표시 -->
-      <v-row v-if="searchfinish === true">
-        <!-- 검색 성공시 보여질 페이지 -->
-      </v-row>
-      <!-- 모달 창 -->
-      <div class="text-center">
-        <v-dialog v-model="dialog" width="500">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
-              방 상세보기
-            </v-btn>
-          </template>
 
-          <v-card>
-            <v-card-title class="text-h5 grey lighten-2">
-              Theme <v-spacer></v-spacer> MissionTitle
-            </v-card-title>
+      <!-- 검색 성공시 보여질 페이지 -->
 
-            <v-card-text>
-              <div class="my-4 text-subtitle-1">룸 코드</div>
-            </v-card-text>
-            <v-card-text>
-              <div class="my-4 text-subtitle-1">참가자 명단</div>
-            </v-card-text>
+      <v-card
+        class="mx-auto"
+        max-width="344"
+        outlined
+        v-for="(item, index) in searchres"
+        v-bind:key="index"
+      >
+        <v-list-item three-line>
+          <v-list-item-content>
+            <div class="text-overline mb-4">
+              참가 포인트 {{ item.missionPoint }}
+            </div>
+            <v-list-item-title class="text-h5 mb-1">
+              {{ item.missionTitle }}
+            </v-list-item-title>
+            <v-list-item-subtitle>{{
+              item.missionContent
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
 
-            <v-card-title> 참여 시 필요한 포인트 5000P</v-card-title>
+          <v-list-item-avatar tile size="80" color="grey"></v-list-item-avatar>
+        </v-list-item>
 
-            <v-card-actions>
-              <v-card-text color="orange" text> 방 설명 </v-card-text>
+        <v-card-actions>
+          <v-btn outlined rounded text @click="beforeJoinCheck(item.missionNo)">
+            입장하기
+          </v-btn>
+        </v-card-actions>
+      </v-card>
 
-              <v-spacer></v-spacer>
-
-              <v-btn icon @click="show = !show">
-                <v-icon>{{
-                  show ? "mdi-chevron-up" : "mdi-chevron-down"
-                }}</v-icon>
-              </v-btn>
-            </v-card-actions>
-
-            <v-expand-transition>
-              <div v-show="show">
-                <v-divider></v-divider>
-                <v-card-title>방 설명 / 인증 방법</v-card-title>
-                <v-card-text>
-                  매일 아침 7시 기상 인증 미라클 모닝 방입니다
-                  <br />
-                  흐르는 물에 손을 씻는 장면을 찍어 인증합니다!
-                </v-card-text>
-                <v-card-title>인증 요일 / 시간</v-card-title>
-                <v-card-text>
-                  일주일에 5 번, 오전 6시 ~ 오전 7시 에 인증합니다.
-                </v-card-text>
-              </div>
-            </v-expand-transition>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="dialog = false">
-                참가하기
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </div>
+      <!-- hot,new -->
       <v-carousel
         cycle
         interval="1500"
@@ -157,12 +129,16 @@ export default {
         "deep-purple accent-4",
       ],
       theme: "",
+      show: false,
       tofindsearch: "",
+      dialog: false,
+      userId: "",
       slides: ["hot", "new", "mission", "is waiting for", "you"],
       searchtype: "",
-      items: ["코드입력", "제목검색", "테마검색"],
+      items: ["코드", "제목", "테마"],
       hotmissions: [],
       newmissions: [],
+      searchres: [],
       headers: [
         {
           text: "missionTitle",
@@ -214,20 +190,42 @@ export default {
       .catch(function (err) {
         console.log(err);
       });
+    axios
+      .get(`api/user/info`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+
+        console.log("유저 ID를 저장성송");
+
+        vm.userId = response.data.userId;
+        console.log(vm.userId);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   },
   computed: {},
   methods: {
     transmit() {
-      if (this.theme === "코드입력") {
+      if (this.theme === "코드") {
         this.searchtype = "code";
-      } else if (this.theme === "제목검색") {
+      } else if (this.theme === "제목") {
         this.searchtype = "title";
-      } else if (this.theme === "테마검색") {
+      } else if (this.theme === "테마") {
         this.searchtype = "type";
+      } else {
+        this.$router.push("/search");
+        return;
       }
       this.serachMission(this.searchtype);
     },
     serachMission(search) {
+      var vm = this;
       const find = this.tofindsearch;
       axios
         .get(`api/mission/search/${search}/${find}`, {
@@ -237,17 +235,75 @@ export default {
           },
         })
         .then(function (response) {
+          console.log("여기는 search result");
           console.log(response);
-
-          console.log("여기는 hotmission");
-          console.log(response.data[0]);
+          vm.searchres = response.data;
+          console.log(vm.searchres);
         })
         .catch(function (err) {
           console.log(err);
         })
         .finally(function () {
-          console.log(search);
-          console.log(find);
+          // console.log(search);
+          // console.log(find);
+        });
+    },
+    beforeJoinCheck(missionNum) {
+      var vm = this;
+
+      axios
+        .get(`api/mission/${missionNum}/users`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+        })
+        .then(function (response) {
+          console.log(response);
+          for (var i = 0; i < response.data.length; i++) {
+            if (response.data[i] === vm.userId) {
+              alert("이미 참가중인 방입니다");
+              vm.$router.push({
+                name: "proceeding",
+                params: { missionNo: missionNum },
+              });
+              return;
+            }
+          }
+
+          vm.joinMission(missionNum);
+        })
+        .catch(function (err) {
+          console.log(err);
+        })
+        .finally(function () {
+          // console.log(search);
+          // console.log(find);
+        });
+    },
+    joinMission(missionNum) {
+      var vm = this;
+      axios
+        .post(`api/mission/${missionNum}/join`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+        })
+        .then(function (response) {
+          console.log(response);
+          console.log("방참가 성공");
+          vm.$router.push({
+            name: "before",
+            params: { missionNo: missionNum },
+          });
+        })
+        .catch(function (err) {
+          console.log(err);
+        })
+        .finally(function () {
+          // console.log(search);
+          // console.log(find);
         });
     },
   },

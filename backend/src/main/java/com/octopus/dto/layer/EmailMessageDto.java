@@ -1,10 +1,10 @@
-package com.octopus.mail.init.form;
+package com.octopus.dto.layer;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class MessageForm {
+public class EmailMessageDto {
 
     private final String to;
 
@@ -13,7 +13,7 @@ public class MessageForm {
     private final String text;
 
     @Builder(builderMethodName = "createMessageForm")
-    MessageForm(String to, String subject, String text){
+    EmailMessageDto(String to, String subject, String text){
         this.to = to;
         this.subject = subject;
         this.text = text;

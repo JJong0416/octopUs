@@ -1,6 +1,5 @@
 package com.octopus.exception;
 
-import com.google.api.Http;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,7 @@ public enum ErrorCode {
     //401 UNAUTHORIZED : 권한 없음
     ACCESS_NOT_ALLOWED(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
 
-    UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"로그인이 필요한 서비스입니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "로그인이 필요한 서비스입니다."),
 
     //404 : NOT_FOUND_EXCEPTION : 리소스를 찾을 수 없음
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
@@ -38,9 +37,7 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
 
     //500 INTERNAL_SERVER_ERROR: 내부 서버 오류
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류입니다.")
-
-    ;
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류입니다.");
 
     private final HttpStatus status;
     private final String message;

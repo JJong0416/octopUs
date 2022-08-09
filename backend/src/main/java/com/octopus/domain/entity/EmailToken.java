@@ -1,5 +1,6 @@
-package com.octopus.mail;
+package com.octopus.domain.entity;
 
+import com.octopus.utils.EmailUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

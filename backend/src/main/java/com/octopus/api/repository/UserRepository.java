@@ -18,6 +18,10 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface UserRepository extends CrudRepository<User, Long> {
 
+    Boolean existsUserByUserId(String userId);
+
+    Boolean existsUserByUserNickname(String userNickname);
+
     Optional<User> findByUserId(String userId);
 
     Optional<User> findByUserNickname(String userNickname);

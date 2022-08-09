@@ -7,8 +7,10 @@ import com.octopus.domain.Mission;
 import com.octopus.domain.User;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
+import com.octopus.domain.type.MissionType;
 import com.octopus.dto.layer.MissionListDto;
 import com.octopus.dto.request.MissionCreateReq;
+import com.octopus.dto.response.MissionRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -80,4 +82,18 @@ public class MissionService {
             Comparator.comparingInt(m -> (m.getMissionLimitPersonnel() - (m.getMissionUsers().length()
                     - (m.getMissionUsers().replaceAll(",", "").length()) + 1)));
 
+    @Transactional(readOnly = true)
+    public List<MissionRes> getMissionByMissionCode(String missionCode) {
+        return missionRepository.findMissionsByMissionCodeAndMissionOpen(missionCode, MissionOpenType.OPEN_ROOM);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MissionRes> getMissionByMissionTitle(String missionTitle) {
+        return missionRepository.findMissionsByMissionTitleAndMissionOpen(missionTitle, MissionOpenType.OPEN_ROOM);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MissionRes> getMissionsByMissionType(MissionType missionType) {
+        return missionRepository.findMissionsByMissionType(missionType);
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    POINT_LACK_ERROR(HttpStatus.BAD_REQUEST, "사용자의 포인트가 부족합니다."),
     //400 BAD_REQUEST: 잘못된 요청
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
@@ -38,6 +39,8 @@ public enum ErrorCode {
 
     //500 INTERNAL_SERVER_ERROR: 내부 서버 오류
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 오류입니다.");
+
+
 
     private final HttpStatus status;
     private final String message;

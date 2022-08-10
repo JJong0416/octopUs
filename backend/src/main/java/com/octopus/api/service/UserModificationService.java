@@ -24,6 +24,7 @@ public class UserModificationService {
     @Transactional
     public void changeUserAvatar(AvatarReq avatarReq) {
         User user = getUserInfo(getCurrentUsername().get());
+
         String[] userAvatar = user.getUserAvatar().split(", ");
 
         boolean isChange = false;
@@ -33,6 +34,12 @@ public class UserModificationService {
                 || Integer.parseInt(userAvatar[3]) != avatarReq.getAvatarPet()) {
             isChange = true;
         }
+        if(isChange && user.getUserPoint() < 500){
+            throw new CustomException(ErrorCode.POINT_LACK_ERROR);
+        }
+        if (isChange) {
+            user.updatePoint(user.getUserPoint() - changeAvatarPoint);
+        }
 
         StringBuilder sb = new StringBuilder();
         sb.append(avatarReq.getAvatarColor()).append(", ")
@@ -41,9 +48,7 @@ public class UserModificationService {
                 .append(avatarReq.getAvatarPet());
         user.updateAvatar(sb.toString());
 
-        if (isChange) {
-            user.updatePoint(user.getUserPoint() - changeAvatarPoint);
-        }
+
     }
 
     @Transactional

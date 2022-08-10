@@ -4,17 +4,10 @@
     <v-container class="mainwrap">
       <v-row>
         <v-col class="logo-img-wrapper">
-<<<<<<< HEAD
-          <v-img src="../assets/img/Ocsoon/Pet/3.png">
-          <v-img src="../assets/img/Ocsoon/Character/13.png">
-          <v-img src="../assets/img/Ocsoon/Face/5.png">
-          <v-img src="../assets/img/Ocsoon/Hat/13.png"></v-img></v-img>
-=======
           <v-img :src="require(`../assets/img/Ocsoon/Pet/${userAvatar[3]}.png`)">
           <v-img :src="require(`../assets/img/Ocsoon/Character/${userAvatar[0]}.png`)">
           <v-img :src="require(`../assets/img/Ocsoon/Face/${userAvatar[1]}.png`)">
           <v-img :src="require(`../assets/img/Ocsoon/Hat/${userAvatar[2]}.png`)"></v-img></v-img>
->>>>>>> e86ea2471b552b1442d6bdcbf31adb14fa8d352e
           </v-img></v-img>
         </v-col>
       </v-row>

@@ -12,10 +12,10 @@
             </v-btn></v-col
           >
         </v-row>
-      <v-img :src=avatarPet >
-          <v-img :src=avatarColor>
-          <v-img :src=avatarFace>
-          <v-img :src=avatarHat></v-img></v-img>
+      <v-img :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)" >
+          <v-img :src="require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)">
+          <v-img :src="require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)">
+          <v-img :src="require(`../assets/img/Ocsoon/Hat/${this.avatarHat}.png`)"></v-img></v-img>
           </v-img>
       </v-img>
       <!-- Nickname -->
@@ -332,10 +332,10 @@ export default {
       charge: false,
       account: false,
       userInfo: [],
-      avatarColor : "",
-      avatarHat : "",
-      avatarFace : "",
-      avatarPet :"",
+      avatarColor : 0,
+      avatarHat : 0,
+      avatarFace : 0,
+      avatarPet :0,
       openedMissions: [],
       closedMissions: [],
       Missionheaders: [
@@ -403,10 +403,10 @@ export default {
         console.log(response);
         vm.userInfo = response.data;
         vm.userAvatar = vm.userInfo.userAvatar.split(", ");
-        vm.avatarColor = require("../assets/img/Ocsoon/Character/" + vm.userAvatar[0] +".png");
-        vm.avatarFace =  require("../assets/img/Ocsoon/Face/" + vm.userAvatar[1] + ".png");
-        vm.avatarHat =  require("../assets/img/Ocsoon/Hat/" + vm.userAvatar[2] +".png");
-        vm.avatarPet =  require("../assets/img/Ocsoon/Pet/" + vm.userAvatar[3] +".png");
+        vm.avatarColor = parseInt(vm.userAvatar[0]);
+        vm.avatarFace =   parseInt(vm.userAvatar[1]);
+        vm.avatarHat =  parseInt(vm.userAvatar[2]);
+        vm.avatarPet =   parseInt(vm.userAvatar[3]);
         console.log(vm.userAvatar);
         // 참여중인 방 정보 받기
         axios

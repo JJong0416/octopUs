@@ -21,22 +21,22 @@
               ></v-text-field>
               인증번호 전송
               <v-icon @click="sendemail">mdi-check-bold</v-icon>
-          <!-- 이메일 인증 내용 추가 위치 -->
+              <!-- 이메일 인증 내용 추가 위치 -->
               <div v-if="issendemail">
-                  <v-text-field
-                    v-model="aouthcode"
-                    label="인증번호 입력"
-                    required
-                  ></v-text-field>
-                  인증번호 확인
-                  <v-icon @click="codecheck">mdi-check-bold</v-icon>
+                <v-text-field
+                  v-model="aouthcode"
+                  label="인증번호 입력"
+                  required
+                ></v-text-field>
+                인증번호 확인
+                <v-icon @click="codecheck">mdi-check-bold</v-icon>
               </div>
               <!--  -->
               <v-text-field
                 v-model="user.userid"
                 label="userid"
                 required
-                @change="userIdChk=false"
+                @change="userIdChk = false"
               ></v-text-field>
               중복검사
               <v-icon @click="idcheck">mdi-check-bold</v-icon>
@@ -47,57 +47,49 @@
                 label="Avatar"
                 required
               ></v-text-field> -->
-              <br>
-              <br>
+              <br />
+              <br />
               아바타선택
               <v-container class="pa-4 text-center">
-                  <v-row
-                    class="fill-height"
-                    align="center"
-                    justify="center"
-                  >
-                    <template v-for="(avatar, i) in avatars">
-                      <v-col
-                        :key="i"
-                        cols="3"
-                        md="4"
-                      >
-                        <v-hover v-slot="{ hover }">
-                          <v-card
-                            :elevation="hover ? 12 : 2"
-                            :class="{ 'on-hover': hover }"
-                            @click="setavater(avatars[i].num)"
+                <v-row class="fill-height" align="center" justify="center">
+                  <template v-for="(avatar, i) in avatars">
+                    <v-col :key="i" cols="3" md="4">
+                      <v-hover v-slot="{ hover }">
+                        <v-card
+                          :elevation="hover ? 12 : 2"
+                          :class="{ 'on-hover': hover }"
+                          @click="setavater(avatars[i].num)"
+                        >
+                          <v-img
+                            :src="
+                              require(`@/assets/img/Ocsoon/Character/${avatars[i].num}.png`)
+                            "
+                            height="55px"
+                            width="55px"
+                            object-fit="cover"
                           >
-                            <v-img
-                              :src="require(`@/assets/img/Ocsoon/Character/${avatars[i].num}.png`)"
-                              height="55px"
-                              width="55px"
-                              object-fit=cover
-                            >
                             <v-img
                               src="../assets/img/Ocsoon/Face/0.png"
                               height="55px"
                               width="55px"
-                              object-fit=cover
+                              object-fit="cover"
                             ></v-img>
-                            </v-img>
-                          </v-card>
-                        </v-hover>
-                      </v-col>
-                    </template>
-                  </v-row>
-                </v-container>
+                          </v-img>
+                        </v-card>
+                      </v-hover>
+                    </v-col>
+                  </template>
+                </v-row>
+              </v-container>
 
-
-
-<!--  -->
+              <!--  -->
               <v-text-field
                 v-model="user.usernickname"
                 :counter="10"
                 :rules="nameRules"
                 label="NickName"
                 required
-                @change="userNickChk=false"
+                @change="userNickChk = false"
               ></v-text-field>
               <!-- 닉네임 중복검사 추가 -->
               중복검사
@@ -169,24 +161,23 @@ export default {
       email: null,
       avatar: null,
     },
-    aouthcode : null,
-    issendemail : false,
+    aouthcode: null,
+    issendemail: false,
     userIdChk: true,
-    userNickChk : true,
-    codeChk : false,
+    userNickChk: true,
+    codeChk: false,
 
     // 아바타들
-    avatars:[
-      {num:0},
-      {num:1},
-      {num:2},
-      {num:3},
-      {num:4},
-      {num:5},
-      {num:6},
-      {num:7},
+    avatars: [
+      { num: 0 },
+      { num: 1 },
+      { num: 2 },
+      { num: 3 },
+      { num: 4 },
+      { num: 5 },
+      { num: 6 },
+      { num: 7 },
     ],
-    
 
     valid: false,
     nameRules: [
@@ -211,7 +202,7 @@ export default {
       axios
         .get(`api/register/check/id/${this.user.userid}`)
         .then(({ data }) => {
-          console.log("아이디중복확인 리턴: "+ data)
+          console.log("아이디중복확인 리턴: " + data);
           let msg = "중복된 아이디입니다. 다시 입력해주세요";
           if (data === false) {
             msg = "사용가능한 아이디입니다.";
@@ -220,7 +211,6 @@ export default {
           } else {
             this.userIdChk = false;
             alert(msg);
-
           }
         })
         .catch((error) => {
@@ -248,10 +238,10 @@ export default {
         .catch((error) => {
           console.log(error);
           alert("닉네임중복체크에 실패했습니다..");
-        })
+        });
     },
     //  인증코드 전송
-    codecheck() { 
+    codecheck() {
       axios
         .post(`api/email/check`, {
           userEmail: this.user.email,
@@ -259,8 +249,8 @@ export default {
         })
         .then(({ data }) => {
           let msg = "인증오류";
-          console.log("인증코드 전송후 리턴 : "+data)
-          if (data===true) {
+          console.log("인증코드 전송후 리턴 : " + data);
+          if (data === true) {
             msg = "인증되었습니다.";
             this.codeChk = true;
             alert(msg);
@@ -278,7 +268,7 @@ export default {
         });
     },
     //  이메일 전송
-    sendemail() { 
+    sendemail() {
       axios
         .post(`api/email`, {
           userEmail: this.user.email,
@@ -288,7 +278,7 @@ export default {
           let msg = "email 전송에 실패했습니다..";
           if (data === true) {
             msg = "인증번호가 전송되었습니다.";
-            this.issendemail=true;
+            this.issendemail = true;
             alert(msg);
           } else {
             alert(msg);
@@ -297,7 +287,7 @@ export default {
         .catch((error) => {
           console.log(error);
           alert("email 전송에 실패했습니다..");
-        })
+        });
     },
     movePage() {
       this.$router.push({ name: "Login" });
@@ -364,17 +354,16 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    setavater(i){
-      this.user.avatar=i;
-      console.log(this.user.avatar)
-    }
+    setavater(i) {
+      this.user.avatar = i;
+      console.log(this.user.avatar);
+    },
   },
 };
 </script>
 
 <style scoped>
-
 .v-card:not(.on-hover) {
   opacity: 0.8;
- }
+}
 </style>

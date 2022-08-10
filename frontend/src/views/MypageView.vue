@@ -35,13 +35,67 @@
         <v-col cols="6">
           <v-card-title>{{ userInfo.userPoint }} Point</v-card-title>
         </v-col>
-        <v-col cols="3"> 충전하기 </v-col>
         <v-col cols="3">
-          <v-img style="max-width: 70px" src="../assets/img/Kakao/kakaopay.png"></v-img>
+          <v-dialog v-model="charge" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+                충전하기
+              </v-btn>
+            </template>
+
+            <v-card>
+              <v-card-title class="text-h5 yellow lighten-2">
+                포인트 충전
+              </v-card-title>
+              <v-dialog
+                v-model="kakaopay"
+                fullscreen
+                hide-overlay
+                transition="dialog-bottom-transition"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="amber" v-bind="attrs" v-on="on">
+                    <v-icon color="yellow">mdi-currency-usd</v-icon>
+                    1000Points
+                  </v-btn>
+                  <v-divider></v-divider>
+                  <v-btn color="amber" v-bind="attrs" v-on="on">
+                    <v-icon color="yellow">mdi-currency-usd</v-icon>
+                    3000Points
+                  </v-btn>
+
+                  <v-btn color="amber" v-bind="attrs" v-on="on">
+                    <v-icon color="yellow">mdi-currency-usd</v-icon>
+                    5000Points
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-img
+                    src="../assets/img/account/kakaopay.jpg"
+                    @click="kakaopay = false"
+                  ></v-img>
+                </v-card>
+              </v-dialog>
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn color="primary" text @click="charge = false">
+                  close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-col>
+        <v-col cols="3">
+          <v-img
+            style="max-width: 70px"
+            src="../assets/img/Kakao/kakaopay.png"
+          ></v-img>
         </v-col>
         <v-col cols="auto">
           <v-dialog
-            fullscreen
             hide-overlay
             transtion="dialog-bottom-transition"
             scrollable
@@ -51,12 +105,35 @@
             </template>
             <template v-slot:default="dialog">
               <v-card>
-                <v-toolbar color="primary" dark
-                  >Opening from the bottom</v-toolbar
+                <v-toolbar max-height="100px" color="primary" dark
+                  ><div class="text-h4">보내기</div></v-toolbar
                 >
-                <v-card-text>
-                  <div class="text-h2 pa-12">Hello world!</div>
-                </v-card-text>
+                <v-dialog v-model="account" width="500">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-container>
+                      <v-btn width="300" outlined v-bind="attrs" v-on="on">
+                        은행 선택
+                      </v-btn>
+                    </v-container>
+                  </template>
+
+                  <v-card>
+                    <v-img
+                      @click="account = false"
+                      src="../assets/img/account/bank.jpg"
+                    ></v-img>
+                    <v-img
+                      @click="account = false"
+                      src="../assets/img/account/bank2.jpg"
+                    ></v-img>
+                  </v-card>
+                </v-dialog>
+                <v-form>
+                  <v-container>
+                    <v-text-field label="계좌번호 입력" outlined></v-text-field>
+                  </v-container>
+                </v-form>
+
                 <v-card-actions class="justify-end">
                   <v-btn text @click="dialog.value = false">Close</v-btn>
                 </v-card-actions>
@@ -245,6 +322,9 @@ import cookie from "vue-cookies";
 export default {
   data() {
     return {
+      kakaopay: false,
+      charge: false,
+      account: false,
       userInfo: [],
       openedMissions: [],
       closedMissions: [],

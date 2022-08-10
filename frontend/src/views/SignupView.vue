@@ -65,14 +65,20 @@
                           <v-card
                             :elevation="hover ? 12 : 2"
                             :class="{ 'on-hover': hover }"
-                            @click="setavater(i)"
+                            @click="setavater(avatars[i].num)"
                           >
                             <v-img
-                              :src="getimg(i)"
+                              :src="require(`@/assets/img/Ocsoon/Character/${avatars[i].num}.png`)"
                               height="55px"
                               width="55px"
                               object-fit=cover
                             >
+                            <v-img
+                              src="../assets/img/Ocsoon/Face/Default.png"
+                              height="55px"
+                              width="55px"
+                              object-fit=cover
+                            ></v-img>
                             </v-img>
                           </v-card>
                         </v-hover>
@@ -169,14 +175,14 @@ export default {
 
     // 아바타들
     avatars:[
-      {img:"../assets/img/1.png", num:1},
-      {img:`../assets/img/2.png`, num:2},
-      {img:`../assets/img/3.png`, num:3},
-      {img:`../assets/img/4.png`, num:4},
-      {img:`../assets/img/5.png`, num:5},
-      {img:`../assets/img/6.png`, num:6},
-      {img:`../assets/img/7.png`, num:7},
-      {img:`../assets/img/8.png`, num:8},
+      {num:1},
+      {num:2},
+      {num:8},
+      {num:9},
+      {num:10},
+      {num:11},
+      {num:12},
+      {num:13},
     ],
     
 
@@ -359,12 +365,8 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    getimg(i){
-      i++;
-      return require('../assets/img/'+i+'.png')
-    },
     setavater(i){
-      this.user.avatar=i+1;
+      this.user.avatar=i;
       console.log(this.user.avatar)
     }
   },

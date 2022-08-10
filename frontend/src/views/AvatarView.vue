@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="8"></v-col>
       <v-col cols="4">
-        <v-btn @click="changeColor(0)">기본색</v-btn>
+        <v-btn>원래대로</v-btn>
       </v-col>
     </v-row>
     <v-img :src=avatarPet width="30vh">
@@ -15,27 +15,27 @@
     <v-btn-toggle v-model="toggle_exclusive">
       <v-row>
         <v-col cols="12" sm="6" class="py-1">
+          <v-btn color="#fa183e" @click="changeColor(0)"/>
           <v-btn color="#ffbbed" @click="changeColor(1)"/>
-          <v-btn color="#8500ff" @click="changeColor(2)"/>
-          <v-btn color="#15ff00" @click="changeColor(3)"/>
+          <v-btn color="#ffec00" @click="changeColor(2)"/>
+          <v-btn color="#b9ffb2"  @click="changeColor(3)"/>
           <v-btn color="#003fff" @click="changeColor(4)"/>
-          <v-btn color="#ffec00" @click="changeColor(5)"/>
-          <v-btn color="#d2a1ff" @click="changeColor(6)"/>
-          <v-btn color="#b9ffb2"  @click="changeColor(7)"/>
+          <v-btn color="#d2a1ff" @click="changeColor(5)"/>
+          <v-btn color="#8500ff" @click="changeColor(6)"/>
         </v-col>
         <v-col cols="12" sm="6" class="py-1">
-          <v-btn color="#a5bbff"  @click="changeColor(8)"/>
-          <v-btn color="#fff9b5"  @click="changeColor(9)"/>
+          <v-btn color="#a5bbff"  @click="changeColor(7)"/>
+          <v-btn color="#fff9b5"  @click="changeColor(8)"/>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/glitter.jpeg" @click="changeColor(10)"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/glitter.jpeg" @click="changeColor(9)"></v-img></v-btn>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/cow.jpeg" @click="changeColor(11)"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/cow.jpeg" @click="changeColor(10)"></v-img></v-btn>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/tiger.jpeg" @click="changeColor(12)"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/tiger.jpeg" @click="changeColor(11)"></v-img></v-btn>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/universe.jpeg" @click="changeColor(13)"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/universe.jpeg" @click="changeColor(12)"></v-img></v-btn>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/pudding.jpeg" @click="changeColor(14)"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/pudding.jpeg" @click="changeColor(13)"></v-img></v-btn>
         </v-col>
       </v-row>
       <br><br>

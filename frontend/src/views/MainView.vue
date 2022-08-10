@@ -5,9 +5,9 @@
       <v-row>
         <v-col class="logo-img-wrapper">
           <v-img src="../assets/img/Ocsoon/Pet/3.png">
-          <v-img src="../assets/img/Ocsoon/Character/14.png">
+          <v-img src="../assets/img/Ocsoon/Character/13.png">
           <v-img src="../assets/img/Ocsoon/Face/5.png">
-          <v-img src="../assets/img/Ocsoon/Hat/14.png"></v-img></v-img>
+          <v-img src="../assets/img/Ocsoon/Hat/13.png"></v-img></v-img>
           </v-img></v-img>
         </v-col>
       </v-row>

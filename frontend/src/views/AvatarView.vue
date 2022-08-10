@@ -1,36 +1,35 @@
 <template>
   <div align="center" justify="center">
-    <v-img src="../assets/img/Ocsoon/Character/1.png" width="200px" />
+    <v-img src="../assets/img/Ocsoon/Character/0.png" width="200px">
+      <v-img src="../assets/img/Ocsoon/Face/0.png"></v-img>
+    </v-img>
     <v-btn-toggle v-model="toggle_exclusive">
       <v-row>
         <v-col cols="12" sm="6" class="py-1">
-          <v-btn color="red"> </v-btn>
-          <v-btn color="red lighten-2"> </v-btn>
-          <v-btn color="pink lighten-2"></v-btn>
-          <v-btn color="purple lighten-2"></v-btn>
-          <v-btn color="deep-purple ligten-1"></v-btn>
-          <v-btn color="deep-purple darken-1"></v-btn>
-          <v-btn color="indigo"></v-btn>
+          <v-btn color="#fa183e"/>
+          <v-btn color="#ffbbed"/>
+          <v-btn color="#8500ff"/>
+          <v-btn color="#15ff00"/>
+          <v-btn color="#003fff"/>
+          <v-btn color="#d2a1ff"/>
+          <v-btn color="#b9ffb2"/>
         </v-col>
         <v-col cols="12" sm="6" class="py-1">
-          <v-btn color="indigo lighten-1"></v-btn>
-          <v-btn color="blue"></v-btn>
-          <v-btn color="blue lighten-3"></v-btn>
-          <v-btn color="cyan"></v-btn>
-          <v-btn color="cyan lighten-3"></v-btn>
-          <v-btn color="lime"></v-btn>
-          <v-btn color="lime lighten-3"></v-btn>
-        </v-col>
-        <v-col cols="12" sm="6" class="py-1">
-          <v-btn color="yellow darken-4"></v-btn>
-          <v-btn color="yellow darken-3"></v-btn>
-          <v-btn color="brown"></v-btn>
-          <v-btn color="blue-grey darken-3"></v-btn>
-          <v-btn color="blue-grey"></v-btn>
-          <v-btn color="blue-grey lighten-2"></v-btn>
-          <v-btn color="grey"></v-btn>
+          <v-btn color="#a5bbff"/>
+          <v-btn color="#fff9b5"/>
+          <v-btn rounded height="48" width="48" >
+          <v-img height="48" width="48" src="../assets/img/Btn/glitter.jpeg"></v-img></v-btn>
+          <v-btn rounded height="48" width="48" >
+          <v-img height="48" width="48" src="../assets/img/Btn/cow.jpeg"></v-img></v-btn>
+          <v-btn rounded height="48" width="48" >
+          <v-img height="48" width="48" src="../assets/img/Btn/tiger.jpeg"></v-img></v-btn>
+          <v-btn rounded height="48" width="48" >
+          <v-img height="48" width="48" src="../assets/img/Btn/universe.jpeg"></v-img></v-btn>
+          <v-btn rounded height="48" width="48" >
+          <v-img height="48" width="48" src="../assets/img/Btn/pudding.jpeg"></v-img></v-btn>
         </v-col>
       </v-row>
+      <br><br>
     </v-btn-toggle>
     <template>
       <v-card color="basil">
@@ -64,8 +63,8 @@ export default {
     return {
       toggle_exclusive: 2,
       tab: null,
-      items: ["Hat", "Accessory", "Shoes"],
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      items: ["Face", "Hat", "Pet"],
+      text: "items",
     };
   },
 };

@@ -3,10 +3,10 @@
     <v-container class="mainwrap">
       <v-row>
         <v-col class="logo-img-wrapper">
-          <v-img src="../assets/img/Ocsoon/Pet/Pegion.png">
-          <v-img src="../assets/img/Ocsoon/Character/1.png">
-          <v-img src="../assets/img/Ocsoon/Face/Cartoon.png">
-          <v-img src="../assets/img/Ocsoon/Hat/Bid.png"></v-img></v-img>
+          <v-img src="../assets/img/Ocsoon/Pet/3.png">
+          <v-img src="../assets/img/Ocsoon/Character/14.png">
+          <v-img src="../assets/img/Ocsoon/Face/5.png">
+          <v-img src="../assets/img/Ocsoon/Hat/14.png"></v-img></v-img>
           </v-img></v-img>
         </v-col>
       </v-row>

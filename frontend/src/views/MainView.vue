@@ -3,10 +3,10 @@
     <v-container class="mainwrap">
       <v-row>
         <v-col class="logo-img-wrapper">
-          <v-img src="../assets/img/Ocsoon/Pet/3.png">
-          <v-img src="../assets/img/Ocsoon/Character/14.png">
-          <v-img src="../assets/img/Ocsoon/Face/5.png">
-          <v-img src="../assets/img/Ocsoon/Hat/14.png"></v-img></v-img>
+          <v-img :src="require(`../assets/img/Ocsoon/Pet/${userAvatar[3]}.png`)">
+          <v-img :src="require(`../assets/img/Ocsoon/Character/${userAvatar[0]}.png`)">
+          <v-img :src="require(`../assets/img/Ocsoon/Face/${userAvatar[1]}.png`)">
+          <v-img :src="require(`../assets/img/Ocsoon/Hat/${userAvatar[2]}.png`)"></v-img></v-img>
           </v-img></v-img>
         </v-col>
       </v-row>
@@ -83,7 +83,8 @@ export default {
     hotmissions: [],
     newmissions: [],
     items: ["코드 입력", "제목 검색", "테마 검색"],
-    slides: ["First", "Second", "Third", "Fourth", "Fifth"],
+    userInfo2: [],
+    userAvatar:[],
   }),
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
@@ -128,6 +129,23 @@ export default {
         console.log("들어온 hotmissions : ")
         console.log(vm.hotmissions);
       })
+      .catch(function (err) {
+        console.log(err);
+      });
+      
+      axios
+      .get(`api/user/info`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+        vm.userInfo2 = response.data;
+        vm.userAvatar=vm.userInfo2.userAvatar.split(',');
+        console.log(vm.userAvatar);
+        })
       .catch(function (err) {
         console.log(err);
       });

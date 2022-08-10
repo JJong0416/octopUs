@@ -93,7 +93,7 @@ export default {
     newmissions: [],
     items: ["코드 입력", "제목 검색", "테마 검색"],
     userInfo2: [],
-    userAvatar:[],
+    userAvatar:[0,0,0,0],
   }),
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),

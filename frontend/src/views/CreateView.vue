@@ -74,7 +74,7 @@ export default {
     mission: {
       // missionType, missionOpen 수정필요
       missionTitle: null,
-      missionType: "LIFE",
+      missionType: [],
       missionPoint: null,
       missionLimitPersonnel: null,
       missionContent: null,

@@ -50,8 +50,8 @@
       </v-row>
       <!-- Hot 실시간 반영 -->
       <v-row>
-        <v-col cols="2"><v-img src="../assets/img/Hot.png"></v-img></v-col>
-        <v-col cols="7">
+        <v-col cols="3"><v-img src="../assets/img/Hot.png"></v-img></v-col>
+        <v-col cols="6">
           <v-carousel
             cycle
             interval="1500"
@@ -71,12 +71,12 @@
         </v-col>
 
         <!-- Hot 더보기 -->
-        <v-col cols="3"> <v-btn color="red lighten-1">more</v-btn></v-col>
+        <v-col cols="3"> <v-btn color="red lighten-1" @click="moveHot()">more</v-btn></v-col>
       </v-row>
       <!-- New 실시간 반영 -->
       <v-row>
-        <v-col cols="2"><v-img src="../assets/img/New.png"></v-img></v-col>
-        <v-col cols="7">
+        <v-col cols="3"><v-img src="../assets/img/New.png"></v-img></v-col>
+        <v-col cols="6">
           <v-carousel
             cycle
             interval="1500"
@@ -95,7 +95,7 @@
           </v-carousel></v-col
         >
         <!-- New 더보기 -->
-        <v-col cols="3"> <v-btn color="warning">more</v-btn></v-col>
+        <v-col cols="3"> <v-btn color="warning" @click="moveNew()">more</v-btn></v-col>
       </v-row>
     </v-container>
   </div>
@@ -113,6 +113,15 @@ export default {
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
   },
+
+  methods:{
+    moveHot(){
+      this.$router.push('/hotnew')
+    },
+    moveNew(){
+      this.$router.push('/hotnew')
+    }
+  }
 };
 </script>
 

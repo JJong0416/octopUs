@@ -12,11 +12,11 @@
         >
           <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
-          <v-toolbar-title
-            ><router-link :to="`/`" style="text-decoration: none">
-              <v-img src="assets/Title.png"></v-img>Title
-            </router-link></v-toolbar-title
-          >
+          <v-toolbar-title style="padding-bottom: 0px">
+            <router-link :to="`/`" style="text-decoration: none object-fit: cover ">
+              <v-img src="@/assets/Title.png"></v-img>
+            </router-link>
+          </v-toolbar-title>
 
           <v-spacer></v-spacer>
           <div v-if="userInfo" class="create">

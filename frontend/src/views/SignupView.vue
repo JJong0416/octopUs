@@ -310,7 +310,7 @@ export default {
         !this.user.email ||
         !this.user.usernickname ||
         !this.user.userpwd ||
-        !this.user.avatar ||
+        this.user.avatar===null ||
         !this.codeChk ||
         !this.userIdChk ||
         !this.userNickChk
@@ -340,9 +340,7 @@ export default {
           alert("등록 실패입니다.");
         })
         .finally(() => {
-          console.log(this.user.userid);
-          console.log(this.user.userpwd);
-          console.log(this.user.usernickname);
+
         });
     },
     validate() {

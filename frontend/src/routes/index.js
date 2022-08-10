@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 // import HomeView from "../views/HomeView.vue";
 import store from "@/store/index.js";
 // import MainView from "@/components/MainView.vue";
-import MainView from "@/views/MainView.vue";
+import StartView from "@/views/StartView.vue";
 Vue.use(VueRouter);
 
 // https://router.vuejs.org/kr/guide/advanced/navigation-guards.html
@@ -28,10 +28,14 @@ const onlyAuthUser = async (to, from, next) => {
 const routes = [
   {
     path: "/",
-    name: "MainView",
-    component: MainView,
+    name: "StartView",
+    component: StartView,
   },
-
+  {
+    path: "/main",
+    name: "MainView",
+    component: () => import("@/views/MainView.vue"),
+  },
   {
     path: "/mypage",
     name: "Mypage",
@@ -89,6 +93,18 @@ const routes = [
     path: "/camera",
     name: "camera",
     component: () => import("@/views/CameraView.vue"),
+  },
+  {
+    path: "/avatar",
+    name: "avatar",
+    component: () => import("@/views/AvatarView.vue"),
+    props: true,
+  },
+  {
+    path: "/refund",
+    name: "refund",
+    component: () => import("@/views/RefundView.vue"),
+    props: true,
   },
 ];
 

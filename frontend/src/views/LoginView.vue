@@ -37,15 +37,22 @@
                     </div>
 
                     <v-card-actions>
-                      <v-btn color="#ff809d" dark large block @click="confirm"
+                      <v-btn color="#ffadad" dark large block @click="confirm"
                         >Login</v-btn
                       >
                     </v-card-actions>
                     <v-card-actions>
                       <v-img
                         @click="KakaoLogin"
-                        src="../assets/kakaologin.png"
+                        src="../assets/img/Kakao/kakaologin.png"
                       ></v-img>
+                    </v-card-actions>
+                          
+                    <!-- 회원가입 -->
+                    <v-card-actions>
+                          <v-btn @click="signup" color="#ffadad" dark large block
+                            >Sign Up</v-btn
+                        >
                     </v-card-actions>
                   </v-form>
                 </v-col>
@@ -94,8 +101,8 @@ export default {
         alert("로그인 정보가 잘못되었습니다.", { icon: "error" });
       }
     },
-    movePage() {
-      this.$router.push({ name: "signUp" });
+    signup(){
+      this.$router.push({name: "Signup"});
     },
     KakaoLogin() {
       console.log(window.Kakao);
@@ -162,3 +169,8 @@ export default {
   },
 };
 </script>
+<style>
+#app{
+  height: 90vh;
+}
+</style>

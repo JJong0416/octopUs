@@ -11,7 +11,7 @@
       >
         <v-card-text>
           <v-btn class="mx-4" icon>
-            <router-link :to="'/'">
+            <router-link :to="'/main'">
               <v-icon size="24px"> mdi-home </v-icon></router-link
             >
           </v-btn>
@@ -39,15 +39,8 @@
 <script>
 import { mapState } from "vuex";
 const memberStore = "memberStore";
+
 export default {
-  data: () => ({
-    icons: [
-      ["mdi-home", "/"],
-      ["mdi-fire", "/hotnew"],
-      ["mdi-magnify", "/search"],
-      ["mdi-account", "mypage"],
-    ],
-  }),
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
   },

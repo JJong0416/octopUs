@@ -60,9 +60,6 @@
       oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
     ></v-text-field>
     <br />
-    <!-- <v-row justify="center">
-      <v-date-picker v-model="mission.missionOpen"></v-date-picker>
-    </v-row> -->
     <v-btn @click="createmission">Create</v-btn>
   </div>
 </template>

@@ -7,7 +7,7 @@
           shrink-on-scroll
           prominent
           fade-img-on-scroll
-          height="50px"
+          height="80"
           color="#a8dadc"
         >
           <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
@@ -136,9 +136,6 @@ export default {
 /* .routing-fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-.wrapper {
-  height: 88.4vh;
-}
 .create a {
   text-decoration: none;
   color: none;
@@ -148,7 +145,7 @@ export default {
   color: none;
 }
 .routerpadding {
-  height: 50px;
+  height: 80px;
 }
 #app {
   background-color: "#f1faee";

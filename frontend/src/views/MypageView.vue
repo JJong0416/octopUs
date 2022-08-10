@@ -39,6 +39,31 @@
         <v-col cols="3">
           <v-img style="max-width: 70px" src="../assets/kakaopay.png"></v-img>
         </v-col>
+        <v-col cols="auto">
+          <v-dialog
+            fullscreen
+            hide-overlay
+            transtion="dialog-bottom-transition"
+            scrollable
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn color="primary" v-bind="attrs" v-on="on">환급받기</v-btn>
+            </template>
+            <template v-slot:default="dialog">
+              <v-card>
+                <v-toolbar color="primary" dark
+                  >Opening from the bottom</v-toolbar
+                >
+                <v-card-text>
+                  <div class="text-h2 pa-12">Hello world!</div>
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                  <v-btn text @click="dialog.value = false">Close</v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </v-col>
       </v-row>
 
       <br />
@@ -156,58 +181,60 @@
           </v-toolbar>
         </template>
 
-          <template v-slot:[`item.missionPoint`]="{ item }">
-            <v-chip
-              :color="getColor(item.missionPoint)"
-              dark
+        <template v-slot:[`item.missionPoint`]="{ item }">
+          <v-chip :color="getColor(item.missionPoint)" dark>
+            {{ item.missionPoint }}
+          </v-chip>
+        </template>
+        <template v-slot:expanded-item="{ headers, item }">
+          <td :colspan="headers.length">
+            <!--  -->
+            <template>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>미션 내용</v-list-item-title>
+                  <v-list-item-subtitle>{{
+                    item.missionContent
+                  }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title>입장 코드</v-list-item-title>
+                  <v-list-item-subtitle>{{
+                    item.missionCode
+                  }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title>분야</v-list-item-title>
+                  <v-list-item-subtitle>
+                    {{ item.missionType }}</v-list-item-subtitle
+                  >
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item two-line>
+                <v-list-item-content>
+                  <v-list-item-title>인증 사진</v-list-item-title>
+                  <img :src="URL" style="height: 120px" class="mx-4" />
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+
+            <!--  -->
+            <router-link
+              :to="{ name: 'after', params: { missionNo: item.missionNo } }"
             >
-              {{ item.missionPoint }}
-            </v-chip>
-          </template>
-          <template v-slot:expanded-item="{ headers, item }">
-            <td :colspan="headers.length">
-
-<!--  -->
-              <template>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-list-item-title>미션 내용</v-list-item-title>
-                      <v-list-item-subtitle>{{item.missionContent}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title>입장 코드</v-list-item-title>
-                      <v-list-item-subtitle>{{item.missionCode}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title>분야</v-list-item-title>
-                      <v-list-item-subtitle>  {{item.missionType}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-
-                  <v-list-item two-line>
-                    <v-list-item-content>
-                      <v-list-item-title>인증 사진</v-list-item-title>
-                      <img :src=URL style="height:120px" class="mx-4" />
-                    </v-list-item-content>
-                  </v-list-item>
-              </template>
-
-<!--  -->
-              <router-link
-                :to="{ name: 'after', params: { missionNo: item.missionNo } }"
-              >
-                자세히보기
-              </router-link>
-            </td>
-          </template>
-        </v-data-table>
-      <br/>
+              자세히보기
+            </router-link>
+          </td>
+        </template>
+      </v-data-table>
+      <br />
     </v-card>
   </v-container>
 </template>
@@ -221,7 +248,7 @@ export default {
       userInfo: [],
       openedMissions: [],
       closedMissions: [],
-      Missionheaders:[
+      Missionheaders: [
         {
           text: `방 이름`,
           align: `start`,
@@ -235,7 +262,7 @@ export default {
       closeexpanded: [],
       singleExpand: true,
       URL: null,
-      userPictures:[],
+      userPictures: [],
     };
   },
 
@@ -264,7 +291,6 @@ export default {
           vm.userPictures = response.data[0].userPictures;
           // vm.URL = response.data[0].userPictures[0].pictureUrl;
           // console.log(vm.URL)
-
         })
         .catch(function (err) {
           console.log(err);

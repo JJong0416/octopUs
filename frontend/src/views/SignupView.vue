@@ -75,7 +75,7 @@
                               object-fit=cover
                             >
                             <v-img
-                              src="../assets/img/Ocsoon/Face/Default.png"
+                              src="../assets/img/Ocsoon/Face/0.png"
                               height="55px"
                               width="55px"
                               object-fit=cover

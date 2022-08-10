@@ -74,7 +74,7 @@
                               object-fit=cover
                             >
                             <v-img
-                              src="../assets/img/Ocsoon/Face/Default.png"
+                              src="../assets/img/Ocsoon/Face/0.png"
                               height="55px"
                               width="55px"
                               object-fit=cover
@@ -175,14 +175,14 @@ export default {
 
     // 아바타들
     avatars:[
+      {num:0},
       {num:1},
       {num:2},
-      {num:8},
-      {num:9},
-      {num:10},
-      {num:11},
-      {num:12},
-      {num:13},
+      {num:3},
+      {num:4},
+      {num:5},
+      {num:6},
+      {num:7},
     ],
     
 

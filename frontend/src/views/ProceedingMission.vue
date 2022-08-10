@@ -141,7 +141,7 @@
         </v-card-text>
         <v-card-text v-for="(user, i) in calendarUserInfos" :key="i">
           <h5>{{user.userNickname}}</h5>
-          <v-progress-linear :value="user.successUserRate" :color="colors[user.userAvatar - 1]" height="25" style="pointer-events: none;">
+          <v-progress-linear :value="user.successUserRate" :color="colors[user.userAvatar]" height="25" style="pointer-events: none;">
            
               <strong>{{ user.successUserRate }}%</strong>
        
@@ -198,14 +198,21 @@ export default {
     events: [],
     // 캘린더 이벤트 색 8개
     colors: [
-      "teal",
-      "orange",
-      "brown",
+      "#fa183e",
+      "#ffbbed",
+      "#8500ff",
+      "#15ff00",
+      "#003fff",
+      "#ffec00",
+      "#d2alff",
+      "#b9ffb2",
+      "#a5bbff",
+      "#FFF800",
       "black",
-      "purple",
-      "indigo",
-      "red",
-      "lime",
+      "#FFD000",
+      "#000F75",
+      "#A26057",
+      
     ],
     names: ["Nickname"],
   }),
@@ -260,18 +267,19 @@ export default {
           const nickname = this.calendarUserInfos[i].userNickname;
           const date =
             this.calendarUserInfos[i].userPictures[j].date.split("T")[0];
-          const avartar = this.calendarUserInfos[i].userAvatar;
+          const avatarColor = this.calendarUserInfos[i].userAvatar.split(", ")[0];
+          this.calendarUserInfos[i].userAvatar = avatarColor;
           if (
-            vm.pictureList[nickname + " " + date + " " + avartar] == undefined
+            vm.pictureList[nickname + " " + date + " " + avatarColor] == undefined
           ) {
-            vm.pictureList[nickname + " " + date + " " + avartar] = [
+            vm.pictureList[nickname + " " + date + " " + avatarColor] = [
               this.calendarUserInfos[i].userPictures[j].pictureUrl,
             ];
           } else {
             var tempList =
-              vm.pictureList[nickname + " " + date + " " + avartar];
+              vm.pictureList[nickname + " " + date + " " + avatarColor];
             tempList.push(this.calendarUserInfos[i].userPictures[j].pictureUrl);
-            vm.pictureList[nickname + " " + date + " " + avartar] = tempList;
+            vm.pictureList[nickname + " " + date + " " + avatarColor] = tempList;
           }
         }
       }
@@ -281,7 +289,7 @@ export default {
           name: key.split(" ")[0],
           start: key.split(" ")[1],
           timed: true,
-          color: this.colors[key.split(" ")[2] - 1],
+          color: this.colors[key.split(" ")[2]],
         });
       }
 
@@ -311,7 +319,7 @@ export default {
         " " +
         event.start +
         " " +
-        (this.colors.indexOf(event.color) + 1);
+        (this.colors.indexOf(event.color));
 
       const open = () => {
         this.pictures = this.pictureList[temp];

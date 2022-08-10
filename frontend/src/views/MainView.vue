@@ -1,10 +1,13 @@
 <template>
   <div>
-    <!-- 왕문어 -->
     <v-container class="mainwrap">
       <v-row>
         <v-col class="logo-img-wrapper">
-          <v-img src="../assets/Logo.png" max-width="60%"></v-img>
+          <v-img src="../assets/img/Ocsoon/Pet/Pegion.png">
+          <v-img src="../assets/img/Ocsoon/Character/1.png">
+          <v-img src="../assets/img/Ocsoon/Face/Cartoon.png">
+          <v-img src="../assets/img/Ocsoon/Hat/Bid.png"></v-img></v-img>
+          </v-img></v-img>
         </v-col>
       </v-row>
       <!-- 검색창 -->
@@ -12,42 +15,11 @@
         <v-col cols="4">
           <v-select :items="items" label="검색 선택"></v-select>
         </v-col>
-        <v-col cols="5">
+        <v-col cols="8">
           <v-text-field hide-details single-line></v-text-field>
         </v-col>
-        <v-col cols="">
-          <v-btn icon>
-            <v-icon> mdi-magnify </v-icon>
-          </v-btn>
-        </v-col>
       </v-row>
-
-      <!-- login -->
-      <v-row v-if="!userInfo">
-        <v-col cols="2"></v-col>
-        <v-col cols="4">
-          <v-card-actions
-            ><div class="login">
-              <router-link :to="`/login`">
-                <v-btn color="#ff809d" dark large block>Login</v-btn>
-              </router-link>
-            </div>
-          </v-card-actions></v-col
-        >
-        <!-- 회원가입 -->
-        <v-col cols="4">
-          <v-card-actions>
-            <div class="signup">
-              <router-link :to="`/signup`">
-                <v-btn color="#ff809d" dark large block
-                  >Sign Up</v-btn
-                ></router-link
-              >
-            </div>
-          </v-card-actions></v-col
-        >
-        <v-col cols="2"></v-col>
-      </v-row>
+<br><br>
       <!-- Hot 실시간 반영 -->
       <v-row>
         <v-col cols="2"><v-img src="../assets/img/Hot.png"></v-img></v-col>
@@ -117,14 +89,7 @@ export default {
 </script>
 
 <style>
-.login a {
-  text-decoration: none;
-  color: black;
-}
-.login a:hover {
-  text-decoration: none;
-  color: black;
-}
+
 .signup a {
   text-decoration: none;
   color: black;
@@ -144,26 +109,11 @@ body {
   text-decoration: none;
   color: black;
 }
-.login a {
-  text-decoration: none;
-  color: white;
-}
-.login a:hover {
-  text-decoration: none;
-  color: white;
-}
-.signUp a {
-  text-decoration: none;
-  color: white;
-}
-.signUp a:hover {
-  text-decoration: none;
-  color: white;
-}
 .logo-img-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0;
 }
 .mainwrap {
   height: 90vh;

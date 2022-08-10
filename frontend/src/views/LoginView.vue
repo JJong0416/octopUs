@@ -34,6 +34,47 @@
                           @keyup.enter="confirm"
                         ></v-text-field>
                       </div>
+                      <div class="text-center">
+                        <v-dialog v-model="dialog" width="500">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn v-bind="attrs" v-on="on">
+                              비밀번호 찾기
+                            </v-btn>
+                          </template>
+
+                          <v-card>
+                            <v-card-title class="text-h5 red lighten-2">
+                              이메일을 입력해주세요
+                            </v-card-title>
+                            <v-card-actions>
+                              <v-text-field
+                                v-model="email"
+                                label="Email"
+                                hide-details="auto"
+                              ></v-text-field>
+                            </v-card-actions>
+                            <v-divider></v-divider>
+
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                color="primary"
+                                dark
+                                @click="findPwByEmail"
+                              >
+                                Send Email
+                              </v-btn>
+                              <v-btn
+                                color="primary"
+                                text
+                                @click="dialog = false"
+                              >
+                                Close
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
+                      </div>
                     </div>
 
                     <v-card-actions>
@@ -42,18 +83,24 @@
                       >
                     </v-card-actions>
                     <v-card-actions>
+                      <v-btn @click="signup" color="#ffadad" dark large block
+                        >Sign Up</v-btn
+                      >
+                    </v-card-actions>
+                    <v-card-actions>
                       <v-img
                         @click="KakaoLogin"
                         src="../assets/img/Kakao/kakaologin.png"
                       ></v-img>
                     </v-card-actions>
-                          
-                    <!-- 회원가입 -->
                     <v-card-actions>
-                          <v-btn @click="signup" color="#ffadad" dark large block
-                            >Sign Up</v-btn
-                        >
+                      <v-img
+                        @click="KakaoLogin"
+                        src="../assets/img/Kakao/kakao_login_large_wide.png"
+                      ></v-img>
                     </v-card-actions>
+
+                    <!-- 회원가입 -->
                   </v-form>
                 </v-col>
               </v-row>
@@ -68,10 +115,13 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import http from "@/utils/http-common.js";
+import axios from "axios";
 
 export default {
   data() {
     return {
+      email: "",
+      dialog: false,
       user: {
         userId: "",
         userPassword: "",
@@ -101,8 +151,20 @@ export default {
         alert("로그인 정보가 잘못되었습니다.", { icon: "error" });
       }
     },
-    signup(){
-      this.$router.push({name: "Signup"});
+    findPwByEmail() {
+      axios
+        .post("/api/find-pw", { userEmail: this.email })
+        .then((response) => {
+          console.log(response);
+          alert("이메일로 임시비밀번호가 발송되었습니다.");
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally();
+    },
+    signup() {
+      this.$router.push({ name: "Signup" });
     },
     KakaoLogin() {
       console.log(window.Kakao);
@@ -170,7 +232,7 @@ export default {
 };
 </script>
 <style>
-#app{
+#app {
   height: 90vh;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="footer">
     <v-footer fixed padless>
       <v-card
         flat
@@ -7,7 +7,7 @@
         width="100%"
         class="text-center"
         height="10vh"
-        color="#a8dadc"
+        color="#white"
       >
         <v-card-text>
           <v-btn class="mx-4" icon>
@@ -55,5 +55,8 @@ export default {
 .v-btn a:hover {
   text-decoration: none;
   color: #e63946;
+}
+.footer{
+  height: 10vh;
 }
 </style>

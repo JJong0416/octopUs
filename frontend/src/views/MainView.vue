@@ -1,5 +1,6 @@
 <template>
   <div>
+    <header-view></header-view>
     <v-container class="mainwrap">
       <v-row>
         <v-col class="logo-img-wrapper">
@@ -70,15 +71,23 @@
         <v-col cols="3"> <v-btn color="warning" @click="moveNew()">more</v-btn></v-col>
       </v-row>
     </v-container>
+      <footer-view></footer-view>
   </div>
+
 </template>
 
 <script>
 import { mapState } from "vuex";
 import axios from "axios";
+import HeaderView from "../components/common/HeaderView.vue";
+import FooterView from "../components/common/FooterView.vue";
 const memberStore = "memberStore";
 
 export default {
+  components:{
+    HeaderView,
+    FooterView,
+  },
   data: () => ({
     hotmissions: [],
     newmissions: [],

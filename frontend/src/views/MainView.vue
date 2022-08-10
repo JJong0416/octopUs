@@ -32,10 +32,10 @@
             hide-delimiters
             show-arrows-on-hover
           >
-            <v-carousel-item v-for="(slide, i) in slides" :key="i">
+            <v-carousel-item v-for="(hotmission, i) in hotmissions" :key="i">
               <v-sheet height="100%">
                 <v-row class="fill-height" align="center" justify="center">
-                  <div class="text-h4">{{ slide }}</div>
+                  <div class="text-h4">{{ hotmission.missionTitle }}</div>
                 </v-row>
               </v-sheet>
             </v-carousel-item>
@@ -57,10 +57,10 @@
             hide-delimiters
             show-arrows-on-hover
           >
-            <v-carousel-item v-for="(slide, i) in slides" :key="i">
+            <v-carousel-item v-for="(newmission, i) in newmissions" :key="i">
               <v-sheet height="100%">
                 <v-row class="fill-height" align="center" justify="center">
-                  <div class="text-h4">{{ slide }}</div>
+                  <div class="text-h4">{{ newmission.missionTitle }}</div>
                 </v-row>
               </v-sheet>
             </v-carousel-item>
@@ -75,10 +75,13 @@
 
 <script>
 import { mapState } from "vuex";
+import axios from "axios";
 const memberStore = "memberStore";
 
 export default {
   data: () => ({
+    hotmissions: [],
+    newmissions: [],
     items: ["코드 입력", "제목 검색", "테마 검색"],
     slides: ["First", "Second", "Third", "Fourth", "Fifth"],
   }),
@@ -93,7 +96,42 @@ export default {
     moveNew(){
       this.$router.push('/hotnew')
     }
-  }
+  },
+  created() {
+    var vm = this;
+    // new mission
+    axios
+      .get(`api/mission/new`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        vm.newmissions = response.data;
+        console.log("들어온 newmissions : ")
+        console.log(vm.newmissions);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+    // hot mission
+      axios
+      .get(`api/mission/hot`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        vm.hotmissions = response.data;
+        console.log("들어온 hotmissions : ")
+        console.log(vm.hotmissions);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  },
 };
 </script>
 

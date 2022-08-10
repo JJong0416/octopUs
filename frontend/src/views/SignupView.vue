@@ -36,6 +36,7 @@
                 v-model="user.userid"
                 label="userid"
                 required
+                @change="userIdChk=false"
               ></v-text-field>
               중복검사
               <v-icon @click="idcheck">mdi-check-bold</v-icon>
@@ -96,6 +97,7 @@
                 :rules="nameRules"
                 label="NickName"
                 required
+                @change="userNickChk=false"
               ></v-text-field>
               <!-- 닉네임 중복검사 추가 -->
               중복검사
@@ -175,14 +177,14 @@ export default {
 
     // 아바타들
     avatars:[
+      {num:0},
       {num:1},
       {num:2},
-      {num:8},
-      {num:9},
-      {num:10},
-      {num:11},
-      {num:12},
-      {num:13},
+      {num:3},
+      {num:4},
+      {num:5},
+      {num:6},
+      {num:7},
     ],
     
 

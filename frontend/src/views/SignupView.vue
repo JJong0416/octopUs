@@ -337,12 +337,9 @@ export default {
           userAvatar: this.user.avatar,
         })
         .then(({ data }) => {
-          let msg = "등록 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "등록이 완료되었습니다.";
-            console.log(msg);
-          }
           console.log(data);
+          let msg = "등록이 완료되었습니다.";
+          console.log(msg);
           alert(msg);
           this.movePage();
         })
@@ -353,7 +350,7 @@ export default {
         .finally(() => {
           console.log(this.user.userid);
           console.log(this.user.userpwd);
-          console.log(this.user.username);
+          console.log(this.user.usernickname);
         });
     },
     validate() {

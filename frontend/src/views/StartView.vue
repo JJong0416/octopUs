@@ -43,22 +43,22 @@ export default {
 
 <style>
 .start{
-    height: 100%;
+    height: 100vh;
+    background-color: #eefaec;
 }
 .login a {
-  text-decoration: none;
-  color: #143559;
+  text-decoration-line: none;
 }
 .login a:hover {
-  text-decoration: none;
-  color: #143559;
+  text-decoration-line: none;
 }
 .nonejoined a {
-  text-decoration: none;
-  color: #143559;
+  text-decoration-line: none;
 }
 .nonejoined a:hover {
-  text-decoration: none;
-  color: #143559;
+  text-decoration-line: none;
+}
+::v-deep .v-btn__content{
+  color: #143559 !important;
 }
 </style>

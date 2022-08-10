@@ -1,32 +1,35 @@
 <template>
   <div align="center" justify="center">
-    <v-img src="../assets/img/Ocsoon/Character/0.png" width="200px">
-      <v-img src="../assets/img/Ocsoon/Face/0.png"></v-img>
-    </v-img>
+    <v-img :src=avatarPet width="30vh">
+          <v-img :src=avatarColor width="30vh">
+          <v-img :src=avatarFace width="30vh">
+          <v-img :src=avatarHat width="30vh"></v-img></v-img>
+          </v-img>
+      </v-img>
     <v-btn-toggle v-model="toggle_exclusive">
       <v-row>
         <v-col cols="12" sm="6" class="py-1">
-          <v-btn color="#fa183e"/>
-          <v-btn color="#ffbbed"/>
-          <v-btn color="#8500ff"/>
-          <v-btn color="#15ff00"/>
-          <v-btn color="#003fff"/>
-          <v-btn color="#d2a1ff"/>
-          <v-btn color="#b9ffb2"/>
+          <v-btn color="#fa183e" @click="changeColor(0)"/>
+          <v-btn color="#ffbbed" @click="changeColor(1)"/>
+          <v-btn color="#8500ff" @click="changeColor(2)"/>
+          <v-btn color="#15ff00" @click="changeColor(3)"/>
+          <v-btn color="#003fff" @click="changeColor(4)"/>
+          <v-btn color="#d2a1ff" @click="changeColor(5)"/>
+          <v-btn color="#b9ffb2" @click="changeColor(6)"/>
         </v-col>
         <v-col cols="12" sm="6" class="py-1">
-          <v-btn color="#a5bbff"/>
-          <v-btn color="#fff9b5"/>
+          <v-btn color="#a5bbff"  @click="changeColor(7)"/>
+          <v-btn color="#fff9b5"  @click="changeColor(8)"/>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/glitter.jpeg"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/glitter.jpeg" @click="changeColor(9)"></v-img></v-btn>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/cow.jpeg"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/cow.jpeg" @click="changeColor(10)"></v-img></v-btn>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/tiger.jpeg"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/tiger.jpeg" @click="changeColor(11)"></v-img></v-btn>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/universe.jpeg"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/universe.jpeg" @click="changeColor(12)"></v-img></v-btn>
           <v-btn rounded height="48" width="48" >
-          <v-img height="48" width="48" src="../assets/img/Btn/pudding.jpeg"></v-img></v-btn>
+          <v-img height="48" width="48" src="../assets/img/Btn/pudding.jpeg" @click="changeColor(13)"></v-img></v-btn>
         </v-col>
       </v-row>
       <br><br>
@@ -65,8 +68,22 @@ export default {
       tab: null,
       items: ["Face", "Hat", "Pet"],
       text: "items",
+      avatarColor : this.$route.params.avatarColor,
+      avatarFace : this.$route.params.avatarFace,
+      avatarHat : this.$route.params.avatarHat,
+      avatarPet : this.$route.params.avatarPet,
+      color : "",
     };
   },
+  created(){
+    console.log(this.avatarColor, this.avatarFace);
+  },
+  methods :{
+    changeColor(value){
+      console.log(value);
+      this.avatarColor = require("../assets/img/Ocsoon/Character/" + value + ".png");
+    }
+  }
 };
 </script>
 

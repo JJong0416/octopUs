@@ -1,16 +1,22 @@
 <template>
   <v-container class="mypagewrap">
     <v-card style="background-color: #ffdede">
-      <v-img height="250" src="../assets/img/Ocsoon/Character/1.png">
-        <!-- 이미지 수정 버튼 -->
-        <v-row>
+      <v-row>
           <v-col cols="8"></v-col>
           <v-col cols="2">
             <v-btn small class="ma-2" outlined fab color="indigo">
-              <v-icon>mdi-pencil</v-icon>
+  
+              <router-link :to ="{name: 'avatar', params : {avatarColor, avatarFace, avatarHat, avatarPet} }">
+                <v-icon>mdi-pencil</v-icon>
+                </router-link>
             </v-btn></v-col
           >
         </v-row>
+      <v-img :src=avatarPet >
+          <v-img :src=avatarColor>
+          <v-img :src=avatarFace>
+          <v-img :src=avatarHat></v-img></v-img>
+          </v-img>
       </v-img>
       <!-- Nickname -->
       <v-row>
@@ -326,6 +332,10 @@ export default {
       charge: false,
       account: false,
       userInfo: [],
+      avatarColor : "",
+      avatarHat : "",
+      avatarFace : "",
+      avatarPet :"",
       openedMissions: [],
       closedMissions: [],
       Missionheaders: [
@@ -392,6 +402,12 @@ export default {
       .then(function (response) {
         console.log(response);
         vm.userInfo = response.data;
+        vm.userAvatar = vm.userInfo.userAvatar.split(", ");
+        vm.avatarColor = require("../assets/img/Ocsoon/Character/" + vm.userAvatar[0] +".png");
+        vm.avatarFace =  require("../assets/img/Ocsoon/Face/" + vm.userAvatar[1] + ".png");
+        vm.avatarHat =  require("../assets/img/Ocsoon/Hat/" + vm.userAvatar[2] +".png");
+        vm.avatarPet =  require("../assets/img/Ocsoon/Pet/" + vm.userAvatar[3] +".png");
+        console.log(vm.userAvatar);
         // 참여중인 방 정보 받기
         axios
           .get(`api/user/mission/${vm.userInfo.userId}`, {

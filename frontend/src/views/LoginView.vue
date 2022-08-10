@@ -94,10 +94,41 @@
                       ></v-img>
                     </v-card-actions>
                     <v-card-actions>
-                      <v-img
-                        @click="KakaoLogin"
-                        src="../assets/img/Kakao/kakao_login_large_wide.png"
-                      ></v-img>
+                      <v-dialog
+                        transition="dialog-bottom-transition"
+                        max-width="600"
+                        ><template v-slot:activator="{ on, attrs }">
+                          <v-img
+                            @click="KakaoSignup"
+                            v-bind="attrs"
+                            v-on="on"
+                            src="../assets/img/Kakao/kakao_login_large_wide.png"
+                          ></v-img>
+                        </template>
+                        <template v-slot:default="dialog">
+                          <v-card>
+                            <v-toolbar color="primary" dark
+                              >Opening from the bottom</v-toolbar
+                            >
+                            <v-text-field
+                              v-model="usernickname"
+                              :counter="10"
+                              :rules="nameRules"
+                              label="NickName"
+                              required
+                              @change="userNickChk = false"
+                            ></v-text-field>
+                            <!-- 닉네임 중복검사 추가 -->
+                            중복검사
+                            <v-icon @click="nickcheck">mdi-check-bold</v-icon>
+                            <v-card-actions class="justify-end">
+                              <v-btn text @click="dialog.value = false"
+                                >Close</v-btn
+                              >
+                            </v-card-actions>
+                          </v-card>
+                        </template>
+                      </v-dialog>
                     </v-card-actions>
 
                     <!-- 회원가입 -->
@@ -122,6 +153,8 @@ export default {
     return {
       email: "",
       dialog: false,
+      userNickChk: true,
+      usernickname: "",
       user: {
         userId: "",
         userPassword: "",
@@ -132,6 +165,10 @@ export default {
         username: null,
         email: null,
       },
+      nameRules: [
+        (v) => !!v || "Name is required",
+        (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
+      ],
     };
   },
 
@@ -151,6 +188,36 @@ export default {
         alert("로그인 정보가 잘못되었습니다.", { icon: "error" });
       }
     },
+    nickcheck() {
+      axios
+        .get(`api/register/check/nickname/${this.usernickname}`)
+        .then(({ data }) => {
+          let msg = "중복된 닉네임입니다. 다시 입력해주세요";
+          if (data === false) {
+            msg = "사용가능한 닉네임입니다.";
+            this.userNickChk = true;
+            alert(msg);
+            this.KakaoNickname(this.usernickname);
+          } else {
+            this.userNickChk = false;
+            alert(msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("닉네임중복체크에 실패했습니다..");
+        });
+    },
+    KakaoNickname(nickname) {
+      axios
+        .post(`api/~`, { nickname: nickname })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     findPwByEmail() {
       axios
         .post("/api/find-pw", { userEmail: this.email })
@@ -166,6 +233,7 @@ export default {
     signup() {
       this.$router.push({ name: "Signup" });
     },
+    KakaoSignup() {},
     KakaoLogin() {
       console.log(window.Kakao);
       window.Kakao.Auth.login({

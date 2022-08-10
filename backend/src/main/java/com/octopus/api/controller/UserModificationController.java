@@ -1,6 +1,7 @@
 package com.octopus.api.controller;
 
 import com.octopus.api.service.UserModificationService;
+import com.octopus.dto.request.AvatarReq;
 import com.octopus.dto.request.UserUpdateInfoReq;
 import com.octopus.dto.request.UserUpdatePasswordReq;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ public class UserModificationController {
     // 아바타 수정
     @PatchMapping("/avatar")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> modifyAvatar(@RequestBody UserUpdateInfoReq userUpdateInfoReq) {
-        userModificationService.changeUserAvatar(userUpdateInfoReq.getUserAvatar());
+    public ResponseEntity<HttpStatus> modifyAvatar(@RequestBody AvatarReq avatarReq) {
+        userModificationService.changeUserAvatar(avatarReq);
         return ResponseEntity.ok().build();
     }
 

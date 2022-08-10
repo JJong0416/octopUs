@@ -2,6 +2,7 @@ package com.octopus.api.service;
 
 import com.octopus.api.repository.UserRepository;
 import com.octopus.domain.User;
+import com.octopus.dto.request.AvatarReq;
 import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
@@ -18,11 +19,31 @@ public class UserModificationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final Integer changeAvatarPoint = 500;
 
     @Transactional
-    public void changeUserAvatar(String userAvatar) {
+    public void changeUserAvatar(AvatarReq avatarReq) {
         User user = getUserInfo(getCurrentUsername().get());
-        user.updateAvatar(userAvatar);
+        String[] userAvatar = user.getUserAvatar().split(", ");
+
+        boolean isChange = false;
+        if (Integer.parseInt(userAvatar[0]) != avatarReq.getAvatarColor()
+                || Integer.parseInt(userAvatar[1]) != avatarReq.getAvatarFace()
+                || Integer.parseInt(userAvatar[2]) != avatarReq.getAvatarHat()
+                || Integer.parseInt(userAvatar[3]) != avatarReq.getAvatarPet()) {
+            isChange = true;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(avatarReq.getAvatarColor()).append(", ")
+                .append(avatarReq.getAvatarFace()).append(", ")
+                .append(avatarReq.getAvatarHat()).append(", ")
+                .append(avatarReq.getAvatarPet());
+        user.updateAvatar(sb.toString());
+
+        if (isChange) {
+            user.updatePoint(user.getUserPoint() - changeAvatarPoint);
+        }
     }
 
     @Transactional

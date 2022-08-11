@@ -7,32 +7,32 @@
         width="100%"
         class="text-center"
         height="10vh"
-        color="#white"
+        color="#eefaec"
       >
-        <v-card-text>
-          <v-btn class="mx-4" icon>
+        <v-card-text class="px-0">
+          <v-btn class="mx-6" icon>
             <router-link :to="'/main'">
-              <v-icon size="24px"> mdi-home </v-icon></router-link
+              <v-icon size="30px"> mdi-home </v-icon></router-link
             >
           </v-btn>
-          <v-btn class="mx-4" icon>
+          <v-btn class="mx-6" icon>
             <router-link :to="'/hotnew'">
-              <v-icon size="24px"> mdi-fire </v-icon></router-link
+              <v-icon size="30px"> mdi-fire </v-icon></router-link
             >
           </v-btn>
-          <v-btn class="mx-4" icon>
+          <v-btn class="mx-6" icon>
             <router-link :to="'/search'">
-              <v-icon size="24px"> mdi-magnify </v-icon></router-link
+              <v-icon size="30px"> mdi-magnify </v-icon></router-link
             >
           </v-btn>
-          <v-btn v-if="userInfo" class="mx-4" icon>
+          <v-btn v-if="userInfo" class="mx-6" icon>
             <router-link :to="'/mypage'">
-              <v-icon size="24px"> mdi-account </v-icon></router-link
+              <v-icon size="30px"> mdi-account </v-icon></router-link
             >
           </v-btn>
-          <v-btn v-if="!userInfo" class="mx-4" icon>
+          <v-btn v-if="!userInfo" class="mx-6" icon>
             <router-link :to="`/login`">
-              <v-icon size="24px">mdi-login-variant</v-icon>
+              <v-icon size="30px">mdi-login-variant</v-icon>
             </router-link>
           </v-btn>
         </v-card-text>

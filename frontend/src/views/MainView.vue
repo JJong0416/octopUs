@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <header-view></header-view>
     <v-container>
       <v-row class="animate__animated animate__bounce">
@@ -195,5 +195,8 @@ body {
   justify-content: center;
   align-items: center;
   padding: 0;
+}
+.app{
+  background-color: #eefaec;
 }
 </style>

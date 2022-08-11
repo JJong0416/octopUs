@@ -45,8 +45,11 @@
           <!-- 비밀번호 입력, 엿보기 기능 -->
           <v-text-field
           placeholder="비밀번호를 입력하세요"
+          :type="show? 'text':'password'"
+          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
           v-model="user.userPassword"
           @keyup.enter="confirm"
+          @click:append="show = !show"
           ></v-text-field>
       </v-row>
       <!-- 로그인 버튼 -->
@@ -79,6 +82,7 @@ import axios from "axios";
 export default {
     data() {
     return {
+      show : false,
       email: "",
       dialog: false,
       userNickChk: true,

@@ -169,9 +169,12 @@ export default {
           missionContent: this.mission.missionContent,
           missionOpen: this.mission.missionOpen ? 0 : 1,
         })
-        .then(() => {
+        .then((response) => {
           alert("미션 성공여부를 위한 인증시간을 정하면 방이 활성화되요!");
-          // this.$router.push({name="/before" ,params:missionNo});
+          this.$router.push({
+            name: "before",
+            params: { missionNo: response.data },
+          });
         })
         .catch(() => {
           alert("미션생성실패");

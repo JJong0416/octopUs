@@ -34,7 +34,7 @@ public class MissionService {
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
-    public void createMission(MissionCreateReq missionCreateReq) {
+    public Long createMission(MissionCreateReq missionCreateReq) {
         User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(() -> {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
@@ -46,10 +46,10 @@ public class MissionService {
         Mission mission = Mission.createMission()
                 .missionCreateReq(missionCreateReq)
                 .build();
-        missionRepository.save(mission);
+        Mission savedMission = missionRepository.save(mission);
 
         octopusTableRepository.insertToOctopusTable(user.getUserNo(), mission.getMissionNo());
-
+        return savedMission.getMissionNo();
     }
 
     @Transactional(readOnly = true)

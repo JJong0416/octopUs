@@ -23,9 +23,8 @@ public class MissionController {
     // 비활성화 미션 생성
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<HttpStatus> createMission(@Valid @RequestBody MissionCreateReq missionCreateReq) {
-        missionService.createMission(missionCreateReq);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Long> createMission(@Valid @RequestBody MissionCreateReq missionCreateReq) {
+        return new ResponseEntity<>(missionService.createMission(missionCreateReq), HttpStatus.OK);
     }
 
     //new 미션 5개 가져오기

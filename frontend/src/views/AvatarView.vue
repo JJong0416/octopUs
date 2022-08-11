@@ -6,7 +6,10 @@
         <v-btn @click="toOriginal">원래대로</v-btn>
       </v-col>
       <v-col cols="4">
-        <v-btn @click="saveAvatar">저장하기(500p 차감)</v-btn>
+        <v-btn :disabled="(initColor===avatarColor)
+        && (initFace === avatarFace)
+        && (initHat === avatarHat)
+        && (initPet === avatarPet)" @click="saveAvatar">저장하기(500p 차감)</v-btn>
       </v-col>
     </v-row>
     <v-img
@@ -152,18 +155,18 @@ export default {
       (this.avatarFace = this.$route.params.avatarFace),
       (this.avatarHat = this.$route.params.avatarHat),
       (this.avatarPet = this.$route.params.avatarPet),
-      (this.initColor = this.$route.params.avatarColor),
-      (this.initFace = this.$route.params.avatarFace),
-      (this.initHat = this.$route.params.avatarHat),
-      (this.initPet = this.$route.params.avatarPet);
+      (this.initColor = this.avatarColor),
+      (this.initFace = this.avatarFace),
+      (this.initHat = this.avatarHat ),
+      (this.initPet = this.avatarPet);
     console.log(this.avatarColor);
   },
   methods: {
     toOriginal() {
-      (this.avatarColor = this.$route.params.avatarColor),
-        (this.avatarFace = this.$route.params.avatarFace),
-        (this.avatarHat = this.$route.params.avatarHat),
-        (this.avatarPet = this.$route.params.avatarPet);
+      (this.avatarColor = this.initColor),
+        (this.avatarFace = this.initFace),
+        (this.avatarHat = this.initHat),
+        (this.avatarPet = this.initPet);
     },
     changeColor(value) {
       this.avatarColor = value;

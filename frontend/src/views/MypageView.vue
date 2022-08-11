@@ -23,12 +23,83 @@
         <v-col cols="10">
           <v-card-title>{{ userInfo.userNickname }}</v-card-title></v-col
         >
-        <v-col cols="2">
+        <!-- <v-col cols="2">
           <v-btn small class="ma-2">
             <v-icon>mdi-pencil</v-icon>
           </v-btn></v-col
+        > -->
+         <v-col cols="2">
+          <v-form ref="nicknameForm" lazy-validation>
+    <v-dialog 
+      v-model="nicknameDialog"
+      persistent
+      max-width="600px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          dark
+          v-bind="attrs"
+          v-on="on"
+          @click='newNickname = ""'
         >
-      </v-row>
+        <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">Change Nickname</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+
+              <v-text-field
+                v-model = newNickname
+                :counter="10"
+                :rules="nameRules"
+                label="new NickName*"
+                required
+                @change="userNickChk = false"
+                
+              ></v-text-field>
+              <!-- 닉네임 중복검사 추가 -->
+              <span>중복검사
+              <v-icon @click="nickcheck">mdi-check-bold</v-icon></span>
+               </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="nicknameDialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="changeNickname"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+          </v-form>
+    </v-col
+        >
+     </v-row>
+ 
+      
       <!-- id, Email -->
       <v-card-text>
         <div>Id : {{ userInfo.userId }}</div>
@@ -151,9 +222,98 @@
 
       <br />
       비밀번호 수정하기
-      <v-btn small class="ma-2">
+   
+    <v-dialog
+      v-model="passwordDialog"
+      persistent
+      max-width="600px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          small class="ma-2"
+          v-bind="attrs"
+          v-on="on"
+        
+        >
         <v-icon>mdi-pencil</v-icon>
-      </v-btn>
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="text-h5">Change Password</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+              <v-text-field
+                 v-model="currentPassword"
+                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required, rules.min]"
+                :type="show ? 'text' : 'password'"
+                label="Enter current Password*"
+                hint="At least 8 characters"
+                counter
+                @click:append="show = !show"
+              ></v-text-field>
+
+              <v-text-field
+                 v-model="newPassword"
+                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required, rules.min]"
+                :type="show ? 'text' : 'password'"
+                label="Enter new Password*"
+                hint="At least 8 characters"
+                counter
+                @click:append="show = !show"
+              ></v-text-field>
+
+              <v-text-field
+                 v-model="chkPassword"
+                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[rules.required, rules.min]"
+                :type="show ? 'text' : 'password'"
+                label="Enter new Password Again*"
+                hint="At least 8 characters"
+                counter
+                @click:append="show = !show"
+              ></v-text-field>
+
+              <h6 v-if="sameChk(chkPassword)" class="mb-5 teal--text accent-3">
+                Please create the two passwords identical.
+              </h6>
+              <h6 v-else class="mb-5 red--text lighten-2">
+                Please create the two passwords identical.
+              </h6>
+               </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="passwordDialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="changePassword"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  
       <v-divider class="mx-4"></v-divider>
       <br />
       <v-data-table
@@ -331,6 +491,26 @@ export default {
       kakaopay: false,
       charge: false,
       account: false,
+      nicknameDialog : false,
+      passwordDialog : false,
+      userNickChk : false,
+      userNickValid : false,
+      currentPassword : "",
+      newPassword : "",
+      newNickname : "",
+      show: false,
+      chkPassword: "",
+      passwordValid :"",
+      nameRules: [
+      (v) => !!v || "Name is required",
+      (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
+      (v) => (v && v.length >= 4) || "Name must be at least 4 characters",
+     
+      ],
+      rules: {
+      required: (value) => !!value || "Required.",
+      min: (v) => v.length >= 8 || "Min 8 characters",
+    },
       userInfo: [],
       avatarColor : 0,
       avatarHat : 0,
@@ -357,6 +537,13 @@ export default {
   },
 
   methods: {
+    sameChk(password) {
+      if (this.newPassword == password) return true;
+      else {
+        this.passwordValid = false;
+        return false;
+      }
+    },
     getColor(point) {
       if (point > 400) return "red";
       else if (point > 200) return "orange";
@@ -386,6 +573,80 @@ export default {
           console.log(err);
         });
     },
+   
+    nickcheck() {
+      const validate = this.$refs.nicknameForm.validate();
+      if(validate){
+      axios
+        .get(`api/register/check/nickname/${this.userInfo.usernickname}`)
+        .then(({ data }) => {
+          let msg = "중복된 닉네임입니다. 다시 입력해주세요";
+          if (data === false) {
+            msg = "사용가능한 닉네임입니다.";
+            this.userNickChk = true;
+            alert(msg);
+          } else {
+            this.userNickChk = false;
+            alert(msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("닉네임중복체크에 실패했습니다..");
+        });
+      }else{
+        alert("닉네임이 유효하지 않습니다.")
+      }
+    },
+    changeNickname(){
+      const userNickname = this.newNickname;
+      if(this.userNickChk && this.newNickname.length!=0){
+        axios
+        .patch(`api/user/modification/nickname`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        userNickname
+      })
+        .then(() => {
+          alert("닉네임 변경에 성공했습니다.")
+         this.userInfo.userNickname = userNickname
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("닉네임 변경에 실패했습니다.")
+        })
+        this.nicknameDialog = false;
+       // this.$router.push("main");
+      }else{
+        alert("닉네임이 유효하지 않습니다.")
+      }
+    },
+    changePassword(){
+      if(this.newPassword === this.chkPassword){
+const UserUpdatePasswordReq = {
+        currentPassword : this.currentPassword,
+        newPassword : this.newPassword
+      }
+      axios
+        .patch(`api/user/modification/password`, UserUpdatePasswordReq
+        )
+        .then(() => {
+          alert("비밀번호 변경에 성공했습니다.")
+         
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("비밀번호 변경에 실패했습니다.")
+        })
+       this.passwordDialog = false;
+       this.$router.push("main");
+    }else{
+      alert("새로운 비밀번호가 일치하지 않습니다.")
+    }
+      }
+      
   },
   created() {
     var vm = this;

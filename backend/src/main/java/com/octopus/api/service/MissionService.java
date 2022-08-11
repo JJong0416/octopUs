@@ -55,14 +55,7 @@ public class MissionService {
     public List<MissionListDto> getAllMissions() {
         List<Mission> missions  = missionRepository.findByMissionStatusAndMissionOpen(MissionStatus.OPEN, MissionOpenType.OPEN_ROOM);
 
-        return missions.stream().map(mission -> MissionListDto.builder()
-                .missionNo(mission.getMissionNo())
-                .missionCode(mission.getMissionCode())
-                .missionTitle(mission.getMissionTitle())
-                .missionLeaderId(mission.getMissionLeaderId())
-                .missionContent(mission.getMissionContent())
-                .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).get().getUserAvatar())
-                .build()).collect(Collectors.toList());
+        return changeMissionListToMissionListDtoList(missions);
 
     }
     @Transactional(readOnly = true)
@@ -72,14 +65,7 @@ public class MissionService {
                 MissionStatus.OPEN,
                 MissionOpenType.OPEN_ROOM
         );
-        return missions.stream().map(mission -> MissionListDto.builder()
-                .missionNo(mission.getMissionNo())
-                .missionCode(mission.getMissionCode())
-                .missionTitle(mission.getMissionTitle())
-                .missionLeaderId(mission.getMissionLeaderId())
-                .missionContent(mission.getMissionContent())
-                .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).get().getUserAvatar())
-                .build()).collect(Collectors.toList());
+        return changeMissionListToMissionListDtoList(missions);
     }
 
     @Transactional
@@ -96,11 +82,26 @@ public class MissionService {
                         .missionTitle(mission.getMissionTitle())
                         .missionLeaderId(mission.getMissionLeaderId())
                         .missionContent(mission.getMissionContent())
-                        .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).get().getUserAvatar())
+                        .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).orElseThrow(() -> {
+                            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                        }).getUserAvatar())
                         .build())
                 .collect(Collectors.toList());
 
         return missionList.size() < 5 ? missionList : missionList.subList(0, 5);
+    }
+    @Transactional(readOnly = true)
+    public List<MissionListDto> changeMissionListToMissionListDtoList(List<Mission> missions){
+        return missions.stream().map(mission -> MissionListDto.builder()
+                .missionNo(mission.getMissionNo())
+                .missionCode(mission.getMissionCode())
+                .missionTitle(mission.getMissionTitle())
+                .missionLeaderId(mission.getMissionLeaderId())
+                .missionContent(mission.getMissionContent())
+                .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).orElseThrow(() -> {
+                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                }).getUserAvatar())
+                .build()).collect(Collectors.toList());
     }
 
     Comparator<Mission> missionComparator =

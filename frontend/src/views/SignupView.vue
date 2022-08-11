@@ -83,14 +83,15 @@
     </v-row>
     <v-row>
       <v-col class="py-0" cols="8">
+        <v-form ref="nicknameForm" lazy-validation>
         <!-- nickname input -->
         <v-text-field
           v-model="user.usernickname"
           :counter="10"
           label="닉네임을 입력해주세요."
-          :rules="[rules.required, nameRules]"
+          :rules="nameRules"
           @change="userNickChk = false"
-        ></v-text-field>
+        ></v-text-field></v-form>
       </v-col>
       <v-col cols="4">
         <v-btn class="px-0" @click="nickcheck">중복 검사</v-btn>
@@ -100,21 +101,21 @@
       <h5>옥순이 캐릭터를 골라주세요. 차후 포인트 차감 후 변경 가능합니다.</h5>
     </v-row>
     <v-row justify="center">
-      <v-img max-width="30%" src="../assets/img/Ocsoon/Character/0.png">
+      <v-img max-width="30%" :src="require(`../assets/img/Ocsoon/Character/${this.user.avatar}.png`)">
         <v-img src="../assets/img/Ocsoon/Face/0.png"></v-img>
       </v-img>
     </v-row>
     <v-row justify="center" class="py-0">
-      <v-btn max-height="30" color="#fa183e" />
-      <v-btn max-height="30" color="#ffbbed" />
-      <v-btn max-height="30" color="#ffec00" />
-      <v-btn max-height="30" color="#b9ffb2" />
+      <v-btn max-height="30" color="#fa183e" @click="changeColor(0)"/>
+      <v-btn max-height="30" color="#ffbbed" @click="changeColor(1)"/>
+      <v-btn max-height="30" color="#ffec00" @click="changeColor(2)"/>
+      <v-btn max-height="30" color="#b9ffb2" @click="changeColor(3)"/>
     </v-row>
     <v-row justify="center" class="py-0">
-      <v-btn max-height="30" color="#a5bbff" />
-      <v-btn max-height="30" color="#003fff" />
-      <v-btn max-height="30" color="#d2a1ff" />
-      <v-btn max-height="30" color="#8500ff" />
+      <v-btn max-height="30" color="#a5bbff" @click="changeColor(7)"/>
+      <v-btn max-height="30" color="#003fff" @click="changeColor(4)"/>
+      <v-btn max-height="30" color="#d2a1ff" @click="changeColor(5)"/>
+      <v-btn max-height="30" color="#8500ff" @click="changeColor(6)"/>
     </v-row>
     <v-row>
       <v-col>
@@ -138,7 +139,7 @@ export default {
       userpwd: null,
       usernickname: null,
       email: null,
-      avatar: null,
+      avatar: 0,
     },
     aouthcode: null,
     issendemail: false,
@@ -146,6 +147,7 @@ export default {
     userNickChk: true,
     codeChk: false,
     valid : false,
+    
 
     avatars: [
       { num: 0 },
@@ -161,6 +163,8 @@ export default {
     nameRules: [
       (v) => !!v || "Name is required",
       (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
+      (v) => (v && v.length >= 4) || "Name must be at least 4 characters",
+     
     ],
     isError: false,
     errorMsg: "",
@@ -176,6 +180,9 @@ export default {
     },
   }),
   methods:{
+    changeColor(value) {
+      this.user.avatar= value;
+    },
     goback(){
       this.$router.go(-1);
     },
@@ -206,6 +213,8 @@ export default {
         });
     },
     nickcheck() {
+      const validate = this.$refs.nicknameForm.validate();
+      if(validate){
       axios
         .get(`api/register/check/nickname/${this.user.usernickname}`)
         .then(({ data }) => {
@@ -223,6 +232,9 @@ export default {
           console.log(error);
           alert("닉네임중복체크에 실패했습니다..");
         });
+         }else{
+        alert("닉네임이 유효하지 않습니다.")
+      }
     },
     codecheck() {
       axios

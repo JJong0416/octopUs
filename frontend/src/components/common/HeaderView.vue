@@ -1,30 +1,42 @@
 <template>
-  <div>
+  <div class="header">
     <v-container>
         <v-row>
-            <v-col cols="4">
+            <v-col cols="2">
               <div class="leftbtn">
-                <router-link :to="`/aboutus`">
-                  <v-btn>
-                      AboutUS
+                  <v-btn class="py-7 pl-2" icon>
+                    <router-link :to="'/aboutus'">
+                      <v-icon size="6vh"> mdi-information-outline </v-icon>
+                    </router-link>
                   </v-btn>
-                </router-link>
               </div>
             </v-col>
-            <v-col cols="6">
-                <v-img src="../../assets/Title.png"/>
+            <v-col cols="8">
+                <v-img max-width="90%" src="../../assets/Title.png"/>
             </v-col>
             <v-col cols="2">
+                <!-- 로그인 되어 있으면 -->
                 <div v-if="userInfo" class="rightbtn">
-                    <v-btn @click="onClickLogout">Log OUT</v-btn>
-                    <router-link :to="`/create`">
-                        <v-btn>Create</v-btn>
-                    </router-link>
+                    <!-- 로그아웃 버튼 -->
+                    <v-btn @click="onClickLogout" icon>
+                      <v-icon size="3vh">mdi-logout</v-icon>
+                    </v-btn>
+                    <!-- 방 생성 버튼 -->
+                    <v-btn icon>
+                      <router-link :to="`/create`">
+                        <v-icon size="3vh">mdi-message-plus-outline</v-icon>
+                      </router-link>
+                    </v-btn>
                 </div>
+                <!-- 로그인 안 되어 있으면 -->
                 <div v-if="!userInfo" class="rightbtn">
-                    <router-link :to="`/login`">
-                        <v-btn>LogIN</v-btn>
-                    </router-link>
+                    <!-- 로그인 버튼 -->
+                    <v-btn class="py-7 pr-9" icon>
+                      <router-link :to="`/login`">
+                        <v-icon size="6vh">mdi-login</v-icon>
+                      </router-link>
+                    </v-btn>
+                    
                 </div>
             </v-col>
         </v-row>
@@ -73,5 +85,8 @@ export default {
 .leftbtn a:hover {
   text-decoration: none;
   color: none;
+}
+.header{
+  background-color: #eefaec;
 }
 </style>

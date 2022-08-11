@@ -1,124 +1,83 @@
 <template>
-  <v-app id="app">
-    <v-main>
-      <v-container
-        style="position: relative; top: 20%; margin: 10px"
-        class="text-xs-center"
-      >
-        <v-layout row wrap class="text-xs-center">
-          <v-flex>
-            <v-card flat class="mx-auto" max-width="800">
-              <v-row style="margin-top: 60px">
-                <v-col>
-                  <v-form style="width: 350px; height: 300px">
-                    <div class="mx-3">
-                      <v-icon>mdi-account</v-icon>
-                      Id
-                      <div class="mx-1">
-                        <v-text-field
-                          placeholder="userId"
-                          v-model="user.userId"
-                          required
-                        ></v-text-field>
-                      </div>
-                    </div>
-                    <div class="mx-3">
-                      <v-icon>mdi-lock</v-icon>
-                      Password
-                      <div class="mx-1">
-                        <v-text-field
-                          placeholder="userPassword"
-                          type="password"
-                          v-model="user.userPassword"
-                          required
-                          @keyup.enter="confirm"
-                        ></v-text-field>
-                      </div>
-                      <div class="text-center">
-                        <v-dialog v-model="dialog" width="500">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn v-bind="attrs" v-on="on">
-                              비밀번호 찾기
-                            </v-btn>
-                          </template>
-
-                          <v-card>
-                            <v-card-title class="text-h5 red lighten-2">
-                              이메일을 입력해주세요
-                            </v-card-title>
-                            <v-card-actions>
-                              <v-text-field
-                                v-model="email"
-                                label="Email"
-                                hide-details="auto"
-                              ></v-text-field>
-                            </v-card-actions>
-                            <v-divider></v-divider>
-
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn
-                                color="primary"
-                                dark
-                                @click="findPwByEmail"
-                              >
-                                Send Email
-                              </v-btn>
-                              <v-btn
-                                color="primary"
-                                text
-                                @click="dialog = false"
-                              >
-                                Close
-                              </v-btn>
-                            </v-card-actions>
-                          </v-card>
-                        </v-dialog>
-                      </div>
-                    </div>
-
-                    <v-card-actions>
-                      <v-btn color="#ffadad" dark large block @click="confirm"
-                        >Login</v-btn
-                      >
-                    </v-card-actions>
-                    <v-card-actions>
-                      <v-btn @click="signup" color="#ffadad" dark large block
-                        >Sign Up</v-btn
-                      >
-                    </v-card-actions>
-                    <v-card-actions>
-                      <v-img
-                        @click="KakaoLogin"
-                        src="../assets/img/Kakao/kakaologin.png"
-                      ></v-img>
-                    </v-card-actions>
-                    <v-card-actions>
-                      <v-img
-                        @click="KakaoLogin"
-                        src="../assets/img/Kakao/kakao_login_large_wide.png"
-                      ></v-img>
-                    </v-card-actions>
-
-                    <!-- 회원가입 -->
-                  </v-form>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-main>
-  </v-app>
+  <div>
+    <v-container>
+      <v-row class="py-3">
+        <v-col cols="4">
+          <!-- 뒤로 가기 버튼 -->
+          <v-btn @click="goback" icon>
+            <v-icon> mdi-arrow-left</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="4"></v-col>
+        <v-col cols="4">
+          <!-- 회원 가입 버튼 -->
+          <v-btn @click="signup" color="#ffadad">
+            회원가입
+          </v-btn>
+        </v-col>
+      </v-row>
+      <br><br><br><br>
+      <v-row>
+        <v-col cols="1">
+          <v-icon>mdi-account</v-icon>
+        </v-col>
+        <v-col cols="2">
+          ID
+        </v-col>
+        <v-col cols="9"></v-col>
+      </v-row>
+      <v-row class="px-3 my-0">
+        <v-text-field
+          placeholder="아이디를 입력하세요"
+          v-model="user.userId"
+          ></v-text-field>
+      </v-row>
+      <v-row>
+        <v-col cols="1">
+          <v-icon>mdi-lock</v-icon>
+        </v-col>
+        <v-col cols="2">
+          Password
+        </v-col>
+        <v-col cols="9"></v-col>
+      </v-row>
+      <v-row class="px-3 my-0">
+          <!-- 비밀번호 입력, 엿보기 기능 -->
+          <v-text-field
+          placeholder="비밀번호를 입력하세요"
+          v-model="user.userPassword"
+          @keyup.enter="confirm"
+          ></v-text-field>
+      </v-row>
+      <!-- 로그인 버튼 -->
+      <v-row class="pa-3" justify="center">
+        <v-btn  color="#ffadad" block large @click="confirm">
+          로그인
+        </v-btn>
+      </v-row>
+      <v-row >
+        <v-col class="py-0 pl-3" cols="6">아이디 찾기</v-col>
+        <v-col cols="2"></v-col>
+        <v-col class="py-0" cols="4">비밀번호 찾기</v-col>
+      </v-row>
+      <br><br><br>
+      <!-- 카카오 회원가입 / 카카오 로그인 -->
+      <v-row justify="center" class="py-5">
+        <v-img max-width="90%" @click="KakaoLogin" src="../assets/img/Kakao/kakaostart.png"></v-img>
+      </v-row>
+      <v-row justify="center">
+        <v-img max-width="90%" @click="KakaoLogin" src="../assets/img/Kakao/kakaolog.png"></v-img>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
 import http from "@/utils/http-common.js";
 import axios from "axios";
-
 export default {
-  data() {
+    data() {
     return {
       email: "",
       dialog: false,
@@ -134,11 +93,13 @@ export default {
       },
     };
   },
-
-  computed: {
+    computed: {
     ...mapState("memberStore", ["isLogin", "isLoginError"]),
   },
   methods: {
+    goback(){
+      this.$router.go(-1);
+    },
     ...mapActions("memberStore", ["userConfirm", "getUserInfo"]),
 
     async confirm() {
@@ -229,10 +190,9 @@ export default {
       }
     },
   },
-};
-</script>
-<style>
-#app {
-  height: 90vh;
 }
+</script>
+
+<style>
+
 </style>

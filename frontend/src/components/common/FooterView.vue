@@ -30,6 +30,11 @@
               <v-icon size="24px"> mdi-account </v-icon></router-link
             >
           </v-btn>
+          <v-btn v-if="!userInfo" class="mx-4" icon>
+            <router-link :to="`/login`">
+              <v-icon size="24px">mdi-login-variant</v-icon>
+            </router-link>
+          </v-btn>
         </v-card-text>
       </v-card>
     </v-footer>
@@ -50,11 +55,11 @@ export default {
 <style>
 .v-btn a {
   text-decoration: none;
-  color: #e63946;
+  color: #143559;
 }
 .v-btn a:hover {
   text-decoration: none;
-  color: #e63946;
+  color: #143559;
 }
 .footer{
   height: 10vh;

@@ -9,13 +9,26 @@
         <v-btn @click="saveAvatar">저장하기(500p 차감)</v-btn>
       </v-col>
     </v-row>
-    <v-img :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)" width="30vh">
-          <v-img :src="require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)" width="30vh">
-          <v-img :src="require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)" width="30vh">
-          <v-img :src="require(`../assets/img/Ocsoon/Hat/${this.avatarHat}.png`)" width="30vh"></v-img></v-img>
-          </v-img>
+    <v-img
+      :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
+      width="30vh"
+    >
+      <v-img
+        :src="require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)"
+        width="30vh"
+      >
+        <v-img
+          :src="require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)"
+          width="30vh"
+        >
+          <v-img
+            :src="require(`../assets/img/Ocsoon/Hat/${this.avatarHat}.png`)"
+            width="30vh"
+          ></v-img
+        ></v-img>
       </v-img>
- 
+    </v-img>
+
     <v-btn-toggle v-model="toggle_exclusive">
       <v-row>
         <v-col cols="12" sm="6" class="py-1">
@@ -127,15 +140,23 @@ export default {
       avatarFace: 0,
       avatarHat: 0,
       avatarPet: 0,
-      avatarInfo :[]
+      initColor: 0,
+      initFace: 0,
+      initHat: 0,
+      initPet: 0,
+      avatarInfo: [],
     };
   },
   created() {
     (this.avatarColor = this.$route.params.avatarColor),
       (this.avatarFace = this.$route.params.avatarFace),
       (this.avatarHat = this.$route.params.avatarHat),
-      (this.avatarPet = this.$route.params.avatarPet);
-      console.log(this.avatarColor)
+      (this.avatarPet = this.$route.params.avatarPet),
+      (this.initColor = this.$route.params.avatarColor),
+      (this.initFace = this.$route.params.avatarFace),
+      (this.initHat = this.$route.params.avatarHat),
+      (this.initPet = this.$route.params.avatarPet);
+    console.log(this.avatarColor);
   },
   methods: {
     toOriginal() {
@@ -157,28 +178,25 @@ export default {
         this.avatarPet = i;
       }
     },
-    saveAvatar(){
-     
-    const avatarReq = {
-      avatarColor : this.avatarColor,
-      avatarFace : this.avatarFace,
-      avatarHat : this.avatarHat,
-      avatarPet : this.avatarPet
-    }
+    saveAvatar() {
+      const avatarReq = {
+        avatarColor: this.avatarColor,
+        avatarFace: this.avatarFace,
+        avatarHat: this.avatarHat,
+        avatarPet: this.avatarPet,
+      };
       axios
-      .patch(`/api/user/modification/avatar`,
-        avatarReq
-      )
-      .then((response) => {
-        console.log(response);
-        alert("아바타 변경이 완료되었습니다.")
-      })
-      .catch(function (err) {
-        alert("포인트가 부족합니다.")
-        console.log(err);
-      });
-      this.$router.push("Mypage")
-    }
+        .patch(`/api/user/modification/avatar`, avatarReq)
+        .then((response) => {
+          console.log(response);
+          alert("아바타 변경이 완료되었습니다.");
+        })
+        .catch(function (err) {
+          alert("포인트가 부족합니다.");
+          console.log(err);
+        });
+      this.$router.push("Mypage");
+    },
   },
 };
 </script>

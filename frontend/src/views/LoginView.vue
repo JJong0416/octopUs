@@ -81,6 +81,8 @@ export default {
     return {
       email: "",
       dialog: false,
+      userNickChk: true,
+      usernickname: "",
       user: {
         userId: "",
         userPassword: "",
@@ -91,6 +93,10 @@ export default {
         username: null,
         email: null,
       },
+      nameRules: [
+        (v) => !!v || "Name is required",
+        (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
+      ],
     };
   },
     computed: {
@@ -112,6 +118,36 @@ export default {
         alert("로그인 정보가 잘못되었습니다.", { icon: "error" });
       }
     },
+    nickcheck() {
+      axios
+        .get(`api/register/check/nickname/${this.usernickname}`)
+        .then(({ data }) => {
+          let msg = "중복된 닉네임입니다. 다시 입력해주세요";
+          if (data === false) {
+            msg = "사용가능한 닉네임입니다.";
+            this.userNickChk = true;
+            alert(msg);
+            this.KakaoNickname(this.usernickname);
+          } else {
+            this.userNickChk = false;
+            alert(msg);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("닉네임중복체크에 실패했습니다..");
+        });
+    },
+    KakaoNickname(nickname) {
+      axios
+        .post(`api/~`, { nickname: nickname })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     findPwByEmail() {
       axios
         .post("/api/find-pw", { userEmail: this.email })
@@ -127,6 +163,7 @@ export default {
     signup() {
       this.$router.push({ name: "Signup" });
     },
+    KakaoSignup() {},
     KakaoLogin() {
       console.log(window.Kakao);
       window.Kakao.Auth.login({

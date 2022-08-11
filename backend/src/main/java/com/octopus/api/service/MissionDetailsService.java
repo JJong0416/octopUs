@@ -32,6 +32,8 @@ public class MissionDetailsService {
 
     private final AuthenticationRepository authenticationRepository;
 
+    private final MissionCalenderService missionCalenderService;
+
     @Transactional
     public void createMissionTime(Long missionNo, MissionTimeReq missionTimeReq) {
 
@@ -68,12 +70,21 @@ public class MissionDetailsService {
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
             throw new UserNotFoundException();
         });
-        StringBuilder sb = new StringBuilder();
-        sb.append(mission.getMissionUsers()).append(", ").append(user.getUserNickname());
-        String newList = sb.toString();
-        mission.updateMissionUsers(newList);
+        if (mission.getMissionStatus().equals(MissionStatus.OPEN)) {
+            List<User> countPerson = octopusTableRepository.findUserByMission(mission);
+            long count = countPerson.stream()
+                    .count();
 
-        octopusTableRepository.insertToOctopusTable(user.getUserNo(), missionNo);
+            if (mission.getMissionLimitPersonnel() > count) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(mission.getMissionUsers()).append(", ").append(user.getUserNickname());
+                String newList = sb.toString();
+                mission.updateMissionUsers(newList);
+                octopusTableRepository.insertToOctopusTable(user.getUserNo(), missionNo);
+            } else
+                throw new CustomException(ErrorCode.MISSION_FULL);
+        }else
+            throw new CustomException(ErrorCode.MISSION_NOT_OPENED);
     }
 
     @Transactional
@@ -90,9 +101,6 @@ public class MissionDetailsService {
 
         if (!checkUserIdEqualLeaderId(mission, loginedUserId))
             throw new CustomException(ErrorCode.ACCESS_NOT_ALLOWED);
-
-        if (!checkMissionStatusIsOPEN(mission))
-            throw new CustomException(ErrorCode.MISSION_NOT_OPENED);
 
         // MissionUser에 userId가 없다면 잘못된 입력
         int nicknameLocation = checkMissionContainsUserNickname(mission, user.getUserNickname());
@@ -214,5 +222,46 @@ public class MissionDetailsService {
         return authenticationReq.getAuthenticationEndTime()
                 .isBefore(authenticationReq.getAuthenticationStartTime()) || authenticationReq.getAuthenticationEndTime()
                 .equals(authenticationReq.getAuthenticationStartTime());
+    }
+
+    @Transactional
+    public void rewardDistribution(Long missionNo) {
+
+        Mission mission = missionRepository.findByMissionNo(missionNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
+
+        if (mission.getMissionStatus() == MissionStatus.CLOSE) {
+            List<String> userList = getMissionUsers(missionNo);
+
+            if (missionCalenderService.getTeamRate(missionNo) == 100.0) {
+                for (String nickname : userList) {
+                    System.out.println("if문, nickname : " + nickname);
+
+                    User user = userRepository.findByUserNickname(nickname).orElseThrow(() -> {
+                        throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                    });
+                    Integer newPoint = (int) Math.round(mission.getMissionPoint() * 1.05);
+                    user.updatePoint(user.getUserPoint() + newPoint);
+                }
+            } else {
+                for (String nickname : userList) {
+                    User user = userRepository.findByUserNickname(nickname).orElseThrow(() -> {
+                        System.out.println("else 문, nickname : " + nickname);
+                        throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                    });
+                    //user의 달성률 가져오기 (user 다시)
+                    Float successRate = missionCalenderService.getUserRate(missionNo, user.getUserId());
+                    //가져온 달성률로 조건문 만들어서 포인트 환급해주기
+                    if (successRate == 100.0) {
+                        user.updatePoint((user.getUserPoint() + mission.getMissionPoint()));
+                    } else if (successRate >= 80.0) {
+                        Integer newPoint = (int) Math.round(mission.getMissionPoint() * 0.8);
+                        user.updatePoint(user.getUserPoint() + newPoint);
+                    }
+
+                }
+            }
+        } else
+            throw new CustomException(ErrorCode.BAD_REQUEST);
     }
 }

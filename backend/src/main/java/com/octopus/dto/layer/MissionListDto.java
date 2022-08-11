@@ -18,10 +18,20 @@ public class MissionListDto {
     @NotNull
     private final String missionTitle;
 
+    private final String missionLeaderAvatar;
+
+    private final String missionLeaderId;
+
+    private final String missionContent;
+
+
     @Builder
-    public MissionListDto(long missionNo, String missionCode, String missionTitle) {
+    public MissionListDto(long missionNo, String missionCode, String missionTitle, String missionLeaderAvatar, String missionLeaderId, String missionContent) {
         this.missionNo = missionNo;
         this.missionCode = missionCode;
         this.missionTitle = missionTitle;
+        this.missionLeaderAvatar = missionLeaderAvatar;
+        this.missionLeaderId = missionLeaderId;
+        this.missionContent = missionContent;
     }
 }

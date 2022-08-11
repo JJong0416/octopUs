@@ -85,6 +85,12 @@ public class MissionDetailsController {
     ) {
         missionDetailsService.deleteUserFromMission(userId, missionNo);
         return ResponseEntity.ok().build();
+    }
 
+    @PatchMapping("/reward")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity distributeReward(@PathVariable Long missionNo){
+        missionDetailsService.rewardDistribution(missionNo);
+        return ResponseEntity.ok().build();
     }
 }

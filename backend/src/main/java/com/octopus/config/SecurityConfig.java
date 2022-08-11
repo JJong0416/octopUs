@@ -49,7 +49,12 @@ public class SecurityConfig {
                 .antMatchers("/api/mission/search/**").permitAll()
                 .antMatchers("/api/email/**").permitAll()
                 .antMatchers("/api/find-pw").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
                 .anyRequest().authenticated()
+
+                .and()
+                .oauth2Login()
+                .defaultSuccessUrl("/")
 
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenProvider));

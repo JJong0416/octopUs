@@ -11,65 +11,60 @@
         <v-col cols="4"></v-col>
         <v-col cols="4">
           <!-- 회원 가입 버튼 -->
-          <v-btn @click="signup" color="#ffadad">
-            회원가입
-          </v-btn>
+          <v-btn @click="signup" color="#ffadad"> 회원가입 </v-btn>
         </v-col>
       </v-row>
-      <br><br><br><br>
+      <br /><br /><br /><br />
       <v-row>
         <v-col cols="1">
           <v-icon>mdi-account</v-icon>
         </v-col>
-        <v-col cols="2">
-          ID
-        </v-col>
+        <v-col cols="2"> ID </v-col>
         <v-col cols="9"></v-col>
       </v-row>
       <v-row class="px-3 my-0">
         <v-text-field
           placeholder="아이디를 입력하세요"
           v-model="user.userId"
-          ></v-text-field>
+        ></v-text-field>
       </v-row>
       <v-row>
         <v-col cols="1">
           <v-icon>mdi-lock</v-icon>
         </v-col>
-        <v-col cols="2">
-          Password
-        </v-col>
+        <v-col cols="2"> Password </v-col>
         <v-col cols="9"></v-col>
       </v-row>
       <v-row class="px-3 my-0">
-          <!-- 비밀번호 입력, 엿보기 기능 -->
-          <v-text-field
+        <!-- 비밀번호 입력, 엿보기 기능 -->
+        <v-text-field
           placeholder="비밀번호를 입력하세요"
-          :type="show? 'text':'password'"
+          :type="show ? 'text' : 'password'"
           :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
           v-model="user.userPassword"
           @keyup.enter="confirm"
           @click:append="show = !show"
-          ></v-text-field>
+        ></v-text-field>
       </v-row>
       <!-- 로그인 버튼 -->
       <v-row class="pa-3" justify="center">
-        <v-btn  color="#ffadad" block large @click="confirm">
-          로그인
-        </v-btn>
+        <v-btn color="#ffadad" block large @click="confirm"> 로그인 </v-btn>
       </v-row>
-      <v-row >
+      <v-row>
         <v-col class="py-0 pl-3" cols="6">아이디 찾기</v-col>
         <v-col cols="2"></v-col>
         <v-col class="py-0" cols="4">비밀번호 찾기</v-col>
       </v-row>
-      <br><br><br>
+      <br /><br /><br />
       <!-- 카카오 회원가입 / 카카오 로그인 -->
       <v-row justify="center" class="py-5">
-        <v-img max-width="90%" @click="KakaoLogin" src="../assets/img/Kakao/kakaostart.png"></v-img>
-      </v-row>
-      <v-row justify="center">
-        <v-img max-width="90%" @click="KakaoLogin" src="../assets/img/Kakao/kakaolog.png"></v-img>
+        <a
+          href="https://kauth.kakao.com/oauth/authorize?client_id=9a4a29dd046d8945a94faa4566beb2f9&redirect_uri=http://localhost:7070/oauth2/code/kakao&response_type=code"
+          ><v-img
+            max-width="90%"
+            src="../assets/img/Kakao/kakaostart.png"
+          ></v-img
+        ></a>
       </v-row>
     </v-container>
   </div>
@@ -80,9 +75,9 @@ import { mapActions, mapState } from "vuex";
 import http from "@/utils/http-common.js";
 import axios from "axios";
 export default {
-    data() {
+  data() {
     return {
-      show : false,
+      show: false,
       email: "",
       dialog: false,
       userNickChk: true,
@@ -103,11 +98,27 @@ export default {
       ],
     };
   },
-    computed: {
+  computed: {
     ...mapState("memberStore", ["isLogin", "isLoginError"]),
   },
   methods: {
-    goback(){
+    KakaoLogin() {
+      axios
+        .get(
+          "https://kauth.kakao.com/oauth/authorize?client_id=9a4a29dd046d8945a94faa4566beb2f9&redirect_uri=http://localhost:7070/oauth2/code/kakao&response_type=code"
+        )
+        .then((response) => {
+          console.log("토큰");
+          console.log(response);
+          console.log("카카오 로그인 서버에 전송 성공");
+          var url = response.data;
+          location.href = url;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    goback() {
       this.$router.go(-1);
     },
     ...mapActions("memberStore", ["userConfirm", "getUserInfo"]),
@@ -168,7 +179,7 @@ export default {
       this.$router.push({ name: "Signup" });
     },
     KakaoSignup() {},
-    KakaoLogin() {
+    KakaoLogin2() {
       console.log(window.Kakao);
       window.Kakao.Auth.login({
         scope: "account_email, gender, profile_nickname",
@@ -231,9 +242,7 @@ export default {
       }
     },
   },
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

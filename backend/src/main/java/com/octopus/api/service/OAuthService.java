@@ -52,7 +52,6 @@ public class OAuthService {
         String userId = String.valueOf(kakaoProfile.getId());
         String userEmail = kakaoProfile.getKakao_account().getEmail();
 
-        System.out.println(kakaoProfile.toString());
         // 존재한다면 LoginReq로 반환해준다
         Optional<User> kakaoUser = findKakaoUser(userId);
         if (kakaoUser.isPresent()) {
@@ -71,7 +70,7 @@ public class OAuthService {
         userSignUpReq.setPlatformType(PlatformType.KAKAO);
         userRegisterService.signup(userSignUpReq);
 
-        return new LoginReq(userSignUpReq.getUserId(), userSignUpReq.getUserPassword());
+        return new LoginReq(userSignUpReq.getUserId(), userEmail);
     }
 
 

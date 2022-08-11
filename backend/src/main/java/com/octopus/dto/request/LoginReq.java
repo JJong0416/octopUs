@@ -1,12 +1,13 @@
 package com.octopus.dto.request;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Getter
+@Getter @ToString
 public class LoginReq {
 
     @Pattern(regexp = "[a-z0-9]{6,15}")

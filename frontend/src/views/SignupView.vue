@@ -1,160 +1,139 @@
 <template>
+<div>
   <v-container>
-    <v-layout align-center row wrap>
-      <v-flex xs12>
-        <v-alert v-if="isError" type="error">
-          {{ errorMsg }}
-        </v-alert>
-        <v-card>
-          <v-toolbar flat color="indigo">
-            <v-toolbar-title
-              ><span class="white--text">회원가입</span></v-toolbar-title
-            >
-          </v-toolbar>
-          <div class="pa-5">
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field
-                v-model="user.email"
-                :rules="emailRules"
-                label="Enter E-mail"
-                required
-              ></v-text-field>
-              인증번호 전송
-              <v-icon @click="sendemail">mdi-check-bold</v-icon>
-              <!-- 이메일 인증 내용 추가 위치 -->
-              <div v-if="issendemail">
-                <v-text-field
-                  v-model="aouthcode"
-                  label="인증번호 입력"
-                  required
-                ></v-text-field>
-                인증번호 확인
-                <v-icon @click="codecheck">mdi-check-bold</v-icon>
-              </div>
-              <!--  -->
-              <v-text-field
-                v-model="user.userid"
-                label="userid"
-                required
-                @change="userIdChk = false"
-              ></v-text-field>
-              중복검사
-              <v-icon @click="idcheck">mdi-check-bold</v-icon>
-
-              <!-- 아바타 선택 화면 변경 -->
-              <!-- <v-text-field
-                v-model="user.avatar"
-                label="Avatar"
-                required
-              ></v-text-field> -->
-              <br />
-              <br />
-              아바타선택
-              <v-container class="pa-4 text-center">
-                <v-row class="fill-height" align="center" justify="center">
-                  <template v-for="(avatar, i) in avatars">
-                    <v-col :key="i" cols="3" md="4">
-                      <v-hover v-slot="{ hover }">
-                        <v-card
-                          :elevation="hover ? 12 : 2"
-                          :class="{ 'on-hover': hover }"
-                          @click="setavater(avatars[i].num)"
-                        >
-                          <v-img
-                            :src="
-                              require(`@/assets/img/Ocsoon/Character/${avatars[i].num}.png`)
-                            "
-                            height="55px"
-                            width="55px"
-                            object-fit="cover"
-                          >
-                            <v-img
-                              src="../assets/img/Ocsoon/Face/0.png"
-                              height="55px"
-                              width="55px"
-                              object-fit="cover"
-                            ></v-img>
-                          </v-img>
-                        </v-card>
-                      </v-hover>
-                    </v-col>
-                  </template>
-                </v-row>
-              </v-container>
-
-              <!--  -->
-              <v-text-field
-                v-model="user.usernickname"
-                :counter="10"
-                :rules="nameRules"
-                label="NickName"
-                required
-                @change="userNickChk = false"
-              ></v-text-field>
-              <!-- 닉네임 중복검사 추가 -->
-              중복검사
-              <v-icon @click="nickcheck">mdi-check-bold</v-icon>
-
-              <v-text-field
-                v-model="user.userpwd"
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required, rules.min]"
-                :type="show ? 'text' : 'password'"
-                label="Enter Password"
-                hint="At least 8 characters"
-                counter
-                @click:append="show = !show"
-              ></v-text-field>
-
-              <v-text-field
-                v-model="chkPassword"
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required, rules.min]"
-                :type="show ? 'text' : 'password'"
-                label="Enter Password Again"
-                hint="At least 8 characters"
-                counter
-                @click:append="show = !show"
-              ></v-text-field>
-
-              <h6 v-if="sameChk(chkPassword)" class="mb-5 teal--text accent-3">
-                Please create the two passwords identical.
-              </h6>
-              <h6 v-else class="mb-5 red--text lighten-2">
-                Please create the two passwords identical.
-              </h6>
-
-              <div class="mt-3 d-flex flex-row-reverse">
-                <v-btn color="error" class="mr-4" @click="reset"> 리셋 </v-btn>
-
-                <v-btn
-                  :disabled="!valid"
-                  color="blue"
-                  class="mr-4"
-                  @click="register()"
-                >
-                  회원가입
-                </v-btn>
-              </div>
-            </v-form>
-          </div>
-        </v-card>
-      </v-flex>
-    </v-layout>
+    <v-row class="py-3">
+      <v-col cols="4">
+        <!-- 뒤로 가기 버튼 -->
+        <v-btn @click="goback" icon>
+          <v-icon> mdi-arrow-left</v-icon>
+        </v-btn>
+      </v-col>
+      <v-col cols="3"></v-col>
+      <v-col cols="5">
+        <!-- 회원 가입 버튼 -->
+        <v-btn outlined @click="login" color="#143559">
+          로그인하러 가기
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row class="pl-3">
+      <h4>이메일을 통해 본인임을 인증합니다.</h4>
+    </v-row>
+    <v-row>
+      <v-col class="py-0 pr-3" cols="9">
+        <v-text-field
+          v-model="user.email"
+          :rules="[rules.required,emailRules]"
+          label="사용가능한 이메일을 입력해주세요."
+        ></v-text-field>
+      </v-col>
+      <v-col class="px-0" cols="3">
+        <v-btn class="px-0" @click="sendemail">인증하기</v-btn>
+      </v-col>
+    </v-row>
+    <!-- email 인증 추가하기 -->
+    <v-row>
+      <v-col class="py-0" cols="8">
+        <!-- id input -->
+        <v-text-field
+          v-model="user.userid"
+          label="아이디를 입력해주세요."
+          :rules="[rules.required]"
+          @change="userIdChk = false"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-btn class="px-0" @click="idcheck">중복 검사</v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="py-0">
+        <!-- password input -->
+        <v-text-field
+          v-model="user.userpwd"
+          :append-icon="show? 'mdi-eye' : 'mdi-eye-off'"
+          :rules="[rules.required, rules.min]"
+          :type="show? 'text' : 'password'"
+          label="비밀번호를 설정해주세요."
+          hint="8자 이상 입력하세요"
+          @click:append="show = !show"
+          counter
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col class="py-0">
+        <!-- password input again -->
+        <v-text-field
+          v-model="chkPassword"
+          :append-icon="show? 'mdi-eye' : 'mdi-eye-off'"
+          :rules="[rules.required, rules.min]"
+          :type="show? 'text' : 'password'"
+          label="비밀번호를 다시 한 번 입력해주세요."
+          hint="8자 이상 입력하세요"
+          @click:append="show = !show"
+          counter
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <h5 v-if="!sameChk(chkPassword)" class="pink--text">
+        비밀번호가 같지 않습니다. 다시 한 번 확인해주세요.
+      </h5>
+    </v-row>
+    <v-row>
+      <v-col class="py-0" cols="8">
+        <!-- nickname input -->
+        <v-text-field
+          v-model="user.usernickname"
+          :counter="10"
+          label="닉네임을 입력해주세요."
+          :rules="[rules.required, nameRules]"
+          @change="userNickChk = false"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="4">
+        <v-btn class="px-0" @click="nickcheck">중복 검사</v-btn>
+      </v-col>
+    </v-row>
+    <v-row justify="center">
+      <h5>옥순이 캐릭터를 골라주세요. 차후 포인트 차감 후 변경 가능합니다.</h5>
+    </v-row>
+    <v-row justify="center">
+      <v-img max-width="30%" src="../assets/img/Ocsoon/Character/0.png">
+        <v-img src="../assets/img/Ocsoon/Face/0.png"></v-img>
+      </v-img>
+    </v-row>
+    <v-row justify="center" class="py-0">
+      <v-btn max-height="30" color="#fa183e" />
+      <v-btn max-height="30" color="#ffbbed" />
+      <v-btn max-height="30" color="#ffec00" />
+      <v-btn max-height="30" color="#b9ffb2" />
+    </v-row>
+    <v-row justify="center" class="py-0">
+      <v-btn max-height="30" color="#a5bbff" />
+      <v-btn max-height="30" color="#003fff" />
+      <v-btn max-height="30" color="#d2a1ff" />
+      <v-btn max-height="30" color="#8500ff" />
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-btn outlined color="red">Reset</v-btn>
+      </v-col>
+      <v-col></v-col>
+      <v-col>
+        <v-btn color="#ffadad">회원가입하기</v-btn>
+      </v-col>
+    </v-row>
   </v-container>
+</div>
 </template>
 
 <script>
 import axios from "axios";
-// import { apiInstance } from "../api/index.js";
-
-// import http from "../utils/http-common.js";
-
-// const api = apiInstance();
-
 export default {
-  data: () => ({
-    user: {
+  data:()=>({
+    user:{
       userid: null,
       userpwd: null,
       usernickname: null,
@@ -166,8 +145,8 @@ export default {
     userIdChk: true,
     userNickChk: true,
     codeChk: false,
+    valid : false,
 
-    // 아바타들
     avatars: [
       { num: 0 },
       { num: 1 },
@@ -179,7 +158,6 @@ export default {
       { num: 7 },
     ],
 
-    valid: false,
     nameRules: [
       (v) => !!v || "Name is required",
       (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
@@ -197,7 +175,13 @@ export default {
       min: (v) => v.length >= 8 || "Min 8 characters",
     },
   }),
-  methods: {
+  methods:{
+    goback(){
+      this.$router.go(-1);
+    },
+    login(){
+      this.$router.push({ name: "Login" });
+    },
     idcheck() {
       axios
         .get(`api/register/check/id/${this.user.userid}`)
@@ -240,7 +224,6 @@ export default {
           alert("닉네임중복체크에 실패했습니다..");
         });
     },
-    //  인증코드 전송
     codecheck() {
       axios
         .post(`api/email/check`, {
@@ -267,7 +250,6 @@ export default {
           console.log(this.user.userid);
         });
     },
-    //  이메일 전송
     sendemail() {
       axios
         .post(`api/email`, {
@@ -292,7 +274,6 @@ export default {
     movePage() {
       this.$router.push({ name: "Login" });
     },
-
     goToMain() {
       this.$router.push({
         name: "MainView",
@@ -356,12 +337,10 @@ export default {
       this.user.avatar = i;
       console.log(this.user.avatar);
     },
-  },
-};
+  }
+}
 </script>
 
-<style scoped>
-.v-card:not(.on-hover) {
-  opacity: 0.8;
-}
+<style>
+
 </style>

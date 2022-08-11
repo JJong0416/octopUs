@@ -52,6 +52,45 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+      <!-- all missions -->
+      <v-sheet class="mx-auto" elevation="8" max-width="800">
+        <v-slide-group v-model="model" class="pa-4" show-arrows>
+          <v-slide-item
+            v-for="(item, index) in allmissions"
+            :key="index"
+            v-slot="{ active, toggle }"
+          >
+            <v-card
+              :color="active ? 'warning' : 'amber'"
+              class="ma-4"
+              height="200"
+              width="200"
+              @click="toggle"
+            >
+              <v-card-title v-if="!active"
+                ><h2>{{ item.missionTitle }}</h2></v-card-title
+              >
+              <v-card-text v-if="!active"
+                ><h3>{{ item.missionLeaderId }}의 미션</h3></v-card-text
+              >
+              <v-row class="fill-height" align="center" justify="center">
+                <v-scale-transition>
+                  <v-button
+                    v-if="active"
+                    @click="beforeJoinCheck(item.missionNo)"
+                  >
+                    <v-icon
+                      color="white"
+                      size="48"
+                      v-text="'mdi-location-enter'"
+                    ></v-icon>
+                  </v-button>
+                </v-scale-transition>
+              </v-row>
+            </v-card>
+          </v-slide-item>
+        </v-slide-group>
+      </v-sheet>
 
       <!-- hot,new -->
       <v-carousel
@@ -114,6 +153,7 @@ export default {
   // data 속성 전체 코드
   data() {
     return {
+      model: null,
       colors: [
         "indigo",
         "warning",
@@ -131,6 +171,7 @@ export default {
       items: ["코드", "제목", "테마"],
       hotmissions: [],
       newmissions: [],
+      allmissions: [],
       searchres: [],
       headers: [
         {
@@ -146,6 +187,21 @@ export default {
   },
   created() {
     var vm = this;
+    axios
+      .get(`api/mission/all`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+        vm.allmissions = response.data;
+        console.log("미션전부받아오기 성공");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     axios
       .get(`api/mission/new`, {
         headers: {
@@ -193,7 +249,7 @@ export default {
       .then(function (response) {
         console.log(response);
 
-        console.log("유저 ID를 저장성송");
+        console.log("유저 ID를 저장성공");
 
         vm.userId = response.data.userId;
         console.log(vm.userId);

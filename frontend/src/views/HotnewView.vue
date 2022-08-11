@@ -24,17 +24,33 @@
                     {{ newmission.missionTitle }}
                   </v-list-item-title>
                   <v-list-item-subtitle
-                    >{{
-                      newmission.missionContent
-                    }}
-                    missionContent</v-list-item-subtitle
-                  >
+                    >{{ newmission.missionContent }}
+                  </v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-list-item-avatar
-                  tile
-                  size="80"
-                  color="grey"
+                <v-list-item-avatar tile size="80">
+                  <v-img
+                    :src="
+                      require(`../assets/img/Ocsoon/Pet/${newavatars[i][3]}.png`)
+                    "
+                  >
+                    <v-img
+                      :src="
+                        require(`../assets/img/Ocsoon/Character/${newavatars[i][0]}.png`)
+                      "
+                    >
+                      <v-img
+                        :src="
+                          require(`../assets/img/Ocsoon/Face/${newavatars[i][1]}.png`)
+                        "
+                      >
+                        <v-img
+                          :src="
+                            require(`../assets/img/Ocsoon/Hat/${newavatars[i][2]}.png`)
+                          "
+                        ></v-img
+                      ></v-img>
+                    </v-img> </v-img
                 ></v-list-item-avatar>
               </v-list-item>
 
@@ -80,17 +96,33 @@
                     {{ hotmission.missionTitle }}
                   </v-list-item-title>
                   <v-list-item-subtitle
-                    >{{
-                      hotmission.missionContent
-                    }}
-                    missionContent</v-list-item-subtitle
-                  >
+                    >{{ hotmission.missionContent }}
+                  </v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-list-item-avatar
-                  tile
-                  size="80"
-                  color="grey"
+                <v-list-item-avatar tile size="80">
+                  <v-img
+                    :src="
+                      require(`../assets/img/Ocsoon/Pet/${hotavatars[i][3]}.png`)
+                    "
+                  >
+                    <v-img
+                      :src="
+                        require(`../assets/img/Ocsoon/Character/${hotavatars[i][0]}.png`)
+                      "
+                    >
+                      <v-img
+                        :src="
+                          require(`../assets/img/Ocsoon/Face/${hotavatars[i][1]}.png`)
+                        "
+                      >
+                        <v-img
+                          :src="
+                            require(`../assets/img/Ocsoon/Hat/${hotavatars[i][2]}.png`)
+                          "
+                        ></v-img
+                      ></v-img>
+                    </v-img> </v-img
                 ></v-list-item-avatar>
               </v-list-item>
 
@@ -122,6 +154,8 @@ export default {
     return {
       hotmissions: [],
       newmissions: [],
+      hotavatars: [],
+      newavatars: [],
       headers: [
         {
           text: "missionTitle",
@@ -157,7 +191,19 @@ export default {
 
         console.log(response.data[0]);
         vm.newmissions = response.data;
+        for (let index = 0; index < vm.newmissions.length; index++) {
+          const newmission = vm.newmissions[index];
+          var list = newmission.missionLeaderAvatar.split(", ");
+          var list2 = [];
+          list2[0] = parseInt(list[0]);
+          list2[1] = parseInt(list[1]);
+          list2[2] = parseInt(list[2]);
+          list2[3] = parseInt(list[3]);
+
+          vm.newavatars[index] = list2;
+        }
         console.log(vm.newmissions);
+        console.log(vm.newavatars);
       })
       .catch(function (err) {
         console.log(err);
@@ -174,6 +220,17 @@ export default {
 
         console.log(response.data[0]);
         vm.hotmissions = response.data;
+        for (let index = 0; index < vm.hotmissions.length; index++) {
+          const hotmission = vm.hotmissions[index];
+          var list = hotmission.missionLeaderAvatar.split(", ");
+          var list2 = [];
+          list2[0] = parseInt(list[0]);
+          list2[1] = parseInt(list[1]);
+          list2[2] = parseInt(list[2]);
+          list2[3] = parseInt(list[3]);
+
+          vm.hotavatars[index] = list2;
+        }
         console.log(vm.hotmissions);
       })
       .catch(function (err) {

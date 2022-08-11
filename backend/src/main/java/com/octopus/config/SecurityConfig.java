@@ -49,6 +49,8 @@ public class SecurityConfig {
                 .antMatchers("/api/mission/search/**").permitAll()
                 .antMatchers("/api/email/**").permitAll()
                 .antMatchers("/api/find-pw").permitAll()
+                .antMatchers("/api/mission/hot").permitAll()
+                .antMatchers("/api/mission/new").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

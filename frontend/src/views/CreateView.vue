@@ -1,66 +1,83 @@
 <template>
   <div>
-    <v-card>
-      <v-container fluid>
-        <v-row align="center">
-          <v-col cols="12">
-            <v-autocomplete
-              v-model="mission.missionType"
-              :items="items"
-              dense
-              chips
-              small-chips
-              label="Solo"
-              multiple
-              solo
-            ></v-autocomplete>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
-    <v-text-field v-model="mission.missionTitle" :rules="rules"></v-text-field>
-    <v-container class="px-0" fluid>
-      <v-checkbox
-        v-model="mission.missionOpen"
-        :label="`공개방 설정 여부: ${mission.missionOpen.toString()}`"
-      ></v-checkbox>
+    <v-container fluid>
+      <v-row align="center">
+        <v-col cols="12">
+          <v-autocomplete
+            v-model="mission.missionType"
+            :items="items"
+            dense
+            chips
+            small-chips
+            label="테마"
+            solo
+            hint="미션과 가장 유사한 주제를 골라주세요!"
+          ></v-autocomplete>
+        </v-col>
+      </v-row>
+      <v-row align="center">
+        <v-col cols="1"></v-col>
+        <v-col cols="8" sm="6">
+          <v-text-field
+            v-model="mission.missionTitle"
+            :rules="rules"
+            label="미션제목을 정해주세요!"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="3">
+          <v-container class="px-0" fluid>
+            <v-checkbox
+              v-model="mission.missionOpen"
+              :label="`공개`"
+            ></v-checkbox>
+          </v-container>
+        </v-col>
+        <v-col cols="1"></v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="1"></v-col>
+        <v-text-field
+          v-model="mission.missionLimitPersonnel"
+          label="최대 참가인원을 정해주세요!"
+          :rules="personrules"
+          type="number"
+          min="1"
+          hide-details="auto"
+          oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
+        ></v-text-field>
+        <v-col cols="1"></v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="1"></v-col>
+        <v-text-field
+          v-model="mission.missionContent"
+          :rules="descriprules"
+          counter
+          maxlength="200"
+          hint="미션에 대한 설명, 달성조건, 사람을 모을 멘트까지!"
+          label="미션에 대해 소개해주세요!"
+        ></v-text-field>
+        <v-col cols="1"></v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="1"></v-col>
+        <v-text-field
+          label="참가 포인트를 숫자로 입력해주세요"
+          :rules="pointrules"
+          type="number"
+          min="1"
+          hide-details="auto"
+          v-model="mission.missionPoint"
+          oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
+        ></v-text-field>
+        <v-col cols="1"></v-col>
+      </v-row>
+      <br />
+      <v-row>
+        <v-col cols="1"></v-col>
+        <v-btn @click="createmission">Create</v-btn>
+      </v-row>
     </v-container>
-    <v-text-field
-      v-model="mission.missionLimitPersonnel"
-      label="인원수를 1~8사이의 숫자로 입력해주세요"
-      :rules="personrules"
-      type="number"
-      min="1"
-      hide-details="auto"
-      oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-    ></v-text-field>
-    <v-form>
-      <v-container>
-        <v-row>
-          <v-col cols="12" sm="6">
-            <v-text-field
-              v-model="mission.missionContent"
-              :rules="descriprules"
-              counter
-              maxlength="25"
-              hint="This field uses maxlength attribute"
-              label="Limit exceeded"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-form>
-    <v-text-field
-      label="참가하기 위한 Point를 숫자로 입력해주세요"
-      :rules="pointrules"
-      type="number"
-      min="1"
-      hide-details="auto"
-      v-model="mission.missionPoint"
-      oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-    ></v-text-field>
-    <br />
-    <v-btn @click="createmission">Create</v-btn>
   </div>
 </template>
 
@@ -69,33 +86,32 @@ import axios from "axios";
 export default {
   data: () => ({
     mission: {
-      // missionType, missionOpen 수정필요
       missionTitle: null,
-      missionType: [],
+      missionType: null,
       missionPoint: null,
       missionLimitPersonnel: null,
       missionContent: null,
-      missionOpen: "OPEN_ROOM",
+      missionOpen: true,
     },
     pointrules: [
-      (value) => !!value || "입력해주세요",
-      (value) => (value && value.length >= 3) || "Min 3 characters",
+      (value) => !!value || "참여 포인트를 입력해주세요",
+      (value) => (value && value.length >= 3) || "최소 100이상이어야 합니다.",
     ],
     personrules: [
-      (value) => !!value || "입력해주세요",
+      (value) => !!value || "숫자로 입력해주세요",
       (value) =>
-        (value && value >= 1 && value <= 8) || "1~8사이의 숫자로 입력해주세요",
+        (value && value >= 2 && value <= 8) || "2~8사이의 숫자로 입력해주세요",
     ],
-    items: ["미라클모닝", "공부", "코딩", "운동", "기타"],
+    items: ["LIFE", "EXERCISE", "STUDY", "MEETING", "기타"],
 
     rules: [
-      (value) => !!value || "제목을 입력해주세요",
-      (value) => (value || "").length <= 20 || "Max 20 characters",
+      (value) => !!value || "미션의 제목을 입력해주세요",
+      (value) => (value || "").length <= 20 || "20자까지 입력가능합니다.",
     ],
     slider: 8,
     title: "Preliminary report",
     description: "이방은 어쩌구 저쩌구 솰라솰라",
-    descriprules: [(v) => v.length <= 25 || "Max 25 characters"],
+    descriprules: [(v) => v.length <= 200 || "200자까지 입력가능합니다."],
   }),
   computed: {
     dateRangeText() {
@@ -121,6 +137,7 @@ export default {
       }
       axios
         .post(`api/mission`, {
+          missionLeaderId: this.userInfo.userId,
           missionTitle: this.mission.missionTitle,
           missionType: this.mission.missionType,
           missionPoint: this.mission.missionPoint,

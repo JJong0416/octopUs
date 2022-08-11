@@ -74,4 +74,5 @@ public class User {
     public void changeNickname(String newNickname) {
         this.userNickname = newNickname;
     }
+    public void updatePoint(Integer newUserPoint) {this.userPoint = newUserPoint;}
 }

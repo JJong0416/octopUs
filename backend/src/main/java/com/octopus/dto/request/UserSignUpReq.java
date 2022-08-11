@@ -42,6 +42,12 @@ public class UserSignUpReq {
         this.userPassword = userPassword;
         this.userEmail = userEmail;
         this.userNickname = userNickname;
-        this.userAvatar = userAvatar;
+        StringBuilder sb = new StringBuilder();
+        sb.append(userAvatar).append(", ")
+                .append(0).append(", ")
+                .append(0).append(", ")
+                .append(0);
+        this.userAvatar = sb.toString();
     }
+
 }

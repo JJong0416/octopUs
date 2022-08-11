@@ -119,7 +119,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-btn outlined color="red">Reset</v-btn>
+        <v-btn outlined @click="reset" color="red">Reset</v-btn>
       </v-col>
       <v-col></v-col>
       <v-col>

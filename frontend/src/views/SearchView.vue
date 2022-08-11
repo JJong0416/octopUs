@@ -1,17 +1,16 @@
 <template>
   <div>
+    <header-view></header-view>
     <v-container>
-      <v-row>
-        <v-col class="logo-img-wrapper">
-          <v-img src="../assets/Logo.png" max-width="30%"></v-img>
-        </v-col>
+      <v-row justify="center">
+          <v-img src="../assets/Logo.png" max-width="25%"></v-img>
       </v-row>
       <!-- 검색창 -->
       <v-row>
-        <v-col cols="4">
+        <v-col class="py-0" cols="4">
           <v-select :items="items" v-model="theme" label="검색 선택"></v-select>
         </v-col>
-        <v-col cols="8">
+        <v-col class="py-0" cols="8">
           <v-text-field
             v-model="tofindsearch"
             @keyup.enter="transmit"
@@ -144,12 +143,19 @@
         </v-carousel-item>
       </v-carousel>
     </v-container>
+    <footer-view></footer-view>
   </div>
 </template>
 
 <script>
+import HeaderView from "../components/common/HeaderView.vue";
+import FooterView from "../components/common/FooterView.vue";
 import axios from "axios";
 export default {
+  components: {
+    HeaderView,
+    FooterView,
+  },
   // data 속성 전체 코드
   data() {
     return {

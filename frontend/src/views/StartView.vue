@@ -19,7 +19,7 @@
         <v-row>
           <v-col class="nonejoined" cols="12">
             <router-link :to="`/main`">
-              <v-btn color="#fdffb6" block large>비회원으로 계속하기</v-btn>
+              <v-btn color="white" block large>비회원으로 계속하기</v-btn>
             </router-link>
           </v-col>
         </v-row>

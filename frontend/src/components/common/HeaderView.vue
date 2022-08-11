@@ -3,28 +3,34 @@
     <v-container>
         <v-row>
             <v-col cols="2">
-              <div class="leftbtn">
-                  <v-btn class="py-7 pl-2" icon>
+              <!-- 로그인 되어 있으면 -->
+              <div v-if="userInfo" class="leftbtn">
+                <!-- 로그아웃 버튼 -->
+                    <v-btn class="py-7 pl-9" @click="onClickLogout" icon>
+                      <v-icon size="6vh">mdi-logout</v-icon>
+                    </v-btn>
+              </div>
+              <!-- 로그인 안 되어 있으면 -->
+              <div v-if="!userInfo" class="leftbtn">
+                  <v-btn class="py-7 pl-9" icon>
                     <router-link :to="'/aboutus'">
                       <v-icon size="6vh"> mdi-information-outline </v-icon>
                     </router-link>
                   </v-btn>
               </div>
             </v-col>
-            <v-col cols="8">
-                <v-img max-width="90%" src="../../assets/Title.png"/>
+            <v-col class="pl-10 py-4" cols="8">
+              <router-link :to="`/main`">
+                <v-img max-width="85%" src="../../assets/Title.png"/>
+                </router-link>
             </v-col>
             <v-col cols="2">
                 <!-- 로그인 되어 있으면 -->
                 <div v-if="userInfo" class="rightbtn">
-                    <!-- 로그아웃 버튼 -->
-                    <v-btn @click="onClickLogout" icon>
-                      <v-icon size="3vh">mdi-logout</v-icon>
-                    </v-btn>
                     <!-- 방 생성 버튼 -->
-                    <v-btn icon>
+                    <v-btn class="py-7 pr-9" icon>
                       <router-link :to="`/create`">
-                        <v-icon size="3vh">mdi-message-plus-outline</v-icon>
+                        <v-icon size="6vh">mdi-message-plus-outline</v-icon>
                       </router-link>
                     </v-btn>
                 </div>

@@ -1,4 +1,6 @@
 <template>
+<div>
+<header-view></header-view>
   <div align="center" justify="center">
     <v-row>
       <v-col cols="8"></v-col>
@@ -124,11 +126,19 @@
       </v-card>
     </template>
   </div>
+  <footer-view></footer-view>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
+import HeaderView from "../components/common/HeaderView.vue";
+import FooterView from "../components/common/FooterView.vue";
 export default {
+  components: {
+    HeaderView,
+    FooterView,
+  },
   data() {
     return {
       toggle_exclusive: 2,

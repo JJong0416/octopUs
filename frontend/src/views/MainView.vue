@@ -4,7 +4,7 @@
     <v-container>
       <v-row class="animate__animated animate__bounce">
         <v-col class="logo-img-wrapper">
-          <v-img
+          <v-img max-width="85%"
             :src="require(`../assets/img/Ocsoon/Pet/${userAvatar[3]}.png`)"
           >
             <v-img
@@ -210,6 +210,6 @@ body {
   padding: 0;
 }
 .app {
-  background-color: #eefaec;
+  background-color: white;
 }
 </style>

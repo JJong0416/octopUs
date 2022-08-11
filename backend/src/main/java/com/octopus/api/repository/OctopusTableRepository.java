@@ -32,6 +32,10 @@ public interface OctopusTableRepository extends JpaRepository<Octopus, OctopusPK
     List<Mission> findMissionByUser(@Param("user") User user);
 
     @Transactional(readOnly = true)
+    @Query("select o.user from Octopus o where o.mission = :mission")
+    List<User> findUserByMission(@Param("mission") Mission mission);
+
+    @Transactional(readOnly = true)
     Optional<List<Octopus>> findOctopusByMission(Mission mission);
     
 }

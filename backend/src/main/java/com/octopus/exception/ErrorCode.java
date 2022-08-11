@@ -1,5 +1,6 @@
 package com.octopus.exception;
 
+import com.sun.net.httpserver.HttpsServer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -9,12 +10,15 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     POINT_LACK_ERROR(HttpStatus.BAD_REQUEST, "사용자의 포인트가 부족합니다."),
+
     //400 BAD_REQUEST: 잘못된 요청
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
-    MISSION_NOT_OPENED(HttpStatus.BAD_REQUEST, "열린 방에서만 강퇴할 수 있습니다."),
+    MISSION_NOT_OPENED(HttpStatus.BAD_REQUEST, "가입이 불가능한 미션입니다."),
 
     PASSWORD_NOT_VALID(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+
+    MISSION_FULL(HttpStatus.BAD_REQUEST, "가입 가능 인원을 초과하여 가입이 불가능합니다"),
 
     //401 UNAUTHORIZED : 권한 없음
     ACCESS_NOT_ALLOWED(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),

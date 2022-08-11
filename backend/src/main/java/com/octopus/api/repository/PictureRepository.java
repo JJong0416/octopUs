@@ -15,4 +15,5 @@ import java.util.Optional;
 public interface PictureRepository extends JpaRepository<Picture, Long> {
 
     Optional<List<Picture>> findPicturesByMissionNoAndUserNo(Mission mission, User user);
+
 }

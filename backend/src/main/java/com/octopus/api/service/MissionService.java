@@ -54,11 +54,12 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public List<MissionListDto> getNewMissions() {
-        return missionRepository.findTop5ByMissionStatusAndMissionOpen(
+        List<MissionListDto> missionListDtos  = missionRepository.findTop5ByMissionStatusAndMissionOpen(
                 Sort.by(Sort.Direction.DESC, "missionNo"),
                 MissionStatus.OPEN,
                 MissionOpenType.OPEN_ROOM
         );
+        return missionListDtos;
     }
 
     @Transactional
@@ -72,7 +73,11 @@ public class MissionService {
                 .map(mission -> MissionListDto.builder()
                         .missionNo(mission.getMissionNo())
                         .missionCode(mission.getMissionCode())
-                        .missionTitle(mission.getMissionTitle()).build())
+                        .missionTitle(mission.getMissionTitle())
+                        .missionLeaderId(mission.getMissionLeaderId())
+                        .missionContent(mission.getMissionContent())
+                        .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).get().getUserAvatar())
+                        .build())
                 .collect(Collectors.toList());
 
         return missionList.size() < 5 ? missionList : missionList.subList(0, 5);

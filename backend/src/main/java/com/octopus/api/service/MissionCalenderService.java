@@ -45,17 +45,46 @@ public class MissionCalenderService {
     @Value("${bucketname}")
     private String bucketName;
 
+    public float getUserRate(Long missionNo, String userId) {
+        Mission mission = getMissionByMissionNo(missionNo);
+        MissionTime missionTime = mission.getMissionTime();
+        User user = getUserByUserId(userId);
+        List<PictureDto> userPicture = getPictureByUserAndMission(mission, user);
+        int totalMissionSize = getTotalMissionAuthenticationCount(missionTime);
+        Float successRate = (float) userPicture.size() / (float) totalMissionSize * 100;
+
+        return successRate;
+    }
+
+    public float getTeamRate(Long missionNo){
+        Mission mission = getMissionByMissionNo(missionNo);
+        MissionTime missionTime = mission.getMissionTime();
+        List<User> joinedMissionUsers = getOctopusByMission(mission).stream()
+                .map(Octopus::getUser)
+                .collect(Collectors.toList());
+        List<CalenderUserInfoRes> calenderUserInfos =
+                getCalenderUserInfos(mission, missionTime, joinedMissionUsers);
+
+        Float successTeamRate = 0.0f;
+        for (CalenderUserInfoRes calenderUserInfo : calenderUserInfos) {
+            successTeamRate += calenderUserInfo.getSuccessUserRate();
+        }
+        successTeamRate = successTeamRate / joinedMissionUsers.size();
+
+        return successTeamRate;
+    }
 
     public CalenderRes getCalenderRes(Long missionNo) {
-
+        List<AuthenticationInfo> authenticationInfos = authenticationRepository.findAuthenticationInfoByMissionNo(missionNo);
         // 1. mission과 해당 미션 Time 가지고 오기
         Mission mission = getMissionByMissionNo(missionNo);
         MissionTime missionTime = mission.getMissionTime();
-        List<AuthenticationInfo> authenticationInfos = authenticationRepository.findAuthenticationInfoByMissionNo(missionNo);
+
         // 2. 해당 미션에 Join된 User 객체들 가져오기
         List<User> joinedMissionUsers = getOctopusByMission(mission).stream()
                 .map(Octopus::getUser)
                 .collect(Collectors.toList());
+
 
         // 3. 그 후, CalenderUserInfos를 가져오기
         List<CalenderUserInfoRes> calenderUserInfos =
@@ -140,7 +169,7 @@ public class MissionCalenderService {
         Picture picture = Picture.createPicture()
                 .missionNo(mission)
                 .userNo(user)
-                .pictureUrl(makeUrl.append("https://storage.googleapㅐis.com/")
+                .pictureUrl(makeUrl.append("https://storage.googleapis.com/")
                         .append(bucketName).append("/")
                         .append(filename).toString())
                 .build();

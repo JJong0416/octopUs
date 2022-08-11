@@ -51,7 +51,20 @@ public class MissionService {
         octopusTableRepository.insertToOctopusTable(user.getUserNo(), mission.getMissionNo());
         return savedMission.getMissionNo();
     }
+    @Transactional(readOnly = true)
+    public List<MissionListDto> getAllMissions() {
+        List<Mission> missions  = missionRepository.findByMissionStatusAndMissionOpen(MissionStatus.OPEN, MissionOpenType.OPEN_ROOM);
+        
+        return missions.stream().map(mission -> MissionListDto.builder()
+                .missionNo(mission.getMissionNo())
+                .missionCode(mission.getMissionCode())
+                .missionTitle(mission.getMissionTitle())
+                .missionLeaderId(mission.getMissionLeaderId())
+                .missionContent(mission.getMissionContent())
+                .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).get().getUserAvatar())
+                .build()).collect(Collectors.toList());
 
+    }
     @Transactional(readOnly = true)
     public List<MissionListDto> getNewMissions() {
         List<MissionListDto> missionListDtos  = missionRepository.findTop5ByMissionStatusAndMissionOpen(

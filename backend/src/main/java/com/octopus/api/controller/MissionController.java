@@ -27,6 +27,8 @@ public class MissionController {
         return new ResponseEntity<>(missionService.createMission(missionCreateReq), HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List> allMissions(){return ResponseEntity.ok(missionService.getAllMissions());}
     //new 미션 5개 가져오기
     @GetMapping("/new")
     public ResponseEntity<List> newMissions() {

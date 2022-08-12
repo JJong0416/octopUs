@@ -4,7 +4,8 @@
     <v-container>
       <v-row class="animate__animated animate__bounce">
         <v-col class="logo-img-wrapper">
-          <v-img max-width="85%"
+          <v-img
+            max-width="85%"
             :src="require(`../assets/img/Ocsoon/Pet/${userAvatar[3]}.png`)"
           >
             <v-img
@@ -97,8 +98,9 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 import axios from "axios";
+import cookie from "vue-cookies";
 import HeaderView from "../components/common/HeaderView.vue";
 import FooterView from "../components/common/FooterView.vue";
 import "animate.css";
@@ -121,6 +123,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
     moveHot() {
       this.$router.push("/hotnew");
     },
@@ -130,6 +133,30 @@ export default {
   },
   created() {
     var vm = this;
+    // kakao login token settings
+    axios
+      .get(`api/login/kakao/${vm.$route.query.code}`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("카카오 로그인 토큰 받아오기 성공");
+        console.log(response);
+        let token = response.data.token;
+        vm.SET_IS_LOGIN(true);
+        vm.SET_USER_INFO(token);
+        cookie.set("token", token);
+        console.log("userInfo : " + vm.userInfo);
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.token}`;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     // new mission
     axios
       .get(`api/mission/new`, {

@@ -3,20 +3,30 @@
     <header-view></header-view>
     <v-container>
       <v-row justify="center">
-          <v-img src="../assets/Logo.png" max-width="25%"></v-img>
+        <v-img src="../assets/Logo.png" max-width="25%"></v-img>
       </v-row>
       <!-- 검색창 -->
       <v-row>
         <v-col class="py-0" cols="4">
           <v-select :items="items" v-model="theme" label="검색 선택"></v-select>
         </v-col>
-        <v-col class="py-0" cols="8">
+        <v-col class="py-0" cols="8" v-if="theme != `테마`">
           <v-text-field
             v-model="tofindsearch"
             @keyup.enter="transmit"
             hide-details
             single-line
           ></v-text-field>
+        </v-col>
+        <v-col class="py-0" cols="8" v-if="theme == `테마`">
+          <v-autocomplete
+            v-model="selectedtheme"
+            :items="themes"
+            dense
+            chips
+            label="Solo"
+            @change="transmit"
+          ></v-autocomplete>
         </v-col>
       </v-row>
 
@@ -170,11 +180,13 @@ export default {
       theme: "",
       show: false,
       tofindsearch: "",
+      selectedtheme: "",
       dialog: false,
       userId: "",
       slides: ["hot", "new", "mission", "is waiting for", "you"],
       searchtype: "",
       items: ["코드", "제목", "테마"],
+      themes: ["생활", "운동", "공부", "모임", "기타"],
       hotmissions: [],
       newmissions: [],
       allmissions: [],
@@ -279,9 +291,28 @@ export default {
       }
       this.serachMission(this.searchtype);
     },
+    changeToType(theme) {
+      var missionType;
+      if (theme === "생활") {
+        missionType = "LIFE";
+      } else if (theme === "운동") {
+        missionType = "EXERCISE";
+      } else if (theme === "공부") {
+        missionType = "STUDY";
+      } else if (theme === "모임") {
+        missionType = "MEETING";
+      } else if (theme === "기타") {
+        missionType = "ELSE";
+      } else {
+        this.$router.push("/search");
+        return;
+      }
+      return missionType;
+    },
     serachMission(search) {
       var vm = this;
-      const find = this.tofindsearch;
+      var find = this.tofindsearch;
+      if (search === "type") find = this.changeToType(vm.selectedtheme);
       axios
         .get(`api/mission/search/${search}/${find}`, {
           headers: {

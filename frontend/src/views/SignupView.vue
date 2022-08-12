@@ -34,7 +34,7 @@
         ></v-text-field>
       </v-col>
       <v-col class="px-0" cols="3">
-        <v-btn class="px-0" @keyup.enter="sendemail" @click="sendemail">인증하기</v-btn>
+        <v-btn class="px-0" @click="sendemail">인증하기</v-btn>
       </v-col>
     </v-row>
     <v-row v-if="issendemail">
@@ -46,7 +46,7 @@
         ></v-text-field>
       </v-col>
       <v-col class="px-0" cols="3">
-        <v-btn class="px-0" @click="codecheck"  @keyup.enter="codecheck">인증번호 확인</v-btn>
+        <v-btn class="px-0" @click="codecheck">인증번호 확인</v-btn>
       </v-col>
     </v-row>
     <!-- email 인증 추가하기 -->
@@ -61,7 +61,7 @@
         ></v-text-field>
       </v-col>
       <v-col cols="4">
-        <v-btn class="px-0"  @keyup.enter="idcheck" @click="idcheck">중복 검사</v-btn>
+        <v-btn class="px-0"  @click="idcheck">중복 검사</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -190,9 +190,13 @@ export default {
     emailRules: [
       (v) => !!v || "E-mail is required",
       (v) => { 
+        if(v){
         const replaceV = v.replace(/(\s*)/g, '')
         const pattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/
-        return pattern.test(replaceV) || 'E-mail must be valid'
+        return pattern.test(replaceV) || 'E-mail must be valid'}
+        else{
+          return !!v || "E-mail is required"
+        }
         },
     ],
     show: false,

@@ -19,12 +19,16 @@
                             </v-list-item>
                             <v-list-item>
                                 <v-list-item-title>
+                                  <router-link :to="`../pointpolicy`">
                                     포인트 정책
+                                  </router-link>
                                 </v-list-item-title>
                             </v-list-item>
                             <v-list-item>
                                 <v-list-item-title>
+                                  <router-link :to="`../privacypolicy`">
                                     개인정보 취급
+                                  </router-link>
                                 </v-list-item-title>
                             </v-list-item>
                             <v-divider></v-divider>

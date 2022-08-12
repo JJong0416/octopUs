@@ -34,7 +34,8 @@
           </v-row>
           <v-card-text>
             Id : {{userInfo.userID}} <br>
-            Email : {{userInfo.userEmail}} <br>
+            Email : {{userInfo.userEmail}} <br><br>
+            <v-divider></v-divider>
             <password-change></password-change>
           </v-card-text>
         </v-card>

@@ -60,7 +60,17 @@ const routes = [
   {
     path: "/aboutus",
     name: "Aboutus",
-    component: () => import("@/views/AboutusView.vue"),
+    component: () => import("@/views/Information/AboutusView.vue"),
+  },
+  {
+    path: "/pointpolicy",
+    name: "Pointpolicy",
+    component: () => import("@/views/Information/PointPolicy.vue"),
+  },
+  {
+    path: "/privacypolicy",
+    name: "Privacypolicy",
+    component: () => import("@/views/Information/PrivacyPolicy.vue"),
   },
   {
     path: "/create",

@@ -121,6 +121,8 @@
                     class="grey lighten-4"
                     @click="changeAvatar(item.kind, i - 1)"
                   ></v-img>
+                 
+                  
                 </v-col>
               </v-row>
             </v-container>
@@ -152,14 +154,14 @@ export default {
         { kind: "Pet", size: 8 },
       ],
       text: "items",
-      avatarColor: 0,
-      avatarFace: 0,
-      avatarHat: 0,
-      avatarPet: 0,
-      initColor: 0,
-      initFace: 0,
-      initHat: 0,
-      initPet: 0,
+      avatarColor: null,
+      avatarFace: null,
+      avatarHat: null,
+      avatarPet: null,
+      initColor: null,
+      initFace: null,
+      initHat: null,
+      initPet: null,
       avatarInfo: [],
     };
   },
@@ -189,31 +191,50 @@ export default {
       if (kind === "Face") {
         this.avatarFace = i;
       } else if (kind === "Hat") {
-        this.avatarHat = i;
+        if(i == 0){
+          this.avatarHat = "0_notting"
+        }else{
+          this.avatarHat = i;
+        }
       } else if (kind === "Pet") {
-        this.avatarPet = i;
+        if(i==0){
+           this.avatarPet = "0_notting"
+        }else{
+           this.avatarPet = i;
+        }
+       
       }
     },
     saveAvatar() {
       if(confirm("아바타 변경시 500포인트가 차감됩니다. 진행하시겠습니까?")){
         console.log("d")
+        var sendAvatarHat = this.avatarHat;
+        var sendAvatarPet = this.avatarPet;
+        if(this.avatarHat == "0_notting"){
+         sendAvatarHat = 0;
+        }
+        if(this.avatarPet == "0_notting"){
+          sendAvatarPet = 0;
+        }
         const avatarReq = {
           avatarColor: this.avatarColor,
           avatarFace: this.avatarFace,
-          avatarHat: this.avatarHat,
-          avatarPet: this.avatarPet,
+          avatarHat: sendAvatarHat,
+          avatarPet: sendAvatarPet ,
         };
         axios
           .patch(`/api/user/modification/avatar`, avatarReq)
           .then((response) => {
             console.log(response);
             alert("아바타 변경이 완료되었습니다.");
+            this.$router.push("Mypage");
           })
           .catch(function (err) {
             alert("포인트가 부족합니다.");
             console.log(err);
+            
           });
-        this.$router.push("Mypage");}
+        }
         
     },
     saveAvatar_not(){

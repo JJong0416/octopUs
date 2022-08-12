@@ -143,6 +143,13 @@ export default {
         vm.avatarFace = parseInt(vm.userAvatar[1]);
         vm.avatarHat = parseInt(vm.userAvatar[2]);
         vm.avatarPet = parseInt(vm.userAvatar[3]);
+         console.log(vm.userAvatar);
+        if(vm.avatarHat == 0){
+          vm.avatarHat = "0_notting"
+        }
+        if(vm.avatarPet == 0){
+          vm.avatarPet = "0_notting"
+        }
         console.log(vm.userAvatar);
         // 참여중인 방 정보 받기
         axios

@@ -103,6 +103,7 @@ const routes = [
     path: "/camera",
     name: "camera",
     component: () => import("@/views/CameraView.vue"),
+    props: true,
   },
   {
     path: "/avatar",

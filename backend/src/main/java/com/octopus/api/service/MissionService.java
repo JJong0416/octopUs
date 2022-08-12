@@ -34,7 +34,7 @@ public class MissionService {
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
-    public void createMission(MissionCreateReq missionCreateReq) {
+    public Long createMission(MissionCreateReq missionCreateReq) {
         User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(() -> {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
@@ -46,20 +46,26 @@ public class MissionService {
         Mission mission = Mission.createMission()
                 .missionCreateReq(missionCreateReq)
                 .build();
-        missionRepository.save(mission);
+        Mission savedMission = missionRepository.save(mission);
 
         octopusTableRepository.insertToOctopusTable(user.getUserNo(), mission.getMissionNo());
+        return savedMission.getMissionNo();
+    }
+    @Transactional(readOnly = true)
+    public List<MissionListDto> getAllMissions() {
+        List<Mission> missions  = missionRepository.findByMissionStatusAndMissionOpen(MissionStatus.OPEN, MissionOpenType.OPEN_ROOM);
+
+        return changeMissionListToMissionListDtoList(missions);
 
     }
-
     @Transactional(readOnly = true)
     public List<MissionListDto> getNewMissions() {
-        List<MissionListDto> missionListDtos  = missionRepository.findTop5ByMissionStatusAndMissionOpen(
+        List<Mission> missions  = missionRepository.findTop5ByMissionStatusAndMissionOpen(
                 Sort.by(Sort.Direction.DESC, "missionNo"),
                 MissionStatus.OPEN,
                 MissionOpenType.OPEN_ROOM
         );
-        return missionListDtos;
+        return changeMissionListToMissionListDtoList(missions);
     }
 
     @Transactional
@@ -76,11 +82,26 @@ public class MissionService {
                         .missionTitle(mission.getMissionTitle())
                         .missionLeaderId(mission.getMissionLeaderId())
                         .missionContent(mission.getMissionContent())
-                        .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).get().getUserAvatar())
+                        .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).orElseThrow(() -> {
+                            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                        }).getUserAvatar())
                         .build())
                 .collect(Collectors.toList());
 
         return missionList.size() < 5 ? missionList : missionList.subList(0, 5);
+    }
+    @Transactional(readOnly = true)
+    public List<MissionListDto> changeMissionListToMissionListDtoList(List<Mission> missions){
+        return missions.stream().map(mission -> MissionListDto.builder()
+                .missionNo(mission.getMissionNo())
+                .missionCode(mission.getMissionCode())
+                .missionTitle(mission.getMissionTitle())
+                .missionLeaderId(mission.getMissionLeaderId())
+                .missionContent(mission.getMissionContent())
+                .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).orElseThrow(() -> {
+                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                }).getUserAvatar())
+                .build()).collect(Collectors.toList());
     }
 
     Comparator<Mission> missionComparator =

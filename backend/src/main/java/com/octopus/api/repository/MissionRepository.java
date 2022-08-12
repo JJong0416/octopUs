@@ -21,7 +21,7 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
 
     Optional<Mission> findByMissionNo(Long missionNo);
 
-    List<MissionListDto> findTop5ByMissionStatusAndMissionOpen(
+    List<Mission> findTop5ByMissionStatusAndMissionOpen(
             Sort sort, MissionStatus missionStatus, MissionOpenType missionOpenType);
 
     Optional<Mission> findMissionByMissionNo(Long missionNo);

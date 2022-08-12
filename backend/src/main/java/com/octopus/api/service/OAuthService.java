@@ -55,13 +55,13 @@ public class OAuthService {
         // 존재한다면 LoginReq로 반환해준다
         Optional<User> kakaoUser = findKakaoUser(userId);
         if (kakaoUser.isPresent()) {
-            return new LoginReq(kakaoUser.get().getUserId(),kakaoUser.get().getUserPassword());
+            return new LoginReq(userId,userId);
         }
 
         // 존재하지 않으면 생성 + 저장 + LoginReq 반환
         UserSignUpReq userSignUpReq = UserSignUpReq.builder()
                 .userId(userId)
-                .userPassword(userEmail)
+                .userPassword(userId)
                 .userEmail(userEmail)
                 .userNickname(createRandomKakaoUserNickname(15L))
                 .userAvatar(createRandomKakaoAvatar())
@@ -70,7 +70,7 @@ public class OAuthService {
         userSignUpReq.setPlatformType(PlatformType.KAKAO);
         userRegisterService.signup(userSignUpReq);
 
-        return new LoginReq(userSignUpReq.getUserId(), userEmail);
+        return new LoginReq(userId, userId);
     }
 
 

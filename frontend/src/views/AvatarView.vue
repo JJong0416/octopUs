@@ -3,15 +3,18 @@
 <header-view></header-view>
   <div align="center" justify="center">
     <v-row>
-      <v-col cols="8"></v-col>
-      <v-col cols="4">
-        <v-btn @click="toOriginal">원래대로</v-btn>
+      
+      <v-col cols="4" style="margin-top:20px">
+       <v-icon large  @click="toOriginal">mdi-refresh</v-icon>
       </v-col>
-      <v-col cols="4">
-        <v-btn :disabled="(initColor===avatarColor)
+      <v-col cols="4"></v-col>
+      <v-col cols="4" style="margin-top:20px">
+        <v-icon large v-if="(initColor===avatarColor)
         && (initFace === avatarFace)
         && (initHat === avatarHat)
-        && (initPet === avatarPet)" @click="saveAvatar">저장하기(500p 차감)</v-btn>
+        && (initPet === avatarPet)" @click="saveAvatar_not" >mdi-check</v-icon>
+      <v-icon large v-else @click="saveAvatar">mdi-check</v-icon>
+       
       </v-col>
     </v-row>
     <v-img
@@ -96,7 +99,7 @@
     <template>
       <v-card color="basil">
         <v-card-title class="text-center justify-center py-6">
-          <h3 class="font-weight-bold basil--text">custom your ocsoon</h3>
+          <h3 class="font-weight-bold basil--text">Custom your Ocsoon</h3>
         </v-card-title>
 
         <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
@@ -192,24 +195,31 @@ export default {
       }
     },
     saveAvatar() {
-      const avatarReq = {
-        avatarColor: this.avatarColor,
-        avatarFace: this.avatarFace,
-        avatarHat: this.avatarHat,
-        avatarPet: this.avatarPet,
-      };
-      axios
-        .patch(`/api/user/modification/avatar`, avatarReq)
-        .then((response) => {
-          console.log(response);
-          alert("아바타 변경이 완료되었습니다.");
-        })
-        .catch(function (err) {
-          alert("포인트가 부족합니다.");
-          console.log(err);
-        });
-      this.$router.push("Mypage");
+      if(confirm("아바타 변경시 500포인트가 차감됩니다. 진행하시겠습니까?")){
+        console.log("d")
+        const avatarReq = {
+          avatarColor: this.avatarColor,
+          avatarFace: this.avatarFace,
+          avatarHat: this.avatarHat,
+          avatarPet: this.avatarPet,
+        };
+        axios
+          .patch(`/api/user/modification/avatar`, avatarReq)
+          .then((response) => {
+            console.log(response);
+            alert("아바타 변경이 완료되었습니다.");
+          })
+          .catch(function (err) {
+            alert("포인트가 부족합니다.");
+            console.log(err);
+          });
+        this.$router.push("Mypage");}
+        
     },
+    saveAvatar_not(){
+       this.$router.push("Mypage");
+       }
+    
   },
 };
 </script>

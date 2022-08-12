@@ -17,7 +17,37 @@
       <v-card-text>
         <div class="my-4 text-subtitle-1">
           참가자 명단
-          {{ mission.missionUsers }}
+          <v-list>
+            <template v-for="(item, index) in this.missionuser">
+              <v-list-tiem :key="index">
+                <v-dialog v-model="userdialog" width="500">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+                      {{ item }}
+                    </v-btn>
+                  </template>
+
+                  <v-card>
+                    <v-card-title class="text-h5 yellow lighten-2">
+                      정말로 추방하시겠어요?
+                    </v-card-title>
+                    유저정보
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="warning" dark @click="kickOutUser(item)">
+                        강퇴하기
+                      </v-btn>
+                      <v-btn color="primary" text @click="userdialog = false">
+                        close
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-list-tiem>
+            </template>
+          </v-list>
         </div>
       </v-card-text>
       <v-card-title
@@ -173,6 +203,8 @@ export default {
   data: () => ({
     show: false,
     roomNo: "",
+    userdialog: false,
+    missionuser: [],
     picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
@@ -241,6 +273,7 @@ export default {
         console.log(response.data[0]);
         vm.mission = response.data;
         console.log(vm.mission);
+        vm.missionuser = response.data.missionUsers.split(", ");
       })
       .catch(function (err) {
         console.log(err);
@@ -248,6 +281,26 @@ export default {
   },
 
   methods: {
+    previewUser() {
+      axios.get(`api/user/`);
+    },
+    kickOutUser(nickname) {
+      axios
+        .delete(`api/mission/${this.missionNo}/user/유저아이디??유저닉넴??`)
+        .then((respponse) => {
+          console.log(nickname);
+          console.log(respponse);
+          console.log("유저추방성공");
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("본인은 강퇴하실 수 없습니다.");
+        })
+        .finally(() => {
+          console.log(this.roomNo);
+          this.userdialog = false;
+        });
+    },
     sendAuthenInfo() {
       axios
         .post(`api/mission/${this.missionNo}/authentication`, {

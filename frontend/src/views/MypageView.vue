@@ -81,11 +81,11 @@
       </v-row>
       <v-row>
         <!-- 진행중인 mission -->
-        <my-missions></my-missions>
+        <my-missions :missions="openedMissions"></my-missions>
       </v-row>
       <v-row>
         <!-- 도전 종료 mission -->
-        <end-missions></end-missions>
+        <end-missions :missions="closedMissions"></end-missions>
       </v-row>
     </v-container>
     <footer-view></footer-view>
@@ -120,6 +120,8 @@ export default {
       avatarHat: null,
       avatarFace: null,
       avatarPet: null,
+      openedMissions: [],
+      closedMissions: [],
     };
   },
   methods: {},

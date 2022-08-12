@@ -42,6 +42,7 @@ const memberStore = {
             cookie.set("token", token);
             console.log("쿠키가 없는것같기도...");
             console.log("쿠키있나요?" + cookie.isKey("token"));
+            sessionStorage.setItem("token", token);
             commit("SET_IS_LOGIN", true);
             commit("SET_IS_LOGIN_ERROR", false);
             commit("SET_USER_INFO", token);

@@ -127,7 +127,9 @@ export default {
     var vm = this;
     let token = cookie.get("token");
     console.log("쿠키는?" + token);
-
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     axios
       .get(`api/user/info`, {
         headers: {

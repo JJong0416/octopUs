@@ -149,10 +149,10 @@ export default {
         vm.avatarPet = parseInt(vm.userAvatar[3]);
         console.log(vm.userAvatar);
         if (vm.avatarHat == 0) {
-          vm.avatarHat = "0_notting";
+          vm.avatarHat = "0_nothing";
         }
         if (vm.avatarPet == 0) {
-          vm.avatarPet = "0_notting";
+          vm.avatarPet = "0_nothing";
         }
         console.log(vm.userAvatar);
         // 참여중인 방 정보 받기

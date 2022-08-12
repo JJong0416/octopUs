@@ -77,7 +77,9 @@
               @click="toggle"
             >
               <v-card-title v-if="!active"
-                ><h2>{{ item.missionTitle }}</h2></v-card-title
+                ><h2 class="singleLine text-h5" style="width: 150px">
+                  {{ item.missionTitle }}
+                </h2></v-card-title
               >
               <v-card-text v-if="!active"
                 ><h3>{{ item.missionLeaderId }}의 미션</h3></v-card-text
@@ -113,7 +115,7 @@
         <v-carousel-item v-for="(item, i) in hotmissions" :key="i">
           <v-sheet :color="colors[i]" height="100%">
             <v-row class="fill-height" align="center" justify="center">
-              <div class="text-h2">
+              <div class="singleLine text-h3" style="width: 300px">
                 <router-link
                   :to="{
                     name: 'before',
@@ -138,7 +140,7 @@
         <v-carousel-item v-for="(item, i) in newmissions" :key="i">
           <v-sheet :color="colors[i]" height="100%">
             <v-row class="fill-height" align="center" justify="center">
-              <div class="text-h2">
+              <div class="singleLine text-h3" style="width: 300px">
                 <router-link
                   :to="{
                     name: 'before',
@@ -205,6 +207,9 @@ export default {
   },
   created() {
     var vm = this;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     axios
       .get(`api/mission/all`, {
         headers: {

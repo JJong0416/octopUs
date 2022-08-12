@@ -81,11 +81,11 @@
       </v-row>
       <v-row>
         <!-- 진행중인 mission -->
-        <my-missions></my-missions>
+        <my-missions :missions="openedMissions"></my-missions>
       </v-row>
       <v-row>
         <!-- 도전 종료 mission -->
-        <end-missions></end-missions>
+        <end-missions :missions="closedMissions"></end-missions>
       </v-row>
     </v-container>
     <footer-view></footer-view>
@@ -120,6 +120,8 @@ export default {
       avatarHat: null,
       avatarFace: null,
       avatarPet: null,
+      openedMissions: [],
+      closedMissions: [],
     };
   },
   methods: {},
@@ -127,7 +129,9 @@ export default {
     var vm = this;
     let token = cookie.get("token");
     console.log("쿠키는?" + token);
-
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     axios
       .get(`api/user/info`, {
         headers: {
@@ -143,6 +147,13 @@ export default {
         vm.avatarFace = parseInt(vm.userAvatar[1]);
         vm.avatarHat = parseInt(vm.userAvatar[2]);
         vm.avatarPet = parseInt(vm.userAvatar[3]);
+        console.log(vm.userAvatar);
+        if (vm.avatarHat == 0) {
+          vm.avatarHat = "0_notting";
+        }
+        if (vm.avatarPet == 0) {
+          vm.avatarPet = "0_notting";
+        }
         console.log(vm.userAvatar);
         // 참여중인 방 정보 받기
         axios

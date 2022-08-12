@@ -29,10 +29,15 @@
       <!-- 검색창 -->
       <v-row>
         <v-col class="py-0" cols="4">
-          <v-select :items="items" label="검색 선택"></v-select>
+          <v-select :items="items" label="코드입력" disabled></v-select>
         </v-col>
         <v-col class="py-0" cols="8">
-          <v-text-field hide-details single-line></v-text-field>
+          <v-text-field
+            hide-details
+            single-line
+            v-model="tofindsearch"
+            @keyup.enter="transmit"
+          ></v-text-field>
         </v-col>
       </v-row>
 
@@ -66,7 +71,9 @@
             <v-carousel-item v-for="(hotmission, i) in hotmissions" :key="i">
               <v-sheet height="100%">
                 <v-row class="fill-height" align="center" justify="center">
-                  <div class="text-h4">{{ hotmission.missionTitle }}</div>
+                  <div class="singleLine text-h5" style="width: 150px">
+                    {{ hotmission.missionTitle }}
+                  </div>
                 </v-row>
               </v-sheet>
             </v-carousel-item>
@@ -85,7 +92,9 @@
             <v-carousel-item v-for="(newmission, i) in newmissions" :key="i">
               <v-sheet height="100%">
                 <v-row class="fill-height" align="center" justify="center">
-                  <div class="text-h4">{{ newmission.missionTitle }}</div>
+                  <div class="singleLine text-h5" style="width: 150px">
+                    {{ newmission.missionTitle }}
+                  </div>
                 </v-row>
               </v-sheet>
             </v-carousel-item>
@@ -112,9 +121,10 @@ export default {
     FooterView,
   },
   data: () => ({
+    tofindsearch: "",
     hotmissions: [],
     newmissions: [],
-    items: ["코드 입력", "제목 검색", "테마 검색"],
+    items: ["코드"],
     userInfo2: [],
     userAvatar: [0, 0, 0, 0],
   }),
@@ -130,9 +140,42 @@ export default {
     moveNew() {
       this.$router.push("/hotnew");
     },
+    transmit() {
+      if (!this.userInfo) {
+        alert("로그인 후 사용가능합니다.");
+        return;
+      }
+      var vm = this;
+      axios
+        .get(`api/mission/search/code/${vm.tofindsearch}`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+        })
+        .then(function (response) {
+          console.log("여기는 search result");
+          console.log(response);
+          if (!response.data[0]) {
+            alert("존재하지 않거나 참가할 수 없는 방입니다.");
+            return;
+          } else {
+            vm.$router.push({
+              name: "before",
+              params: { missionNo: response.data[0].missionNo },
+            });
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    },
   },
   created() {
     var vm = this;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     // kakao login token settings
     axios
       .get(`api/login/kakao/${vm.$route.query.code}`, {
@@ -142,6 +185,9 @@ export default {
         },
       })
       .then((response) => {
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.token}`;
         console.log("카카오 로그인 토큰 받아오기 성공");
         console.log(response);
         let token = response.data.token;
@@ -149,12 +195,28 @@ export default {
         vm.SET_USER_INFO(token);
         cookie.set("token", token);
         console.log("userInfo : " + vm.userInfo);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${response.data.token}`;
+        sessionStorage.setItem("token", token);
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        axios
+          .get(`api/user/info`, {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+          })
+          .then(function (response) {
+            console.log(response);
+            vm.userInfo2 = response.data;
+            vm.userAvatar = vm.userInfo2.userAvatar.split(", ");
+            console.log(vm.userAvatar);
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
       });
 
     // new mission
@@ -185,23 +247,6 @@ export default {
         vm.hotmissions = response.data;
         console.log("들어온 hotmissions : ");
         console.log(vm.hotmissions);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-
-    axios
-      .get(`api/user/info`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      })
-      .then(function (response) {
-        console.log(response);
-        vm.userInfo2 = response.data;
-        vm.userAvatar = vm.userInfo2.userAvatar.split(", ");
-        console.log(vm.userAvatar);
       })
       .catch(function (err) {
         console.log(err);
@@ -238,5 +283,12 @@ body {
 }
 .app {
   background-color: white;
+}
+
+.singleLine {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: break-word;
 }
 </style>

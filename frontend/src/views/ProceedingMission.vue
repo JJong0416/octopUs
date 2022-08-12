@@ -238,6 +238,9 @@ export default {
   created() {
     var vm = this;
     vm.missionNo = this.$route.params.missionNo;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     axios
       .get(`../api/mission/${this.$route.params.missionNo}`, {
         headers: {

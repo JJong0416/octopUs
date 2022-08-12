@@ -169,6 +169,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data: () => ({
     show: false,
@@ -205,6 +206,11 @@ export default {
       "Party",
     ],
   }),
+  created() {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
+  },
   mounted() {
     this.$refs.calendar.checkChange();
   },

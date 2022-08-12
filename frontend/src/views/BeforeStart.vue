@@ -220,6 +220,9 @@ export default {
     missionNo: { missionNo: String },
   },
   created() {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     var vm = this;
     vm.roomNo = this.$route.params.missionNo;
     console.log("missionNo는 뭘까요?");

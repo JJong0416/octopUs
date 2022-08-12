@@ -1,137 +1,149 @@
 <template>
-<div>
-<header-view></header-view>
-  <div align="center" justify="center">
-    <v-row>
-      
-      <v-col cols="4" style="margin-top:20px">
-       <v-icon large  @click="toOriginal">mdi-refresh</v-icon>
-      </v-col>
-      <v-col cols="4"></v-col>
-      <v-col cols="4" style="margin-top:20px">
-        <v-icon large v-if="(initColor===avatarColor)
-        && (initFace === avatarFace)
-        && (initHat === avatarHat)
-        && (initPet === avatarPet)" @click="saveAvatar_not" >mdi-check</v-icon>
-      <v-icon large v-else @click="saveAvatar">mdi-check</v-icon>
-       
-      </v-col>
-    </v-row>
-    <v-img
-      :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
-      width="30vh"
-    >
+  <div>
+    <header-view></header-view>
+    <div align="center" justify="center">
+      <v-row>
+        <v-col cols="4" style="margin-top: 20px">
+          <v-icon large @click="toOriginal">mdi-refresh</v-icon>
+        </v-col>
+        <v-col cols="4"></v-col>
+        <v-col cols="4" style="margin-top: 20px">
+          <v-icon
+            large
+            v-if="
+              initColor === avatarColor &&
+              initFace === avatarFace &&
+              initHat === avatarHat &&
+              initPet === avatarPet
+            "
+            @click="saveAvatar_not"
+            >mdi-check</v-icon
+          >
+          <v-icon large v-else @click="saveAvatar">mdi-check</v-icon>
+        </v-col>
+      </v-row>
       <v-img
-        :src="require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)"
+        :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
         width="30vh"
       >
         <v-img
-          :src="require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)"
+          :src="
+            require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)
+          "
           width="30vh"
         >
           <v-img
-            :src="require(`../assets/img/Ocsoon/Hat/${this.avatarHat}.png`)"
+            :src="require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)"
             width="30vh"
-          ></v-img
-        ></v-img>
+          >
+            <v-img
+              :src="require(`../assets/img/Ocsoon/Hat/${this.avatarHat}.png`)"
+              width="30vh"
+            ></v-img
+          ></v-img>
+        </v-img>
       </v-img>
-    </v-img>
 
-    <v-btn-toggle v-model="toggle_exclusive">
-      <v-row>
-        <v-col cols="12" sm="6" class="py-1">
-          <v-btn color="#fa183e" @click="changeColor(0)" />
-          <v-btn color="#ffbbed" @click="changeColor(1)" />
-          <v-btn color="#ffec00" @click="changeColor(2)" />
-          <v-btn color="#b9ffb2" @click="changeColor(3)" />
-          <v-btn color="#003fff" @click="changeColor(4)" />
-          <v-btn color="#d2a1ff" @click="changeColor(5)" />
-          <v-btn color="#8500ff" @click="changeColor(6)" />
-        </v-col>
-        <v-col cols="12" sm="6" class="py-1">
-          <v-btn color="#a5bbff" @click="changeColor(7)" />
-          <v-btn color="#fff9b5" @click="changeColor(8)" />
-          <v-btn rounded height="48" width="48">
-            <v-img
-              height="48"
-              width="48"
-              src="../assets/img/Btn/glitter.jpeg"
-              @click="changeColor(9)"
-            ></v-img
-          ></v-btn>
-          <v-btn rounded height="48" width="48">
-            <v-img
-              height="48"
-              width="48"
-              src="../assets/img/Btn/cow.jpeg"
-              @click="changeColor(10)"
-            ></v-img
-          ></v-btn>
-          <v-btn rounded height="48" width="48">
-            <v-img
-              height="48"
-              width="48"
-              src="../assets/img/Btn/tiger.jpeg"
-              @click="changeColor(11)"
-            ></v-img
-          ></v-btn>
-          <v-btn rounded height="48" width="48">
-            <v-img
-              height="48"
-              width="48"
-              src="../assets/img/Btn/universe.jpeg"
-              @click="changeColor(12)"
-            ></v-img
-          ></v-btn>
-          <v-btn rounded height="48" width="48">
-            <v-img
-              height="48"
-              width="48"
-              src="../assets/img/Btn/pudding.jpeg"
-              @click="changeColor(13)"
-            ></v-img
-          ></v-btn>
-        </v-col>
-      </v-row>
-      <br /><br />
-    </v-btn-toggle>
+      <v-btn-toggle v-model="toggle_exclusive">
+        <v-row>
+          <v-col cols="12" sm="6" class="py-1">
+            <v-btn color="#fa183e" @click="changeColor(0)" />
+            <v-btn color="#ffbbed" @click="changeColor(1)" />
+            <v-btn color="#ffec00" @click="changeColor(2)" />
+            <v-btn color="#b9ffb2" @click="changeColor(3)" />
+            <v-btn color="#003fff" @click="changeColor(4)" />
+            <v-btn color="#d2a1ff" @click="changeColor(5)" />
+            <v-btn color="#8500ff" @click="changeColor(6)" />
+          </v-col>
+          <v-col cols="12" sm="6" class="py-1">
+            <v-btn color="#a5bbff" @click="changeColor(7)" />
+            <v-btn color="#fff9b5" @click="changeColor(8)" />
+            <v-btn rounded height="48" width="48">
+              <v-img
+                height="48"
+                width="48"
+                src="../assets/img/Btn/glitter.jpeg"
+                @click="changeColor(9)"
+              ></v-img
+            ></v-btn>
+            <v-btn rounded height="48" width="48">
+              <v-img
+                height="48"
+                width="48"
+                src="../assets/img/Btn/cow.jpeg"
+                @click="changeColor(10)"
+              ></v-img
+            ></v-btn>
+            <v-btn rounded height="48" width="48">
+              <v-img
+                height="48"
+                width="48"
+                src="../assets/img/Btn/tiger.jpeg"
+                @click="changeColor(11)"
+              ></v-img
+            ></v-btn>
+            <v-btn rounded height="48" width="48">
+              <v-img
+                height="48"
+                width="48"
+                src="../assets/img/Btn/universe.jpeg"
+                @click="changeColor(12)"
+              ></v-img
+            ></v-btn>
+            <v-btn rounded height="48" width="48">
+              <v-img
+                height="48"
+                width="48"
+                src="../assets/img/Btn/pudding.jpeg"
+                @click="changeColor(13)"
+              ></v-img
+            ></v-btn>
+          </v-col>
+        </v-row>
+        <br /><br />
+      </v-btn-toggle>
 
-    <template>
-      <v-card color="basil">
-        <v-card-title class="text-center justify-center py-6">
-          <h3 class="font-weight-bold basil--text">Custom your Ocsoon</h3>
-        </v-card-title>
+      <template>
+        <v-card color="basil">
+          <v-card-title class="text-center justify-center py-6">
+            <h3 class="font-weight-bold basil--text">Custom your Ocsoon</h3>
+          </v-card-title>
 
-        <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
-          <v-tab v-for="(item, index) in items" :key="index">
-            {{ item.kind }}
-          </v-tab>
-        </v-tabs>
+          <v-tabs
+            v-model="tab"
+            background-color="transparent"
+            color="basil"
+            grow
+          >
+            <v-tab v-for="(item, index) in items" :key="index">
+              {{ item.kind }}
+            </v-tab>
+          </v-tabs>
 
-        <v-tabs-items v-model="tab">
-          <v-tab-item v-for="(item, index) in items" :key="index">
-            <v-container fluid>
-              <v-row>
-                <v-col v-for="i in item.size" :key="i" cols="3" md="4">
-                  <v-img
-                    :src="
-                      require(`../assets/img/Ocsoon/${item.kind}/${i - 1}.png`)
-                    "
-                    aspect-ratio="1"
-                    class="grey lighten-4"
-                    @click="changeAvatar(item.kind, i - 1)"
-                  ></v-img>
-                 
-                  
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-card>
-    </template>
-  </div>
-  <footer-view></footer-view>
+          <v-tabs-items v-model="tab">
+            <v-tab-item v-for="(item, index) in items" :key="index">
+              <v-container fluid>
+                <v-row>
+                  <v-col v-for="i in item.size" :key="i" cols="3" md="4">
+                    <v-img
+                      :src="
+                        require(`../assets/img/Ocsoon/${item.kind}/${
+                          i - 1
+                        }.png`)
+                      "
+                      aspect-ratio="1"
+                      class="grey lighten-4"
+                      @click="changeAvatar(item.kind, i - 1)"
+                    ></v-img>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-card>
+      </template>
+    </div>
+    <footer-view></footer-view>
   </div>
 </template>
 
@@ -166,13 +178,16 @@ export default {
     };
   },
   created() {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     (this.avatarColor = this.$route.params.avatarColor),
       (this.avatarFace = this.$route.params.avatarFace),
       (this.avatarHat = this.$route.params.avatarHat),
       (this.avatarPet = this.$route.params.avatarPet),
       (this.initColor = this.avatarColor),
       (this.initFace = this.avatarFace),
-      (this.initHat = this.avatarHat ),
+      (this.initHat = this.avatarHat),
       (this.initPet = this.avatarPet);
     console.log(this.avatarColor);
   },
@@ -191,36 +206,35 @@ export default {
       if (kind === "Face") {
         this.avatarFace = i;
       } else if (kind === "Hat") {
-        if(i == 0){
-          this.avatarHat = "0_notting"
-        }else{
+        if (i == 0) {
+          this.avatarHat = "0_notting";
+        } else {
           this.avatarHat = i;
         }
       } else if (kind === "Pet") {
-        if(i==0){
-           this.avatarPet = "0_notting"
-        }else{
-           this.avatarPet = i;
+        if (i == 0) {
+          this.avatarPet = "0_notting";
+        } else {
+          this.avatarPet = i;
         }
-       
       }
     },
     saveAvatar() {
-      if(confirm("아바타 변경시 500포인트가 차감됩니다. 진행하시겠습니까?")){
-        console.log("d")
+      if (confirm("아바타 변경시 500포인트가 차감됩니다. 진행하시겠습니까?")) {
+        console.log("d");
         var sendAvatarHat = this.avatarHat;
         var sendAvatarPet = this.avatarPet;
-        if(this.avatarHat == "0_notting"){
-         sendAvatarHat = 0;
+        if (this.avatarHat == "0_notting") {
+          sendAvatarHat = 0;
         }
-        if(this.avatarPet == "0_notting"){
+        if (this.avatarPet == "0_notting") {
           sendAvatarPet = 0;
         }
         const avatarReq = {
           avatarColor: this.avatarColor,
           avatarFace: this.avatarFace,
           avatarHat: sendAvatarHat,
-          avatarPet: sendAvatarPet ,
+          avatarPet: sendAvatarPet,
         };
         axios
           .patch(`/api/user/modification/avatar`, avatarReq)
@@ -232,15 +246,12 @@ export default {
           .catch(function (err) {
             alert("포인트가 부족합니다.");
             console.log(err);
-            
           });
-        }
-        
+      }
     },
-    saveAvatar_not(){
-       this.$router.push("Mypage");
-       }
-    
+    saveAvatar_not() {
+      this.$router.push("Mypage");
+    },
   },
 };
 </script>

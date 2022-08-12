@@ -66,8 +66,8 @@ export default {
       cookie.remove("token");
       sessionStorage.removeItem("token");
       alert("로그아웃됐습니다");
-      if (this.$route.path != "/") this.$router.push({ name: "MainView" });
       this.drawer = false;
+      window.location.replace("http://localhost:8080");
     },
   },
 };

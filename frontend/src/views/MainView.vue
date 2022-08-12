@@ -181,6 +181,9 @@ export default {
         },
       })
       .then((response) => {
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${response.data.token}`;
         console.log("카카오 로그인 토큰 받아오기 성공");
         console.log(response);
         let token = response.data.token;
@@ -189,12 +192,27 @@ export default {
         cookie.set("token", token);
         console.log("userInfo : " + vm.userInfo);
         sessionStorage.setItem("token", token);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${response.data.token}`;
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        axios
+          .get(`api/user/info`, {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+          })
+          .then(function (response) {
+            console.log(response);
+            vm.userInfo2 = response.data;
+            vm.userAvatar = vm.userInfo2.userAvatar.split(", ");
+            console.log(vm.userAvatar);
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
       });
 
     // new mission
@@ -225,23 +243,6 @@ export default {
         vm.hotmissions = response.data;
         console.log("들어온 hotmissions : ");
         console.log(vm.hotmissions);
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-
-    axios
-      .get(`api/user/info`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      })
-      .then(function (response) {
-        console.log(response);
-        vm.userInfo2 = response.data;
-        vm.userAvatar = vm.userInfo2.userAvatar.split(", ");
-        console.log(vm.userAvatar);
       })
       .catch(function (err) {
         console.log(err);

@@ -205,6 +205,9 @@ export default {
   },
   created() {
     var vm = this;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     axios
       .get(`api/mission/all`, {
         headers: {

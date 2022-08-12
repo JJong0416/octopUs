@@ -6,7 +6,7 @@
             scrollable
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-btn outlined color="#fa183e" v-bind="attrs" v-on="on">환급받기</v-btn>
+              <v-btn color="#D5D5D5" v-bind="attrs" v-on="on" style="padding : 10px 12px 10px 12px; margin-top : 15px">환급</v-btn>
             </template>
             <template v-slot:default="dialog">
               <v-card>

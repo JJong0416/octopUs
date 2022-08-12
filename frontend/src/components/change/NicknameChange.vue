@@ -74,7 +74,7 @@
 <script>
 import axios from "axios";
 export default {
-    date(){
+    data(){
         return{
             nicknameDialog : false,
             newNickname: "",
@@ -96,7 +96,7 @@ export default {
             const validate = this.$refs.nicknameForm.validate();
             if(validate){
             axios
-                .get(`api/register/check/nickname/${this.userInfo.usernickname}`)
+                .get(`api/register/check/nickname/${this.newNickname}`)
                 .then(({ data }) => {
                 let msg = "중복된 닉네임입니다. 다시 입력해주세요";
                 if (data === false) {
@@ -129,7 +129,7 @@ export default {
             })
                 .then(() => {
                 alert("닉네임 변경에 성공했습니다.")
-                this.userInfo.userNickname = userNickname
+                window.location.reload();
                 })
                 .catch((error) => {
                 console.log(error);

@@ -1,10 +1,11 @@
 <template>
   <div>
     <v-dialog v-model="charge" width="500">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="yellow" v-bind="attrs" v-on="on">
-                충전하기
+            <template v-slot:activator="{ on, attrs }"> 
+              <v-btn color="yellow" v-bind="attrs" v-on="on" style="padding : 10px 12px 10px 12px; margin-top : 15px">
+                충전
               </v-btn>
+               
             </template>
 
             <v-card>

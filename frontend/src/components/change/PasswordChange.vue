@@ -6,14 +6,11 @@
       max-width="600px"
     >
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          v-bind="attrs"
+
+        <button  v-bind="attrs"
           v-on="on"
           text
-          class="pa-0"
-        >
-        비밀번호 변경하기
-        </v-btn>
+          class="pa-0" style="color : #1C69C1">비밀번호 수정 ></button>
       </template>
       <v-card>
         <v-card-title>

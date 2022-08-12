@@ -38,7 +38,7 @@
               <v-divider></v-divider>
               <v-list-item>
                 <v-list-item-title>
-                  <v-btn class="pa-0" text> 회원 탈퇴하기 </v-btn>
+                  <user-delete></user-delete>
                 </v-list-item-title>
               </v-list-item>
             </v-list>
@@ -69,8 +69,14 @@
 <script>
 import { mapMutations, mapState } from "vuex";
 import cookie from "vue-cookies";
+import UserDelete from "../change/UserDelete.vue";
+
 const memberStore = "memberStore";
+
 export default {
+  components: {
+    UserDelete
+  },
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
   },

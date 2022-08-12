@@ -2,21 +2,24 @@
   <div>
     <mypage-header></mypage-header>
     <v-container>
+      <br>
+       <v-card >
       <v-row>
+        <v-col cols="3"></v-col>
         <v-col cols="6">
           <!-- my Ocsoon -->
-          <v-img
-            :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
+          <v-img v-if="this.avatarPet!=null"
+            :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)" 
           >
             <v-img
               :src="
                 require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)
-              "
+              " 
             >
               <v-img
                 :src="
                   require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)
-                "
+                " 
               >
                 <v-img
                   :src="
@@ -46,39 +49,57 @@
             </v-img>
           </v-img>
         </v-col>
-        <v-col cols="6">
+        <v-col cols="3"></v-col>
+
+        <v-col cols="2"></v-col>
+        <v-col cols="8" >
           <!-- 개인 정보 카드 -->
-          <v-card height="180">
+         
             <v-row>
-              <v-col class="pl-3">
-                <v-card-title>{{ userInfo.userNickname }}</v-card-title>
+              <v-col class="pl-3"> 
+                <v-card-title style="display: flex; justify-content: center; align-items: center;"><div>{{ userInfo.userNickname }}</div></v-card-title>
               </v-col>
-              <v-col class="px-0">
+              
+            </v-row>
+            
+        </v-col>
+        <v-col class="px-0">
                 <nickname-change></nickname-change>
               </v-col>
-            </v-row>
             <v-card-text>
-              Id : {{ userInfo.userID }} <br />
-              Email : {{ userInfo.userEmail }} <br /><br />
+              <v-row >
+              <v-col cols="1" style="padding :0px"></v-col>
+              <v-col cols="2" style="padding :0px">ID</v-col>
+              <v-col cols="5" style="padding :0px">{{ userInfo.userId }}</v-col>
+              <v-col cols="4" style="padding :0px"> <password-change></password-change></v-col>
+               <v-col cols="1" style="padding :0px"></v-col>
+              <v-col cols="2" style="padding :0px">EMAIL</v-col>
+              <v-col cols="9" style="padding :0px 0px 12px 0px">{{ userInfo.userEmail}}</v-col>
+                   
+               </v-row>
+              <br>
               <v-divider></v-divider>
-              <password-change></password-change>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row class="pr-5">
-        <v-col cols="6">
-          <!-- point -->
-          {{ userInfo.userPoint }} Point
-        </v-col>
-        <v-col cols="3">
+             <v-row >
+               <v-col cols="6">
+                <v-card-title style="padding-bottom : 0px">{{ userInfo.userPoint}}P</v-card-title>
+              </v-col>
+              <v-col cols="3">
           <!-- 충전, 환급 -->
           <charge-point></charge-point>
         </v-col>
-        <v-col class="pl-4" cols="3">
+        <v-col class="pl-4" cols="3" style="padding-left:0px !important">
           <refund-point></refund-point>
         </v-col>
+            </v-row>
+            </v-card-text>
+          
+        <!-- <v-col cols="3"></v-col> -->
       </v-row>
+      </v-card>
+      <br>
+      <br>
+
+      
       <v-row>
         <!-- 진행중인 mission -->
         <my-missions :missions="openedMissions"></my-missions>
@@ -185,4 +206,6 @@ export default {
   },
 };
 </script>
-<style></style>
+<style>
+
+</style>

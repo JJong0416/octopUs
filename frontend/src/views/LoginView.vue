@@ -58,13 +58,11 @@
       <br /><br /><br />
       <!-- 카카오 회원가입 / 카카오 로그인 -->
       <v-row justify="center" class="py-5">
-        <a
-          href="https://kauth.kakao.com/oauth/authorize?client_id=9a4a29dd046d8945a94faa4566beb2f9&redirect_uri=http://localhost:7070/oauth2/code/kakao&response_type=code"
-          ><v-img
-            max-width="90%"
-            src="../assets/img/Kakao/kakaostart.png"
-          ></v-img
-        ></a>
+        <v-img
+          max-width="90%"
+          @click="kakaoLogin"
+          src="../assets/img/Kakao/kakaostart.png"
+        ></v-img>
       </v-row>
     </v-container>
   </div>
@@ -72,7 +70,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import http from "@/utils/http-common.js";
+
 import axios from "axios";
 export default {
   data() {
@@ -102,21 +100,10 @@ export default {
     ...mapState("memberStore", ["isLogin", "isLoginError"]),
   },
   methods: {
-    KakaoLogin() {
-      axios
-        .get(
-          "https://kauth.kakao.com/oauth/authorize?client_id=9a4a29dd046d8945a94faa4566beb2f9&redirect_uri=http://localhost:7070/oauth2/code/kakao&response_type=code"
-        )
-        .then((response) => {
-          console.log("토큰");
-          console.log(response);
-          console.log("카카오 로그인 서버에 전송 성공");
-          var url = response.data;
-          location.href = url;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    kakaoLogin() {
+      window.location.replace(
+        "https://kauth.kakao.com/oauth/authorize?client_id=9a4a29dd046d8945a94faa4566beb2f9&redirect_uri=http://localhost:8080/main&response_type=code"
+      );
     },
     goback() {
       this.$router.go(-1);
@@ -153,16 +140,7 @@ export default {
           alert("닉네임중복체크에 실패했습니다..");
         });
     },
-    KakaoNickname(nickname) {
-      axios
-        .post(`api/~`, { nickname: nickname })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+
     findPwByEmail() {
       axios
         .post("/api/find-pw", { userEmail: this.email })
@@ -177,69 +155,6 @@ export default {
     },
     signup() {
       this.$router.push({ name: "Signup" });
-    },
-    KakaoSignup() {},
-    KakaoLogin2() {
-      console.log(window.Kakao);
-      window.Kakao.Auth.login({
-        scope: "account_email, gender, profile_nickname",
-        success: this.GetMe,
-        fail: function (error) {
-          console.log(error);
-        },
-      });
-    },
-    GetMe(authObj) {
-      console.log(authObj);
-      window.Kakao.API.request({
-        url: "/v2/user/me",
-        success: (res) => {
-          const kakao_account = res.kakao_account;
-          console.log(kakao_account);
-          alert("로그인 성공 !!");
-          console.log(kakao_account);
-          this.login(kakao_account);
-        },
-      });
-    },
-    async login(kakao_account) {
-      const loginuser = {
-        userid: kakao_account.email,
-        userpwd: "kakao",
-        username: kakao_account.profile.nickname,
-        email: kakao_account.email,
-      };
-      http
-        .get("/user/idcheck/" + loginuser.userid)
-        .then(({ data }) => {
-          console.log(data);
-          this.registerKakao(loginuser);
-        })
-        .catch(({ error }) => {
-          console.log(error);
-          this.confirmKakao(loginuser);
-        });
-    },
-    registerKakao(login_user) {
-      http
-        .post("/user/register", login_user)
-        .then(({ data }) => {
-          console.log(data);
-          this.confirmKakao(login_user);
-        })
-        .catch(({ error }) => {
-          console.log(error);
-          this.confirmKakao(login_user);
-        });
-    },
-    async confirmKakao(loginuser) {
-      await this.userConfirm(loginuser);
-      let token = sessionStorage.getItem("access-token");
-
-      if (this.isLogin) {
-        await this.getUserInfo(token);
-        this.$router.push({ name: "MainView" });
-      }
     },
   },
 };

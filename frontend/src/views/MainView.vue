@@ -169,6 +169,9 @@ export default {
   },
   created() {
     var vm = this;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     // kakao login token settings
     axios
       .get(`api/login/kakao/${vm.$route.query.code}`, {
@@ -185,6 +188,7 @@ export default {
         vm.SET_USER_INFO(token);
         cookie.set("token", token);
         console.log("userInfo : " + vm.userInfo);
+        sessionStorage.setItem("token", token);
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${response.data.token}`;

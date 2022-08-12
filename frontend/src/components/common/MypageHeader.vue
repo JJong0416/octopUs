@@ -43,8 +43,10 @@
                         </v-list>
                     </v-menu>
             </v-col>
-            <v-col class="pt-4 pl-14" cols="8">
-                <h1 >My Page</h1>
+            <v-col class="pl-10 py-4" cols="8">
+                <router-link :to="`/main`">
+                <v-img max-width="85%" src="../../assets/Title.png"/>
+                </router-link>
             </v-col>
             <v-col cols="2">
                 <div class="rightbtn">

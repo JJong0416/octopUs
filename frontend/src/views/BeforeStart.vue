@@ -172,7 +172,7 @@ import axios from "axios";
 export default {
   data: () => ({
     show: false,
-
+    roomNo: "",
     picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
@@ -221,7 +221,7 @@ export default {
   },
   created() {
     var vm = this;
-
+    vm.roomNo = this.$route.params.missionNo;
     console.log("missionNo는 뭘까요?");
     console.log("missionNo는 : " + this.$route.params.missionNo);
     axios
@@ -294,7 +294,7 @@ export default {
     movePage() {
       this.$router.push({
         name: "proceeding",
-        params: this.$route.params.missionNo,
+        params: this.roomNo,
       });
     },
   },

@@ -113,9 +113,15 @@
                   </v-toolbar>
                   <v-card-text class="text-center">
                     <div>{{ clickDate }}</div>
-                     {{ pictures.length }} 번 인증하셨습니다.
+                    {{ pictures.length }} 번 인증하셨습니다.
                     <div v-for="index in pictures" :key="index">
-                      <center><v-img :src="index" max-width="30vh"  style="margin-top : 3vh"></v-img></center>
+                      <center>
+                        <v-img
+                          :src="index"
+                          max-width="30vh"
+                          style="margin-top: 3vh"
+                        ></v-img>
+                      </center>
                     </div>
                   </v-card-text>
                   <v-card-actions>
@@ -130,27 +136,40 @@
             </v-sheet>
           </v-col>
         </v-row>
-          <h3>현재 미션 {{weekInProgress}}주차 진행 중</h3>
+        <h3>현재 미션 {{ weekInProgress }}주차 진행 중</h3>
         <v-card-text>
           <h3>팀성공률</h3>
-          <v-progress-linear v-model="missionTeamSuccess" color="pink" height="25" style="pointer-events: none;">
+          <v-progress-linear
+            v-model="missionTeamSuccess"
+            color="pink"
+            height="25"
+            style="pointer-events: none"
+          >
             <template v-slot:default="{ value }">
               <strong>{{ value }}%</strong>
             </template>
           </v-progress-linear>
         </v-card-text>
         <v-card-text v-for="(user, i) in calendarUserInfos" :key="i">
-          <h5>{{user.userNickname}}</h5>
-          <v-progress-linear :value="user.successUserRate" :color="colors[user.userAvatar]" height="25" style="pointer-events: none;">
-           
-              <strong>{{ user.successUserRate }}%</strong>
-       
+          <h5>{{ user.userNickname }}</h5>
+          <v-progress-linear
+            :value="user.successUserRate"
+            :color="colors[user.userAvatar]"
+            height="25"
+            style="pointer-events: none"
+          >
+            <strong>{{ user.successUserRate }}%</strong>
           </v-progress-linear>
         </v-card-text>
       </div>
     </v-expand-transition>
     <div class="text-center">
-      <router-link :to="`/camera`">
+      <router-link
+        :to="{
+          name: 'camera',
+          params: { missionNo: this.missionNo },
+        }"
+      >
         <v-btn v-if="isCurrentUserPicturePost">인증하기</v-btn></router-link
       >
     </div>
@@ -162,6 +181,7 @@ import axios from "axios";
 
 export default {
   data: () => ({
+    missionNo: "",
     missionTitle: "",
     missionContent: "",
     missionCode: "",
@@ -212,11 +232,12 @@ export default {
       "#FFD000",
       "#000F75",
       "#A26057",
-      
     ],
     names: ["Nickname"],
   }),
   created() {
+    var vm = this;
+    vm.missionNo = this.$route.params.missionNo;
     axios
       .get(`../api/mission/${this.$route.params.missionNo}`, {
         headers: {
@@ -262,15 +283,20 @@ export default {
       var vm = this;
       vm.pictureList = {};
       for (let i = 0; i < this.calendarUserInfos.length; i++) {
-        
-        for (let j = 0;j < this.calendarUserInfos[i].userPictures.length;j++ ) {
+        for (
+          let j = 0;
+          j < this.calendarUserInfos[i].userPictures.length;
+          j++
+        ) {
           const nickname = this.calendarUserInfos[i].userNickname;
           const date =
             this.calendarUserInfos[i].userPictures[j].date.split("T")[0];
-          const avatarColor = this.calendarUserInfos[i].userAvatar.split(", ")[0];
+          const avatarColor =
+            this.calendarUserInfos[i].userAvatar.split(", ")[0];
           this.calendarUserInfos[i].userAvatar = avatarColor;
           if (
-            vm.pictureList[nickname + " " + date + " " + avatarColor] == undefined
+            vm.pictureList[nickname + " " + date + " " + avatarColor] ==
+            undefined
           ) {
             vm.pictureList[nickname + " " + date + " " + avatarColor] = [
               this.calendarUserInfos[i].userPictures[j].pictureUrl,
@@ -279,7 +305,8 @@ export default {
             var tempList =
               vm.pictureList[nickname + " " + date + " " + avatarColor];
             tempList.push(this.calendarUserInfos[i].userPictures[j].pictureUrl);
-            vm.pictureList[nickname + " " + date + " " + avatarColor] = tempList;
+            vm.pictureList[nickname + " " + date + " " + avatarColor] =
+              tempList;
           }
         }
       }
@@ -294,7 +321,7 @@ export default {
       }
 
       this.events = events;
-      
+
       this.calendarShow = !this.calendarShow;
     },
     viewDay({ date }) {
@@ -315,11 +342,7 @@ export default {
     },
     showEvent({ nativeEvent, event }) {
       const temp =
-        event.name +
-        " " +
-        event.start +
-        " " +
-        (this.colors.indexOf(event.color));
+        event.name + " " + event.start + " " + this.colors.indexOf(event.color);
 
       const open = () => {
         this.pictures = this.pictureList[temp];

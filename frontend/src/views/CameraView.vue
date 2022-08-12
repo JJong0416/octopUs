@@ -32,12 +32,17 @@ export default {
     WebCam,
   },
   data: () => ({
+    missionNo: "",
     cameraon: true,
     img: null,
     camera: null,
     deviceId: null,
     devices: [],
   }),
+  created() {
+    var vm = this;
+    vm.missionNo = this.$route.params.missionNo;
+  },
   computed: {
     device() {
       return find(this.devices, (n) => n.deviceId == this.deviceId);
@@ -97,7 +102,7 @@ export default {
       const encodedImg = this.img;
       // const api = apiInstance();
       axios
-        .post(`../api/mission/${this.$route.params.missionNo}/picture`, {
+        .post(`../api/mission/${this.missionNo}/picture`, {
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
@@ -109,7 +114,10 @@ export default {
         });
 
       alert("정상적으로 등록되었습니다.");
-      this.$router.push({ name: "proceeding", params: { missionNo: 1 } });
+      this.$router.push({
+        name: "proceeding",
+        params: { missionNo: this.missionNo },
+      });
     },
   },
 };

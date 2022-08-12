@@ -2,11 +2,8 @@ package com.octopus.api.repository;
 
 
 import com.octopus.domain.User;
-import com.octopus.domain.type.MissionOpenType;
-import com.octopus.domain.type.MissionStatus;
-import com.octopus.dto.layer.MissionListDto;
+import com.octopus.domain.type.PlatformType;
 import com.octopus.dto.layer.UserListDto;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +18,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Boolean existsUserByUserId(String userId);
 
     Boolean existsUserByUserNickname(String userNickname);
+
+    Optional<User> findUserByUserIdAndPlatformType(String userId, PlatformType platformType);
 
     Optional<User> findUserByUserEmail(String userEmail);
 

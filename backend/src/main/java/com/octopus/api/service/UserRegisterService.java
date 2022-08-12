@@ -2,6 +2,7 @@ package com.octopus.api.service;
 
 import com.octopus.api.repository.UserRepository;
 import com.octopus.domain.User;
+import com.octopus.domain.type.PlatformType;
 import com.octopus.dto.layer.UserListDto;
 import com.octopus.dto.request.UserSignUpReq;
 import com.octopus.exception.CustomException;
@@ -44,12 +45,16 @@ public class UserRegisterService {
     }
 
     private User createUser(UserSignUpReq userSignUpReq) {
-        return User.signUpBuilder()
-                .userSignUpReq(userSignUpReq)
+        return User.builder()
+                .userId(userSignUpReq.getUserId())
+                .userPassword(userSignUpReq.getUserPassword())
+                .userNickname(userSignUpReq.getUserNickname())
+                .userEmail(userSignUpReq.getUserEmail())
+                .userAvatar(userSignUpReq.getUserAvatar())
+                .userPoint(userSignUpReq.getUserPoint())
+                .platformType(userSignUpReq.getPlatformType())
                 .build();
     }
-
-    /* 카카오 회원가입 */
 
     @Transactional(readOnly = true)
     public boolean isDuplicatedUserId(String id){

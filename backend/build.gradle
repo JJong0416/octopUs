@@ -40,6 +40,8 @@ dependencies {
 	/* TemplateEngine*/
 	implementation group: 'org.thymeleaf', name: 'thymeleaf-spring5', version: '3.0.11.RELEASE'
 
+	/* Oauth2 */
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	/* Mission Code 랜덤생성*/
 	implementation 'org.apache.commons:commons-lang3:3.12.0'

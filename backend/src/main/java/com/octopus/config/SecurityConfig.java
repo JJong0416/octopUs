@@ -4,6 +4,7 @@ import com.octopus.jwt.JwtAccessDeniedHandler;
 import com.octopus.jwt.JwtAuthenticationEntryPoint;
 import com.octopus.jwt.JwtSecurityConfig;
 import com.octopus.jwt.JwtTokenProvider;
+import com.octopus.oauth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -23,6 +24,8 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    private final OAuth2SuccessHandler successHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -52,7 +55,14 @@ public class SecurityConfig {
                 .antMatchers("/api/mission/hot").permitAll()
                 .antMatchers("/api/mission/new").permitAll()
                 .antMatchers("/api/mission/all").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
+                .antMatchers("/api/hello").permitAll()
                 .anyRequest().authenticated()
+
+                .and()
+                .oauth2Login()
+                .successHandler(successHandler)
+
 
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenProvider));

@@ -29,7 +29,7 @@ public class User {
     @Column(name = "user_password", length = 100, nullable = false)
     private String userPassword;
 
-    @Column(name = "user_email", length = 30, nullable = false, unique = true)
+    @Column(name = "user_email", length = 30, nullable = false)
     private String userEmail;
 
     @Column(name = "user_point")
@@ -47,25 +47,21 @@ public class User {
     @OneToMany(mappedBy = "user")
     private final Set<Octopus> octopus = new HashSet<>();
 
-    @Builder(builderMethodName = "signUpBuilder")
-    public User(UserSignUpReq userSignUpReq) {
-        this.userId = userSignUpReq.getUserId();
-        this.userPassword = userSignUpReq.getUserPassword();
-        this.userNickname = userSignUpReq.getUserNickname();
-        this.userEmail = userSignUpReq.getUserEmail();
-        this.userAvatar = userSignUpReq.getUserAvatar();
-        this.userPoint = userSignUpReq.getUserPoint();
-        this.platformType = userSignUpReq.getPlatformType();
+    @Builder
+    public User(String userId, String userPassword, String userNickname, String userEmail,
+                String userAvatar, Integer userPoint, PlatformType platformType) {
+        this.userId = userId;
+        this.userPassword = userPassword;
+        this.userNickname = userNickname;
+        this.userEmail = userEmail;
+        this.userAvatar = userAvatar;
+        this.userPoint = userPoint;
+        this.platformType = platformType;
     }
 
     public void updateAvatar(String avatar){
         this.userAvatar = avatar;
     }
- /*   public void update(UpdateDto updateDto){
-       // this.userPassword = updateDto.getUserPassword();
-        this.userNickname = updateDto.getUserNickname();;
-        this.userAvatar = updateDto.getUserAvatar();
-    }*/
 
     public void updatePassword(final String newPassword){
         this.userPassword = newPassword;
@@ -74,5 +70,6 @@ public class User {
     public void changeNickname(String newNickname) {
         this.userNickname = newNickname;
     }
+
     public void updatePoint(Integer newUserPoint) {this.userPoint = newUserPoint;}
 }

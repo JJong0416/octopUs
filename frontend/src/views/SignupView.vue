@@ -16,6 +16,12 @@
         </v-btn>
       </v-col>
     </v-row>
+    <v-row>
+      <v-alert v-if="isError" type="error">
+          {{ errorMsg }}
+        </v-alert>
+    </v-row>
+    <v-form ref="form" v-model="valid" lazy-validation>
     <v-row class="pl-3">
       <h4>이메일을 통해 본인임을 인증합니다.</h4>
     </v-row>
@@ -23,12 +29,24 @@
       <v-col class="py-0 pr-3" cols="9">
         <v-text-field
           v-model="user.email"
-          :rules="[rules.required,emailRules]"
+          :rules="emailRules"
           label="사용가능한 이메일을 입력해주세요."
         ></v-text-field>
       </v-col>
       <v-col class="px-0" cols="3">
         <v-btn class="px-0" @click="sendemail">인증하기</v-btn>
+      </v-col>
+    </v-row>
+    <v-row v-if="issendemail">
+      <v-col class="py-0 pr-3" cols="8">
+        <v-text-field
+          v-model="aouthcode"
+          required
+          label="인증번호 입력"
+        ></v-text-field>
+      </v-col>
+      <v-col class="px-0" cols="3">
+        <v-btn class="px-0" @click="codecheck">인증번호 확인</v-btn>
       </v-col>
     </v-row>
     <!-- email 인증 추가하기 -->
@@ -43,7 +61,7 @@
         ></v-text-field>
       </v-col>
       <v-col cols="4">
-        <v-btn class="px-0" @click="idcheck">중복 검사</v-btn>
+        <v-btn class="px-0"  @click="idcheck">중복 검사</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -94,7 +112,7 @@
         ></v-text-field></v-form>
       </v-col>
       <v-col cols="4">
-        <v-btn class="px-0" @click="nickcheck">중복 검사</v-btn>
+        <v-btn class="px-0" @click="nickcheck"  @keyup.enter="nickcheck">중복 검사</v-btn>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -123,9 +141,10 @@
       </v-col>
       <v-col></v-col>
       <v-col>
-        <v-btn color="#ffadad">회원가입하기</v-btn>
+        <v-btn color="#ffadad" @click="register()">회원가입하기</v-btn>
       </v-col>
     </v-row>
+    </v-form>
   </v-container>
 </div>
 </template>
@@ -170,13 +189,21 @@ export default {
     errorMsg: "",
     emailRules: [
       (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      (v) => { 
+        if(v){
+        const replaceV = v.replace(/(\s*)/g, '')
+        const pattern = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/
+        return pattern.test(replaceV) || 'E-mail must be valid'}
+        else{
+          return !!v || "E-mail is required"
+        }
+        },
     ],
     show: false,
     chkPassword: "",
     rules: {
       required: (value) => !!value || "Required.",
-      min: (v) => v.length >= 8 || "Min 8 characters",
+      min: (v) => (v && v.length >= 8) || "Min 8 characters",
     },
   }),
   methods:{
@@ -299,6 +326,7 @@ export default {
       }
     },
     register() {
+
       if (
         !this.user.email ||
         !this.user.usernickname ||
@@ -309,7 +337,7 @@ export default {
         !this.userNickChk
       ) {
         this.isError = true;
-
+        
         this.errorMsg = "이메일과 닉네임과 비밀번호를 모두 입력해주세요.";
         return;
       }
@@ -341,6 +369,7 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
+      this.$refs.nicknameForm.reset();
     },
     resetValidation() {
       this.$refs.form.resetValidation();

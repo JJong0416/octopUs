@@ -202,10 +202,10 @@ export default {
         (this.avatarPet = this.initPet);
         console.log(this.initPet);
         this.selectItemKind["Face"] = this.initFace;
-        if(this.initHat == "0_notting"){
+        if(this.initHat == "0_nothing"){
            this.selectItemKind["Hat"] = 0
         }
-        if(this.initPet == "0_notting"){
+        if(this.initPet == "0_nothing"){
           this.selectItemKind["Pet"] = 0
         }
        
@@ -222,27 +222,27 @@ export default {
         this.avatarFace = i;
       } else if (kind === "Hat") {
         if (i == 0) {
-          this.avatarHat = "0_notting";
+          this.avatarHat = "0_nothing";
         } else {
           this.avatarHat = i;
         }
       } else if (kind === "Pet") {
         if (i == 0) {
-          this.avatarPet = "0_notting";
+          this.avatarPet = "0_nothing";
         } else {
           this.avatarPet = i;
         }
       }
     },
     saveAvatar() {
-      if (confirm("아바타 변경시 500포인트가 차감됩니다. 진행하시겠습니까?")) {
+      if (confirm("아바타 변경시 500 포인트가 차감됩니다. 변경하시겠습니까?")) {
         console.log("d");
         var sendAvatarHat = this.avatarHat;
         var sendAvatarPet = this.avatarPet;
-        if (this.avatarHat == "0_notting") {
+        if (this.avatarHat == "0_nothing") {
           sendAvatarHat = 0;
         }
-        if (this.avatarPet == "0_notting") {
+        if (this.avatarPet == "0_nothing") {
           sendAvatarPet = 0;
         }
         const avatarReq = {
@@ -272,7 +272,6 @@ export default {
 </script>
 
 <style>
-/* Helper classes */
 .basil {
   background-color: #fffbe6 !important;
 }

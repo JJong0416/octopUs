@@ -29,9 +29,9 @@
 
                   <v-card>
                     <v-card-title class="text-h5 yellow lighten-2">
-                      정말로 추방하시겠어요?
+                      정말로 추방하시겠습니까?
                     </v-card-title>
-                    유저정보
+                    User info
                     <v-divider></v-divider>
 
                     <v-card-actions>
@@ -78,7 +78,8 @@
           </v-card-text>
           <v-card-title>인증 요일 / 시간</v-card-title>
           <v-card-text>
-            일주일에 5 번, 오전 6시 ~ 오전 7시 에 인증합니다.
+            일주일에 {{mission.authenweeks}} 번, 하루에 {{mission.authendays}} 번, 
+            {{start}} ~ {{end}}에 인증합니다.
           </v-card-text>
         </div>
       </v-expand-transition>

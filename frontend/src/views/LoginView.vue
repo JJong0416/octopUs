@@ -46,16 +46,44 @@
           @click:append="show = !show"
         ></v-text-field>
       </v-row>
+      <v-row>
+        <v-col class="py-0" cols="6" @click="dialog = true"
+          >비밀번호 찾기</v-col
+        >
+      </v-row>
+      <template>
+        <div class="text-center">
+          <v-dialog v-model="dialog" width="500">
+            <v-card>
+              <v-card-title class="text-h5 amber lighten-2">
+                이메일로 임시 비밀번호가 전송됩니다
+              </v-card-title>
+              <v-text-field
+                v-model="email"
+                :rules="emailRules"
+                label="가입시 사용한 이메일을 입력해주세요."
+              ></v-text-field>
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" dark @click="findPwByEmail">
+                  전송
+                </v-btn>
+                <v-btn color="primary" text @click="dialog = false">
+                  취소
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+      </template>
+      <br /><br />
       <!-- 로그인 버튼 -->
       <v-row class="pa-3" justify="center">
         <v-btn color="#ffadad" block large @click="confirm"> 로그인 </v-btn>
       </v-row>
-      <v-row>
-        <v-col class="py-0 pl-3" cols="6">아이디 찾기</v-col>
-        <v-col cols="2"></v-col>
-        <v-col class="py-0" cols="4">비밀번호 찾기</v-col>
-      </v-row>
-      <br /><br /><br />
+      <br />
       <!-- 카카오 회원가입 / 카카오 로그인 -->
       <v-row justify="center" class="py-5">
         <v-img
@@ -90,6 +118,19 @@ export default {
         username: null,
         email: null,
       },
+      emailRules: [
+        (v) => !!v || "E-mail is required",
+        (v) => {
+          if (v) {
+            const replaceV = v.replace(/(\s*)/g, "");
+            const pattern =
+              /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+            return pattern.test(replaceV) || "이메일 형식이 올바르지 않습니다.";
+          } else {
+            return !!v || "E-mail is required";
+          }
+        },
+      ],
       nameRules: [
         (v) => !!v || "Name is required",
         (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
@@ -151,7 +192,9 @@ export default {
         .catch((error) => {
           console.log(error);
         })
-        .finally();
+        .finally(() => {
+          this.dialog = false;
+        });
     },
     signup() {
       this.$router.push({ name: "Signup" });

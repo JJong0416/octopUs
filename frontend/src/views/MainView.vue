@@ -29,10 +29,15 @@
       <!-- 검색창 -->
       <v-row>
         <v-col class="py-0" cols="4">
-          <v-select :items="items" label="검색 선택"></v-select>
+          <v-select :items="items" label="코드입력" disabled></v-select>
         </v-col>
         <v-col class="py-0" cols="8">
-          <v-text-field hide-details single-line></v-text-field>
+          <v-text-field
+            hide-details
+            single-line
+            v-model="tofindsearch"
+            @keyup.enter="transmit"
+          ></v-text-field>
         </v-col>
       </v-row>
 
@@ -112,9 +117,10 @@ export default {
     FooterView,
   },
   data: () => ({
+    tofindsearch: "",
     hotmissions: [],
     newmissions: [],
-    items: ["코드 입력", "제목 검색", "테마 검색"],
+    items: ["코드"],
     userInfo2: [],
     userAvatar: [0, 0, 0, 0],
   }),
@@ -130,9 +136,42 @@ export default {
     moveNew() {
       this.$router.push("/hotnew");
     },
+    transmit() {
+      if (!this.userInfo) {
+        alert("로그인 후 사용가능합니다.");
+        return;
+      }
+      var vm = this;
+      axios
+        .get(`api/mission/search/code/${vm.tofindsearch}`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+        })
+        .then(function (response) {
+          console.log("여기는 search result");
+          console.log(response);
+          if (!response.data[0]) {
+            alert("존재하지 않거나 참가할 수 없는 방입니다.");
+            return;
+          } else {
+            vm.$router.push({
+              name: "before",
+              params: { missionNo: response.data[0].missionNo },
+            });
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    },
   },
   created() {
     var vm = this;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     // kakao login token settings
     axios
       .get(`api/login/kakao/${vm.$route.query.code}`, {
@@ -149,6 +188,7 @@ export default {
         vm.SET_USER_INFO(token);
         cookie.set("token", token);
         console.log("userInfo : " + vm.userInfo);
+        sessionStorage.setItem("token", token);
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${response.data.token}`;

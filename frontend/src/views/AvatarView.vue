@@ -132,7 +132,7 @@
                         }.png`)
                       "
                       aspect-ratio="1"
-                      class="grey lighten-4"
+                      :class="{'grey lighten-2' : (selectItemKind[item.kind] == i-1), 'grey lighten-4' : (selectItemKind[item.kind] != i-1)}"
                       @click="changeAvatar(item.kind, i - 1)"
                     ></v-img>
                   </v-col>
@@ -175,8 +175,11 @@ export default {
       initHat: null,
       initPet: null,
       avatarInfo: [],
+      selectItem : null,
+      selectItemKind : {Face : this.initFace, Hat : this.initHat, Pet : this.initPet},
     };
   },
+  
   created() {
     axios.defaults.headers.common[
       "Authorization"
@@ -197,11 +200,23 @@ export default {
         (this.avatarFace = this.initFace),
         (this.avatarHat = this.initHat),
         (this.avatarPet = this.initPet);
+        console.log(this.initPet);
+        this.selectItemKind["Face"] = this.initFace;
+        if(this.initHat == "0_notting"){
+           this.selectItemKind["Hat"] = 0
+        }
+        if(this.initPet == "0_notting"){
+          this.selectItemKind["Pet"] = 0
+        }
+       
     },
     changeColor(value) {
       this.avatarColor = value;
     },
     changeAvatar(kind, i) {
+      this.selectItem = i;
+      this.selectItemKind[kind] = i;
+      console.log(this.selectItem)
       console.log(kind + i);
       if (kind === "Face") {
         this.avatarFace = i;

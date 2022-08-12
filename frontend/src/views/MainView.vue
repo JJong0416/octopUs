@@ -71,7 +71,9 @@
             <v-carousel-item v-for="(hotmission, i) in hotmissions" :key="i">
               <v-sheet height="100%">
                 <v-row class="fill-height" align="center" justify="center">
-                  <div class="text-h4">{{ hotmission.missionTitle }}</div>
+                  <div class="singleLine text-h5" style="width: 150px">
+                    {{ hotmission.missionTitle }}
+                  </div>
                 </v-row>
               </v-sheet>
             </v-carousel-item>
@@ -90,7 +92,9 @@
             <v-carousel-item v-for="(newmission, i) in newmissions" :key="i">
               <v-sheet height="100%">
                 <v-row class="fill-height" align="center" justify="center">
-                  <div class="text-h4">{{ newmission.missionTitle }}</div>
+                  <div class="singleLine text-h5" style="width: 150px">
+                    {{ newmission.missionTitle }}
+                  </div>
                 </v-row>
               </v-sheet>
             </v-carousel-item>
@@ -279,5 +283,12 @@ body {
 }
 .app {
   background-color: white;
+}
+
+.singleLine {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: break-word;
 }
 </style>

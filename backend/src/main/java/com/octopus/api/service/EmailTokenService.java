@@ -1,7 +1,9 @@
 package com.octopus.api.service;
 
 import com.octopus.api.repository.EmailTokenRepository;
+import com.octopus.api.repository.UserRepository;
 import com.octopus.domain.entity.EmailToken;
+import com.octopus.domain.type.PlatformType;
 import com.octopus.dto.layer.EmailMessageDto;
 import com.octopus.mail.EmailFactory;
 import com.octopus.mail.SendStrategy;
@@ -23,6 +25,8 @@ public class EmailTokenService {
     private final StrategyFactory strategyFactory;
     private final EmailFactory emailFactory;
 
+    private final UserRepository userRepository;
+
     // 패스워드 찾기 토큰 생성
     public void createPasswordEmailToken(String userEmail, String userPassword){
         EmailMessageDto emailMessageDto = emailFactory.makePasswordMessageForm(userEmail, userPassword);
@@ -30,19 +34,25 @@ public class EmailTokenService {
     }
 
     // 이메일 인증 토큰 생성
-    public Boolean createEmailToken(String userEmail) {
+    public String createEmailToken(String userEmail) {
 
-        // 이메일 토큰 저장
-        EmailToken emailToken = EmailToken.createEmailToken(userEmail);
-        emailTokenRepository.save(emailToken);
+        // 이메일 중복 여부 체크
+        if(!userRepository.existsByUserEmailAndPlatformType(userEmail, PlatformType.DOMAIN)) {
 
-        // email 양식 만들기
-        EmailMessageDto emailMessageDto = emailFactory.makeEmailMessageForm(userEmail, emailToken.getEmailCode());
+            // 이메일 토큰 저장
+            EmailToken emailToken = EmailToken.createEmailToken(userEmail);
+            emailTokenRepository.save(emailToken);
 
-        // email 보내기
-        sendEmail(emailMessageDto);
+            // email 양식 만들기
+            EmailMessageDto emailMessageDto = emailFactory.makeEmailMessageForm(userEmail, emailToken.getEmailCode());
 
-        return true;
+            // email 보내기
+            sendEmail(emailMessageDto);
+
+            return "전송성공";
+        }else{
+            return "이메일중복";
+        }
     }
 
     // 유효한 토큰 가져오기

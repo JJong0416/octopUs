@@ -28,4 +28,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findByUserNickname(String userNickname);
 
     List<UserListDto> findUserByUserIdOrUserEmailOrUserNickname(String userId, String userEmail, String userNickname);
+
+    Boolean existsByUserEmailAndPlatformType(String email, PlatformType platformType);
 }

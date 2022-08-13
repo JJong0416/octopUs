@@ -19,9 +19,10 @@ public class EmailController {
 
     // 유저가 입력한 이메일로 메일 보내기
     @PostMapping("/email")
-    public ResponseEntity<Boolean> postEmailVerifiedCode(@RequestBody EmailVerificationReq emailVerificationReq) {
-        return new ResponseEntity<>(
-                emailTokenService.createEmailToken(emailVerificationReq.getUserEmail()), HttpStatus.OK);
+    public ResponseEntity<String> postEmailVerifiedCode(@RequestBody EmailVerificationReq emailVerificationReq) {
+        String msg = "이메일오류";
+        msg = emailTokenService.createEmailToken(emailVerificationReq.getUserEmail());
+        return new ResponseEntity<>(msg , HttpStatus.OK);
     }
 
     // 유저가 입력한 코드가 이메일로 보낸 코드와 같은지 확인

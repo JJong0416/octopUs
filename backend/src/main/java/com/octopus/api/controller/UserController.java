@@ -5,6 +5,7 @@ import com.octopus.api.service.UserService;
 import com.octopus.dto.request.UserFindPasswordReq;
 import com.octopus.dto.request.UserUpdatePasswordReq;
 import com.octopus.dto.response.MissionInfoRes;
+import com.octopus.dto.response.MissionUserInfoRes;
 import com.octopus.dto.response.UserMyPageRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,12 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserMyPageRes> userMyPage() {
         return ResponseEntity.ok(userService.getUserMyPageInfo());
+    }
+
+    @GetMapping("/user/info/{userNickname}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<MissionUserInfoRes> userInfoByNickname(@PathVariable String userNickname){
+        return ResponseEntity.ok(userService.getUserInfoByUserNickname(userNickname));
     }
 
     //참여 미션 목록

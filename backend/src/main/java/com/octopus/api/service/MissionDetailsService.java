@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,6 +52,7 @@ public class MissionDetailsService {
         // 미션 타임 생성
         MissionTime missionTime = MissionTime.createMTBuilder()
                 .mission(mission)
+                .missionTimeStartTime(missionTimeReq.getMissionTimeStartTime())
                 .missionTimeWeek(missionTimeReq.getMissionTimeWeek())
                 .missionTimeDPW(missionTimeReq.getMissionTimeDPW())
                 .missionTimeTPD(missionTimeReq.getMissionTimeTPD())
@@ -88,14 +91,14 @@ public class MissionDetailsService {
     }
 
     @Transactional
-    public void deleteUserFromMission(String userId, Long missionNo) {
+    public void deleteUserFromMission(String userNickname, Long missionNo) {
         // 1. mission table의 MissionUser에서 해당하는 id의 이름을 제거한다.
 
         String loginedUserId = getCurrentUsername().get();
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
             throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
         });
-        User user = userRepository.findByUserId(userId).orElseThrow(() -> {
+        User user = userRepository.findByUserNickname(userNickname).orElseThrow(() -> {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
 
@@ -103,13 +106,13 @@ public class MissionDetailsService {
             throw new CustomException(ErrorCode.ACCESS_NOT_ALLOWED);
 
         // MissionUser에 userId가 없다면 잘못된 입력
-        int nicknameLocation = checkMissionContainsUserNickname(mission, user.getUserNickname());
+        int nicknameLocation = checkMissionContainsUserNickname(mission, userNickname);
         if (nicknameLocation < 0)
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
 
         // Users에서 삭제하기 로직
         String newUsers = mission.getMissionUsers().substring(0, nicknameLocation - 2) +
-                mission.getMissionUsers().substring(nicknameLocation + user.getUserNickname().length());
+                mission.getMissionUsers().substring(nicknameLocation + userNickname.length());
 
         mission.updateMissionUsers(newUsers);
 
@@ -179,12 +182,26 @@ public class MissionDetailsService {
 
     @Transactional(readOnly = true)
     public boolean haveMissionTime(Long missionNo) {
-        return missionTimeRepository.findMissionTimeByMissionNo(missionNo);
+        return missionTimeRepository.haveMissionTimeByMissionNo(missionNo);
     }
 
-    @Transactional(readOnly = true)
+
     public MissionRes getMissionDtoByMissionNo(Long missionNo) {
         Mission mission = getMissionByMissionNo(missionNo);
+        if(missionTimeRepository.haveMissionTimeByMissionNo(missionNo)) {
+            MissionTime missionTime = missionTimeRepository.findMissionTimeByMissionNo(missionNo).get();
+
+            LocalDateTime startDate = missionTime.getMissionTimeStartTime();
+            if (mission.getMissionStatus() == MissionStatus.OPEN && LocalDateTime.now().isAfter(startDate)) {
+                mission.updateMissionStatus(MissionStatus.ONGOING);
+            }
+
+            LocalDateTime endDate = missionTime.getMissionTimeStartTime().plusDays(missionTime.getMissionTimeWeek() * 7);
+            if (mission.getMissionStatus() == MissionStatus.ONGOING && LocalDateTime.now().isAfter(endDate)) {
+                mission.updateMissionStatus(MissionStatus.CLOSE);
+            }
+            missionRepository.save(mission);
+        }
 
         return MissionRes.builder()
                 .missionNo(missionNo)

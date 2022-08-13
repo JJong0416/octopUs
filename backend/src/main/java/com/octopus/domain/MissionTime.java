@@ -39,10 +39,10 @@ public class MissionTime implements Serializable {
 
     @Builder(builderMethodName = "createMTBuilder")
     public MissionTime(
-            Mission mission, Integer missionTimeWeek, Integer missionTimeDPW, Integer missionTimeTPD
+            Mission mission, LocalDateTime missionTimeStartTime, Integer missionTimeWeek, Integer missionTimeDPW, Integer missionTimeTPD
     ) {
         this.mission = mission;
-        this.missionTimeStartTime = LocalDateTime.now();
+        this.missionTimeStartTime = missionTimeStartTime;
         this.missionTimeWeek = missionTimeWeek;
         this.missionTimeDPW = missionTimeDPW;
         this.missionTimeTPD = missionTimeTPD;

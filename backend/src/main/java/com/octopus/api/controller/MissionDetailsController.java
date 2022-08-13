@@ -77,13 +77,13 @@ public class MissionDetailsController {
     }
 
     //참여 유저 강퇴하기
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/user/{userNickname}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity kickOutUser(
-            @PathVariable String userId,
+            @PathVariable String userNickname,
             @PathVariable Long missionNo
     ) {
-        missionDetailsService.deleteUserFromMission(userId, missionNo);
+        missionDetailsService.deleteUserFromMission(userNickname, missionNo);
         return ResponseEntity.ok().build();
     }
 

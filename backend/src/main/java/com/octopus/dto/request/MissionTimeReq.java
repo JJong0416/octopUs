@@ -16,9 +16,9 @@ public class MissionTimeReq {
     private final Integer missionTimeTPD;
 
     MissionTimeReq(
-            Integer missionTimeWeek, Integer missionTimeDPW, Integer missionTimeTPD
+            LocalDateTime missionTimeStartTime, Integer missionTimeWeek, Integer missionTimeDPW, Integer missionTimeTPD
     ) {
-        this.missionTimeStartTime = LocalDateTime.now();
+        this.missionTimeStartTime = missionTimeStartTime;
         this.missionTimeWeek = missionTimeWeek;
         this.missionTimeDPW = missionTimeDPW;
         this.missionTimeTPD = missionTimeTPD;

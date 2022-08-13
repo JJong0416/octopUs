@@ -6,6 +6,7 @@ import com.octopus.domain.Mission;
 import com.octopus.domain.User;
 import com.octopus.dto.request.UserFindPasswordReq;
 import com.octopus.dto.response.MissionInfoRes;
+import com.octopus.dto.response.MissionUserInfoRes;
 import com.octopus.dto.response.UserMyPageRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
@@ -84,6 +85,18 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(() -> {
             throw new UserNotFoundException();
         });
+    }
+
+    @Transactional(readOnly = true)
+    public MissionUserInfoRes getUserInfoByUserNickname(String userNickname) {
+        User user = userRepository.findByUserNickname(userNickname).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
+        return MissionUserInfoRes.builder()
+                .userEmail(user.getUserEmail())
+                .userAvatar(user.getUserAvatar())
+                .userNickname(user.getUserNickname())
+                .build();
     }
 
     @Transactional(readOnly = true)

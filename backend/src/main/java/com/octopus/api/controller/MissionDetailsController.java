@@ -80,10 +80,10 @@ public class MissionDetailsController {
     @DeleteMapping("/user/{userId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity kickOutUser(
-            @PathVariable String userId,
+            @PathVariable String userNickname,
             @PathVariable Long missionNo
     ) {
-        missionDetailsService.deleteUserFromMission(userId, missionNo);
+        missionDetailsService.deleteUserFromMission(userNickname, missionNo);
         return ResponseEntity.ok().build();
     }
 

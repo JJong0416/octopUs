@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      :search="search"
       :headers="Missionheaders"
       :items="missions"
       :items-per-page="5"
@@ -14,7 +15,17 @@
       <!-- 표 상단의 해더 문구 -->
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>진행중인 Missions</v-toolbar-title>
+          <v-toolbar-title
+            >Missions
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="검색"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-toolbar-title>
         </v-toolbar>
       </template>
 
@@ -54,7 +65,13 @@
               </v-list-item-content>
             </v-list-item>
 
-            <v-list-item two-line>
+            <v-list-item
+              two-line
+              v-if="
+                item.missionStatus === `ONGOING` ||
+                item.missionStatus === `CLOSE`
+              "
+            >
               <v-list-item-content>
                 <v-list-item-title>인증 사진</v-list-item-title>
                 <img :src="URL" style="height: 120px" class="mx-4" />
@@ -64,12 +81,41 @@
 
           <!-- 내부 내용 끝 -->
           <router-link
+            v-if="item.missionStatus === `UNACTIVATED`"
+            :to="{
+              name: 'before',
+              params: { missionNo: item.missionNo },
+            }"
+          >
+            미션 활성화하기
+          </router-link>
+          <router-link
+            v-if="item.missionStatus === `OPEN`"
             :to="{
               name: 'proceeding',
               params: { missionNo: item.missionNo },
             }"
           >
-            자세히보기
+            열린 미션 입장하기
+          </router-link>
+          <!-- 열린미션, 진행중미션 이동위치 확인 -->
+          <router-link
+            v-if="item.missionStatus === `ONGOING`"
+            :to="{
+              name: 'proceeding',
+              params: { missionNo: item.missionNo },
+            }"
+          >
+            진행중인 미션 입장하기
+          </router-link>
+          <router-link
+            v-if="item.missionStatus === `CLOSE`"
+            :to="{
+              name: 'finished',
+              params: { missionNo: item.missionNo },
+            }"
+          >
+            끝난방 들어가기
           </router-link>
         </td>
       </template>
@@ -84,8 +130,8 @@ export default {
 
   data() {
     return {
+      search: "",
       openexpanded: [],
-      openedMissions: [],
       closeexpanded: [],
       singleExpand: true,
       Missionheaders: [
@@ -95,6 +141,7 @@ export default {
           softable: false,
           value: `missionTitle`,
         },
+        { text: `미션상태`, value: `missionStatus` },
         { text: `포인트`, value: `missionPoint` },
         { text: ``, value: `data-table-expand` },
       ],
@@ -127,8 +174,8 @@ export default {
         });
     },
     getColor(point) {
-      if (point > 400) return "red";
-      else if (point > 200) return "orange";
+      if (point > 1000) return "red";
+      else if (point > 500) return "orange";
       else return "green";
     },
   },

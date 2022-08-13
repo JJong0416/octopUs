@@ -93,6 +93,7 @@ const routes = [
     path: "/finished",
     name: "finished",
     component: () => import("@/views/FinishedMission.vue"),
+    props: true,
   },
   {
     path: "/hotnew",

@@ -2,111 +2,117 @@
   <div>
     <mypage-header></mypage-header>
     <v-container>
-      <br>
-       <v-card >
-      <v-row>
-        <v-col cols="3"></v-col>
-        <v-col cols="6">
-          <!-- my Ocsoon -->
-          <v-img v-if="this.avatarPet!=null"
-            :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)" 
-          >
+      <br />
+      <v-card>
+        <v-row>
+          <v-col cols="3"></v-col>
+          <v-col cols="6">
+            <!-- my Ocsoon -->
             <v-img
-              :src="
-                require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)
-              " 
+              v-if="this.avatarPet != null"
+              :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
             >
               <v-img
                 :src="
-                  require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)
-                " 
+                  require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)
+                "
               >
                 <v-img
                   :src="
-                    require(`../assets/img/Ocsoon/Hat/${this.avatarHat}.png`)
+                    require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)
                   "
                 >
-                  <v-row>
-                    <v-col cols="7"></v-col>
-                    <v-col class="px-0">
-                      <router-link
-                        :to="{
-                          name: 'avatar',
-                          params: {
-                            avatarColor,
-                            avatarFace,
-                            avatarHat,
-                            avatarPet,
-                          },
-                        }"
-                      >
-                        <v-btn class="store" text>상점</v-btn>
-                      </router-link>
-                    </v-col>
-                  </v-row>
-                </v-img></v-img
-              >
+                  <v-img
+                    :src="
+                      require(`../assets/img/Ocsoon/Hat/${this.avatarHat}.png`)
+                    "
+                  >
+                    <v-row>
+                      <v-col cols="7"></v-col>
+                      <v-col class="px-0">
+                        <router-link
+                          :to="{
+                            name: 'avatar',
+                            params: {
+                              avatarColor,
+                              avatarFace,
+                              avatarHat,
+                              avatarPet,
+                            },
+                          }"
+                        >
+                          <v-btn class="store" text>상점</v-btn>
+                        </router-link>
+                      </v-col>
+                    </v-row>
+                  </v-img></v-img
+                >
+              </v-img>
             </v-img>
-          </v-img>
-        </v-col>
-        <v-col cols="3"></v-col>
+          </v-col>
+          <v-col cols="3"></v-col>
 
-        <v-col cols="2"></v-col>
-        <v-col cols="8" >
-          <!-- 개인 정보 카드 -->
-         
+          <v-col cols="2"></v-col>
+          <v-col cols="8">
+            <!-- 개인 정보 카드 -->
+
             <v-row>
-              <v-col class="pl-3"> 
-                <v-card-title style="display: flex; justify-content: center; align-items: center;"><div>{{ userInfo.userNickname }}</div></v-card-title>
+              <v-col class="pl-3">
+                <v-card-title
+                  style="
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  "
+                  ><div>{{ userInfo.userNickname }}</div></v-card-title
+                >
               </v-col>
-              
             </v-row>
-            
-        </v-col>
-        <v-col class="px-0">
-                <nickname-change></nickname-change>
-              </v-col>
-            <v-card-text>
-              <v-row >
-              <v-col cols="1" style="padding :0px"></v-col>
-              <v-col cols="2" style="padding :0px">ID</v-col>
-              <v-col cols="5" style="padding :0px">{{ userInfo.userId }}</v-col>
-              <v-col cols="4" style="padding :0px"> <password-change></password-change></v-col>
-               <v-col cols="1" style="padding :0px"></v-col>
-              <v-col cols="2" style="padding :0px">EMAIL</v-col>
-              <v-col cols="9" style="padding :0px 0px 12px 0px">{{ userInfo.userEmail}}</v-col>
-                   
-               </v-row>
-              <br>
-              <v-divider></v-divider>
-             <v-row >
-               <v-col cols="6">
-                <v-card-title style="padding-bottom : 0px">{{ userInfo.userPoint}}P</v-card-title>
+          </v-col>
+          <v-col class="px-0">
+            <nickname-change></nickname-change>
+          </v-col>
+          <v-card-text>
+            <v-row>
+              <v-col cols="1" style="padding: 0px"></v-col>
+              <v-col cols="2" style="padding: 0px">ID</v-col>
+              <v-col cols="5" style="padding: 0px">{{ userInfo.userId }}</v-col>
+              <v-col cols="4" style="padding: 0px">
+                <password-change></password-change
+              ></v-col>
+              <v-col cols="1" style="padding: 0px"></v-col>
+              <v-col cols="2" style="padding: 0px">EMAIL</v-col>
+              <v-col cols="9" style="padding: 0px 0px 12px 0px">{{
+                userInfo.userEmail
+              }}</v-col>
+            </v-row>
+            <br />
+            <v-divider></v-divider>
+            <v-row>
+              <v-col cols="6">
+                <v-card-title style="padding-bottom: 0px"
+                  >{{ userInfo.userPoint }}P</v-card-title
+                >
               </v-col>
               <v-col cols="3">
-          <!-- 충전, 환급 -->
-          <charge-point></charge-point>
-        </v-col>
-        <v-col class="pl-4" cols="3" style="padding-left:0px !important">
-          <refund-point></refund-point>
-        </v-col>
+                <!-- 충전, 환급 -->
+                <charge-point></charge-point>
+              </v-col>
+              <v-col class="pl-4" cols="3" style="padding-left: 0px !important">
+                <refund-point></refund-point>
+              </v-col>
             </v-row>
-            </v-card-text>
-          
-        <!-- <v-col cols="3"></v-col> -->
-      </v-row>
-      </v-card>
-      <br>
-      <br>
+          </v-card-text>
 
-      
+          <!-- <v-col cols="3"></v-col> -->
+        </v-row>
+      </v-card>
+      <br />
+      <br />
+
       <v-row>
-        <!-- 진행중인 mission -->
-        <my-missions :missions="openedMissions"></my-missions>
-      </v-row>
-      <v-row>
-        <!-- 도전 종료 mission -->
-        <end-missions :missions="closedMissions"></end-missions>
+        <!--  mission -->
+        <my-missions :missions="Missions"></my-missions>
       </v-row>
     </v-container>
     <footer-view></footer-view>
@@ -122,7 +128,6 @@ import PasswordChange from "../components/change/PasswordChange.vue";
 import ChargePoint from "../components/point/ChargePoint.vue";
 import RefundPoint from "../components/point/RefundPoint.vue";
 import MyMissions from "../components/mission/MyMissions.vue";
-import EndMissions from "../components/mission/EndMissions.vue";
 export default {
   components: {
     MypageHeader,
@@ -132,7 +137,6 @@ export default {
     ChargePoint,
     RefundPoint,
     MyMissions,
-    EndMissions,
   },
   data() {
     return {
@@ -141,8 +145,7 @@ export default {
       avatarHat: null,
       avatarFace: null,
       avatarPet: null,
-      openedMissions: [],
-      closedMissions: [],
+      Missions: [],
     };
   },
   methods: {},
@@ -186,15 +189,7 @@ export default {
           })
           .then(function (response) {
             console.log(response);
-            response.data.forEach((mission) => {
-              if (mission.missionStatus === "CLOSE") {
-                vm.closedMissions.push(mission);
-              } else {
-                vm.openedMissions.push(mission);
-              }
-            });
-            console.log("열린것" + vm.openedMissions);
-            console.log("닫힌것" + vm.closedMissions);
+            vm.Missions = response.data;
           })
           .catch(function (err) {
             console.log(err);
@@ -206,6 +201,4 @@ export default {
   },
 };
 </script>
-<style>
-
-</style>
+<style></style>

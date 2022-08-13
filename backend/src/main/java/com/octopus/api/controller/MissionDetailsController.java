@@ -77,7 +77,7 @@ public class MissionDetailsController {
     }
 
     //참여 유저 강퇴하기
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/user/{userNickname}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity kickOutUser(
             @PathVariable String userNickname,

@@ -8,8 +8,8 @@ public enum MissionType {
     LIFE("life", 0),
     EXERCISE("exercise", 1),
     STUDY("study", 2),
-    MEETING("meeting", 3);
-
+    MEETING("meeting", 3),
+    ETC("etc", 4);
     private final String desc;
     private final Integer stateCode;
 

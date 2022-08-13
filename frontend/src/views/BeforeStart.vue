@@ -22,17 +22,48 @@
               <v-list-tiem :key="index">
                 <v-dialog v-model="userdialog" width="500">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+                    <v-btn
+                      color="red lighten-2"
+                      @click="previewUser(item)"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
                       {{ item }}
                     </v-btn>
                   </template>
 
                   <v-card>
-                    <v-card-title class="text-h5 yellow lighten-2">
-                      정말로 추방하시겠습니까?
+                    <v-card-title class="text-h6 yellow lighten-2">
+                      {{ previewUsernickname }}님을 정말로 추방하시겠습니까?
                     </v-card-title>
-                    User info
-                    <v-divider></v-divider>
+
+                    <v-row class="animate__animated animate__bounce">
+                      <v-col class="logo-img-wrapper">
+                        <v-img
+                          max-width="85%"
+                          :src="
+                            require(`../assets/img/Ocsoon/Pet/${userAvatar[3]}.png`)
+                          "
+                        >
+                          <v-img
+                            :src="
+                              require(`../assets/img/Ocsoon/Character/${userAvatar[0]}.png`)
+                            "
+                          >
+                            <v-img
+                              :src="
+                                require(`../assets/img/Ocsoon/Face/${userAvatar[1]}.png`)
+                              "
+                            >
+                              <v-img
+                                :src="
+                                  require(`../assets/img/Ocsoon/Hat/${userAvatar[2]}.png`)
+                                "
+                              ></v-img
+                            ></v-img> </v-img
+                        ></v-img>
+                      </v-col>
+                    </v-row>
 
                     <v-card-actions>
                       <v-spacer></v-spacer>
@@ -78,8 +109,8 @@
           </v-card-text>
           <v-card-title>인증 요일 / 시간</v-card-title>
           <v-card-text>
-            일주일에 {{mission.authenweeks}} 번, 하루에 {{mission.authendays}} 번, 
-            {{start}} ~ {{end}}에 인증합니다.
+            일주일에 {{ mission.authenweeks }} 번, 하루에
+            {{ mission.authendays }} 번, {{ start }} ~ {{ end }}에 인증합니다.
           </v-card-text>
         </div>
       </v-expand-transition>
@@ -206,6 +237,8 @@ export default {
     roomNo: "",
     userdialog: false,
     missionuser: [],
+    previewUsernickname: "",
+    userAvatar: [0, 0, 0, 0],
     picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
@@ -282,12 +315,30 @@ export default {
   },
 
   methods: {
-    previewUser() {
-      axios.get(`api/user/`);
+    previewUser(nickname) {
+      axios
+        .get(`api/user/info/${nickname}`, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log("nickname으로 불러온 유저정보");
+          console.log(response);
+          this.previewUsernickname = response.data.userNickname;
+          this.userAvatar = response.data.userAvatar.split(", ");
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          console.log(nickname);
+        });
     },
     kickOutUser(nickname) {
       axios
-        .delete(`api/mission/${this.missionNo}/user/유저아이디??유저닉넴??`)
+        .delete(`api/mission/${this.missionNo}/user/${nickname}`)
         .then((respponse) => {
           console.log(nickname);
           console.log(respponse);
@@ -298,6 +349,7 @@ export default {
           alert("본인은 강퇴하실 수 없습니다.");
         })
         .finally(() => {
+          console.log("추방당한 유저는?" + nickname);
           console.log(this.roomNo);
           this.userdialog = false;
         });

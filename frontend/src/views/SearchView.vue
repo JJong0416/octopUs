@@ -24,7 +24,7 @@
             :items="themes"
             dense
             chips
-            label="Solo"
+            label="선택된 테마"
             @change="transmit"
           ></v-autocomplete>
         </v-col>
@@ -62,7 +62,12 @@
         </v-card-actions>
       </v-card>
       <!-- all missions -->
-      <v-sheet class="mx-auto" elevation="8" max-width="800">
+      <v-sheet
+        v-if="searchres == null"
+        class="mx-auto"
+        elevation="8"
+        max-width="800"
+      >
         <v-slide-group v-model="model" class="pa-4" show-arrows>
           <v-slide-item
             v-for="(item, index) in allmissions"
@@ -104,56 +109,6 @@
       </v-sheet>
 
       <!-- hot,new -->
-      <v-carousel
-        cycle
-        interval="1500"
-        height="100"
-        hide-delimiters
-        hide-delimiter-background
-        show-arrows-on-hover
-      >
-        <v-carousel-item v-for="(item, i) in hotmissions" :key="i">
-          <v-sheet :color="colors[i]" height="100%">
-            <v-row class="fill-height" align="center" justify="center">
-              <div class="singleLine text-h3" style="width: 300px">
-                <router-link
-                  :to="{
-                    name: 'before',
-                    params: { missionNo: item.missionNo },
-                  }"
-                  style="text-decoration: none; color: white"
-                  >{{ item.missionTitle }}</router-link
-                >
-              </div>
-            </v-row>
-          </v-sheet>
-        </v-carousel-item>
-      </v-carousel>
-      <v-carousel
-        cycle
-        interval="1500"
-        height="100"
-        hide-delimiters
-        hide-delimiter-background
-        show-arrows-on-hover
-      >
-        <v-carousel-item v-for="(item, i) in newmissions" :key="i">
-          <v-sheet :color="colors[i]" height="100%">
-            <v-row class="fill-height" align="center" justify="center">
-              <div class="singleLine text-h3" style="width: 300px">
-                <router-link
-                  :to="{
-                    name: 'before',
-                    params: { missionNo: item.missionNo },
-                  }"
-                  style="text-decoration: none; color: white"
-                  >{{ item.missionTitle }}</router-link
-                >
-              </div>
-            </v-row>
-          </v-sheet>
-        </v-carousel-item>
-      </v-carousel>
     </v-container>
     <footer-view></footer-view>
   </div>
@@ -192,7 +147,7 @@ export default {
       hotmissions: [],
       newmissions: [],
       allmissions: [],
-      searchres: [],
+      searchres: null,
       headers: [
         {
           text: "missionTitle",

@@ -307,7 +307,7 @@ export default {
       } else if (theme === "모임") {
         missionType = "MEETING";
       } else if (theme === "기타") {
-        missionType = "ELSE";
+        missionType = "ETC";
       } else {
         this.$router.push("/search");
         return;

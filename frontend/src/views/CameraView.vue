@@ -15,9 +15,11 @@
     </v-btn>
     <v-spacer></v-spacer>
     미리보기
-    <figure class="figure">
-      <img :src="img" width="100%" />
-    </figure>
+    <v-img src="../assets/img/picture.jpg">
+      <figure class="figure">
+        <v-img :src="img" width="70%"></v-img>
+      </figure>
+    </v-img>
     <v-btn v-if="img != null" @click="onSave">올리기</v-btn>
     <v-btn v-if="img != null" @click="onRestart">다시 찍기</v-btn>
   </div>

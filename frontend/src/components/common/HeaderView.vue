@@ -30,7 +30,11 @@
             <!-- 방 생성 버튼 -->
             <v-btn class="py-7 pr-9" icon>
               <router-link :to="`/create`">
-                <v-icon size="6vh">mdi-message-plus-outline</v-icon>
+                <v-img
+                  src="../../assets/img/icons/plus-icon.png"
+                  max-height="62"
+                  max-width="62"
+                />
               </router-link>
             </v-btn>
           </div>

@@ -99,7 +99,7 @@
                 <charge-point></charge-point>
               </v-col>
               <v-col class="pl-4" cols="3" style="padding-left: 0px !important">
-                <refund-point></refund-point>
+                <refund-point :point="userInfo.userPoint"></refund-point>
               </v-col>
             </v-row>
           </v-card-text>

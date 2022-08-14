@@ -29,28 +29,28 @@
                   >
                     <v-row>
                       <v-col cols="7"></v-col>
-                      <v-col class="px-0">
-                        <router-link
-                          :to="{
-                            name: 'avatar',
-                            params: {
-                              avatarColor,
-                              avatarFace,
-                              avatarHat,
-                              avatarPet,
-                            },
-                          }"
-                        >
-                          <v-btn class="store" text>상점</v-btn>
-                        </router-link>
-                      </v-col>
-                    </v-row>
-                  </v-img></v-img
-                >
+                      <v-col class="px-0"> </v-col>
+                    </v-row> </v-img
+                ></v-img>
               </v-img>
             </v-img>
           </v-col>
-          <v-col cols="3"></v-col>
+          <v-col cols="3"
+            ><router-link
+              :to="{
+                name: 'avatar',
+                params: {
+                  avatarColor,
+                  avatarFace,
+                  avatarHat,
+                  avatarPet,
+                },
+              }"
+            >
+              <v-btn class="store" icon
+                ><img src="../assets/img/icons/shop.png" width="40" height="40"
+              /></v-btn> </router-link
+          ></v-col>
 
           <v-col cols="2"></v-col>
           <v-col cols="8">

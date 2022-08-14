@@ -78,7 +78,7 @@ const routes = [
     component: () => import("@/views/CreateView.vue"),
   },
   {
-    path: "/before",
+    path: "/before/:missionNo",
     name: "before",
     component: () => import("@/views/BeforeStart.vue"),
     props: true,
@@ -119,10 +119,9 @@ const routes = [
     props: true,
   },
   {
-    path: "/unactivated",
+    path: "/unactivated/:missionNo",
     name: "unactivated",
     component: () => import("@/views/UnactivatedMission.vue"),
-    props: true,
   },
 ];
 

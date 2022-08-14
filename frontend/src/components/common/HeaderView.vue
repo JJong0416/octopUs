@@ -7,7 +7,7 @@
           <div v-if="userInfo" class="leftbtn">
             <!-- 로그아웃 버튼 -->
             <v-btn class="py-7 pl-9" @click="onClickLogout" icon>
-              <v-icon size="6vh">mdi-logout</v-icon>
+              <v-icon color="black" size="6vh">mdi-logout</v-icon>
             </v-btn>
           </div>
           <!-- 로그인 안 되어 있으면 -->
@@ -32,8 +32,7 @@
               <router-link :to="`/create`">
                 <v-img
                   src="../../assets/img/icons/plus-icon.png"
-                  max-height="62"
-                  max-width="62"
+                  max-width="45"
                 />
               </router-link>
             </v-btn>

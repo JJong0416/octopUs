@@ -1,13 +1,24 @@
 <template>
   <div>
-    <header-view></header-view>
-    <div align="center" justify="center">
-      <v-row>
-        <v-col cols="4" style="margin-top: 20px">
+    <v-container  align="center" justify="center">
+      <v-row class="pt-4 pl-4">
+        <v-col cols="4">
+          <!-- 뒤로 가기 버튼 -->
+          <v-btn @click="goback" icon>
+            <v-icon> mdi-arrow-left</v-icon>
+          </v-btn>
+        </v-col>
+         <v-col cols="4">
+          <h3>옥수니 상점</h3>
+         </v-col>
+         <v-col cols="4"></v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col class="px-10 pt-3 pb-0" cols="4">
           <v-icon large @click="toOriginal">mdi-refresh</v-icon>
         </v-col>
         <v-col cols="4"></v-col>
-        <v-col cols="4" style="margin-top: 20px">
+        <v-col class="px-10 pt-3 pb-0" cols="4">
           <v-icon
             large
             v-if="
@@ -22,6 +33,9 @@
           <v-icon large v-else @click="saveAvatar">mdi-check</v-icon>
         </v-col>
       </v-row>
+      
+      <v-row class="pl-13 pb-3 pt-0" justify="center">
+        <v-col cols="12">
       <v-img
         :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
         width="30vh"
@@ -42,8 +56,8 @@
             ></v-img
           ></v-img>
         </v-img>
-      </v-img>
-
+      </v-img></v-col>
+    </v-row>
       <v-btn-toggle v-model="toggle_exclusive">
         <v-row>
           <v-col cols="12" sm="6" class="py-1">
@@ -55,7 +69,7 @@
             <v-btn color="#d2a1ff" @click="changeColor(5)" />
             <v-btn color="#8500ff" @click="changeColor(6)" />
           </v-col>
-          <v-col cols="12" sm="6" class="py-1">
+          <v-col cols="12" sm="6" class="pb-5 pt-0">
             <v-btn color="#a5bbff" @click="changeColor(7)" />
             <v-btn color="#fff9b5" @click="changeColor(8)" />
             <v-btn rounded height="48" width="48">
@@ -105,14 +119,11 @@
 
       <template>
         <v-card color="basil">
-          <v-card-title class="text-center justify-center py-6">
-            <h3 class="font-weight-bold basil--text">Custom your Ocsoon</h3>
-          </v-card-title>
 
           <v-tabs
             v-model="tab"
-            background-color="transparent"
-            color="basil"
+            background-color="#eefaec"
+            color="#143559"
             grow
           >
             <v-tab v-for="(item, index) in items" :key="index">
@@ -142,18 +153,16 @@
           </v-tabs-items>
         </v-card>
       </template>
-    </div>
+    </v-container>
     <footer-view></footer-view>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import HeaderView from "../components/common/HeaderView.vue";
 import FooterView from "../components/common/FooterView.vue";
 export default {
   components: {
-    HeaderView,
     FooterView,
   },
   data() {
@@ -267,6 +276,9 @@ export default {
     saveAvatar_not() {
       this.$router.push("Mypage");
     },
+    goback() {
+      this.$router.go(-1);
+    },
   },
 };
 </script>
@@ -277,5 +289,8 @@ export default {
 }
 .basil--text {
   color: #356859 !important;
+}
+.wrapper{
+  height: 100%;
 }
 </style>

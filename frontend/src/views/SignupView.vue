@@ -47,7 +47,12 @@
             ></v-text-field>
           </v-col>
           <v-col class="px-0" cols="3">
-            <v-btn class="px-0" @click="codecheck">인증번호 확인</v-btn>
+            <div v-if="codeChk==false">
+              <v-btn outlined color="#fa183e" class="px-0" @click="codecheck">인증번호 확인</v-btn>
+            </div>
+            <div v-else-if="true">
+              <v-btn disabled outlined color="success" class="px-0" @click="codecheck">인증번호 확인</v-btn>
+            </div>
           </v-col>
         </v-row>
         <v-row>
@@ -100,7 +105,7 @@
           </v-col>
         </v-row>
         <v-row justify="center">
-          <h5 v-if="!sameChk(chkPassword)" class="pink--text">
+          <h5 v-if="!sameChk(chkPassword) && user.userpwd != null" class="pink--text">
             비밀번호가 같지 않습니다. 다시 한 번 확인해주세요.
           </h5>
         </v-row>

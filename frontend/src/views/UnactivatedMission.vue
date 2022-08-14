@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-img src="../assets/img/thema/study.png" width="100%"></v-img>
-    <v-card>
+    <v-card height="100%">
       <v-card-text>
         <div>
           {{ mission.missionType }}
@@ -15,9 +15,6 @@
         </p>
       </v-card-text>
       <v-divider></v-divider>
-      <!-- <v-btn v-if="mission.missionLeaderId == userInfo.userId"
-        >미션 수정하기</v-btn
-      > -->
       <v-card-title>
         <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
         <div class="my-4 text-subtitle-1"><b>미션 인증 방법</b></div>
@@ -25,15 +22,20 @@
       <v-card-text
         style="display: flex; justify-content: center; align-items: center"
       >
-        {{ mission.missionContent }}
+      <v-textarea disabled outlined v-model="mission.missionContent">
+      </v-textarea>
+
         <br />
-        흐르는 물에 손을 씻는 장면을 찍어 인증합니다!
       </v-card-text>
       <v-card-title style="padding: 5px 16px 5px 16px">
         <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
         <div class="my-4 text-subtitle-1">
-          <b>미션 코드 : </b>&nbsp;&nbsp;&nbsp;{{ mission.missionCode }}
+          <b>미션 코드 : </b>&nbsp;&nbsp;&nbsp;{{ mission.missionCode }} &nbsp;&nbsp;
         </div>
+        <v-btn @click="copy" icon>
+          <v-img max-height="30px" max-width="30px" src="../assets/img/icons/layer.png"></v-img>
+        </v-btn>
+        
       </v-card-title>
       <v-card-title style="padding: 5px 16px 5px 16px">
         <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
@@ -281,6 +283,9 @@ export default {
         params: { missionNo: this.missionNo },
       });
     },
+    copy(){
+      alert("코드 복사가 완료되었습니다.")
+    }
   },
 };
 </script>

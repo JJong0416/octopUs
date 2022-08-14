@@ -29,7 +29,7 @@
                  v-model="password"
                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="show ? 'text' : 'password'"
-                label="Enter Current Password"
+                label="비밀번호를 입력하세요."
                 counter
                 @click:append="show = !show"
               ></v-text-field>
@@ -39,20 +39,20 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
           <v-btn
-            color="blue darken-1"
+            color="#143559"
             text
             @click="dialog = false"
           >
-            Close
+            취소하기
           </v-btn>
+          <v-spacer></v-spacer>
           <v-btn
-            color="blue darken-1"
+            color="#fa183e"
             text
             @click="deleteUser"
           >
-            Continue
+            탈퇴하기
           </v-btn>
         </v-card-actions>
       </v-card>

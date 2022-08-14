@@ -35,7 +35,7 @@
               </v-img>
             </v-img>
           </v-col>
-          <v-col cols="3"
+          <v-col cols="3" class="pt-5"
             ><router-link
               :to="{
                 name: 'avatar',
@@ -48,7 +48,7 @@
               }"
             >
               <v-btn class="store" icon
-                ><img src="../assets/img/icons/shop.png" width="40" height="40"
+                ><img src="../assets/img/icons/shop.png" width="50" height="50"
               /></v-btn> </router-link
           ></v-col>
 
@@ -69,7 +69,7 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col class="px-0">
+          <v-col class="px-0 pt-6">
             <nickname-change></nickname-change>
           </v-col>
           <v-card-text>
@@ -91,7 +91,7 @@
             <v-row>
               <v-col cols="6">
                 <v-card-title style="padding-bottom: 0px"
-                  >{{ userInfo.userPoint }}P</v-card-title
+                  >{{ userInfo.userPoint }} P</v-card-title
                 >
               </v-col>
               <v-col cols="3">
@@ -106,13 +106,10 @@
               </v-col>
             </v-row>
           </v-card-text>
-
-          <!-- <v-col cols="3"></v-col> -->
         </v-row>
       </v-card>
       <br />
       <br />
-
       <v-row>
         <!--  mission -->
         <my-missions :missions="Missions"></my-missions>

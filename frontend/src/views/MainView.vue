@@ -28,16 +28,19 @@
 
       <!-- 검색창 -->
       <v-row>
-        <v-col class="py-0" cols="4">
-          <v-select :items="items" label="코드입력" disabled></v-select>
-        </v-col>
-        <v-col class="py-0" cols="8">
+        <v-col class="pt-0 pb-5 pl-5 pr-0" cols="9">
           <v-text-field
             hide-details
             single-line
+            label="참여할 방의 코드를 입력해 주세요."
             v-model="tofindsearch"
             @keyup.enter="transmit"
           ></v-text-field>
+        </v-col>
+        <v-col class="pl-1" cols="3">
+          <v-btn v-model="tofindsearch" @click="transmit" outlined color="#fa183e">
+            Go!
+          </v-btn>
         </v-col>
       </v-row>
 

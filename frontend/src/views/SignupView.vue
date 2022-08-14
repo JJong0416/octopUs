@@ -30,10 +30,10 @@
             ></v-text-field>
           </v-col>
           <v-col class="px-0" cols="3">
-            <div v-if="issendemail==false">
+            <div v-if="codeChk==false">
               <v-btn color="#fa183e" outlined class="px-0" @click="sendemail">인증하기</v-btn>
             </div>
-            <div v-if="issendemail==true">
+            <div v-else-if="codeChk==true">
               <v-btn disabled color="success" outlined class="px-0" @click="sendemail">인증하기</v-btn>
             </div>
           </v-col>
@@ -167,7 +167,6 @@
         </v-row>
         <v-row class="px-3 pt-8">
           <v-card
-    v-scroll.self="onScroll"
     class="overflow-y-auto"
     max-height="100"
   >
@@ -532,7 +531,7 @@ export default {
         !this.codeChk ||
         !this.userIdChk ||
         !this.userNickChk ||
-        !this.agreement == false
+        !this.agreement
       ) {
         this.isError = true;
         this.errorMsg = "가입에 필요한 정보를 모두 입력해주세요.";

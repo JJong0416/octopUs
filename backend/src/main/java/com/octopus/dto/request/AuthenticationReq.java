@@ -1,5 +1,7 @@
 package com.octopus.dto.request;
 
+import com.octopus.domain.AuthenticationInfo;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
@@ -19,5 +21,10 @@ public class AuthenticationReq {
     ){
         this.authenticationStartTime = authenticationStartTime;
         this.authenticationEndTime = authenticationEndTime;
+    }
+    @Builder
+    AuthenticationReq(AuthenticationInfo authenticationInfo){
+        this.authenticationStartTime = authenticationInfo.getAuthenticationStartTime();
+        this.authenticationEndTime = authenticationInfo.getAuthenticationEndTime();
     }
 }

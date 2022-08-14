@@ -211,7 +211,7 @@ public class MissionCalenderService {
                 break;
             }
         }
-        if (missionTime.getMissionTimeDPW() > weekAuthentication && missionTime.getMissionTimeTPD() > todayAuthentication) {
+        if (missionTime.getMissionTimeDPW() * missionTime.getMissionTimeTPD()> weekAuthentication && missionTime.getMissionTimeTPD() > todayAuthentication) {
             isPossibleCnt = true;
         }
 

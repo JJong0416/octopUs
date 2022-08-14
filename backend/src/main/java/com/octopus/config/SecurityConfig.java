@@ -7,6 +7,7 @@ import com.octopus.jwt.JwtTokenProvider;
 import com.octopus.oauth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -52,6 +53,9 @@ public class SecurityConfig {
                 .antMatchers("/api/mission/search/**").permitAll()
                 .antMatchers("/api/email/**").permitAll()
                 .antMatchers("/api/find-pw").permitAll()
+                .antMatchers("/api/mission/hot").permitAll()
+                .antMatchers("/api/mission/new").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/mission/{missionNo}").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

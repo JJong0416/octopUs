@@ -3,9 +3,11 @@ package com.octopus.api.service;
 import com.octopus.api.repository.*;
 import com.octopus.domain.*;
 import com.octopus.domain.type.MissionStatus;
+import com.octopus.dto.layer.MissionListDto;
 import com.octopus.dto.request.AuthenticationReq;
 import com.octopus.dto.request.MissionTimeReq;
 import com.octopus.dto.request.MissionUpdateInfoReq;
+import com.octopus.dto.response.MissionDetailRes;
 import com.octopus.dto.response.MissionRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
@@ -188,20 +190,20 @@ public class MissionDetailsService {
 
     public MissionRes getMissionDtoByMissionNo(Long missionNo) {
         Mission mission = getMissionByMissionNo(missionNo);
-        if(missionTimeRepository.haveMissionTimeByMissionNo(missionNo)) {
-            MissionTime missionTime = missionTimeRepository.findMissionTimeByMissionNo(missionNo).get();
-
-            LocalDateTime startDate = missionTime.getMissionTimeStartTime();
-            if (mission.getMissionStatus() == MissionStatus.OPEN && LocalDateTime.now().isAfter(startDate)) {
-                mission.updateMissionStatus(MissionStatus.ONGOING);
-            }
-
-            LocalDateTime endDate = missionTime.getMissionTimeStartTime().plusDays(missionTime.getMissionTimeWeek() * 7);
-            if (mission.getMissionStatus() == MissionStatus.ONGOING && LocalDateTime.now().isAfter(endDate)) {
-                mission.updateMissionStatus(MissionStatus.CLOSE);
-            }
-            missionRepository.save(mission);
-        }
+//        if(missionTimeRepository.haveMissionTimeByMissionNo(missionNo)) {
+//            MissionTime missionTime = missionTimeRepository.findMissionTimeByMissionNo(missionNo).get();
+//
+//            LocalDateTime startDate = missionTime.getMissionTimeStartTime();
+//            if (mission.getMissionStatus() == MissionStatus.OPEN && LocalDateTime.now().isAfter(startDate)) {
+//                mission.updateMissionStatus(MissionStatus.ONGOING);
+//            }
+//
+//            LocalDateTime endDate = missionTime.getMissionTimeStartTime().plusDays(missionTime.getMissionTimeWeek() * 7);
+//            if (mission.getMissionStatus() == MissionStatus.ONGOING && LocalDateTime.now().isAfter(endDate)) {
+//                mission.updateMissionStatus(MissionStatus.CLOSE);
+//            }
+//            missionRepository.save(mission);
+//        }
 
         return MissionRes.builder()
                 .missionNo(missionNo)
@@ -280,5 +282,21 @@ public class MissionDetailsService {
             }
         } else
             throw new CustomException(ErrorCode.BAD_REQUEST);
+    }
+
+    public MissionDetailRes getMissionDetail(Long missionNo) {
+        MissionTime missionTime = missionTimeRepository.findMissionTimeByMissionNo(missionNo).get();
+        List<AuthenticationReq> authenticationInfoList =authenticationRepository.findAuthenticationInfoByMissionNo(missionNo)
+                .stream().map(authenticationInfo -> AuthenticationReq.builder()
+                                .authenticationInfo(authenticationInfo)
+                                .build())
+                .collect(Collectors.toList());
+
+        return MissionDetailRes.builder()
+                .missionTimeStartTime(missionTime.getMissionTimeStartTime())
+                .missionTimeEndTime(missionTime.getMissionTimeStartTime().plusDays(missionTime.getMissionTimeWeek() * 7))
+                .authenticationInfoList(authenticationInfoList)
+                .missionTimeDPW(missionTime.getMissionTimeDPW())
+                .missionTimeTPD(missionTime.getMissionTimeTPD()).build();
     }
 }

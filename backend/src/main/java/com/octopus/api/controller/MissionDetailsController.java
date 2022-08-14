@@ -4,6 +4,7 @@ import com.octopus.api.service.MissionDetailsService;
 import com.octopus.dto.request.AuthenticationReq;
 import com.octopus.dto.request.MissionTimeReq;
 import com.octopus.dto.request.MissionUpdateInfoReq;
+import com.octopus.dto.response.MissionDetailRes;
 import com.octopus.dto.response.MissionRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,15 @@ public class MissionDetailsController {
     ) {
         missionDetailsService.createMissionTime(missionNo, missionTimeReq);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/mission-detail")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<MissionDetailRes> getMissionDetail(
+            @PathVariable Long missionNo
+    ) {
+        return new ResponseEntity<>(
+                missionDetailsService.getMissionDetail(missionNo), HttpStatus.OK);
     }
 
     //인증 시작 시간 & 끝나는 시간 생성하기

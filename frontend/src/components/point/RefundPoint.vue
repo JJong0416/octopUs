@@ -92,6 +92,7 @@ export default {
           console.log(response);
           alert(vm.inputdata + "point 환급 성공.");
           vm.refunddia = false;
+          vm.$emit("success");
           // this.$router.push("Mypage");
         })
         .catch(function (err) {

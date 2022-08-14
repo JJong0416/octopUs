@@ -101,6 +101,7 @@ export default {
           console.log(response);
           alert(this.price + "point 충전 성공.");
           this.charge = false;
+          this.$emit("success");
           // this.$router.push("Mypage");
         })
         .catch(function (err) {

@@ -96,10 +96,13 @@
               </v-col>
               <v-col cols="3">
                 <!-- 충전, 환급 -->
-                <charge-point></charge-point>
+                <charge-point @success="refresh"></charge-point>
               </v-col>
               <v-col class="pl-4" cols="3" style="padding-left: 0px !important">
-                <refund-point :point="userInfo.userPoint"></refund-point>
+                <refund-point
+                  :point="userInfo.userPoint"
+                  @success="refresh"
+                ></refund-point>
               </v-col>
             </v-row>
           </v-card-text>
@@ -148,7 +151,11 @@ export default {
       Missions: [],
     };
   },
-  methods: {},
+  methods: {
+    refresh() {
+      this.$router.go();
+    },
+  },
   created() {
     var vm = this;
     let token = cookie.get("token");

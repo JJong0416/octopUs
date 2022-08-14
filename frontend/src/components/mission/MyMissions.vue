@@ -10,6 +10,7 @@
       :expanded.sync="openexpanded"
       item-key="missionCode"
       show-expand
+      multi-sort
       @item-expanded="clickExpand"
     >
       <!-- 표 상단의 해더 문구 -->

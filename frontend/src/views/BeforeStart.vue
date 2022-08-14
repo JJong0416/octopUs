@@ -1,231 +1,165 @@
 <template>
   <div>
-    <v-card class="mx-auto my-12" max-width="374">
-      <template slot="progress">
-        <v-progress-linear
-          color="deep-purple"
-          height="10"
-          indeterminate
-        ></v-progress-linear>
-      </template>
-
-      <v-card-title> {{ mission.missionTitle }} </v-card-title>
-
+    <v-img src="../assets/img/thema/study.png" width="100%"></v-img>
+    <v-card>
       <v-card-text>
-        <div class="my-4 text-subtitle-1">{{ mission.missionCode }}</div>
+        <div>
+          {{ mission.missionType }}
+          <span style="float: right"
+            ><v-chip>{{ mission.missionPoint }}P</v-chip></span
+          >
+        </div>
+
+        <p class="text-h4 text--primary">
+          {{ mission.missionTitle }}
+        </p>
       </v-card-text>
+
+      <v-divider></v-divider>
+      <!-- <v-btn v-if="mission.missionLeaderId == userInfo.userId"
+        >미션 수정하기</v-btn
+      > -->
+       <v-card-title v-if="isParticipated">
+        <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
+        <div class="my-4 text-subtitle-1"><b>미션 코드 : </b>&nbsp;&nbsp;&nbsp;{{ mission.missionCode }}</div>
+      </v-card-title>
+      <v-card-title>
+        <v-icon color="pink darken-1">mdi-help</v-icon>&nbsp;&nbsp;
+        <div class="my-4 text-subtitle-1"><b>인증은 어떻게 하나요?</b></div>
+      </v-card-title>
+      <v-card-text
+        style="display: flex; justify-content: center; align-items: center"
+      >
+        {{ mission.missionContent }}
+        <br />
+        흐르는 물에 손을 씻는 장면을 찍어 인증합니다!
+      </v-card-text>
+
+      <v-card-title>
+        <v-icon color="pink darken-1">mdi-calendar-check</v-icon>&nbsp;&nbsp;
+        <div class="my-4 text-subtitle-1"><b>미션은 언제부터인가요?</b></div>
+      </v-card-title>
+      <v-card-text
+        style="display: flex; justify-content: center; align-items: center"
+      >
+        {{ missionDetail.missionTimeStartTime | changeDateFormat}} ~ {{missionDetail.missionTimeEndTime | changeDateFormat}}
+      </v-card-text>
+
+      <v-card-title>
+        <v-icon color="pink darken-1">mdi-clock-time-four-outline</v-icon
+        >&nbsp;&nbsp;
+        <div class="my-4 text-subtitle-1"><b>인증은 언제하나요?</b></div>
+      </v-card-title>
+      <v-card-text
+        style="display: flex; justify-content: center; align-items: center"
+      >
+      <div>
+                
+                  <div>해당 미션은
+                    일주일에 &nbsp;&nbsp;<font style="font-weight : bold" size="4" color = "#D81B60">{{missionDetail.missionTimeDPW}}</font>&nbsp;&nbsp;번 인증해야 합니다.</div>
+             <br>
+                    <div >해당 미션은
+                      
+                      하루에 총 &nbsp;&nbsp;<font style="font-weight : bold" size="4" color = "#D81B60">{{missionDetail.missionTimeTPD}}</font>&nbsp;&nbsp;번 인증해야 합니다.</div>
+                      <v-col v-for="(authentication, index) in missionDetail.authenticationInfoList" :key="index" cols="12" 
+                      style="padding : 12px 12px 0px 12px">
+                        <b> > &nbsp;&nbsp;{{authentication.authenticationStartTime}}&nbsp;~&nbsp;{{authentication.authenticationEndTime}}</b>
+                      </v-col>
+                     
+              </div>
+
+      </v-card-text>
+
+      <v-card-title style="padding-bottom: 0px">
+        <div class="my-4 text-subtitle-1" style="padding-bottom: 0px">
+          <v-icon color="pink darken-1">mdi-account-supervisor</v-icon
+          >&nbsp;&nbsp;<b
+            >참여중인 옥순이들 {{ missionuser.length }}/{{
+              mission.missionLimitPersonnel
+            }}</b
+          >
+        </div></v-card-title
+      >
       <v-card-text>
         <div class="my-4 text-subtitle-1">
-          참가자 명단
-          <v-list>
-            <template v-for="(item, index) in this.missionuser">
-              <v-list-tiem :key="index">
-                <v-dialog v-model="userdialog" width="500">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      color="red lighten-2"
+          <v-dialog v-model="userdialog">
+            <template v-slot:activator="{ on, attrs }">
+              <v-container fluid>
+                <v-row>
+                  <v-col cols="2"
+                    v-for="(item, index) in missionuser"
+                    :key="index"
+                    style="padding: 0px 15px 10px 15px !important"
+                  >
+                    <v-avatar
+                      size="40"
+                      color="red lighten-3"
                       @click="previewUser(item)"
+                     
                       v-bind="attrs"
                       v-on="on"
                     >
+                      <b>{{ item }}</b>
+                    </v-avatar>
+                    <!-- <v-avatar size="40" color="red lighten-3" v-else>
                       {{ item }}
-                    </v-btn>
-                  </template>
-
-                  <v-card>
-                    <v-card-title class="text-h6 yellow lighten-2">
-                      {{ previewUsernickname }}님을 정말로 추방하시겠습니까?
-                    </v-card-title>
-
-                    <v-row class="animate__animated animate__bounce">
-                      <v-col class="logo-img-wrapper">
-                        <v-img
-                          max-width="85%"
-                          :src="
-                            require(`../assets/img/Ocsoon/Pet/${userAvatar[3]}.png`)
-                          "
-                        >
-                          <v-img
-                            :src="
-                              require(`../assets/img/Ocsoon/Character/${userAvatar[0]}.png`)
-                            "
-                          >
-                            <v-img
-                              :src="
-                                require(`../assets/img/Ocsoon/Face/${userAvatar[1]}.png`)
-                              "
-                            >
-                              <v-img
-                                :src="
-                                  require(`../assets/img/Ocsoon/Hat/${userAvatar[2]}.png`)
-                                "
-                              ></v-img
-                            ></v-img> </v-img
-                        ></v-img>
-                      </v-col>
-                    </v-row>
-
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="warning" dark @click="kickOutUser(item)">
-                        강퇴하기
-                      </v-btn>
-                      <v-btn color="primary" text @click="userdialog = false">
-                        close
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </v-list-tiem>
+                    </v-avatar> -->
+                  </v-col>
+                </v-row>
+              </v-container>
             </template>
-          </v-list>
+
+            <v-card>
+              <v-card-title class="text-h6 yellow lighten-2">
+                {{ previewUsernickname }}
+              </v-card-title>
+
+              <v-row class="animate__animated animate__bounce">
+                <v-col class="logo-img-wrapper">
+                  <v-img
+                    max-width="85%"
+                    :src="
+                      require(`../assets/img/Ocsoon/Pet/${userAvatar[3]}.png`)
+                    "
+                  >
+                    <v-img
+                      :src="
+                        require(`../assets/img/Ocsoon/Character/${userAvatar[0]}.png`)
+                      "
+                    >
+                      <v-img
+                        :src="
+                          require(`../assets/img/Ocsoon/Face/${userAvatar[1]}.png`)
+                        "
+                      >
+                        <v-img
+                          :src="
+                            require(`../assets/img/Ocsoon/Hat/${userAvatar[2]}.png`)
+                          "
+                        ></v-img
+                      ></v-img> </v-img
+                  ></v-img>
+                </v-col>
+              </v-row>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn v-if="mission.missionLeaderId == userInfo.userId" color="warning" dark @click="kickOutUser()">
+                  강퇴하기
+                </v-btn>
+                <v-btn color="primary" text @click="userdialog = false">
+                  close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </div>
       </v-card-text>
-      <v-card-title
-        >방 인원제한 : {{ mission.missionLimitPersonnel }}</v-card-title
-      >
-      <v-card-title
-        >미션 참가시 필요한 포인트 : {{ mission.missionPoint }}</v-card-title
-      >
-
-      <v-card-actions>
-        <v-card-text color="orange" text> 방 설명 </v-card-text>
-
-        <v-spacer></v-spacer>
-
-        <v-btn icon @click="show = !show">
-          <v-icon>{{ show ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
-        </v-btn>
-      </v-card-actions>
-
-      <v-expand-transition>
-        <div v-show="show">
-          <v-divider></v-divider>
-          <v-card-title>방 설명 / 인증 방법</v-card-title>
-          <v-card-text>
-            {{ mission.missionContent }}
-            <br />
-            흐르는 물에 손을 씻는 장면을 찍어 인증합니다!
-          </v-card-text>
-          <v-card-title>인증 요일 / 시간</v-card-title>
-          <v-card-text>
-            일주일에 {{ mission.authenweeks }} 번, 하루에
-            {{ mission.authendays }} 번, {{ start }} ~ {{ end }}에 인증합니다.
-          </v-card-text>
-        </div>
-      </v-expand-transition>
-      <v-btn color="primary" class="ma-2" dark @click="dialog = true">
-        인증 정보 설정(방장만 보이는 버튼)
-      </v-btn>
-
-      <v-btn color="primary" class="ma-2" dark @click="sendMissionTimeInfo">
-        시작하기(방장만보이는버튼)
-      </v-btn>
+      <v-row>
+      <v-col cols="6"></v-col>
+      <v-btn justify="end" style ="margin : 10px" color ="pink darken-1" v-if="!isParticipated" @click="joinMission"><font color="white">미션에 참여하기</font></v-btn>
+      </v-row>
     </v-card>
-
-    <v-dialog
-      v-model="dialog"
-      fullscreen
-      hide-overlay
-      transition="dialog-bottom-transition"
-      scrollable
-    >
-      <v-card tile>
-        <v-toolbar flat dark color="primary">
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Settings</v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-        <v-card-text>
-          <v-list three-line subheader>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>시작날짜 설정</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-content justify="center">
-                <v-date-picker v-model="picker"></v-date-picker>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>인증횟수</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-content justify="center">
-                <v-text-field
-                  v-model="howmanyweeks"
-                  label="몇주 동안 진행할지 숫자로 입력해주세요"
-                  :rules="weekrules"
-                  type="number"
-                  min="1"
-                  hide-details="auto"
-                  oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-                ></v-text-field>
-                <v-text-field
-                  v-model="authenweeks"
-                  label="일주일에 몇 일 인증할지 숫자로 입력해주세요"
-                  :rules="weekrules"
-                  type="number"
-                  min="1"
-                  hide-details="auto"
-                  oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-                ></v-text-field>
-                <v-text-field
-                  v-model="authendays"
-                  label="하루에 몇 번 인증할지 숫자로 입력해주세요"
-                  :rules="weekrules"
-                  type="number"
-                  min="1"
-                  hide-details="auto"
-                  oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-                ></v-text-field>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-          <v-divider></v-divider>
-          <v-list>
-            <v-list-item v-for="n in Number(authendays)" v-bind:key="n">
-              <v-btn
-                color="primary"
-                dark
-                class="ma-2"
-                @click="dialog2 = !dialog2"
-              >
-                인증 가능 시간설정 {{ n }}
-              </v-btn>
-            </v-list-item>
-            <v-list-item>
-              <v-btn color="primary" dark class="ma-2" @click="dialog = false">
-                save
-              </v-btn>
-            </v-list-item>
-          </v-list>
-        </v-card-text>
-
-        <div style="flex: 1 1 auto"></div>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialog2" max-width="500px">
-      <v-card justify="space-around" align="center">
-        <v-card-title> 인증 가능 시간 설정 </v-card-title>
-        <v-card-title> 시작 시간 </v-card-title>
-        <v-time-picker v-model="start" :max="end"></v-time-picker>
-        <v-card-title> 마감 시간 </v-card-title>
-        <v-time-picker v-model="end" :min="start"></v-time-picker>
-
-        <v-card-actions>
-          <v-btn color="primary" dark @click="dialog2 = false"> Close </v-btn>
-
-          <v-btn color="primary" dark @click="sendAuthenInfo"> save </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -236,8 +170,11 @@ export default {
     show: false,
     roomNo: "",
     userdialog: false,
+    userInfo: [],
     missionuser: [],
+    clickUser: null,
     previewUsernickname: "",
+    missionDetail: null,
     userAvatar: [0, 0, 0, 0],
     picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
@@ -258,64 +195,89 @@ export default {
     notifications: false,
     sound: true,
     widgets: false,
-    items: [
-      {
-        title: "Click Me",
-      },
-      {
-        title: "Click Me",
-      },
-      {
-        title: "Click Me",
-      },
-      {
-        title: "Click Me 2",
-      },
-    ],
-    select: [
-      { text: "State 1" },
-      { text: "State 2" },
-      { text: "State 3" },
-      { text: "State 4" },
-      { text: "State 5" },
-      { text: "State 6" },
-      { text: "State 7" },
-    ],
+    isParticipated: false,
+    
   }),
   props: {
     missionNo: { missionNo: String },
   },
+
   created() {
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${sessionStorage.getItem("token")}`;
     var vm = this;
     vm.roomNo = this.$route.params.missionNo;
-    console.log("missionNo는 뭘까요?");
-    console.log("missionNo는 : " + this.$route.params.missionNo);
     axios
-      .get(`api/mission/${this.$route.params.missionNo}`, {
+      .get(`api/user/info`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
         },
       })
       .then(function (response) {
-        console.log(response);
-
-        console.log("첫번째 데이터가 뭐게요");
-        console.log(response.data[0]);
-        vm.mission = response.data;
-        console.log(vm.mission);
-        vm.missionuser = response.data.missionUsers.split(", ");
+        vm.userInfo = response.data;
+        vm.userAvatar = vm.userInfo.userAvatar.split(", ");
+        vm.avatarColor = parseInt(vm.userAvatar[0]);
+        vm.avatarFace = parseInt(vm.userAvatar[1]);
+        vm.avatarHat = parseInt(vm.userAvatar[2]);
+        vm.avatarPet = parseInt(vm.userAvatar[3]);
       })
       .catch(function (err) {
         console.log(err);
+      })
+      .finally(() => {
+        axios
+          .get(`api/mission/${vm.$route.params.missionNo}`, {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+          })
+          .then(function (response) {
+            console.log(response);
+            vm.mission = response.data;
+            vm.missionuser = response.data.missionUsers.split(", ");
+            if (
+              vm.userInfo.length != 0 &&
+              vm.missionuser.includes(vm.userInfo.userNickname)
+            ) {
+              vm.isParticipated = true;
+            }
+            console.log(vm.missionuser);
+            axios
+              .get(`api/mission/${vm.$route.params.missionNo}/mission-detail`, {
+                headers: {
+                  "Access-Control-Allow-Origin": "*",
+                  "Content-Type": "application/json",
+                },
+              })
+              .then(function (response) {
+                vm.missionDetail = response.data;
+              })
+              .catch(function (err) {
+                console.log(err);
+              });
+          })
+          .catch(function (err) {
+            console.log(err);
+          });
       });
-  },
 
+  },
+  filters: {
+    changeDateFormat: function (value) {
+      if (value == "") return "";
+      var date = value.split("T")[0];
+      var year = date.split("-")[0];
+      var month = date.split("-")[1];
+      var day = date.split("-")[2];
+      return year +"년 " + month + "일 " + day + "일"
+    },
+  },
   methods: {
     previewUser(nickname) {
+      this.clickUser = nickname;
       axios
         .get(`api/user/info/${nickname}`, {
           headers: {
@@ -324,8 +286,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log("nickname으로 불러온 유저정보");
-          console.log(response);
           this.previewUsernickname = response.data.userNickname;
           this.userAvatar = response.data.userAvatar.split(", ");
         })
@@ -333,77 +293,48 @@ export default {
           console.log(error);
         })
         .finally(() => {
-          console.log(nickname);
         });
     },
-    kickOutUser(nickname) {
-      axios
-        .delete(`api/mission/${this.missionNo}/user/${nickname}`)
-        .then((respponse) => {
-          console.log(nickname);
-          console.log(respponse);
-          console.log("유저추방성공");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("본인은 강퇴하실 수 없습니다.");
-        })
-        .finally(() => {
-          console.log("추방당한 유저는?" + nickname);
-          console.log(this.roomNo);
-          this.userdialog = false;
-        });
+    kickOutUser() {
+      const vm = this;
+      if (confirm(`${this.clickUser}님을 정말로 추방하시겠습니까?`)) {
+        axios
+          .delete(`api/mission/${this.missionNo}/user/${this.clickUser}`)
+          .then(() => {
+            alert(vm.clickUser + "님을 미션에서 제외시켰습니다.");
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("본인은 강퇴하실 수 없습니다.");
+          })
+          .finally(() => {
+            this.userdialog = false;
+          });
+      }
     },
-    sendAuthenInfo() {
-      axios
-        .post(`api/mission/${this.missionNo}/authentication`, {
-          authenticationStartTime: this.start,
-          authenticationEndTime: this.end,
-        })
-        .then((response) => {
-          console.log(response);
-          console.log("authentication 정보 전송 성공");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("athentication 정보 전송 실패");
-        })
-        .finally(() => {
-          console.log(this.start);
-          console.log(this.end);
-          this.dialog2 = false;
-          this.start = null;
-          this.end = null;
+    joinMission() {
+      if (this.userInfo.length != 0) {
+        axios
+          .post(`api/mission/${this.missionNo}/join`)
+          .then((response) => {
+            console.log(response);
+            alert("미션에 참여하기가 완료되었습니다.");
+            this.movePage();
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("미션에 참여할 수 없습니다.");
+          });
+      } else {
+        alert("로그인 후 이용해주세요.");
+        this.$router.push({
+          name: "Login",
         });
-    },
-    sendMissionTimeInfo() {
-      axios
-        .post(`api/mission/${this.missionNo}/mission-time`, {
-          missionTimeStartTime: this.picker + "T00:00:00",
-          missionTimeWeek: this.howmanyweeks,
-          missionTimeDPW: this.authenweeks,
-          missionTimeTPD: this.authendays,
-        })
-        .then((response) => {
-          console.log(response);
-          console.log("missiontime 정보 전송 성공");
-          this.movePage();
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("missiontime 정보 전송 실패");
-        })
-        .finally(() => {
-          console.log(this.picker + "T00:00:00");
-          console.log(this.howmanyweeks);
-          console.log(this.authenweeks);
-          console.log(this.authendays);
-        });
+      }
     },
     movePage() {
       this.$router.push({
-        name: "proceeding",
-        params: this.roomNo,
+        name: "Mypage"
       });
     },
   },

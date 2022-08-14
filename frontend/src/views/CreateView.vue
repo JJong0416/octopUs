@@ -189,7 +189,7 @@ export default {
             "미션 성공 인증을 위한 시간을 설정하면 해당 미션이 활성화됩니다."
           );
           this.$router.push({
-            name: "before",
+            name: "unactivated",
             params: { missionNo: response.data },
           });
         })

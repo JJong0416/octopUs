@@ -83,7 +83,7 @@
           <router-link
             v-if="item.missionStatus === `UNACTIVATED`"
             :to="{
-              name: 'before',
+              name: 'unactivated',
               params: { missionNo: item.missionNo },
             }"
           >
@@ -92,7 +92,7 @@
           <router-link
             v-if="item.missionStatus === `OPEN`"
             :to="{
-              name: 'proceeding',
+              name: 'before',
               params: { missionNo: item.missionNo },
             }"
           >

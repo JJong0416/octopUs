@@ -310,7 +310,7 @@ export default {
             if (response.data[i] === vm.userId) {
               alert("이미 참가중인 방입니다");
               vm.$router.push({
-                name: "proceeding",
+                name: "before",
                 params: { missionNo: missionNum },
               });
               return;

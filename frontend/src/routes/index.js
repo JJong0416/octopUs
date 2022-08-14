@@ -118,6 +118,12 @@ const routes = [
     component: () => import("@/views/RefundView.vue"),
     props: true,
   },
+  {
+    path: "/unactivated",
+    name: "unactivated",
+    component: () => import("@/views/UnactivatedMission.vue"),
+    props: true,
+  },
 ];
 
 const router = new VueRouter({

@@ -88,4 +88,17 @@ public class UserModificationService {
     private boolean isCurrentPasswordAndDbPasswordEquals(String currentPassword, String dbPassword) {
         return passwordEncoder.matches(currentPassword, dbPassword);
     }
+
+    @Transactional
+    public void plusUserPoint(Integer point) {
+        User user = getUserInfo(getCurrentUsername().get());
+        user.updatePoint(user.getUserPoint() + point);
+
+    }
+
+    @Transactional
+    public void minusUserPoint(Integer point) {
+        User user = getUserInfo(getCurrentUsername().get());
+        user.updatePoint(user.getUserPoint() - point);
+    }
 }

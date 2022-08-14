@@ -2,6 +2,7 @@ package com.octopus.api.controller;
 
 import com.octopus.api.service.UserModificationService;
 import com.octopus.dto.request.AvatarReq;
+import com.octopus.dto.request.PointReq;
 import com.octopus.dto.request.UserUpdateInfoReq;
 import com.octopus.dto.request.UserUpdatePasswordReq;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,23 @@ public class UserModificationController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<HttpStatus> modifyPassword(@Valid @RequestBody UserUpdatePasswordReq userUpdatePasswordReq) {
         userModificationService.changeUserPassword(userUpdatePasswordReq);
+        return ResponseEntity.ok().build();
+    }
+
+    // 포인트 충전
+    @PatchMapping("/point/charge")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> pointCharge(@RequestBody PointReq pointReq) {
+        userModificationService.plusUserPoint(pointReq.getPoint());
+        return ResponseEntity.ok().build();
+    }
+
+
+    // 포인트 환급
+    @PatchMapping("/point/refund")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<HttpStatus> pointRefund(@RequestBody PointReq pointReq) {
+        userModificationService.minusUserPoint(pointReq.getPoint());
         return ResponseEntity.ok().build();
     }
 }

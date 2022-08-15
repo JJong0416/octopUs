@@ -28,6 +28,9 @@ public class MissionTime implements Serializable {
     @Column(name = "mission_time_start_time")
     private LocalDateTime missionTimeStartTime;
 
+    @Column(name = "mission_time_end_time")
+    private LocalDateTime missionTimeEndTime;
+
     @Column(name = "mission_time_week")
     private Integer missionTimeWeek;
 
@@ -43,6 +46,7 @@ public class MissionTime implements Serializable {
     ) {
         this.mission = mission;
         this.missionTimeStartTime = missionTimeStartTime;
+        this.missionTimeEndTime = missionTimeStartTime.plusDays(missionTimeWeek * 7);
         this.missionTimeWeek = missionTimeWeek;
         this.missionTimeDPW = missionTimeDPW;
         this.missionTimeTPD = missionTimeTPD;

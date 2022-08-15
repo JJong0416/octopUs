@@ -1,8 +1,6 @@
 package com.octopus.api.service;
 
-import com.octopus.api.repository.MissionRepository;
-import com.octopus.api.repository.OctopusTableRepository;
-import com.octopus.api.repository.UserRepository;
+import com.octopus.api.repository.*;
 import com.octopus.domain.Mission;
 import com.octopus.domain.User;
 import com.octopus.domain.type.MissionOpenType;
@@ -31,6 +29,8 @@ public class MissionService {
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
     private final OctopusTableRepository octopusTableRepository;
+    private final AuthenticationRepository authenticationRepository;
+    private final MissionTimeRepository missionTimeRepository;
 
     /* 미션 코드 중복은 안했음. */
     @Transactional
@@ -121,5 +121,17 @@ public class MissionService {
     @Transactional(readOnly = true)
     public List<MissionRes> getMissionsByMissionType(MissionType missionType) {
         return missionRepository.findMissionsByMissionType(missionType);
+    }
+
+    // 미션을 삭제하며 해당 미션의 모든 조인테이블 삭제(리더인경우만 가능)
+    @Transactional
+    public void deleteMission(Long missionNo){
+        Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(()->{
+            throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
+        });
+        missionTimeRepository.deleteByMission(mission);
+        octopusTableRepository.deleteByMission(mission);
+        authenticationRepository.deleteByMission(mission);
+        missionRepository.deleteByMissionNo(missionNo);
     }
 }

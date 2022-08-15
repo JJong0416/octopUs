@@ -11,7 +11,6 @@ import com.octopus.dto.response.MissionDetailRes;
 import com.octopus.dto.response.MissionRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
-import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,11 +68,11 @@ public class MissionDetailsService {
     @Transactional
     public void joinMission(Long missionNo) {
         User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
 
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
         if (mission.getMissionStatus().equals(MissionStatus.OPEN)) {
             List<User> countPerson = octopusTableRepository.findUserByMission(mission);
@@ -86,6 +85,11 @@ public class MissionDetailsService {
                 String newList = sb.toString();
                 mission.updateMissionUsers(newList);
                 octopusTableRepository.insertToOctopusTable(user.getUserNo(), missionNo);
+                if(user.getUserPoint() >= mission.getMissionPoint()){
+                    user.updatePoint(user.getUserPoint() - mission.getMissionPoint());
+                }else{
+                    throw new CustomException(ErrorCode.POINT_LACK_ERROR);
+                }
             } else
                 throw new CustomException(ErrorCode.MISSION_FULL);
         }else
@@ -190,20 +194,6 @@ public class MissionDetailsService {
 
     public MissionRes getMissionDtoByMissionNo(Long missionNo) {
         Mission mission = getMissionByMissionNo(missionNo);
-//        if(missionTimeRepository.haveMissionTimeByMissionNo(missionNo)) {
-//            MissionTime missionTime = missionTimeRepository.findMissionTimeByMissionNo(missionNo).get();
-//
-//            LocalDateTime startDate = missionTime.getMissionTimeStartTime();
-//            if (mission.getMissionStatus() == MissionStatus.OPEN && LocalDateTime.now().isAfter(startDate)) {
-//                mission.updateMissionStatus(MissionStatus.ONGOING);
-//            }
-//
-//            LocalDateTime endDate = missionTime.getMissionTimeStartTime().plusDays(missionTime.getMissionTimeWeek() * 7);
-//            if (mission.getMissionStatus() == MissionStatus.ONGOING && LocalDateTime.now().isAfter(endDate)) {
-//                mission.updateMissionStatus(MissionStatus.CLOSE);
-//            }
-//            missionRepository.save(mission);
-//        }
 
         return MissionRes.builder()
                 .missionNo(missionNo)
@@ -249,47 +239,44 @@ public class MissionDetailsService {
         Mission mission = missionRepository.findByMissionNo(missionNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
 
-        if (mission.getMissionStatus() == MissionStatus.CLOSE) {
-            List<String> userList = getMissionUsers(missionNo);
+        List<String> userList = getMissionUsers(missionNo);
 
-            if (missionCalenderService.getTeamRate(missionNo) == 100.0) {
-                for (String nickname : userList) {
-                    System.out.println("if문, nickname : " + nickname);
+        if (missionCalenderService.getTeamRate(missionNo) == 100.0) {
+            for (String nickname : userList) {
+                System.out.println("if문, nickname : " + nickname);
 
-                    User user = userRepository.findByUserNickname(nickname).orElseThrow(() -> {
-                        throw new CustomException(ErrorCode.USER_NOT_FOUND);
-                    });
-                    Integer newPoint = (int) Math.round(mission.getMissionPoint() * 1.05);
+                User user = userRepository.findByUserNickname(nickname).orElseThrow(() -> {
+                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                });
+                Integer newPoint = (int) Math.round(mission.getMissionPoint() * 1.05);
+                user.updatePoint(user.getUserPoint() + newPoint);
+            }
+        } else {
+            for (String nickname : userList) {
+                User user = userRepository.findByUserNickname(nickname).orElseThrow(() -> {
+                    System.out.println("else 문, nickname : " + nickname);
+                    throw new CustomException(ErrorCode.USER_NOT_FOUND);
+                });
+                //user의 달성률 가져오기 (user 다시)
+                Float successRate = missionCalenderService.getUserRate(missionNo, user.getUserId());
+                //가져온 달성률로 조건문 만들어서 포인트 환급해주기
+                if (successRate == 100.0) {
+                    user.updatePoint((user.getUserPoint() + mission.getMissionPoint()));
+                } else if (successRate >= 80.0) {
+                    Integer newPoint = (int) Math.round(mission.getMissionPoint() * 0.8);
                     user.updatePoint(user.getUserPoint() + newPoint);
                 }
-            } else {
-                for (String nickname : userList) {
-                    User user = userRepository.findByUserNickname(nickname).orElseThrow(() -> {
-                        System.out.println("else 문, nickname : " + nickname);
-                        throw new CustomException(ErrorCode.USER_NOT_FOUND);
-                    });
-                    //user의 달성률 가져오기 (user 다시)
-                    Float successRate = missionCalenderService.getUserRate(missionNo, user.getUserId());
-                    //가져온 달성률로 조건문 만들어서 포인트 환급해주기
-                    if (successRate == 100.0) {
-                        user.updatePoint((user.getUserPoint() + mission.getMissionPoint()));
-                    } else if (successRate >= 80.0) {
-                        Integer newPoint = (int) Math.round(mission.getMissionPoint() * 0.8);
-                        user.updatePoint(user.getUserPoint() + newPoint);
-                    }
 
-                }
             }
-        } else
-            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
     }
 
     public MissionDetailRes getMissionDetail(Long missionNo) {
         MissionTime missionTime = missionTimeRepository.findMissionTimeByMissionNo(missionNo).get();
         List<AuthenticationReq> authenticationInfoList =authenticationRepository.findAuthenticationInfoByMissionNo(missionNo)
                 .stream().map(authenticationInfo -> AuthenticationReq.builder()
-                                .authenticationInfo(authenticationInfo)
-                                .build())
+                        .authenticationInfo(authenticationInfo)
+                        .build())
                 .collect(Collectors.toList());
 
         return MissionDetailRes.builder()

@@ -10,7 +10,6 @@ import com.octopus.dto.response.MissionUserInfoRes;
 import com.octopus.dto.response.UserMyPageRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
-import com.octopus.exception.UserNotFoundException;
 import com.octopus.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,9 +29,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final OctopusTableRepository octopusTableRepository;
     private final EmailTokenService emailTokenService;
-    private final PasswordEncoder passwordEncoder;
 
-    private final UserNotFoundException userNotFoundException;
+    private final MissionDetailsService missionDetailsService;
+    private final MissionService missionService;
+    private final PasswordEncoder passwordEncoder;
 
     // 패스워드 중복 체크 후, 삭제
     @Transactional
@@ -40,6 +40,18 @@ public class UserService {
         User user = getUserInfo(getCurrentUsername().get());
         // 입력받은 id, pw조합이 존재한다면 - 삭제
         if (isCurrentPasswordAndDbPasswordEquals(password, user.getUserPassword())) {
+            // 조인테이블 내용 삭제
+            if(octopusTableRepository.existsByUser(user)) {
+                // 내가 포함된 모든 미션
+                for (Mission mission:octopusTableRepository.findMissionByUser(user)) {
+                    // 내가 방장이라면? 미션을 삭제
+                    if(user.getUserId().equals(mission.getMissionLeaderId())){
+                        missionService.deleteMission(mission.getMissionNo());
+                    }else{ // 아니라면 해당 미션에서 내이름만 지움 + 조인테이블에서 삭제
+                        missionDetailsService.deleteUserFromMission(user.getUserNickname(),mission.getMissionNo());
+                    }
+                }
+            }
             userRepository.delete(user);
         } else
             throw new CustomException(ErrorCode.PASSWORD_NOT_VALID);
@@ -51,7 +63,7 @@ public class UserService {
 
         // 회원찾고
         User findUser = userRepository.findUserByUserEmail(userFindPasswordReq.getUserEmail())
-                .orElseThrow( () -> {throw userNotFoundException;});
+                .orElseThrow( () -> {throw new CustomException(ErrorCode.USER_NOT_FOUND);});
 
         // 있으면, 랜덤의 패스워드를 생성 후, 인코딩 하고
         String userRandomPassword = UserUtils.createRandomUserPassword();
@@ -83,14 +95,14 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserInfo(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
     }
 
     @Transactional(readOnly = true)
     public MissionUserInfoRes getUserInfoByUserNickname(String userNickname) {
         User user = userRepository.findByUserNickname(userNickname).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
         return MissionUserInfoRes.builder()
                 .userEmail(user.getUserEmail())

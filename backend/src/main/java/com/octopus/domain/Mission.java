@@ -5,6 +5,8 @@ import com.octopus.dto.request.MissionUpdateInfoReq;
 import com.octopus.domain.type.MissionOpenType;
 import com.octopus.domain.type.MissionStatus;
 import com.octopus.domain.type.MissionType;
+import com.octopus.exception.CustomException;
+import com.octopus.exception.ErrorCode;
 import lombok.*;
 
 import javax.persistence.*;
@@ -73,7 +75,7 @@ public class Mission {
         this.missionContent = missionUpdateInfoReq.getMissionContent();
         this.missionType = missionUpdateInfoReq.getMissionType();
         if (missionUpdateInfoReq.getMissionLimitPersonnel() < this.missionLimitPersonnel){
-            //throw LimitLessThanBeforeException;
+            throw new CustomException(ErrorCode.LIMIT_CANT_BE_LESS_THAN_BEFORE);
         }
         else
         {this.missionLimitPersonnel = missionUpdateInfoReq.getMissionLimitPersonnel();}

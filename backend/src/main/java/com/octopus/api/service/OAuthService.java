@@ -6,7 +6,7 @@ import com.octopus.domain.type.PlatformType;
 import com.octopus.dto.layer.KakaoProfileDto;
 import com.octopus.dto.request.LoginReq;
 import com.octopus.dto.request.UserSignUpReq;
-import com.octopus.exception.UserNotFoundException;
+import com.octopus.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -55,7 +55,7 @@ public class OAuthService {
         // 존재한다면 LoginReq로 반환해준다
         Optional<User> kakaoUser = findKakaoUser(userId);
         if (kakaoUser.isPresent()) {
-            return new LoginReq(kakaoUser.get().getUserId(),kakaoUser.get().getUserPassword());
+            return new LoginReq(kakaoUser.get().getUserId(),userEmail);
         }
 
         // 존재하지 않으면 생성 + 저장 + LoginReq 반환
@@ -76,7 +76,7 @@ public class OAuthService {
 
     /* 현재 userRepository에 해당하는 카카오 아이디 찾아오기 */
     @Transactional(readOnly = true)
-    protected Optional<User> findKakaoUser(String userId) throws UserNotFoundException {
+    protected Optional<User> findKakaoUser(String userId) throws CustomException {
         return userRepository.findUserByUserIdAndPlatformType(userId, PlatformType.KAKAO);
     }
 

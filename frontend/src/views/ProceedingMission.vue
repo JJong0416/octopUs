@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-img src="../assets/img/thema/study.png" width="100%"></v-img>
+    <v-img  :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)" width="100%">
+      <!-- 뒤로 가기 버튼 -->
+      <v-btn @click="goback" icon color="pink" class="pa-3">
+        <v-icon> mdi-arrow-left</v-icon>
+      </v-btn></v-img
+    >
     <v-card>
       <v-card-text>
         <div>

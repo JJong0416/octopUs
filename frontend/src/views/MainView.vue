@@ -38,7 +38,12 @@
           ></v-text-field>
         </v-col>
         <v-col class="pl-1" cols="3">
-          <v-btn v-model="tofindsearch" @click="transmit" outlined color="#fa183e">
+          <v-btn
+            v-model="tofindsearch"
+            @click="transmit"
+            outlined
+            color="#fa183e"
+          >
             Go!
           </v-btn>
         </v-col>
@@ -176,9 +181,9 @@ export default {
   },
   created() {
     var vm = this;
-    axios.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${sessionStorage.getItem("token")}`;
+    // axios.defaults.headers.common[
+    //   "Authorization"
+    // ] = `Bearer ${sessionStorage.getItem("token")}`;
     // kakao login token settings
     axios
       .get(`api/login/kakao/${vm.$route.query.code}`, {

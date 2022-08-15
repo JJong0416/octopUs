@@ -5,6 +5,7 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.octopus.api.repository.*;
 import com.octopus.domain.*;
+import com.octopus.domain.type.MissionStatus;
 import com.octopus.dto.layer.PictureDto;
 import com.octopus.dto.request.UploadPictureReq;
 import com.octopus.dto.response.CalenderRes;
@@ -12,7 +13,6 @@ import com.octopus.dto.response.CalenderUserInfoRes;
 import com.octopus.dto.response.MissionPictureRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
-import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
@@ -150,6 +150,8 @@ public class MissionCalenderService {
 
         User user = getUserByUserId(getCurrentUsername().get());
         Mission mission = getMissionByMissionNo(missionNo);
+        if (!mission.getMissionStatus().equals(MissionStatus.ONGOING))
+            throw new CustomException(ErrorCode.BAD_REQUEST);
         StringBuilder filename = makeFileName(user, mission);
 
         String encodedImg = uploadPictureReq.getEncodedImg().split(",")[1];
@@ -249,7 +251,7 @@ public class MissionCalenderService {
     @Transactional(readOnly = true)
     public User getUserByUserId(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
     }
 

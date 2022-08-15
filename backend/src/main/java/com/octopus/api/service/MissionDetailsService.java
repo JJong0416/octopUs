@@ -9,7 +9,6 @@ import com.octopus.dto.request.MissionUpdateInfoReq;
 import com.octopus.dto.response.MissionRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
-import com.octopus.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,11 +63,11 @@ public class MissionDetailsService {
     @Transactional
     public void joinMission(Long missionNo) {
         User user = userRepository.findByUserId(getCurrentUsername().get()).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
 
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
         });
         if (mission.getMissionStatus().equals(MissionStatus.OPEN)) {
             List<User> countPerson = octopusTableRepository.findUserByMission(mission);

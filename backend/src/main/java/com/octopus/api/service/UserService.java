@@ -9,7 +9,6 @@ import com.octopus.dto.response.MissionInfoRes;
 import com.octopus.dto.response.UserMyPageRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
-import com.octopus.exception.UserNotFoundException;
 import com.octopus.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,8 +30,6 @@ public class UserService {
     private final EmailTokenService emailTokenService;
     private final PasswordEncoder passwordEncoder;
 
-    private final UserNotFoundException userNotFoundException;
-
     // 패스워드 중복 체크 후, 삭제
     @Transactional
     public void isPasswordEqualDbPassword(String password) {
@@ -50,7 +47,7 @@ public class UserService {
 
         // 회원찾고
         User findUser = userRepository.findUserByUserEmail(userFindPasswordReq.getUserEmail())
-                .orElseThrow( () -> {throw userNotFoundException;});
+                .orElseThrow( () -> {throw new CustomException(ErrorCode.USER_NOT_FOUND);});
 
         // 있으면, 랜덤의 패스워드를 생성 후, 인코딩 하고
         String userRandomPassword = UserUtils.createRandomUserPassword();
@@ -82,7 +79,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserInfo(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
     }
 

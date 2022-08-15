@@ -102,7 +102,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public MissionUserInfoRes getUserInfoByUserNickname(String userNickname) {
         User user = userRepository.findByUserNickname(userNickname).orElseThrow(() -> {
-            throw new UserNotFoundException();
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
         return MissionUserInfoRes.builder()
                 .userEmail(user.getUserEmail())

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container  align="center" justify="center">
+    <v-container align="center" justify="center">
       <v-row class="pt-4 pl-4">
         <v-col cols="4">
           <!-- 뒤로 가기 버튼 -->
@@ -8,10 +8,10 @@
             <v-icon> mdi-arrow-left</v-icon>
           </v-btn>
         </v-col>
-         <v-col cols="4">
-          <h3>옥수니 상점</h3>
-         </v-col>
-         <v-col cols="4"></v-col>
+        <v-col cols="5">
+          <h3>옥수니상점</h3>
+        </v-col>
+        <v-col cols="3"></v-col>
       </v-row>
       <v-row justify="center">
         <v-col class="px-10 pt-3 pb-0" cols="4">
@@ -33,31 +33,35 @@
           <v-icon large v-else @click="saveAvatar">mdi-check</v-icon>
         </v-col>
       </v-row>
-      
+
       <v-row class="pl-13 pb-3 pt-0" justify="center">
         <v-col cols="12">
-      <v-img
-        :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
-        width="30vh"
-      >
-        <v-img
-          :src="
-            require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)
-          "
-          width="30vh"
-        >
           <v-img
-            :src="require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)"
+            :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
             width="30vh"
           >
             <v-img
-              :src="require(`../assets/img/Ocsoon/Hat/${this.avatarHat}.png`)"
+              :src="
+                require(`../assets/img/Ocsoon/Character/${this.avatarColor}.png`)
+              "
               width="30vh"
-            ></v-img
-          ></v-img>
-        </v-img>
-      </v-img></v-col>
-    </v-row>
+            >
+              <v-img
+                :src="
+                  require(`../assets/img/Ocsoon/Face/${this.avatarFace}.png`)
+                "
+                width="30vh"
+              >
+                <v-img
+                  :src="
+                    require(`../assets/img/Ocsoon/Hat/${this.avatarHat}.png`)
+                  "
+                  width="30vh"
+                ></v-img
+              ></v-img>
+            </v-img> </v-img
+        ></v-col>
+      </v-row>
       <v-btn-toggle v-model="toggle_exclusive">
         <v-row>
           <v-col cols="12" sm="6" class="py-1">
@@ -119,13 +123,7 @@
 
       <template>
         <v-card color="basil">
-
-          <v-tabs
-            v-model="tab"
-            background-color="#eefaec"
-            color="#143559"
-            grow
-          >
+          <v-tabs v-model="tab" background-color="#eefaec" color="#143559" grow>
             <v-tab v-for="(item, index) in items" :key="index">
               {{ item.kind }}
             </v-tab>
@@ -143,7 +141,10 @@
                         }.png`)
                       "
                       aspect-ratio="1"
-                      :class="{'grey lighten-2' : (selectItemKind[item.kind] == i-1), 'grey lighten-4' : (selectItemKind[item.kind] != i-1)}"
+                      :class="{
+                        'grey lighten-2': selectItemKind[item.kind] == i - 1,
+                        'grey lighten-4': selectItemKind[item.kind] != i - 1,
+                      }"
                       @click="changeAvatar(item.kind, i - 1)"
                     ></v-img>
                   </v-col>
@@ -184,11 +185,15 @@ export default {
       initHat: null,
       initPet: null,
       avatarInfo: [],
-      selectItem : null,
-      selectItemKind : {Face : this.initFace, Hat : this.initHat, Pet : this.initPet},
+      selectItem: null,
+      selectItemKind: {
+        Face: this.initFace,
+        Hat: this.initHat,
+        Pet: this.initPet,
+      },
     };
   },
-  
+
   created() {
     axios.defaults.headers.common[
       "Authorization"
@@ -209,15 +214,14 @@ export default {
         (this.avatarFace = this.initFace),
         (this.avatarHat = this.initHat),
         (this.avatarPet = this.initPet);
-        console.log(this.initPet);
-        this.selectItemKind["Face"] = this.initFace;
-        if(this.initHat == "0_nothing"){
-           this.selectItemKind["Hat"] = 0
-        }
-        if(this.initPet == "0_nothing"){
-          this.selectItemKind["Pet"] = 0
-        }
-       
+      console.log(this.initPet);
+      this.selectItemKind["Face"] = this.initFace;
+      if (this.initHat == "0_nothing") {
+        this.selectItemKind["Hat"] = 0;
+      }
+      if (this.initPet == "0_nothing") {
+        this.selectItemKind["Pet"] = 0;
+      }
     },
     changeColor(value) {
       this.avatarColor = value;
@@ -225,7 +229,7 @@ export default {
     changeAvatar(kind, i) {
       this.selectItem = i;
       this.selectItemKind[kind] = i;
-      console.log(this.selectItem)
+      console.log(this.selectItem);
       console.log(kind + i);
       if (kind === "Face") {
         this.avatarFace = i;
@@ -290,7 +294,7 @@ export default {
 .basil--text {
   color: #356859 !important;
 }
-.wrapper{
+.wrapper {
   height: 100%;
 }
 </style>

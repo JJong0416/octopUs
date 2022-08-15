@@ -33,7 +33,7 @@
           <b>미션 코드 : </b>&nbsp;&nbsp;&nbsp;{{ mission.missionCode }}
           &nbsp;&nbsp;
         </div>
-        <v-btn @click="copy(mission.missionCode)" icon>
+        <v-btn v-clipboard="mission.missionCode" icon>
           <v-img
             max-height="30px"
             max-width="30px"
@@ -312,9 +312,6 @@ export default {
         name: "Mypage",
         params: { missionNo: this.missionNo },
       });
-    },
-    copy(missionCode) {
-      this.$clipboard(missionCode);
     },
   },
 };

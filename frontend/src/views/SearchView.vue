@@ -52,7 +52,12 @@
             }}</v-list-item-subtitle>
           </v-list-item-content>
 
-          <v-list-item-avatar tile size="80" color="grey"></v-list-item-avatar>
+          <v-list-item-avatar tile size="80">
+            <v-img
+              :src="require(`../assets/img/Theme/${searchtypes[index]}.jpg`)"
+            >
+            </v-img
+          ></v-list-item-avatar>
         </v-list-item>
 
         <v-card-actions>
@@ -147,6 +152,7 @@ export default {
       hotmissions: [],
       newmissions: [],
       allmissions: [],
+      searchtypes: [],
       searchres: null,
       headers: [
         {
@@ -284,6 +290,23 @@ export default {
           console.log("여기는 search result");
           console.log(response);
           vm.searchres = response.data;
+          for (let index = 0; index < vm.searchres.length; index++) {
+            const searchedmission = vm.searchres[index];
+            var type;
+            if (searchedmission.missionType === "ETC") {
+              type = "ETC";
+            } else if (searchedmission.missionType === "LIFE") {
+              type = "life";
+            } else if (searchedmission.missionType === "EXERCISE") {
+              type = "exercise";
+            } else if (searchedmission.missionType === "STUDY") {
+              type = "study";
+            } else if (searchedmission.missionType === "MEETING") {
+              type = "meeting";
+            }
+
+            vm.searchtypes[index] = type;
+          }
           console.log(vm.searchres);
         })
         .catch(function (err) {

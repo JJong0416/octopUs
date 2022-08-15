@@ -29,6 +29,13 @@
         <div class="my-4 text-subtitle-1">
           <b>미션 코드 : </b>&nbsp;&nbsp;&nbsp;{{ mission.missionCode }}
         </div>
+        <v-btn v-clipboard="mission.missionCode" icon>
+          <v-img
+            max-height="30px"
+            max-width="30px"
+            src="../assets/img/icons/layer.png"
+          ></v-img>
+        </v-btn>
       </v-card-title>
       <v-card-title>
         <v-icon color="pink darken-1">mdi-help</v-icon>&nbsp;&nbsp;

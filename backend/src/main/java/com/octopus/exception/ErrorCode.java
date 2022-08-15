@@ -14,6 +14,8 @@ public enum ErrorCode {
     //400 BAD_REQUEST: 잘못된 요청
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
 
+    LIMIT_CANT_BE_LESS_THAN_BEFORE(HttpStatus.BAD_REQUEST, "기존 설정 인원보다 적게 수정할 수 없습니다."),
+
     MISSION_NOT_OPENED(HttpStatus.BAD_REQUEST, "가입이 불가능한 미션입니다."),
 
     PASSWORD_NOT_VALID(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),

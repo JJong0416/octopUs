@@ -1,149 +1,90 @@
 <template>
-  <div>
+  <div class="wrapper">
     <header-view></header-view>
-    <br />
-    NewMissions!
-    <br />
-    <v-row>
-      <v-col cols="1"></v-col>
-      <v-col cols="10">
-        <v-carousel
-          cycle
-          height="180"
-          hide-delimiter-background
-          show-arrows-on-hover
-          hide-delimiters
-        >
-          <v-carousel-item v-for="(newmission, i) in newmissions" :key="i">
-            <v-card class="mx-auto" max-width="344" outlined>
-              <v-list-item three-line>
-                <v-list-item-content>
-                  <div class="text-overline mb-4">
-                    {{ newmission.missionNo }}
-                  </div>
-                  <v-list-item-title class="text-h5 mb-1">
-                    {{ newmission.missionTitle }}
-                  </v-list-item-title>
-                  <v-list-item-subtitle
-                    >{{ newmission.missionContent }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-
-                <v-list-item-avatar tile size="80">
-                  <v-img
-                    :src="
-                      require(`../assets/img/Ocsoon/Pet/${newavatars[i][3]}.png`)
-                    "
-                  >
+    <v-card>
+      <v-tabs v-model="tab">
+        <v-tabs-slider></v-tabs-slider>
+        <v-tab href="#tab-1">
+          Hot
+        </v-tab>
+        <v-tab href="#tab-2">
+          New
+        </v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tab">
+        <v-tab-item v-for="i in 2" :key="i" :value="'tab-'+ i">
+          <v-container>
+             <v-row>
+              <v-col cols="1"></v-col>
+              <v-col cols="10">
+                <v-carousel
+                  cycle
+                  height="180"
+                  hide-delimiter-background
+                  show-arrows-on-hover
+                  hide-delimiters
+                >
+                  <v-carousel-item v-for="(newmission, i) in newmissions" :key="i">
+                    <v-card class="mx-auto" max-width="344" outlined>
+                      <v-list-item three-line>
+                        <v-list-item-content>
+                          <div class="text-overline mb-4">
+                            {{ newmission.missionNo }}
+                          </div>
+                          <v-list-item-title class="text-h5 mb-1">
+                            {{ newmission.missionTitle }}
+                          </v-list-item-title>
+                          <v-list-item-subtitle
+                            >{{ newmission.missionContent }}
+                          </v-list-item-subtitle>
+                        </v-list-item-content>
+                  <v-list-item-avatar tile size="80">
                     <v-img
                       :src="
-                        require(`../assets/img/Ocsoon/Character/${newavatars[i][0]}.png`)
+                        require(`../assets/img/Ocsoon/Pet/${newavatars[i][3]}.png`)
                       "
                     >
                       <v-img
                         :src="
-                          require(`../assets/img/Ocsoon/Face/${newavatars[i][1]}.png`)
+                          require(`../assets/img/Ocsoon/Character/${newavatars[i][0]}.png`)
                         "
                       >
                         <v-img
                           :src="
-                            require(`../assets/img/Ocsoon/Hat/${newavatars[i][2]}.png`)
+                            require(`../assets/img/Ocsoon/Face/${newavatars[i][1]}.png`)
                           "
-                        ></v-img
-                      ></v-img>
-                    </v-img> </v-img
-                ></v-list-item-avatar>
-              </v-list-item>
+                        >
+                          <v-img
+                            :src="
+                              require(`../assets/img/Ocsoon/Hat/${newavatars[i][2]}.png`)
+                            "
+                          ></v-img
+                        ></v-img>
+                      </v-img> </v-img
+                  ></v-list-item-avatar>
+                </v-list-item>
 
-              <v-card-actions>
-                <v-btn
-                  outlined
-                  rounded
-                  text
-                  color="secondary"
-                  @click="mvdetail(newmission)"
-                >
-                  자세히보기
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-carousel-item>
-        </v-carousel>
-      </v-col>
-      <v-col cols="1"></v-col>
-    </v-row>
-
-    <br />
-    hotmission!
-    <br />
-    <v-row>
-      <v-col cols="1"></v-col>
-      <v-col cols="10">
-        <v-carousel
-          cycle
-          height="180"
-          hide-delimiter-background
-          show-arrows-on-hover
-          hide-delimiters
-        >
-          <v-carousel-item v-for="(hotmission, i) in hotmissions" :key="i">
-            <v-card class="mx-auto" max-width="344" outlined>
-              <v-list-item three-line>
-                <v-list-item-content>
-                  <div class="text-overline mb-4">
-                    {{ hotmission.missionNo }}
-                  </div>
-                  <v-list-item-title class="text-h5 mb-1">
-                    {{ hotmission.missionTitle }}
-                  </v-list-item-title>
-                  <v-list-item-subtitle
-                    >{{ hotmission.missionContent }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-
-                <v-list-item-avatar tile size="80">
-                  <v-img
-                    :src="
-                      require(`../assets/img/Ocsoon/Pet/${hotavatars[i][3]}.png`)
-                    "
+                <v-card-actions>
+                  <v-btn
+                    outlined
+                    rounded
+                    text
+                    color="secondary"
+                    @click="mvdetail(newmission)"
                   >
-                    <v-img
-                      :src="
-                        require(`../assets/img/Ocsoon/Character/${hotavatars[i][0]}.png`)
-                      "
-                    >
-                      <v-img
-                        :src="
-                          require(`../assets/img/Ocsoon/Face/${hotavatars[i][1]}.png`)
-                        "
-                      >
-                        <v-img
-                          :src="
-                            require(`../assets/img/Ocsoon/Hat/${hotavatars[i][2]}.png`)
-                          "
-                        ></v-img
-                      ></v-img>
-                    </v-img> </v-img
-                ></v-list-item-avatar>
-              </v-list-item>
-
-              <v-card-actions>
-                <v-btn
-                  outlined
-                  rounded
-                  text
-                  color="secondary"
-                  @click="mvdetail(hotmission)"
-                >
-                  자세히보기
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-carousel-item>
-        </v-carousel>
-      </v-col>
-      <v-col cols="1"></v-col>
+                    자세히보기
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-carousel-item>
+          </v-carousel>
+        </v-col>
+        <v-col cols="1"></v-col>
     </v-row>
+          </v-container>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-card>
     <footer-view></footer-view>
   </div>
 </template>
@@ -159,6 +100,7 @@ export default {
   },
   data() {
     return {
+      tab: null,
       hotmissions: [],
       newmissions: [],
       hotavatars: [],
@@ -250,4 +192,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.wrapper{
+  height: 100%;
+}
+</style>

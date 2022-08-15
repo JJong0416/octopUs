@@ -291,7 +291,7 @@ export default {
           .then((response) => {
             console.log(response);
             this.successDialog = true;
-            setInterval(this.movePage, 2000);
+            setTimeout(this.movePage, 2000);
           })
           .catch((error) => {
             console.log(error);

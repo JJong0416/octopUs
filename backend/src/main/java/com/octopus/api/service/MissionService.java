@@ -11,7 +11,6 @@ import com.octopus.dto.request.MissionCreateReq;
 import com.octopus.dto.response.MissionRes;
 import com.octopus.exception.CustomException;
 import com.octopus.exception.ErrorCode;
-import com.octopus.exception.MissionNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -128,7 +127,7 @@ public class MissionService {
     @Transactional
     public void deleteMission(Long missionNo){
         Mission mission = missionRepository.findByMissionNo(missionNo).orElseThrow(()->{
-            throw new MissionNotFoundException();
+            throw new CustomException(ErrorCode.MISSION_NOT_FOUND);
         });
         missionTimeRepository.deleteByMission(mission);
         octopusTableRepository.deleteByMission(mission);

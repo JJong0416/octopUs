@@ -30,6 +30,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final OctopusTableRepository octopusTableRepository;
     private final EmailTokenService emailTokenService;
+
+    private final MissionDetailsService missionDetailsService;
+    private final MissionService missionService;
     private final PasswordEncoder passwordEncoder;
 
     private final UserNotFoundException userNotFoundException;
@@ -40,6 +43,18 @@ public class UserService {
         User user = getUserInfo(getCurrentUsername().get());
         // 입력받은 id, pw조합이 존재한다면 - 삭제
         if (isCurrentPasswordAndDbPasswordEquals(password, user.getUserPassword())) {
+            // 조인테이블 내용 삭제
+            if(octopusTableRepository.existsByUser(user)) {
+                // 내가 포함된 모든 미션
+                for (Mission mission:octopusTableRepository.findMissionByUser(user)) {
+                    // 내가 방장이라면? 미션을 삭제
+                    if(user.getUserId().equals(mission.getMissionLeaderId())){
+                        missionService.deleteMission(mission.getMissionNo());
+                    }else{ // 아니라면 해당 미션에서 내이름만 지움 + 조인테이블에서 삭제
+                        missionDetailsService.deleteUserFromMission(user.getUserNickname(),mission.getMissionNo());
+                    }
+                }
+            }
             userRepository.delete(user);
         } else
             throw new CustomException(ErrorCode.PASSWORD_NOT_VALID);

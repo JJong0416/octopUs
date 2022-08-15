@@ -1,6 +1,8 @@
 package com.octopus.api.repository;
 
 import com.octopus.domain.AuthenticationInfo;
+import com.octopus.domain.Mission;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +19,8 @@ public interface AuthenticationRepository extends CrudRepository<AuthenticationI
 
     @Query(value = "SELECT ai " + "FROM AuthenticationInfo ai " + "WHERE ai.mission.missionNo=:missionNo")
     List<AuthenticationInfo> findAuthenticationInfoByMissionNo(@Param("missionNo") Long missionNo);
+
+    @Transactional
+    @Modifying
+    void deleteByMission(Mission mission);
 }

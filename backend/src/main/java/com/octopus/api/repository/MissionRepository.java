@@ -8,6 +8,7 @@ import com.octopus.domain.type.MissionStatus;
 import com.octopus.dto.response.MissionRes;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,10 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
     List<MissionRes> findMissionsByMissionTitleAndMissionOpen(String missionTitle, MissionOpenType openRoom);
 
     List<MissionRes> findMissionsByMissionType(MissionType missionType);
+
+    @Modifying
+    @Transactional
+    void deleteByMissionNo(Long missionNo);
 }
 
 /**

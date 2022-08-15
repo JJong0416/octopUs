@@ -100,6 +100,7 @@ export default {
     ticksLabels: [2, 3, 4, 5, 6, 7, 8],
     label: ["공개", "비공개"],
     mission: {
+      gotoUnactDialog: false,
       missionTitle: null,
       missionType: null,
       missionPoint: null,
@@ -109,13 +110,13 @@ export default {
     },
     userInfo: [],
     pointrules: [
-      (value) => !!value || "필수 입력 값",
+      (value) => !!value || "필수 항목입니다.",
       (value) => (value && value.length >= 3) || "",
     ],
     items: ["LIFE", "EXERCISE", "STUDY", "MEETING", "ETC"],
 
     rules: [
-      (value) => !!value || "필수 입력 값",
+      (value) => !!value || "필수 항목입니다.",
       (value) =>
         (value && (value || "").length >= 4 && (value || "").length <= 30) ||
         "",
@@ -171,7 +172,7 @@ export default {
         console.log(this.mission.missionLimitPersonnel);
         console.log(this.mission.missionContent);
         console.log(this.mission.missionOpen);
-        alert("필요한 정보를 전부 입력해주세요.");
+        alert("필수 정보를 모두 입력해주세요");
         return;
       }
       axios

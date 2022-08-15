@@ -77,6 +77,17 @@
             </v-card>
           </v-dialog>
         </div>
+        <v-dialog v-model="loginFailDialog" max-width="500px">
+          <v-card>
+            <v-card-title> <h4>로그인 정보를 확인해주세요</h4> </v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="pink" text @click="loginFailDialog = false">
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
       <br /><br />
       <!-- 로그인 버튼 -->
@@ -106,6 +117,7 @@ export default {
       show: false,
       email: "",
       dialog: false,
+      loginFailDialog: false,
       userNickChk: true,
       usernickname: "",
       user: {
@@ -158,7 +170,7 @@ export default {
       if (this.isLogin) {
         this.$router.push({ name: "MainView" });
       } else {
-        alert("로그인 정보가 잘못되었습니다.", { icon: "error" });
+        this.loginFailDialog = true;
       }
     },
     nickcheck() {
@@ -178,7 +190,7 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          alert("닉네임중복체크에 실패했습니다..");
+          alert("로그인 정보가 잘못되었습니다.", { icon: "error" });
         });
     },
 

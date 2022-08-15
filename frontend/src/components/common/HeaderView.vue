@@ -49,6 +49,17 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-dialog v-model="logoutDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h4>로그아웃 되었습니다.</h4>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="pink" text @click="logoutDialog = false"> Close </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -57,6 +68,11 @@ import { mapMutations, mapState } from "vuex";
 import cookie from "vue-cookies";
 const memberStore = "memberStore";
 export default {
+  data() {
+    return {
+      logoutDialog: false,
+    };
+  },
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
   },
@@ -68,8 +84,11 @@ export default {
       this.SET_USER_INFO(null);
       cookie.remove("token");
       sessionStorage.removeItem("token");
-      alert("로그아웃됐습니다");
+      this.logoutDialog = true;
+      setTimeout(this.movepage, 1000);
       this.drawer = false;
+    },
+    movepage() {
       window.location.replace("http://localhost:8080");
     },
   },

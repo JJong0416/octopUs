@@ -171,6 +171,30 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="authenFailDialog" max-width="500px">
+        <v-card justify="space-around" align="center">
+          <v-card-title><h4>인증정보를 설정해주세요</h4></v-card-title>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="pink" @click="authenFailDialog = false">
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="successDialog" max-width="500px">
+        <v-card justify="space-around" align="center">
+          <v-card-title><h4>미션이 활성화되었습니다</h4> </v-card-title>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text color="pink" @click="successDialog = false">
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-card>
   </div>
 </template>
@@ -182,7 +206,9 @@ export default {
     show: false,
     roomNo: "",
     isAuthentication: false,
+    successDialog: false,
     userdialog: false,
+    authenFailDialog: false,
     missionuser: [],
     previewUsernickname: "",
     userAvatar: [0, 0, 0, 0],
@@ -264,8 +290,8 @@ export default {
           })
           .then((response) => {
             console.log(response);
-            alert("해당 미션이 활성화되었습니다.");
-            this.movePage();
+            this.successDialog = true;
+            setInterval(this.movePage, 2000);
           })
           .catch((error) => {
             console.log(error);
@@ -278,7 +304,7 @@ export default {
             console.log(this.authendays);
           });
       } else {
-        alert("미션 인증 정보를 입력해야 미션을 활성화할 수 있습니다.");
+        this.authenFailDialog = true;
       }
     },
     movePage() {
@@ -289,7 +315,6 @@ export default {
     },
     copy(missionCode) {
       this.$clipboard(missionCode);
-      alert(missionCode + "을 복사했습니다.");
     },
   },
 };

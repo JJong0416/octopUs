@@ -26,42 +26,42 @@
               >
               <v-text-field
                  v-model="currentPassword"
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required, rules.min]"
-                :type="show ? 'text' : 'password'"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required]"
+                :type="show1 ? 'text' : 'password'"
                 label="현재 비밀번호 입력"
-                hint="At least 8 characters"
+                
                 counter
-                @click:append="show = !show"
+                @click:append="show1 = !show1"
               ></v-text-field>
 
               <v-text-field
                  v-model="newPassword"
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[rules.required, rules.min]"
-                :type="show ? 'text' : 'password'"
+                :type="show2 ? 'text' : 'password'"
                 label="새로운 비밀번호 입력"
-                hint="At least 8 characters"
+                hint="최소 8글자 이상으로 설정해주세요."
                 counter
-                @click:append="show = !show"
+                @click:append="show2 = !show2"
               ></v-text-field>
 
               <v-text-field
                  v-model="chkPassword"
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="[rules.required, rules.min]"
-                :type="show ? 'text' : 'password'"
+                :type="show3 ? 'text' : 'password'"
                 label="새로운 비밀번호 확인"
-                hint="At least 8 characters"
+                hint="최소 8글자 이상으로 설정해주세요."
                 counter
-                @click:append="show = !show"
+                @click:append="show3 = !show3"
               ></v-text-field>
 
               <h6 v-if="sameChk(chkPassword)" class="mb-5 teal--text accent-3">
-                Please create the two passwords identical.
+                
               </h6>
               <h6 v-else class="mb-5 red--text lighten-2">
-                Please create the two passwords identical.
+                비밀번호가 같지 않습니다. 다시 한 번 확인해주세요.
               </h6>
                </v-col>
             </v-row>
@@ -98,10 +98,12 @@ export default {
             currentPassword : "",
             newPassword : "",
             rules: {
-                required: (value) => !!value || "Required.",
-                min: (v) => v.length >= 8 || "Min 8 characters",
+                required: (value) => !!value || "필수 항목입니다.",
+                min: (v) => v.length >= 8 || "최소 8글자 이상으로 설정해주세요.",
             },
-            show: false,
+            show1: false,
+            show2: false,
+            show3: false,
             chkPassword: "",
             passwordValid :"",
         }
@@ -132,7 +134,7 @@ export default {
                     alert("비밀번호 변경에 실패했습니다.")
                 })
                 this.passwordDialog = false;
-                this.$router.push("main");
+                this.$router.push("mypage");
             }else{
                 alert("새로운 비밀번호가 일치하지 않습니다.")
             }

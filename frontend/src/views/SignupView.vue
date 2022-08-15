@@ -106,12 +106,12 @@
             <!-- password input -->
             <v-text-field
               v-model="user.userpwd"
-              :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="[rules.required, rules.min]"
-              :type="show ? 'text' : 'password'"
+              :type="show1 ? 'text' : 'password'"
               label="비밀번호를 설정해주세요."
               hint="8자 이상 입력하세요"
-              @click:append="show = !show"
+              @click:append="show1 = !show1"
               counter
             ></v-text-field>
           </v-col>
@@ -121,12 +121,12 @@
             <!-- password input again -->
             <v-text-field
               v-model="chkPassword"
-              :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="[rules.required, rules.min]"
-              :type="show ? 'text' : 'password'"
+              :type="show2 ? 'text' : 'password'"
               label="비밀번호를 다시 한 번 입력해주세요."
               hint="8자 이상 입력하세요"
-              @click:append="show = !show"
+              @click:append="show2 = !show2"
               counter
             ></v-text-field>
           </v-col>
@@ -512,7 +512,8 @@ export default {
         }
       },
     ],
-    show: false,
+    show1: false,
+    show2: false,
     chkPassword: "",
     rules: {
       required: (value) => !!value || "필수 항목입니다.",

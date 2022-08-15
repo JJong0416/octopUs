@@ -1,73 +1,101 @@
 <template>
-  <div>
-   <v-img  :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)" width="100%">
-      <!-- 뒤로 가기 버튼 -->
-      <v-btn @click="goback" icon color="pink" class="pa-3">
-        <v-icon> mdi-arrow-left</v-icon>
-      </v-btn></v-img
-    >
-    <v-card height="100%">
-      <v-card-text>
-        <div>
-          {{ mission.missionType }}
-          <span style="float: right"
-            ><v-chip>{{ mission.missionPoint }}P</v-chip></span
-          >
-        </div>
-
-        <p class="text-h4 text--primary">
-          {{ mission.missionTitle }}
-        </p>
-      </v-card-text>
-      <v-divider></v-divider>
-      <v-card-title>
-        <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
-        <div class="my-4 text-subtitle-1"><b>미션 인증 방법</b></div>
-      </v-card-title>
-      <v-card-text
-        style="display: flex; justify-content: center; align-items: center"
-      >
-        <v-textarea disabled outlined v-model="mission.missionContent">
-        </v-textarea>
-
-        <br />
-      </v-card-text>
-      <v-card-title style="padding: 5px 16px 5px 16px">
-        <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
-        <div class="my-4 text-subtitle-1">
-          <b>미션 코드 : </b>&nbsp;&nbsp;&nbsp;{{ mission.missionCode }}
-          &nbsp;&nbsp;
-        </div>
-        <v-btn v-clipboard="mission.missionCode" icon>
-          <v-img
-            max-height="30px"
-            max-width="30px"
-            src="../assets/img/icons/layer.png"
-          ></v-img>
-        </v-btn>
-      </v-card-title>
-      <v-card-title style="padding: 5px 16px 5px 16px">
-        <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
-        <div class="my-4 text-subtitle-1">
-          <b>미션 최대 인원 : </b>&nbsp;&nbsp;&nbsp;{{
-            mission.missionLimitPersonnel
-          }}
-        </div>
-      </v-card-title>
+  <v-container>
+    <v-card>
+      <v-row class="pt-3">
+        <v-img :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)" width="100%">
+          <v-row>
+            <v-col class="px-6">
+              <!-- 뒤로 가기 버튼 -->
+              <v-btn @click="goback" icon color="#fa183e">
+                <v-icon> mdi-arrow-left</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-img>
+      </v-row>
       <v-row>
-        <v-col cols="1"></v-col>
-        <v-col cols="5">
-          <v-btn color="primary" class="ma-2" dark @click="dialog = true">
-            인증 정보 설정
+        <v-card-text>
+          <v-row>
+            <v-col cols="2" class="pr-0 pl-5">
+              <v-img :src="require(`../assets/img/icons/${this.mission.missionType}.png`)"></v-img>
+            </v-col>
+            <v-col class="pl-1 pt-6" cols="7">
+              {{ mission.missionType }}
+            </v-col>
+            <v-col cols="3" class="pt-4 pr-5">
+              <v-chip outlined color="#fa183e">
+              {{ mission.missionPoint }} P
+            </v-chip>
+            </v-col>
+          </v-row>
+          <v-row class="px-6">
+            <p class="text-h5">
+              {{ mission.missionTitle }}
+            </p>
+          </v-row>
+        </v-card-text>
+      </v-row>
+      <v-card-title>
+        <v-row>
+          <v-col class="pr-6 pb-0" cols="1">
+            <v-icon color="#fa183e">mdi-chevron-right</v-icon>
+          </v-col>
+          <v-col class="pt-4 pl-0 pb-0" cols="8">
+            <div class="pl-2 text-subtitle-1">
+              <b>미션 공유 코드 : </b> &nbsp; {{ mission.missionCode }}
+            </div>
+          </v-col>
+          <v-col class="pb-0" cols="2">
+            <v-btn v-clipboard="mission.missionCode" icon>
+              <v-img
+                max-height="30px"
+                max-width="30px"
+                src="../assets/img/icons/layer.png"
+              ></v-img>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col class="pr-6 pt-6 pb-0" cols="1">
+            <v-icon color="#fa183e">mdi-chevron-right</v-icon>
+          </v-col>
+          <v-col class="pt-6 pl-0" cols="8">
+            <div class="pl-2 text-subtitle-1">
+              <b>미션 최대 인원 : </b> &nbsp; {{ mission.missionLimitPersonnel }} 명
+            </div>
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-title>
+        <v-row>
+          <v-col class="pt-0 pr-6 pb-0" cols="1">
+            <v-icon color="#fa183e">mdi-chevron-right</v-icon>
+          </v-col>
+          <v-col class="pt-1 pl-0 pb-0">
+            <div class="pl-2 pb-0 text-subtitle-1"><b>미션 인증 방법</b></div>
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-card-text>
+        <v-textarea height="100" disabled outlined v-model="mission.missionContent"/>
+      </v-card-text>
+      <v-spacer></v-spacer>
+      <v-row class="py-3" justify="center">
+        <div v-if="!successDialog">
+          <v-btn outlined color="#fa183e" @click="dialog=true">
+            인증 시간 설정하기
           </v-btn>
-        </v-col>
-        <v-col cols="5">
-          <v-btn color="primary" class="ma-2" dark @click="sendMissionTimeInfo">
-            미션 활성화
+        </div>
+        <div v-if="successDialog">
+          <v-btn outlined color="#fa183e" @click="sendMissionTimeInfo">
+            미션 시작하기!
           </v-btn>
-        </v-col>
+        </div>
       </v-row>
 
+      <!-- 인증 시간 설정 창 -->
       <v-dialog
         v-model="dialog"
         fullscreen
@@ -76,15 +104,23 @@
         scrollable
       >
         <v-card tile>
-          <v-toolbar flat dark color="primary">
-            <v-btn icon dark @click="dialog = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-            <v-toolbar-title>Settings</v-toolbar-title>
-            <v-spacer></v-spacer>
+          <v-toolbar color="#eefaec">
+            <v-row justify="center">
+              <v-col cols="3"></v-col>
+              <v-col cols="7" class="pt-6 pl-5">
+                <v-toolbar-title>
+                  <h5>인증 시간 설정하기</h5>
+                </v-toolbar-title>
+              </v-col>
+              <v-col class="pr-3" cols="2">
+                <v-btn icon color="#143559" @click="dialog = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
           </v-toolbar>
           <v-card-text>
-            <v-list three-line subheader>
+            <v-list>
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title>시작날짜 설정</v-list-item-title>
@@ -160,8 +196,7 @@
           <div style="flex: 1 1 auto"></div> </v-card
         >ndAuthenInfosendMissionTimeInfo
       </v-dialog>
-
-      <v-dialog v-model="dialog2" max-width="500px">
+<v-dialog v-model="dialog2" max-width="500px">
         <v-card justify="space-around" align="center">
           <v-card-title> 인증 가능 시간 설정 </v-card-title>
           <v-card-title> 시작 시간 </v-card-title>
@@ -188,6 +223,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <!-- 미션 시작 창 -->
       <v-dialog v-model="successDialog" max-width="500px">
         <v-card justify="space-around" align="center">
           <v-card-title><h4>미션이 활성화되었습니다</h4> </v-card-title>
@@ -201,9 +237,8 @@
         </v-card>
       </v-dialog>
     </v-card>
-  </div>
+  </v-container>
 </template>
-
 <script>
 import axios from "axios";
 export default {
@@ -317,6 +352,9 @@ export default {
         name: "Mypage",
         params: { missionNo: this.missionNo },
       });
+    },
+    goback() {
+      this.$router.go(-1);
     },
   },
 };

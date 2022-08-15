@@ -55,23 +55,24 @@
         <div class="text-center">
           <v-dialog v-model="dialog" width="500">
             <v-card>
-              <v-card-title class="text-h5 amber lighten-2">
-                이메일로 임시 비밀번호가 전송됩니다
+              <v-card-title class="text-h6">
+                임시 비밀번호를 발급합니다.
               </v-card-title>
               <v-text-field
+                class="px-3"
                 v-model="email"
                 :rules="emailRules"
-                label="가입시 사용한 이메일을 입력해주세요."
+                label="가입시 등록한 이메일을 입력해주세요."
               ></v-text-field>
               <v-divider></v-divider>
 
               <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" dark @click="findPwByEmail">
-                  전송
-                </v-btn>
-                <v-btn color="primary" text @click="dialog = false">
+                <v-btn outlined color="#143559" @click="dialog = false">
                   취소
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn outlined color="#fa183e" @click="findPwByEmail">
+                  임시 비밀번호 전송
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -79,11 +80,14 @@
         </div>
         <v-dialog v-model="loginFailDialog" max-width="500px">
           <v-card>
-            <v-card-title> <h4>로그인 정보를 확인해주세요</h4> </v-card-title>
+            <v-card-title>
+              <h5>로그인에 실패하였습니다.</h5>
+              <h6>로그인 정보를 다시 확인해주세요.</h6>
+            </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="pink" text @click="loginFailDialog = false">
-                Close
+              <v-btn color="#fa183e" text @click="loginFailDialog = false">
+                확인
               </v-btn>
             </v-card-actions>
           </v-card>

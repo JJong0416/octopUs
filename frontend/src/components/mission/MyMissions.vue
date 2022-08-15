@@ -112,7 +112,7 @@
           <router-link
             v-if="item.missionStatus === `CLOSE`"
             :to="{
-              name: 'finished',
+              name: 'proceeding',
               params: { missionNo: item.missionNo },
             }"
           >

@@ -250,6 +250,7 @@ export default {
         });
     },
     sendMissionTimeInfo() {
+      
       if (this.isAuthentication) {
         axios
           .post(`../api/mission/${this.roomNo}/mission-time`, {

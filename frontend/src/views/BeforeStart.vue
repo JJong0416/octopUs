@@ -241,7 +241,7 @@ export default {
     var vm = this;
     vm.roomNo = this.$route.params.missionNo;
     axios
-      .get(`api/user/info`, {
+      .get(`../api/user/info`, {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
@@ -313,7 +313,7 @@ export default {
     previewUser(nickname) {
       this.clickUser = nickname;
       axios
-        .get(`api/user/info/${nickname}`, {
+        .get(`../api/user/info/${nickname}`, {
           headers: {
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
@@ -332,7 +332,7 @@ export default {
       const vm = this;
       if (confirm(`${this.clickUser}님을 정말로 추방하시겠습니까?`)) {
         axios
-          .delete(`api/mission/${this.roomNo}/user/${this.clickUser}`)
+          .delete(`../api/mission/${this.roomNo}/user/${this.clickUser}`)
           .then(() => {
             alert(vm.clickUser + "님을 미션에서 제외시켰습니다.");
           })
@@ -348,7 +348,7 @@ export default {
     joinMission() {
       if (this.userInfo.length != 0) {
         axios
-          .post(`api/mission/${this.roomNo}/join`)
+          .post(`../api/mission/${this.roomNo}/join`)
           .then((response) => {
             console.log(response);
             alert("미션에 참여하기가 완료되었습니다.");

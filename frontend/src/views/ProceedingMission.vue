@@ -211,7 +211,8 @@
            <v-card-title>
             <v-icon color="pink darken-1">mdi-clock-time-four-outline</v-icon
             >&nbsp;&nbsp;
-            <div class="my-4 text-subtitle-1"><b>현재 미션 {{ weekInProgress }}주차 진행 중</b></div>
+            <div v-if ="mission.missionStatus=='ONGOING'" class="my-4 text-subtitle-1"><b>현재 미션 {{ weekInProgress }}주차 진행 중</b></div>
+            <div v-else-if="mission.missionStatus=='CLOSE'" class="my-4 text-subtitle-1"><b>해당 미션은 종료되었습니다.</b></div>
           </v-card-title>
           <v-row class="fill-height">
             <v-col>
@@ -323,7 +324,7 @@
 
  <v-divider></v-divider>
   <v-card-actions>
-        <div class="my-4 text-subtitle-1">안증 하기</div>
+        <div class="my-4 text-subtitle-1">인증 하기</div>
 
         <v-spacer></v-spacer>
 

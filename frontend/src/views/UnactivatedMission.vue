@@ -22,20 +22,24 @@
       <v-card-text
         style="display: flex; justify-content: center; align-items: center"
       >
-      <v-textarea disabled outlined v-model="mission.missionContent">
-      </v-textarea>
+        <v-textarea disabled outlined v-model="mission.missionContent">
+        </v-textarea>
 
         <br />
       </v-card-text>
       <v-card-title style="padding: 5px 16px 5px 16px">
         <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
         <div class="my-4 text-subtitle-1">
-          <b>미션 코드 : </b>&nbsp;&nbsp;&nbsp;{{ mission.missionCode }} &nbsp;&nbsp;
+          <b>미션 코드 : </b>&nbsp;&nbsp;&nbsp;{{ mission.missionCode }}
+          &nbsp;&nbsp;
         </div>
-        <v-btn @click="copy" icon>
-          <v-img max-height="30px" max-width="30px" src="../assets/img/icons/layer.png"></v-img>
+        <v-btn @click="copy(mission.missionCode)" icon>
+          <v-img
+            max-height="30px"
+            max-width="30px"
+            src="../assets/img/icons/layer.png"
+          ></v-img>
         </v-btn>
-        
       </v-card-title>
       <v-card-title style="padding: 5px 16px 5px 16px">
         <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
@@ -250,7 +254,6 @@ export default {
         });
     },
     sendMissionTimeInfo() {
-      
       if (this.isAuthentication) {
         axios
           .post(`../api/mission/${this.roomNo}/mission-time`, {
@@ -284,9 +287,10 @@ export default {
         params: { missionNo: this.missionNo },
       });
     },
-    copy(){
-      alert("코드 복사가 완료되었습니다.")
-    }
+    copy(missionCode) {
+      this.$clipboard(missionCode);
+      alert(missionCode + "을 복사했습니다.");
+    },
   },
 };
 </script>

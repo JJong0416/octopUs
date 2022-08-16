@@ -82,17 +82,18 @@
         <v-textarea height="100" disabled outlined v-model="mission.missionContent"/>
       </v-card-text>
       <v-spacer></v-spacer>
-      <v-row class="py-3" justify="center">
-        <div v-if="!successDialog">
-          <v-btn outlined color="#fa183e" @click="dialog=true">
+      <v-row class="py-3 px-3" justify="center">
+        <v-col>
+          <v-btn outlined color="#143559" @click="dialog=true">
             인증 시간 설정하기
           </v-btn>
-        </div>
-        <div v-if="successDialog">
+        </v-col>
+        <v-spacer></v-spacer>
+        <v-col>
           <v-btn outlined color="#fa183e" @click="sendMissionTimeInfo">
             미션 시작하기!
           </v-btn>
-        </div>
+        </v-col>
       </v-row>
 
       <!-- 인증 시간 설정 창 -->
@@ -104,7 +105,7 @@
         scrollable
       >
         <v-card tile>
-          <v-toolbar color="#eefaec">
+          <v-toolbar color="#f7f5fc">
             <v-row justify="center">
               <v-col cols="3"></v-col>
               <v-col cols="7" class="pt-6 pl-5">
@@ -123,102 +124,214 @@
             <v-list>
               <v-list-item>
                 <v-list-item-content>
-                  <v-list-item-title>시작날짜 설정</v-list-item-title>
+                  <v-list-item-title>
+                    <v-row>
+                      <v-col cols="1" class="pr-6 pb-0">
+                        <v-icon color="#fa183e">mdi-chevron-right</v-icon>
+                      </v-col>
+                      <v-col class="pt-4">
+                        <b>시작 날짜 설정</b>
+                      </v-col>
+                    </v-row>
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item>
+              <v-list-item class="pb-0">
                 <v-list-item-content justify="center">
-                  <v-date-picker v-model="picker"></v-date-picker>
+                  <v-date-picker locale="ko" color="#ffadad" v-model="picker"></v-date-picker>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>인증횟수</v-list-item-title>
-                </v-list-item-content>
+                <v-list-item-title>
+                  <v-row>
+                    <v-col cols="1" class="pr-6 pb-0">
+                        <v-icon color="#fa183e">mdi-chevron-right</v-icon>
+                      </v-col>
+                    <v-col class="pt-4">
+                      <b>인증 횟수 설정</b>
+                    </v-col>
+                  </v-row>
+                </v-list-item-title>
               </v-list-item>
               <v-list-item>
-                <v-list-item-content justify="center">
-                  <v-text-field
-                    v-model="howmanyweeks"
-                    label="몇주 동안 진행할지 숫자로 입력해주세요"
-                    :rules="weekrules"
-                    type="number"
-                    min="1"
-                    hide-details="auto"
-                    oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="authenweeks"
-                    label="일주일에 몇 일 인증할지 숫자로 입력해주세요"
-                    :rules="weekrules"
-                    type="number"
-                    min="1"
-                    hide-details="auto"
-                    oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="authendays"
-                    label="하루에 몇 번 인증할지 숫자로 입력해주세요"
-                    :rules="weekrules"
-                    type="number"
-                    min="1"
-                    hide-details="auto"
-                    oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
-                  ></v-text-field>
-                </v-list-item-content>
+                <v-row>
+                  <v-col class=" pt-6 pb-0" cols="3">
+                    이 미션은
+                  </v-col>
+                  <v-col class="pb-0" cols="3">
+                    <v-text-field
+                      label="00"
+                      :rules="weekrules"
+                      outlined
+                      type="number"
+                      min="1"
+                      hide-details="auto"
+                      v-model="howmanyweeks"
+                      oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col class=" pt-6 pb-0">
+                    주 동안 진행됩니다.
+                  </v-col>
+                </v-row>
+              </v-list-item>
+              <v-list-item>
+                <v-row class="pt-3">
+                  <v-col class="pt-6 pb-0" cols="6">
+                    미션 인증은 일주일에 
+                  </v-col>
+                  <v-col cols="3">
+                    <v-text-field
+                      label="00"
+                      :rules="weekrules"
+                      outlined
+                      type="number"
+                      min="1"
+                      hide-details="auto"
+                      v-model="authenweeks"
+                      oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col class="pt-6 pb-0">
+                      번, 
+                  </v-col>
+                </v-row>
+              </v-list-item>
+              <v-list-item>
+                <v-row class="pt-3">
+                  <v-col class="pt-6 pb-0" cols="3">
+                    하루에
+                  </v-col>
+                  <v-col cols="3">
+                    <v-text-field
+                      label="00"
+                      :rules="weekrules"
+                      outlined
+                      type="number"
+                      min="1"
+                      hide-details="auto"
+                      v-model="authendays"
+                      oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col class="pt-6 pb-0">
+                    번 인증합니다.
+                  </v-col>
+                </v-row>
               </v-list-item>
             </v-list>
             <v-divider></v-divider>
             <v-list>
               <v-list-item v-for="n in Number(authendays)" v-bind:key="n">
-                <v-btn
-                  color="primary"
-                  dark
-                  class="ma-2"
-                  @click="dialog2 = !dialog2"
-                >
-                  인증 가능 시간설정 {{ n }}
-                </v-btn>
+                <v-row justify="center">
+                  <v-col cols="2"></v-col>
+                  <v-col class="pl-4" cols="10">
+                    <v-btn
+                      color="#fa183e"
+                      outlined
+                      @click="dialog2 = !dialog2"
+                    >
+                       {{ n }}번째 인증 시간 설정
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                
               </v-list-item>
               <v-list-item>
-                <v-btn
-                  color="primary"
-                  dark
-                  class="ma-2"
-                  @click="dialog = false"
-                >
-                  save
-                </v-btn>
+                <v-row>
+                  <v-col cols="2"></v-col>
+                  <v-col cols="10">
+                    <v-btn
+                      color="#143559"
+                      outlined
+                      class="ma-2"
+                      @click="dialog = false"
+                    >
+                      인증 시간 설정 완료
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-list-item>
             </v-list>
           </v-card-text>
 
           <div style="flex: 1 1 auto"></div> </v-card
-        >ndAuthenInfosendMissionTimeInfo
+        >
       </v-dialog>
-<v-dialog v-model="dialog2" max-width="500px">
-        <v-card justify="space-around" align="center">
-          <v-card-title> 인증 가능 시간 설정 </v-card-title>
-          <v-card-title> 시작 시간 </v-card-title>
-          <v-time-picker v-model="start" :max="end"></v-time-picker>
-          <v-card-title> 마감 시간 </v-card-title>
-          <v-time-picker v-model="end" :min="start"></v-time-picker>
+        <v-dialog v-model="dialog2" max-width="500px">
+          <v-card class="pa-4" justify="space-around" align="center">
+            <v-menu
+              ref="menu"
+              v-model="menu"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              :return-value.sync="start"
+              transition="scale-transition"
+              offset-y
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="start"
+                  label="인증 시작 시간을 설정해주세요."
+                  prepend-icon="mdi-clock-time-four-outline"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-time-picker
+                color="#ffadad"
+                v-if="menu"
+                v-model="start"
+                :max="end"
+                full-width
+                @click:minute="$refs.menu.save(start)"
+              ></v-time-picker>
+            </v-menu>
 
-          <v-card-actions>
-            <v-btn color="primary" dark @click="dialog2 = false"> Close </v-btn>
-
-            <v-btn color="primary" dark @click="sendAuthenInfo"> save </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-dialog v-model="authenFailDialog" max-width="500px">
-        <v-card justify="space-around" align="center">
-          <v-card-title><h4>인증정보를 설정해주세요</h4></v-card-title>
-
+            <!-- 마감 시간 -->
+            <v-menu
+              ref="menu1"
+              v-model="menu1"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              :return-value.sync="end"
+              transition="scale-transition"
+              offset-y
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="end"
+                  label="인증 마감 시간을 설정해주세요."
+                  prepend-icon="mdi-clock-time-four-outline"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-time-picker
+                color="#ffadad"
+                v-if="menu1"
+                v-model="end"
+                :min="start"
+                full-width
+                @click:minute="$refs.menu1.save(end)"
+              ></v-time-picker>
+            </v-menu>
+            <v-card-actions>
+              <v-btn outlined color="#143559" @click="dialog2 = false"> 취소 </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn outlined color="#fa183e" @click="sendAuthenInfo"> 저장 </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="authenFailDialog" max-width="500px">
+          <v-card justify="space-around" align="center">
+          <v-card-title><h5>인증 시간을 모두 설정해주세요.</h5></v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="pink" @click="authenFailDialog = false">
-              Close
+            <v-btn text color="#fa183e" @click="authenFailDialog = false">
+              확인
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -226,12 +339,11 @@
       <!-- 미션 시작 창 -->
       <v-dialog v-model="successDialog" max-width="500px">
         <v-card justify="space-around" align="center">
-          <v-card-title><h4>미션이 활성화되었습니다</h4> </v-card-title>
-
+          <v-card-title><h5>미션이 활성화 되었습니다.</h5> </v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text color="pink" @click="successDialog = false">
-              Close
+            <v-btn text color="#fa183e" @click="successDialog = false">
+              확인
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -261,8 +373,8 @@ export default {
     start: null,
     end: null,
     weekrules: [
-      (value) => !!value || "입력해주세요",
-      (value) => (value && value >= 1) || "숫자로 입력해주세요",
+      (value) => !!value || "필수",
+      (value) => (value && value >= 1) || "숫자",
     ],
     mission: null,
     dialog: false,
@@ -271,6 +383,9 @@ export default {
     notifications: false,
     sound: true,
     widgets: false,
+    time: null,
+    menu: false,
+    menu1: false,
   }),
   created() {
     axios.defaults.headers.common[
@@ -304,12 +419,12 @@ export default {
         })
         .then((response) => {
           console.log(response);
-          console.log("authentication 정보 전송 성공");
+          console.log("인증 시간이 저장되었습니다.");
           this.isAuthentication = true;
         })
         .catch((error) => {
           console.log(error);
-          alert("athentication 정보 전송 실패");
+          alert("시간 정보 저장에 실패했습니다.");
         })
         .finally(() => {
           console.log(this.start);
@@ -360,4 +475,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+</style>

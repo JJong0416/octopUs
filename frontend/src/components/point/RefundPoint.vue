@@ -58,6 +58,21 @@
         </v-card>
       </template>
     </v-dialog>
+    <!-- 환급완료Dialog -->
+    <v-dialog v-model="refundFail" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>환급</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>잔액이 부족합니다.</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="refundFail = false"> 확인 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -70,6 +85,7 @@ export default {
       account: false,
       inputdata: null,
       refunddia: false,
+      refundFail: false,
     };
   },
   created() {
@@ -81,7 +97,7 @@ export default {
     refundbtn() {
       var vm = this;
       if (vm.point < vm.inputdata) {
-        alert("포인트가 부족합니다.");
+        this.refundFail = true;
         return;
       }
       const pointReq = { userId: "", point: vm.inputdata };
@@ -90,7 +106,7 @@ export default {
         .patch(`api/user/modification/point/refund`, pointReq)
         .then((response) => {
           console.log(response);
-          alert(vm.inputdata + "point 환급 성공.");
+
           vm.refunddia = false;
           vm.$emit("success");
           // this.$router.push("Mypage");

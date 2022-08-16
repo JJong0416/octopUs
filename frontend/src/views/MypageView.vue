@@ -96,41 +96,67 @@
               </v-col>
               <v-col cols="3">
                 <!-- 충전, 환급 -->
-                <charge-point @success="refresh"></charge-point>
+                <charge-point @success="chargeRefresh"></charge-point>
               </v-col>
               <v-col class="pl-4" cols="3" style="padding-left: 0px !important">
                 <refund-point
                   :point="userInfo.userPoint"
-                  @success="refresh"
+                  @success="refundRefresh"
                 ></refund-point>
               </v-col>
             </v-row>
           </v-card-text>
         </v-row>
-       
       </v-card>
       <br />
       <br />
       <v-card>
         <v-row>
           &nbsp;&nbsp;&nbsp;&nbsp;
-         <v-card-title style="font-weight: bold">            
-          <v-icon color="pink darken-1">mdi-tag</v-icon
-          >&nbsp;&nbsp;미션 현황
-         </v-card-title>
-      
+          <v-card-title style="font-weight: bold">
+            <v-icon color="pink darken-1">mdi-tag</v-icon>&nbsp;&nbsp;미션 현황
+          </v-card-title>
         </v-row>
         <my-missions :missions="Missions"></my-missions>
       </v-card>
-        <br />
       <br />
-        <br />
+      <br />
+      <br />
       <br />
       <v-row>
         <!--  mission -->
-        
       </v-row>
     </v-container>
+    <!-- 충전완료Dialog -->
+    <v-dialog v-model="chargeDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>Points</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>충전 완료되었습니다.</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="dialogOff"> 확인 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 환급완료Dialog -->
+    <v-dialog v-model="refundDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>환급</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>환급 완료되었습니다.</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="dialogOff"> 확인 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <footer-view></footer-view>
   </div>
 </template>
@@ -156,6 +182,8 @@ export default {
   },
   data() {
     return {
+      chargeDialog: false,
+      refundDialog: false,
       userInfo: [],
       avatarColor: null,
       avatarHat: null,
@@ -165,7 +193,15 @@ export default {
     };
   },
   methods: {
-    refresh() {
+    chargeRefresh() {
+      this.chargeDialog = true;
+    },
+    refundRefresh() {
+      this.refundDialog = true;
+    },
+    dialogOff() {
+      this.chargeDialog = false;
+      this.refundDialog = false;
       this.$router.go();
     },
   },

@@ -2,30 +2,119 @@
   <div class="wrapper">
     <header-view></header-view>
     <v-card>
-      <v-tabs v-model="tab">
-        <v-tabs-slider></v-tabs-slider>
-        <v-tab href="#tab-1">
-          Hot
-        </v-tab>
-        <v-tab href="#tab-2">
-          New
-        </v-tab>
-      </v-tabs>
-      <v-tabs-items v-model="tab">
-        <v-tab-item v-for="i in 2" :key="i" :value="'tab-'+ i">
-          <v-container>
-             <v-row>
-              <v-col cols="1"></v-col>
-              <v-col cols="10">
-                <v-carousel
-                  cycle
-                  height="180"
-                  hide-delimiter-background
-                  show-arrows-on-hover
-                  hide-delimiters
-                >
-                  <v-carousel-item v-for="(newmission, i) in newmissions" :key="i">
-                    <v-card class="mx-auto" max-width="344" outlined>
+<br>
+
+    <v-bottom-navigation
+      style="box-shadow: none !important;  height : 100%"
+    
+      color="pink darken-1"
+      grow
+    >
+      <v-btn text @click="clickevent('Hot')" style="display:block; height : 100%">
+        <span>HOT</span>
+
+        <v-img  :src="require(`../assets/img/Hot.png`)"   style="height:auto;"></v-img>
+      </v-btn>
+
+      <v-btn text @click="clickevent('New')" style="display:block;height : 100%">
+        <span>NEW</span>
+
+         <v-img  :src="require(`../assets/img/New.png`)"  style="height:auto;"></v-img>
+      </v-btn>
+
+      
+    </v-bottom-navigation>
+<v-divider></v-divider>
+    <v-divider></v-divider>
+<br>
+
+
+<div class="wrapper" v-if="hotnewSelected =='Hot'">
+      <div class="card" v-for="(hotmission, index) in hotmissions" :key="index">
+        <div v-if="`${hotmissions.length}` == 0">
+          <v-card-text
+        style="display: flex; justify-content: center; align-items: center"
+      >
+     현재 모집 중인 미션이 없습니다.
+      </v-card-text>
+        </div>
+        <div v-else>
+          <v-card class="mx-auto" max-width="344" outlined>
+                      <v-list-item three-line>
+                        <v-list-item-content>
+                          <div class="text-overline mb-4">
+                            {{ hotmission.missionNo }}
+                          </div>
+                          <v-list-item-title class="text-h5 mb-1">
+                            {{ hotmission.missionTitle }}
+                          </v-list-item-title>
+                          <v-list-item-subtitle
+                            >{{ hotmission.missionContent }}
+                          </v-list-item-subtitle>
+                        </v-list-item-content>
+                  <v-list-item-avatar tile size="80">
+                    <v-img
+                      :src="
+                        require(`../assets/img/Ocsoon/Pet/${hotavatars[index][3]}.png`)
+                      "
+                    >
+                      <v-img
+                        :src="
+                          require(`../assets/img/Ocsoon/Character/${hotavatars[index][0]}.png`)
+                        "
+                      >
+                        <v-img
+                          :src="
+                            require(`../assets/img/Ocsoon/Face/${hotavatars[index][1]}.png`)
+                          "
+                        >
+                          <v-img
+                            :src="
+                              require(`../assets/img/Ocsoon/Hat/${hotavatars[index][2]}.png`)
+                            "
+                          ></v-img
+                        ></v-img>
+                      </v-img> </v-img
+                  ></v-list-item-avatar>
+                </v-list-item>
+
+                <v-card-actions>
+                  <v-btn
+                    outlined
+                    rounded
+                    text
+                    color="secondary"
+                    @click="mvdetail(hotmission)"
+                  >
+                    자세히보기
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+        </div>
+        
+
+    
+        <br />
+        <!-- <a v-bind:href="post.link" target="_blank">
+        <img v-bind:src="post.img"/>
+        <small>posted by: {{ post.author }}</small> 
+        {{ post.title }}n
+      </a> -->
+      </div>
+      
+    </div>
+
+<div class="wrapper" v-if="hotnewSelected =='New'">
+      <div class="card" v-for="(newmission, index) in newmissions" :key="index">
+        <div v-if="`${newmissions.length}` == 0">
+          <v-card-text
+        style="display: flex; justify-content: center; align-items: center"
+      >
+      검색 조건에 맞는 미션이 없습니다.
+      </v-card-text>
+        </div>
+        <div v-else>
+          <v-card class="mx-auto" max-width="344" outlined>
                       <v-list-item three-line>
                         <v-list-item-content>
                           <div class="text-overline mb-4">
@@ -41,22 +130,22 @@
                   <v-list-item-avatar tile size="80">
                     <v-img
                       :src="
-                        require(`../assets/img/Ocsoon/Pet/${newavatars[i][3]}.png`)
+                        require(`../assets/img/Ocsoon/Pet/${newavatars[index][3]}.png`)
                       "
                     >
                       <v-img
                         :src="
-                          require(`../assets/img/Ocsoon/Character/${newavatars[i][0]}.png`)
+                          require(`../assets/img/Ocsoon/Character/${newavatars[index][0]}.png`)
                         "
                       >
                         <v-img
                           :src="
-                            require(`../assets/img/Ocsoon/Face/${newavatars[i][1]}.png`)
+                            require(`../assets/img/Ocsoon/Face/${newavatars[index][1]}.png`)
                           "
                         >
                           <v-img
                             :src="
-                              require(`../assets/img/Ocsoon/Hat/${newavatars[i][2]}.png`)
+                              require(`../assets/img/Ocsoon/Hat/${newavatars[index][2]}.png`)
                             "
                           ></v-img
                         ></v-img>
@@ -76,14 +165,22 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
-            </v-carousel-item>
-          </v-carousel>
-        </v-col>
-        <v-col cols="1"></v-col>
-    </v-row>
-          </v-container>
-        </v-tab-item>
-      </v-tabs-items>
+        </div>
+        
+
+    
+        <br />
+        <!-- <a v-bind:href="post.link" target="_blank">
+        <img v-bind:src="post.img"/>
+        <small>posted by: {{ post.author }}</small> 
+        {{ post.title }}n
+      </a> -->
+      </div>
+      
+    </div>
+
+
+     
     </v-card>
     <footer-view></footer-view>
   </div>
@@ -105,6 +202,7 @@ export default {
       newmissions: [],
       hotavatars: [],
       newavatars: [],
+      hotnewSelected : 'Hot',
       headers: [
         {
           text: "missionTitle",
@@ -124,6 +222,10 @@ export default {
         params: { missionNo: mission.missionNo },
       });
     },
+    clickevent(value){
+      this.hotnewSelected = value;
+      console.log(this.hotnewSelected);
+    }
   },
 
   created() {
@@ -151,7 +253,12 @@ export default {
           list2[1] = parseInt(list[1]);
           list2[2] = parseInt(list[2]);
           list2[3] = parseInt(list[3]);
-
+          if(list2[2] == 0){
+            list2[2] = "0_nothing"
+          }
+          if(list2[3] == 0){
+            list2[3] = "0_nothing"
+          }
           vm.newavatars[index] = list2;
         }
         console.log(vm.newmissions);
@@ -180,7 +287,12 @@ export default {
           list2[1] = parseInt(list[1]);
           list2[2] = parseInt(list[2]);
           list2[3] = parseInt(list[3]);
-
+    if(list2[2] == 0){
+            list2[2] = "0_nothing"
+          }
+          if(list2[3] == 0){
+            list2[3] = "0_nothing"
+          }
           vm.hotavatars[index] = list2;
         }
         console.log(vm.hotmissions);
@@ -188,6 +300,7 @@ export default {
       .catch(function (err) {
         console.log(err);
       });
+  
   },
 };
 </script>

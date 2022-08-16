@@ -103,6 +103,21 @@
         </v-col>
       </v-row>
     </v-container>
+    <!-- searchFail Dialog -->
+    <v-dialog v-model="FailDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>미션 검색 결과</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>{{ this.failMsg }}</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="FailDialog = false"> 확인 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <footer-view></footer-view>
   </div>
 </template>
@@ -122,6 +137,8 @@ export default {
     FooterView,
   },
   data: () => ({
+    FailDialog: false,
+    failMsg: "",
     tofindsearch: "",
     hotmissions: [],
     newmissions: [],
@@ -158,8 +175,7 @@ export default {
           console.log("여기는 search result");
           console.log(response);
           if (!response.data[0]) {
-            alert("존재하지 않거나 참가할 수 없는 방입니다.");
-            return;
+            vm.failMsg = "참여할 수 없는 방입니다.";
           } else {
             vm.$router.push({
               name: "before",
@@ -168,8 +184,11 @@ export default {
           }
         })
         .catch(function (err) {
+          vm.failMsg = "존재하지 않거나 참가할 수 없는 방입니다.";
           console.log(err);
         });
+
+      this.FailDialog = true;
     },
   },
   created() {

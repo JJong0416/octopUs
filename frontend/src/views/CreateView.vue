@@ -105,6 +105,23 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- createFail Dialog -->
+    <v-dialog v-model="FailDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>새로운 미션 생성하기</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>
+            보유한 포인트가 참가 포인트보다 많아야 미션을 생성할 수 있습니다.
+          </h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="FailDialog = false"> 확인 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -115,6 +132,7 @@ export default {
     ticksLabels: [2, 3, 4, 5, 6, 7, 8],
     label: ["공개", "비공개"],
     createDialog: false,
+    FailDialog: false,
     createMsg: "",
     missionNum: null,
     mission: {
@@ -204,31 +222,35 @@ export default {
         this.createMsg = "필수 정보를 모두 입력해주세요";
         this.createDialog = true;
       } else {
-        axios
-          .post(`api/mission`, {
-            missionLeaderId: this.userInfo.userId,
-            missionTitle: this.mission.missionTitle,
-            missionType: this.mission.missionType,
-            missionPoint: this.mission.missionPoint,
-            missionLimitPersonnel: this.mission.missionLimitPersonnel,
-            missionContent: this.mission.missionContent,
-            missionOpen: this.mission.missionOpen ? 0 : 1,
-          })
-          .then((response) => {
-            this.createMsg =
-              "미션 성공 인증을 위한 시간을 설정하면 해당 미션이 활성화됩니다.";
-            this.missionNum = response.data;
-          })
-          .catch(() => {
-            this.createMsg = "미션 생성에 실패하였습니다.";
-            console.log(this.mission.missionTitle);
-            console.log(this.mission.missionType);
-            console.log(this.mission.missionPoint);
-            console.log(this.mission.missionLimitPersonnel);
-            console.log(this.mission.missionContent);
-            console.log(this.mission.missionOpen);
-          });
-        this.createDialog = true;
+        if (this.userInfo.userPoint < this.mission.missionPoint) {
+          this.FailDialog = true;
+        } else {
+          axios
+            .post(`api/mission`, {
+              missionLeaderId: this.userInfo.userId,
+              missionTitle: this.mission.missionTitle,
+              missionType: this.mission.missionType,
+              missionPoint: this.mission.missionPoint,
+              missionLimitPersonnel: this.mission.missionLimitPersonnel,
+              missionContent: this.mission.missionContent,
+              missionOpen: this.mission.missionOpen ? 0 : 1,
+            })
+            .then((response) => {
+              this.createMsg =
+                "미션 성공 인증을 위한 시간을 설정하면 해당 미션이 활성화됩니다.";
+              this.missionNum = response.data;
+            })
+            .catch(() => {
+              this.createMsg = "미션 생성에 실패하였습니다.";
+              console.log(this.mission.missionTitle);
+              console.log(this.mission.missionType);
+              console.log(this.mission.missionPoint);
+              console.log(this.mission.missionLimitPersonnel);
+              console.log(this.mission.missionContent);
+              console.log(this.mission.missionOpen);
+            });
+          this.createDialog = true;
+        }
       }
     },
   },

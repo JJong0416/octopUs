@@ -101,6 +101,7 @@ public class MissionService {
                 .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).orElseThrow(() -> {
                     throw new CustomException(ErrorCode.USER_NOT_FOUND);
                 }).getUserAvatar())
+                .missionType(mission.getMissionType())
                 .build()).collect(Collectors.toList());
     }
 
@@ -110,17 +111,17 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public List<MissionRes> getMissionByMissionCode(String missionCode) {
-        return missionRepository.findMissionsByMissionCodeAndMissionOpen(missionCode, MissionOpenType.OPEN_ROOM);
+        return missionRepository.findMissionsByMissionCodeAndMissionStatus(missionCode, MissionStatus.OPEN);
     }
 
     @Transactional(readOnly = true)
     public List<MissionRes> getMissionByMissionTitle(String missionTitle) {
-        return missionRepository.findMissionsByMissionTitleAndMissionOpen(missionTitle, MissionOpenType.OPEN_ROOM);
+        return missionRepository.findMissionsByMissionTitleAndMissionOpenAndMissionStatus(missionTitle, MissionOpenType.OPEN_ROOM, MissionStatus.OPEN);
     }
 
     @Transactional(readOnly = true)
     public List<MissionRes> getMissionsByMissionType(MissionType missionType) {
-        return missionRepository.findMissionsByMissionType(missionType);
+        return missionRepository.findMissionsByMissionTypeAndMissionStatus(missionType, MissionStatus.OPEN);
     }
 
     // 미션을 삭제하며 해당 미션의 모든 조인테이블 삭제(리더인경우만 가능)

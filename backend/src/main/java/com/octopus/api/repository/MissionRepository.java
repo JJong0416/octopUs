@@ -29,11 +29,11 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
 
     List<Mission> findByMissionStatusAndMissionOpen(MissionStatus missionStatus, MissionOpenType missionOpenType);
 
-    List<MissionRes> findMissionsByMissionCodeAndMissionOpen(String missionCode, MissionOpenType missionOpen);
+    List<MissionRes> findMissionsByMissionCodeAndMissionStatus(String missionCode, MissionStatus missionStatus);
 
-    List<MissionRes> findMissionsByMissionTitleAndMissionOpen(String missionTitle, MissionOpenType openRoom);
+    List<MissionRes> findMissionsByMissionTitleAndMissionOpenAndMissionStatus(String missionTitle, MissionOpenType openRoom,  MissionStatus missionStatus);
 
-    List<MissionRes> findMissionsByMissionType(MissionType missionType);
+    List<MissionRes> findMissionsByMissionTypeAndMissionStatus(MissionType missionType, MissionStatus missionStatus);
 
     @Modifying
     @Transactional

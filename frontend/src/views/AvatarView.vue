@@ -30,7 +30,7 @@
             @click="saveAvatar_not"
             >mdi-check</v-icon
           >
-          <v-icon large v-else @click="saveAvatar">mdi-check</v-icon>
+          <v-icon large v-else @click="avatarDialog = true">mdi-check</v-icon>
         </v-col>
       </v-row>
 
@@ -155,6 +155,39 @@
         </v-card>
       </template>
     </v-container>
+    <!-- 아바타 Dialog -->
+    <v-dialog v-model="avatarDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>아바타 변경</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>아바타 변경시 500 포인트가 차감됩니다. 변경하시겠습니까?</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-btn color="#fa183e" text @click="saveAvatar"> 확인 </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="avatarDialog = false">
+            취소
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 아바타 -->
+    <v-dialog v-model="avaChangeDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>아바타 변경</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>{{ this.avatarMsg }}</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="refresh"> 확인 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <footer-view></footer-view>
   </div>
 </template>
@@ -176,6 +209,9 @@ export default {
         { kind: "Pet", size: 8 },
       ],
       text: "items",
+      avatarDialog: false,
+      avaChangeDialog: false,
+      avatarMsg: false,
       avatarColor: null,
       avatarFace: null,
       avatarHat: null,
@@ -248,34 +284,36 @@ export default {
       }
     },
     saveAvatar() {
-      if (confirm("아바타 변경시 500 포인트가 차감됩니다. 변경하시겠습니까?")) {
-        console.log("d");
-        var sendAvatarHat = this.avatarHat;
-        var sendAvatarPet = this.avatarPet;
-        if (this.avatarHat == "0_nothing") {
-          sendAvatarHat = 0;
-        }
-        if (this.avatarPet == "0_nothing") {
-          sendAvatarPet = 0;
-        }
-        const avatarReq = {
-          avatarColor: this.avatarColor,
-          avatarFace: this.avatarFace,
-          avatarHat: sendAvatarHat,
-          avatarPet: sendAvatarPet,
-        };
-        axios
-          .patch(`/api/user/modification/avatar`, avatarReq)
-          .then((response) => {
-            console.log(response);
-            alert("아바타 변경이 완료되었습니다.");
-            this.$router.push("Mypage");
-          })
-          .catch(function (err) {
-            alert("포인트가 부족합니다.");
-            console.log(err);
-          });
+      var sendAvatarHat = this.avatarHat;
+      var sendAvatarPet = this.avatarPet;
+      if (this.avatarHat == "0_nothing") {
+        sendAvatarHat = 0;
       }
+      if (this.avatarPet == "0_nothing") {
+        sendAvatarPet = 0;
+      }
+      const avatarReq = {
+        avatarColor: this.avatarColor,
+        avatarFace: this.avatarFace,
+        avatarHat: sendAvatarHat,
+        avatarPet: sendAvatarPet,
+      };
+      axios
+        .patch(`/api/user/modification/avatar`, avatarReq)
+        .then((response) => {
+          console.log(response);
+          this.avatarMsg = "아바타 변경이 완료되었습니다.";
+        })
+        .catch(function (err) {
+          this.avatarMsg = "포인트가 부족합니다.";
+          console.log(err);
+        });
+      this.avaChangeDialog = true;
+    },
+    refresh() {
+      if (this.avatarMsg === "아바타 변경이 완료되었습니다.")
+        this.$router.push("Mypage");
+      else this.avaChangeDialog = false;
     },
     saveAvatar_not() {
       this.$router.push("Mypage");

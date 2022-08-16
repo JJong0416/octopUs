@@ -36,11 +36,6 @@
                 </v-list-item-title>
               </v-list-item>
               <v-divider></v-divider>
-              <v-list-item>
-                <v-list-item-title>
-                  <user-delete></user-delete>
-                </v-list-item-title>
-              </v-list-item>
             </v-list>
           </v-menu>
         </v-col>
@@ -62,6 +57,21 @@
           </div>
         </v-col>
       </v-row>
+      <!-- 로그아웃 Dialog -->
+      <v-dialog v-model="logoutDialog" max-width="500px">
+        <v-card>
+          <v-card-title>
+            <h5>로그아웃</h5>
+          </v-card-title>
+          <v-card-title>
+            <h6>로그아웃 되었습니다.</h6>
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="#fa183e" text @click="refresh"> 확인 </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -69,13 +79,15 @@
 <script>
 import { mapMutations, mapState } from "vuex";
 import cookie from "vue-cookies";
-import UserDelete from "../change/UserDelete.vue";
 
 const memberStore = "memberStore";
 
 export default {
-  components: {
-    UserDelete
+  data() {
+    return {
+      logoutMsg: "",
+      logoutDialog: false,
+    };
   },
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
@@ -88,8 +100,10 @@ export default {
       this.SET_USER_INFO(null);
       cookie.remove("token");
 
-      alert("로그아웃됐습니다");
-      this.drawer = false;
+      this.logoutMsg = "로그아웃 되었습니다";
+      this.logoutDialog = true;
+    },
+    refresh() {
       window.location.replace("http://localhost:8080");
     },
   },

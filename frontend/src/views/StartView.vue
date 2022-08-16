@@ -43,7 +43,7 @@ export default {};
 <style>
 .start {
   height: 100vh;
-  background-color: #eefaec;
+  background-color: #f7f5fc;
 }
 .login a {
   text-decoration-line: none;

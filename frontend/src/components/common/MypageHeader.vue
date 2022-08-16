@@ -128,7 +128,7 @@ export default {
   color: none;
 }
 .header {
-  background-color: #eefaec;
+  background-color: #f7f5fc;
 }
 .v-list-item a {
   text-decoration: none;

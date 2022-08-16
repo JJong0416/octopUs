@@ -7,7 +7,7 @@
         width="100%"
         class="text-center"
         height="10vh"
-        color="#eefaec"
+        color="#f7f5fc"
       >
         <v-card-text class="px-0">
           <v-btn class="mx-6" icon>

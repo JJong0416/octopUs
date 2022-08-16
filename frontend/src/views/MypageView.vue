@@ -107,12 +107,28 @@
             </v-row>
           </v-card-text>
         </v-row>
+       
       </v-card>
       <br />
       <br />
+      <v-card>
+        <v-row>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+         <v-card-title style="font-weight: bold">            
+          <v-icon color="pink darken-1">mdi-tag</v-icon
+          >&nbsp;&nbsp;미션 현황
+         </v-card-title>
+      
+        </v-row>
+        <my-missions :missions="Missions"></my-missions>
+      </v-card>
+        <br />
+      <br />
+        <br />
+      <br />
       <v-row>
         <!--  mission -->
-        <my-missions :missions="Missions"></my-missions>
+        
       </v-row>
     </v-container>
     <footer-view></footer-view>

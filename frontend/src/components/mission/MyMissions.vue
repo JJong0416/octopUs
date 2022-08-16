@@ -1,137 +1,91 @@
 <template>
   <div>
-    <v-data-table
-      :search="search"
-      :headers="Missionheaders"
-      :items="missions"
-      :items-per-page="5"
-      class="elevation-1"
-      :single-expand="singleExpand"
-      :expanded.sync="openexpanded"
-      item-key="missionCode"
-      show-expand
-      multi-sort
-      @item-expanded="clickExpand"
+    <v-toolbar flat>
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="검색"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-toolbar>
+    <br />
+    <v-divider></v-divider>
+    <v-bottom-navigation
+      style="box-shadow: none !important"
+      v-model="statusSearch"
+      color="pink darken-1"
+      grow
     >
-      <!-- 표 상단의 해더 문구 -->
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title
-            >Missions
-            <v-spacer></v-spacer>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="검색"
-              single-line
-              hide-details
-            ></v-text-field>
-          </v-toolbar-title>
-        </v-toolbar>
-      </template>
+      <v-btn value="UNACTIVATED">
+        <span>비활성화</span>
 
-      <template v-slot:[`item.missionPoint`]="{ item }">
-        <v-chip :color="getColor(item.missionPoint)" dark>
-          {{ item.missionPoint }}
-        </v-chip>
-      </template>
-      <template v-slot:expanded-item="{ headers, item }">
-        <td :colspan="headers.length">
-          <!-- 내부 내용 -->
-          <template>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>미션 내용</v-list-item-title>
-                <v-list-item-subtitle>{{
-                  item.missionContent
-                }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
+        <v-icon>mdi-battery-alert-variant-outline</v-icon>
+      </v-btn>
 
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title>입장 코드</v-list-item-title>
-                <v-list-item-subtitle>{{
-                  item.missionCode
-                }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
+      <v-btn value="OPEN">
+        <span>모집중</span>
 
-            <v-list-item two-line>
-              <v-list-item-content>
-                <v-list-item-title>분야</v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ item.missionType }}</v-list-item-subtitle
-                >
-              </v-list-item-content>
-            </v-list-item>
+        <v-icon>mdi-battery-low</v-icon>
+      </v-btn>
 
-            <v-list-item
-              two-line
-              v-if="
-                item.missionStatus === `ONGOING` ||
-                item.missionStatus === `CLOSE`
-              "
-            >
-              <v-list-item-content>
-                <v-list-item-title>인증 사진</v-list-item-title>
-                <img :src="URL" style="height: 120px" class="mx-4" />
-              </v-list-item-content>
-            </v-list-item>
-          </template>
+      <v-btn value="ONGOING">
+        <span>진행중</span>
 
-          <!-- 내부 내용 끝 -->
-          <router-link
-            v-if="item.missionStatus === `UNACTIVATED`"
-            :to="{
-              name: 'unactivated',
-              params: { missionNo: item.missionNo },
-            }"
-          >
-            미션 활성화하기
-          </router-link>
-          <router-link
-            v-if="item.missionStatus === `OPEN`"
-            :to="{
-              name: 'before',
-              params: { missionNo: item.missionNo },
-            }"
-          >
-            열린 미션 입장하기
-          </router-link>
-          <!-- 열린미션, 진행중미션 이동위치 확인 -->
-          <router-link
-            v-if="item.missionStatus === `ONGOING`"
-            :to="{
-              name: 'proceeding',
-              params: { missionNo: item.missionNo },
-            }"
-          >
-            진행중인 미션 입장하기
-          </router-link>
-          <router-link
-            v-if="item.missionStatus === `CLOSE`"
-            :to="{
-              name: 'proceeding',
-              params: { missionNo: item.missionNo },
-            }"
-          >
-            끝난방 들어가기
-          </router-link>
-        </td>
-      </template>
-    </v-data-table>
+        <v-icon>mdi-battery-medium</v-icon>
+      </v-btn>
+      <v-btn value="CLOSE">
+        <span>종료</span>
+
+        <v-icon>mdi-battery-high</v-icon>
+      </v-btn>
+    </v-bottom-navigation>
+
+    <v-divider></v-divider>
+    <br />
+
+    <div class="wrapper">
+      <div class="card" v-for="(mission, index) in filteredList" :key="index">
+        <div v-if="`${search.length}` == 0">
+          <mission-card :mission=mission></mission-card>
+        </div>
+        <div v-else-if="mission.missionTitle.includes(search)">
+          <mission-card :mission=mission></mission-card>
+        </div>
+        
+
+        <div v-else><v-card-text
+        style="display: flex; justify-content: center; align-items: center"
+      >
+      검색 조건에 맞는 미션이 없습니다.
+      </v-card-text></div>
+        <br />
+        <!-- <a v-bind:href="post.link" target="_blank">
+        <img v-bind:src="post.img"/>
+        <small>posted by: {{ post.author }}</small> 
+        {{ post.title }}n
+      </a> -->
+      </div>
+      
+    </div>
+
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import MissionCard from './MissionCard.vue';
+
+//import MissionCard from "../MissionCard.vue";
 export default {
+  components: { MissionCard },
   props: ["missions"],
 
   data() {
     return {
       search: "",
+      statusSearch: "",
       openexpanded: [],
       closeexpanded: [],
       singleExpand: true,
@@ -180,7 +134,20 @@ export default {
       else return "green";
     },
   },
+  computed: {
+    filteredList() {
+      return this.missions.filter((mission) => {
+        return mission.missionStatus
+          .toLowerCase()
+          .includes(this.statusSearch.toLowerCase());
+      });
+    },
+  },
 };
 </script>
 
-<style></style>
+<style>
+.logo {
+  text-decoration: none;
+}
+</style>

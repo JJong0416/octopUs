@@ -54,7 +54,7 @@
 
             <v-list-item-avatar tile size="80">
               <v-img
-                :src="require(`../assets/img/Theme/${searchtypes[index]}.jpg`)"
+                :src="require(`../assets/img/Theme/${item.missionType}.jpg`)"
               >
               </v-img
             ></v-list-item-avatar>
@@ -96,7 +96,7 @@
 
             <v-list-item-avatar tile size="80">
               <v-img
-                :src="require(`../assets/img/Theme/${searchtypes[index]}.jpg`)"
+                :src="require(`../assets/img/Theme/${alltypes[index]}.jpg`)"
               >
               </v-img
             ></v-list-item-avatar>
@@ -181,23 +181,12 @@ export default {
         console.log(response);
         vm.allmissions = response.data;
         for (let index = 0; index < vm.allmissions.length; index++) {
-          const allmission = vm.allmissions[index];
-          var type;
-          if (allmission.missionType === "ETC") {
-            type = "ETC";
-          } else if (allmission.missionType === "LIFE") {
-            type = "life";
-          } else if (allmission.missionType === "EXERCISE") {
-            type = "exercise";
-          } else if (allmission.missionType === "STUDY") {
-            type = "study";
-          } else if (allmission.missionType === "MEETING") {
-            type = "meeting";
-          }
-
-          vm.alltypes[index] = type;
+          var allmission = vm.allmissions[index];
+          vm.alltypes[index] = allmission.missionType;
         }
         console.log("미션전부받아오기 성공");
+        console.log(vm.allmissions);
+        console.log(vm.alltypes);
       })
       .catch(function (error) {
         console.log(error);
@@ -270,21 +259,8 @@ export default {
           console.log(response);
           vm.searchres = response.data;
           for (let index = 0; index < vm.searchres.length; index++) {
-            const searchedmission = vm.searchres[index];
-            var type;
-            if (searchedmission.missionType === "ETC") {
-              type = "ETC";
-            } else if (searchedmission.missionType === "LIFE") {
-              type = "life";
-            } else if (searchedmission.missionType === "EXERCISE") {
-              type = "exercise";
-            } else if (searchedmission.missionType === "STUDY") {
-              type = "study";
-            } else if (searchedmission.missionType === "MEETING") {
-              type = "meeting";
-            }
-
-            vm.searchtypes[index] = type;
+            var searchedmission = vm.searchres[index];
+            vm.searchtypes[index] = searchedmission.missionType;
           }
           console.log(vm.searchres);
         })

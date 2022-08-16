@@ -312,11 +312,11 @@ export default {
     },
     refresh() {
       if (this.avatarMsg === "아바타 변경이 완료되었습니다.")
-        this.$router.push("Mypage");
+        window.location.replace("http://localhost:8080/Mypage");
       else this.avaChangeDialog = false;
     },
     saveAvatar_not() {
-      this.$router.push("Mypage");
+      window.location.replace("http://localhost:8080/Mypage");
     },
     goback() {
       this.$router.go(-1);

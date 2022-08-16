@@ -44,18 +44,18 @@
 
       <!-- hot, new icon -->
       <v-row>
-        <v-col cols="2"></v-col>
-        <v-col class="pa-0" cols="3">
+        <v-col cols="1"></v-col>
+        <v-col class="pa-0" cols="4">
           <!-- hot -->
           <v-img @click="moveHot()" src="../assets/img/Hot.png"></v-img>
         </v-col>
         <v-col cols="1"></v-col>
         <v-col cols="1"></v-col>
-        <v-col class="pa-0" cols="3">
+        <v-col class="pa-0" cols="4">
           <!-- new -->
           <v-img @click="moveNew()" src="../assets/img/New.png"></v-img>
         </v-col>
-        <v-col cols="2"></v-col>
+        <v-col cols="1"></v-col>
       </v-row>
 
       <!-- Hot 실시간 반영 -->
@@ -72,7 +72,8 @@
             <v-carousel-item v-for="(hotmission, i) in hotmissions" :key="i">
               <v-sheet height="100%">
                 <v-row class="fill-height" align="center" justify="center">
-                  <div class="singleLine text-h5" style="width: 150px">
+                   
+                  <div class="twiceLine" style="width: 9em; display: flex; justify-content: center; align-items: center" >
                     {{ hotmission.missionTitle }}
                   </div>
                 </v-row>
@@ -89,11 +90,12 @@
             hide-delimiter-background
             hide-delimiters
             show-arrows-on-hover
+            :show-arrows="false"
           >
             <v-carousel-item v-for="(newmission, i) in newmissions" :key="i">
               <v-sheet height="100%">
-                <v-row class="fill-height" align="center" justify="center">
-                  <div class="singleLine text-h5" style="width: 150px">
+                     <v-row class="fill-height" align="center" justify="center">
+                  <div class="twiceLine" style="width: 9em; display: flex; justify-content: center; align-items: center" >
                     {{ newmission.missionTitle }}
                   </div>
                 </v-row>
@@ -144,7 +146,7 @@ export default {
     newmissions: [],
     items: ["코드"],
     userInfo2: [],
-    userAvatar: [0, 0, 0, 0],
+    userAvatar: [0, 0, "0_nothing", "0_nothing"],
   }),
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
@@ -193,9 +195,9 @@ export default {
   },
   created() {
     var vm = this;
-    // axios.defaults.headers.common[
-    //   "Authorization"
-    // ] = `Bearer ${sessionStorage.getItem("token")}`;
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
     // kakao login token settings
     axios
       .get(`api/login/kakao/${vm.$route.query.code}`, {
@@ -316,5 +318,32 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: break-word;
+}
+
+.twiceLine {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: break-word;
+
+  line-height: 1;
+  white-space: normal;
+    line-height: 1.2;
+
+    text-align: left;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+}
+::v-deep .v-btn.v-btn--icon.v-btn--round.theme--dark.v-size--default{
+  display : none;
+}
+::v-deep .v-window--show-arrows-on-hover.v-window__next{
+  display : none;
+}
+::v-deep .v-carousel__next > button{
+  color: red;
 }
 </style>

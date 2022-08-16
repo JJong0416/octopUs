@@ -24,12 +24,6 @@
       </v-card-text>
 
       <v-divider></v-divider>
-      <!-- <v-btn v-if="mission.missionLeaderId == userInfo.userId"
-        >미션 수정하기</v-btn
-      > -->
-
-      <!-- ---------------------------------------------------------------------------- -->
-
       <v-card-actions>
         <div class="my-4 text-subtitle-1">미션 정보 확인하기</div>
 
@@ -143,9 +137,6 @@
                         >
                           <b>{{ item }}</b>
                         </v-avatar>
-                        <!-- <v-avatar size="40" color="red lighten-3" v-else>
-                      {{ item }}
-                    </v-avatar> -->
                       </v-col>
                     </v-row>
                   </v-container>
@@ -352,7 +343,7 @@
         <div v-show="cameraShow">
           <v-divider></v-divider>
           <v-card-text class="text-center" v-if="!isCurrentUserPicturePost">
-            현재는 인증 가능하지 않습니다.
+            인증 가능한 시간이 아닙니다.
           </v-card-text>
           <v-card-text class="text-center" v-else>
             <router-link
@@ -362,7 +353,7 @@
               }"
             >
               <v-btn style="margin: 15px" v-if="isCurrentUserPicturePost"
-                >클릭 시 카메라가 켜집니다.</v-btn
+                >클릭 시 사진 인증을 위해 카메라가 켜집니다.</v-btn
               ></router-link
             >
           </v-card-text>

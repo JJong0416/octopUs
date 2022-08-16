@@ -17,13 +17,14 @@
       </template>
       <template v-slot:default="dialog">
         <v-card>
-          <v-toolbar max-height="100px" color="primary" dark
-            ><div class="text-h4">보내기</div></v-toolbar
+          <v-toolbar max-height="20%" color="#ffadad"
+            ><div class="text-h6">환급 받기</div></v-toolbar
           >
           <v-dialog v-model="account" width="500">
             <template v-slot:activator="{ on, attrs }">
               <v-container>
-                <v-btn width="300" outlined v-bind="attrs" v-on="on">
+                <br>
+                <v-btn width="100%" outlined color="#143559" v-bind="attrs" v-on="on">
                   은행 선택
                 </v-btn>
               </v-container>
@@ -42,9 +43,10 @@
           </v-dialog>
           <v-form>
             <v-container>
-              <v-text-field label="계좌번호 입력" outlined></v-text-field>
+              <v-text-field height="50%" label="계좌번호를 입력해주세요." outlined></v-text-field>
               <v-text-field
-                label="환급 포인트 입력"
+                height="50%"
+                label="환급 받으실 포인트를 입력해주세요."
                 outlined
                 v-model="inputdata"
               ></v-text-field>
@@ -52,8 +54,9 @@
           </v-form>
 
           <v-card-actions class="justify-end">
-            <v-btn text @click="refundbtn">환급하기</v-btn>
-            <v-btn text @click="dialog.value = false">Close</v-btn>
+            <v-btn outlined color="#143559" @click="dialog.value = false">Close</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn outlined color="#fa183e" @click="refundbtn">환급 받기</v-btn>
           </v-card-actions>
         </v-card>
       </template>

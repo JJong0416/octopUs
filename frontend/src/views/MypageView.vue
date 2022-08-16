@@ -128,7 +128,7 @@
       </v-row>
     </v-container>
     <!-- 충전완료Dialog -->
-    <v-dialog v-model="chargeDialog" max-width="500px">
+    <v-dialog v-model="chargeDialog" max-width="80%">
       <v-card>
         <v-card-title>
           <h5>Points</h5>

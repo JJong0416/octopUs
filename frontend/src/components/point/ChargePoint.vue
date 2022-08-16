@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="charge" width="500">
+    <v-dialog v-model="charge" width="200">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           color="yellow"
@@ -13,8 +13,8 @@
       </template>
 
       <v-card>
-        <v-card-title class="text-h5 yellow lighten-2">
-          <h4>포인트 충전</h4>
+        <v-card-title class="text-h6">
+          <h5>포인트 충전하기</h5>
         </v-card-title>
         <v-dialog
           v-model="kakaopay"
@@ -27,39 +27,39 @@
               <v-row>
                 <v-col>
                   <v-btn
-                    color="amber"
+                    class="px-1"
+                    color="#fdffb6"
                     v-bind="attrs"
                     v-on="on"
                     @click="getPrice(1000)"
                   >
-                    <v-icon color="yellow">mdi-currency-usd</v-icon>
-                    1000Points
+                    <v-icon color="#143559">mdi-currency-usd</v-icon>
+                    1000 Points
                   </v-btn>
-                  <v-spacer><h3>1000원</h3></v-spacer>
                 </v-col>
                 <v-col>
                   <v-btn
-                    color="amber"
+                    class="px-1"
+                    color="#fdffb6"
                     v-bind="attrs"
                     v-on="on"
                     @click="getPrice(3000)"
                   >
-                    <v-icon color="yellow">mdi-currency-usd</v-icon>
-                    3000Points
+                    <v-icon color="#143559">mdi-currency-usd</v-icon>
+                    3000 Points
                   </v-btn>
-                  <v-spacer><h3>3000원</h3></v-spacer>
                 </v-col>
                 <v-col>
                   <v-btn
-                    color="amber"
+                    class="px-1"
+                    color="#fdffb6"
                     v-bind="attrs"
                     v-on="on"
                     @click="getPrice(5000)"
                   >
-                    <v-icon color="yellow">mdi-currency-usd</v-icon>
-                    5000Points
+                    <v-icon color="#143559">mdi-currency-usd</v-icon>
+                    5000 Points
                   </v-btn>
-                  <v-spacer><h3>5000원</h3></v-spacer>
                 </v-col>
               </v-row>
             </v-card-actions>
@@ -76,7 +76,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="primary" text @click="charge = false"> close </v-btn>
+          <v-btn color="#fa183e" outlined @click="charge = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

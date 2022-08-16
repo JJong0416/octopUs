@@ -213,6 +213,12 @@ export default {
             console.log(response);
             vm.userInfo2 = response.data;
             vm.userAvatar = vm.userInfo2.userAvatar.split(", ");
+            if (vm.userAvatar[2] == 0) {
+              vm.userAvatar[2] = "0_nothing";
+            }
+            if (vm.userAvatar[3] == 0) {
+              vm.userAvatar[3] = "0_nothing";
+            }
             console.log(vm.userAvatar);
           })
           .catch(function (err) {

@@ -31,89 +31,89 @@
       </v-row>
 
       <!-- 검색 성공시 보여질 페이지 -->
+      <v-row v-if="searchres">
+        <v-card
+          class="mx-auto"
+          max-width="344"
+          outlined
+          v-for="(item, index) in searchres"
+          v-bind:key="index"
+        >
+          <v-list-item three-line>
+            <v-list-item-content>
+              <div class="text-overline mb-4">
+                참가 포인트 {{ item.missionPoint }}
+              </div>
+              <v-list-item-title class="text-h5 mb-1">
+                {{ item.missionTitle }}
+              </v-list-item-title>
+              <v-list-item-subtitle>{{
+                item.missionContent
+              }}</v-list-item-subtitle>
+            </v-list-item-content>
 
-      <v-card
-        class="mx-auto"
-        max-width="344"
-        outlined
-        v-for="(item, index) in searchres"
-        v-bind:key="index"
-      >
-        <v-list-item three-line>
-          <v-list-item-content>
-            <div class="text-overline mb-4">
-              참가 포인트 {{ item.missionPoint }}
-            </div>
-            <v-list-item-title class="text-h5 mb-1">
-              {{ item.missionTitle }}
-            </v-list-item-title>
-            <v-list-item-subtitle>{{
-              item.missionContent
-            }}</v-list-item-subtitle>
-          </v-list-item-content>
+            <v-list-item-avatar tile size="80">
+              <v-img
+                :src="require(`../assets/img/Theme/${searchtypes[index]}.jpg`)"
+              >
+              </v-img
+            ></v-list-item-avatar>
+          </v-list-item>
 
-          <v-list-item-avatar tile size="80">
-            <v-img
-              :src="require(`../assets/img/Theme/${searchtypes[index]}.jpg`)"
+          <v-card-actions>
+            <v-btn
+              outlined
+              rounded
+              text
+              @click="beforeJoinCheck(item.missionNo)"
             >
-            </v-img
-          ></v-list-item-avatar>
-        </v-list-item>
-
-        <v-card-actions>
-          <v-btn outlined rounded text @click="beforeJoinCheck(item.missionNo)">
-            입장하기
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+              입장하기
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-row>
       <!-- all missions -->
-      <v-sheet
-        v-if="searchres == null"
-        class="mx-auto"
-        elevation="8"
-        max-width="800"
-      >
-        <v-slide-group v-model="model" class="pa-4" show-arrows>
-          <v-slide-item
-            v-for="(item, index) in allmissions"
-            :key="index"
-            v-slot="{ active, toggle }"
-          >
-            <v-card
-              :color="active ? 'warning' : 'amber'"
-              class="ma-4"
-              height="200"
-              width="200"
-              @click="toggle"
-            >
-              <v-card-title v-if="!active"
-                ><h2 class="singleLine text-h5" style="width: 150px">
-                  {{ item.missionTitle }}
-                </h2></v-card-title
-              >
-              <v-card-text v-if="!active"
-                ><h3>{{ item.missionLeaderId }}의 미션</h3></v-card-text
-              >
-              <v-row class="fill-height" align="center" justify="center">
-                <v-scale-transition>
-                  <v-button
-                    v-if="active"
-                    @click="beforeJoinCheck(item.missionNo)"
-                  >
-                    <v-icon
-                      color="white"
-                      size="48"
-                      v-text="'mdi-location-enter'"
-                    ></v-icon>
-                  </v-button>
-                </v-scale-transition>
-              </v-row>
-            </v-card>
-          </v-slide-item>
-        </v-slide-group>
-      </v-sheet>
+      <v-row v-if="!searchres">
+        <v-card
+          class="mx-auto"
+          max-width="344"
+          outlined
+          v-for="(item, index) in allmissions"
+          v-bind:key="index"
+        >
+          <v-list-item three-line>
+            <v-list-item-content>
+              <div class="text-overline mb-4">
+                참가 포인트 {{ item.missionPoint }}
+              </div>
+              <v-list-item-title class="text-h5 mb-1">
+                {{ item.missionTitle }}
+              </v-list-item-title>
+              <v-list-item-subtitle>{{
+                item.missionContent
+              }}</v-list-item-subtitle>
+            </v-list-item-content>
 
-      <!-- hot,new -->
+            <v-list-item-avatar tile size="80">
+              <v-img
+                :src="require(`../assets/img/Theme/${searchtypes[index]}.jpg`)"
+              >
+              </v-img
+            ></v-list-item-avatar>
+          </v-list-item>
+
+          <v-card-actions>
+            <v-btn
+              outlined
+              rounded
+              text
+              @click="beforeJoinCheck(item.missionNo)"
+            >
+              입장하기
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-row>
     </v-container>
     <footer-view></footer-view>
   </div>
@@ -149,9 +149,8 @@ export default {
       searchtype: "",
       items: ["코드", "제목", "테마"],
       themes: ["생활", "운동", "공부", "모임", "기타"],
-      hotmissions: [],
-      newmissions: [],
       allmissions: [],
+      alltypes: [],
       searchtypes: [],
       searchres: null,
       headers: [
@@ -181,47 +180,27 @@ export default {
       .then(function (response) {
         console.log(response);
         vm.allmissions = response.data;
+        for (let index = 0; index < vm.allmissions.length; index++) {
+          const allmission = vm.allmissions[index];
+          var type;
+          if (allmission.missionType === "ETC") {
+            type = "ETC";
+          } else if (allmission.missionType === "LIFE") {
+            type = "life";
+          } else if (allmission.missionType === "EXERCISE") {
+            type = "exercise";
+          } else if (allmission.missionType === "STUDY") {
+            type = "study";
+          } else if (allmission.missionType === "MEETING") {
+            type = "meeting";
+          }
+
+          vm.alltypes[index] = type;
+        }
         console.log("미션전부받아오기 성공");
       })
       .catch(function (error) {
         console.log(error);
-      });
-    axios
-      .get(`api/mission/new`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      })
-      .then(function (response) {
-        console.log(response);
-
-        console.log("여기는 뉴미션");
-        console.log(response.data[0]);
-        vm.newmissions = response.data;
-        console.log(vm.newmissions);
-      })
-      .catch(function (err) {
-        console.log(err);
-      })
-      .finally({});
-    axios
-      .get(`api/mission/hot`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-      })
-      .then(function (response) {
-        console.log(response);
-
-        console.log("여기는 hotmission");
-        console.log(response.data[0]);
-        vm.hotmissions = response.data;
-        console.log(vm.newmissions);
-      })
-      .catch(function (err) {
-        console.log(err);
       });
     axios
       .get(`api/user/info`, {

@@ -1,28 +1,47 @@
 <template>
-  <div>
+  <v-container>
+    <v-row >
+      <v-col style="display: flex; justify-content: center; align-items: center">
+<h4>인증 사진 찍기</h4></v-col>
+    </v-row><v-row>
+<v-col style="display: flex; justify-content: center; align-items: center">
+    <h6>미션 인증 방법을 잘 숙지한 후 찍어주세요.</h6>
+      </v-col>
+    </v-row>
+    <v-row>
     <web-cam
       ref="webcam"
       :device-id="deviceId"
-      width="100%"
+      width="100%" height="50%"
       @started="onStarted"
       @stopped="onStopped"
       @error="onError"
       @cameras="onCameras"
       @camera-change="onCameraChange"
-    />
-    <v-btn type="button" class="btn btn-primary" @click="onCapture">
+    /></v-row>
+    <v-row>
+      <v-col style="display: flex; justify-content: center; align-items: center">
+    <v-btn outlined color="#fa183e" class="btn btn-primary" @click="onCapture" >
       찍기
-    </v-btn>
-    <v-spacer></v-spacer>
-    미리보기
-    <v-img src="../assets/img/picture.jpg">
-      <figure class="figure">
-        <v-img :src="img" width="70%"></v-img>
+    </v-btn></v-col></v-row>
+   
+    <br>
+
+    <h5 style="display: flex; justify-content: center; align-items: center">미리보기</h5>
+    <v-row>
+      <v-col class="px-0 pt-3">
+      <figure class="figure"  >
+        <v-img :src="img" width="100%"></v-img>
       </figure>
-    </v-img>
-    <v-btn v-if="img != null" @click="onSave">올리기</v-btn>
-    <v-btn v-if="img != null" @click="onRestart">다시 찍기</v-btn>
-  </div>
+      </v-col>
+    </v-row>
+    <v-row class="px-4">
+    <v-btn  outlined color="#143559" v-if="img != null" @click="onRestart">다시 찍기</v-btn>
+    <v-spacer></v-spacer>
+    <v-btn  outlined color="#fa183e" v-if="img != null" @click="onSave">올리기</v-btn>
+    </v-row>
+    
+  </v-container>
 </template>
 
 <script>

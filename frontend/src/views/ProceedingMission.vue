@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <v-img
       :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)"
       width="100%"
@@ -268,12 +268,12 @@
                 <v-menu
                   v-model="selectedOpen"
                   :close-on-content-click="false"
-                  :activator="selectedElement"
+                  
                   offset-x
                 >
                   <!-- 클릭하면 나오는 상세 창 -------------------------------- -->
-                  <v-card color="grey lighten-4" min-width="350px" flat>
-                    <v-toolbar :color="selectedEvent.color" dark>
+                  <v-card color="grey lighten-4" max-width="100%" flat>
+                    <v-toolbar :color="selectedEvent.color">
                       <v-toolbar-title
                         v-html="selectedEvent.name"
                       ></v-toolbar-title>
@@ -369,7 +369,7 @@
         </div>
       </v-expand-transition>
     </v-card>
-  </div>
+  </v-container>
 </template>
 
 <script>

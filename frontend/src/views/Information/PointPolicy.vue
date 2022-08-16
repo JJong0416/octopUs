@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrap">
     <v-container>
       <v-row>
         <v-col>
@@ -17,9 +17,9 @@
     width="360"
   >
     <v-card-text>
-      <div class="mb-4">
-        <h2 class="pl-7">[ OctopUS Point 관련 정책 ]</h2>
-        
+      <div class="pa-0 ma-0">
+        <v-img src="../../assets/img/Point.png">
+        </v-img>
       </div>
     </v-card-text>
   </v-card>
@@ -43,3 +43,8 @@
     },
   }
 </script>
+<style scoped>
+.wrap{
+  background-color: #f7f5fc;
+}
+</style>

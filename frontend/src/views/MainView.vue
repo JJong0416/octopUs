@@ -38,14 +38,7 @@
           ></v-text-field>
         </v-col>
         <v-col class="pl-1" cols="3">
-          <v-btn
-            v-model="tofindsearch"
-            @click="transmit"
-            outlined
-            color="#fa183e"
-          >
-            Go!
-          </v-btn>
+          <v-btn @click="transmit" outlined color="#fa183e"> Go! </v-btn>
         </v-col>
       </v-row>
 

@@ -460,6 +460,87 @@
         </v-row>
       </v-form>
     </v-container>
+    <!-- emailDialog -->
+    <v-dialog v-model="EmailDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>E-mail</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>{{ this.msg }}</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="EmailDialog = false">
+            확인
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 이메일인증Dialog -->
+    <v-dialog v-model="EmailAuthenDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>E-mail</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>{{ this.authenmsg }}</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="EmailAuthenDialog = false">
+            확인
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 아이디중복검사Dialog -->
+    <v-dialog v-model="IDDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>ID</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>{{ this.idmsg }}</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="IDDialog = false"> 확인 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 닉네임중복검사Dialog -->
+    <v-dialog v-model="NickDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>닉네임</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>{{ this.nickmsg }}</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="NickDialog = false"> 확인 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 회원가입Dialog -->
+    <v-dialog v-model="registerDialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <h5>회원가입</h5>
+        </v-card-title>
+        <v-card-title>
+          <h6>{{ this.registermsg }}</h6>
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="#fa183e" text @click="registerDialog = false">
+            확인
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -475,6 +556,16 @@ export default {
       avatar: 0,
     },
     aouthcode: null,
+    EmailDialog: false,
+    EmailAuthenDialog: false,
+    IDDialog: false,
+    NickDialog: false,
+    registerDialog: false,
+    msg: "",
+    authenmsg: "",
+    idmsg: "",
+    nickmsg: "",
+    registermsg: "",
     issendemail: false,
     userIdChk: true,
     userNickChk: true,
@@ -535,22 +626,21 @@ export default {
         .get(`api/register/check/id/${this.user.userid}`)
         .then(({ data }) => {
           console.log("아이디중복확인 리턴: " + data);
-          let msg = "중복된 아이디입니다. 다시 입력해주세요";
+          this.idmsg = "중복된 아이디입니다. 다시 입력해주세요";
           if (data === false) {
-            msg = "사용가능한 아이디입니다.";
+            this.idmsg = "사용가능한 아이디입니다.";
             this.userIdChk = true;
-            alert(msg);
           } else {
             this.userIdChk = false;
-            alert(msg);
           }
         })
         .catch((error) => {
           console.log(error);
-          alert("ID중복체크에 실패했습니다..");
+          this.idmsg = "ID중복체크에 실패했습니다..";
         })
         .finally(() => {
           console.log(this.user.userid);
+          this.IDDialog = true;
         });
     },
     nickcheck() {
@@ -559,23 +649,22 @@ export default {
         axios
           .get(`api/register/check/nickname/${this.user.usernickname}`)
           .then(({ data }) => {
-            let msg = "중복된 닉네임입니다. 다시 입력해주세요";
+            this.nickmsg = "중복된 닉네임입니다. 다시 입력해주세요";
             if (data === false) {
-              msg = "사용가능한 닉네임입니다.";
+              this.nickmsg = "사용가능한 닉네임입니다.";
               this.userNickChk = true;
-              alert(msg);
             } else {
               this.userNickChk = false;
-              alert(msg);
             }
           })
           .catch((error) => {
             console.log(error);
-            alert("닉네임중복체크에 실패했습니다..");
+            this.nickmsg = "닉네임 중복검사에 실패했습니다.";
           });
       } else {
-        alert("닉네임이 유효하지 않습니다.");
+        this.nickmsg = "닉네임이 유효하지 않습니다.";
       }
+      this.NickDialog = true;
     },
     codecheck() {
       axios
@@ -584,23 +673,21 @@ export default {
           emailCode: this.aouthcode,
         })
         .then(({ data }) => {
-          let msg = "인증오류";
+          this.authenmsg = "인증번호를 다시 확인해주세요.";
           console.log("인증코드 전송후 리턴 : " + data);
           if (data === true) {
-            msg = "인증되었습니다.";
+            this.authenmsg = "인증되었습니다.";
             this.codeChk = true;
-            alert(msg);
           } else {
             this.codeChk = false;
-            alert(msg);
           }
         })
         .catch((error) => {
           console.log(error);
-          alert("ID 중복 체크에 실패했습니다.");
         })
         .finally(() => {
           console.log(this.user.userid);
+          this.EmailAuthenDialog = true;
         });
     },
     sendemail() {
@@ -610,21 +697,21 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
-          let msg = "email 전송에 실패했습니다.";
+          this.msg = "email 전송에 실패했습니다.";
           if (data === "전송성공") {
-            msg = "인증번호가 전송되었습니다.";
+            this.msg = "인증번호가 전송되었습니다.";
             this.issendemail = true;
-            alert(msg);
           } else if (data === "이메일중복") {
-            msg = "이미 가입된 이메일입니다.";
-            alert(msg);
+            this.msg = "이미 가입된 이메일입니다.";
           } else {
-            alert(msg);
+            this.msg = "이미 가입된 이메일입니다.";
           }
         })
         .catch((error) => {
           console.log(error);
-          alert("email 전송에 실패했습니다.");
+        })
+        .finally(() => {
+          this.EmailDialog = true;
         });
     },
     movePage() {
@@ -667,16 +754,20 @@ export default {
         })
         .then(({ data }) => {
           console.log(data);
-          let msg = "등록이 완료되었습니다.";
-          console.log(msg);
-          alert(msg);
+          this.registermsg = "등록이 완료되었습니다.";
           this.movePage();
         })
         .catch((error) => {
           console.log(error);
-          alert("등록 실패입니다.");
+          this.registermsg = "등록 실패입니다.";
         })
-        .finally(() => {});
+        .finally(() => {
+          if (this.registermsg === "등록이 완료되었습니다.") {
+            this.movePage;
+          } else {
+            this.registerDialog = true;
+          }
+        });
     },
     validate() {
       this.$refs.form.validate();

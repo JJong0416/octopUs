@@ -2,7 +2,10 @@
   <v-container>
     <v-card>
       <v-row class="pt-3">
-        <v-img :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)" width="100%">
+        <v-img
+          :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)"
+          width="100%"
+        >
           <v-row>
             <v-col class="px-6">
               <!-- 뒤로 가기 버튼 -->
@@ -17,15 +20,19 @@
         <v-card-text>
           <v-row>
             <v-col cols="2" class="pr-0 pl-5">
-              <v-img :src="require(`../assets/img/icons/${this.mission.missionType}.png`)"></v-img>
+              <v-img
+                :src="
+                  require(`../assets/img/icons/${this.mission.missionType}.png`)
+                "
+              ></v-img>
             </v-col>
             <v-col class="pl-1 pt-6" cols="7">
               {{ mission.missionType }}
             </v-col>
             <v-col cols="3" class="pt-4 pr-5">
               <v-chip outlined color="#fa183e">
-              {{ mission.missionPoint }} P
-            </v-chip>
+                {{ mission.missionPoint }} P
+              </v-chip>
             </v-col>
           </v-row>
           <v-row class="px-6">
@@ -42,10 +49,10 @@
           </v-col>
           <v-col class="pt-4 pl-0 pb-0" cols="8">
             <div class="pl-2 text-subtitle-1">
-              <b>미션 공유 코드 : </b> &nbsp; {{ mission.missionCode }}
+              <b>미션 공유코드</b> &nbsp; {{ mission.missionCode }}
             </div>
           </v-col>
-          <v-col class="pb-0" cols="2">
+          <v-col class="pb-0 px-0" cols="2">
             <v-btn v-clipboard="mission.missionCode" icon>
               <v-img
                 max-height="30px"
@@ -56,18 +63,19 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text>
+      <v-card-title>
         <v-row>
-          <v-col class="pr-6 pt-6 pb-0" cols="1">
+          <v-col class="pr-6 pt-4 pb-0" cols="1">
             <v-icon color="#fa183e">mdi-chevron-right</v-icon>
           </v-col>
-          <v-col class="pt-6 pl-0" cols="8">
+          <v-col class="pt-4 pl-0" cols="8">
             <div class="pl-2 text-subtitle-1">
-              <b>미션 최대 인원 : </b> &nbsp; {{ mission.missionLimitPersonnel }} 명
+              <b>미션 최대 인원 </b> &nbsp;
+              {{ mission.missionLimitPersonnel }} 명
             </div>
           </v-col>
         </v-row>
-      </v-card-text>
+      </v-card-title>
       <v-card-title>
         <v-row>
           <v-col class="pt-0 pr-6 pb-0" cols="1">
@@ -79,12 +87,17 @@
         </v-row>
       </v-card-title>
       <v-card-text>
-        <v-textarea height="100" disabled outlined v-model="mission.missionContent"/>
+        <v-textarea
+          height="100"
+          disabled
+          outlined
+          v-model="mission.missionContent"
+        />
       </v-card-text>
       <v-spacer></v-spacer>
-      <v-row class="py-3 px-3" justify="center">
+      <v-row class="py-3 px-0" justify="center">
         <v-col>
-          <v-btn outlined color="#143559" @click="dialog=true">
+          <v-btn outlined color="#143559" @click="dialog = true">
             인증 시간 설정하기
           </v-btn>
         </v-col>
@@ -138,15 +151,19 @@
               </v-list-item>
               <v-list-item class="pb-0">
                 <v-list-item-content justify="center">
-                  <v-date-picker locale="ko" color="#ffadad" v-model="picker"></v-date-picker>
+                  <v-date-picker
+                    locale="ko"
+                    color="#ffadad"
+                    v-model="picker"
+                  ></v-date-picker>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
                 <v-list-item-title>
                   <v-row>
                     <v-col cols="1" class="pr-6 pb-0">
-                        <v-icon color="#fa183e">mdi-chevron-right</v-icon>
-                      </v-col>
+                      <v-icon color="#fa183e">mdi-chevron-right</v-icon>
+                    </v-col>
                     <v-col class="pt-4">
                       <b>인증 횟수 설정</b>
                     </v-col>
@@ -155,9 +172,7 @@
               </v-list-item>
               <v-list-item>
                 <v-row>
-                  <v-col class=" pt-6 pb-0" cols="3">
-                    이 미션은
-                  </v-col>
+                  <v-col class="pt-6 pb-0" cols="4"> 이 미션은 </v-col>
                   <v-col class="pb-0" cols="3">
                     <v-text-field
                       label="00"
@@ -170,16 +185,12 @@
                       oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
                     ></v-text-field>
                   </v-col>
-                  <v-col class=" pt-6 pb-0">
-                    주 동안 진행됩니다.
-                  </v-col>
+                  <v-col class="pt-6 pb-0"> 주 동안</v-col>
                 </v-row>
               </v-list-item>
               <v-list-item>
                 <v-row class="pt-3">
-                  <v-col class="pt-6 pb-0" cols="6">
-                    미션 인증은 일주일에 
-                  </v-col>
+                  <v-col class="pt-6 pb-0" cols="4"> 일주일에 </v-col>
                   <v-col cols="3">
                     <v-text-field
                       label="00"
@@ -192,16 +203,12 @@
                       oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
                     ></v-text-field>
                   </v-col>
-                  <v-col class="pt-6 pb-0">
-                      번, 
-                  </v-col>
+                  <v-col class="pt-6 pb-0"> 번, </v-col>
                 </v-row>
               </v-list-item>
               <v-list-item>
                 <v-row class="pt-3">
-                  <v-col class="pt-6 pb-0" cols="3">
-                    하루에
-                  </v-col>
+                  <v-col class="pt-6 pb-0" cols="4"> 하루에 </v-col>
                   <v-col cols="3">
                     <v-text-field
                       label="00"
@@ -214,9 +221,7 @@
                       oniput="javascript: this.value= this.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|a-z]/g,'');"
                     ></v-text-field>
                   </v-col>
-                  <v-col class="pt-6 pb-0">
-                    번 인증합니다.
-                  </v-col>
+                  <v-col class="pt-6 pb-0"> 번 인증합니다. </v-col>
                 </v-row>
               </v-list-item>
             </v-list>
@@ -226,16 +231,11 @@
                 <v-row justify="center">
                   <v-col cols="2"></v-col>
                   <v-col class="pl-4" cols="10">
-                    <v-btn
-                      color="#fa183e"
-                      outlined
-                      @click="dialog2 = !dialog2"
-                    >
-                       {{ n }}번째 인증 시간 설정
+                    <v-btn color="#fa183e" outlined @click="dialog2 = !dialog2">
+                      {{ n }}번째 인증 시간 설정
                     </v-btn>
                   </v-col>
                 </v-row>
-                
               </v-list-item>
               <v-list-item>
                 <v-row>
@@ -255,78 +255,82 @@
             </v-list>
           </v-card-text>
 
-          <div style="flex: 1 1 auto"></div> </v-card
-        >
+          <div style="flex: 1 1 auto"></div>
+        </v-card>
       </v-dialog>
-        <v-dialog v-model="dialog2" max-width="500px">
-          <v-card class="pa-4" justify="space-around" align="center">
-            <v-menu
-              ref="menu"
-              v-model="menu"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              :return-value.sync="start"
-              transition="scale-transition"
-              offset-y
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="start"
-                  label="인증 시작 시간을 설정해주세요."
-                  prepend-icon="mdi-clock-time-four-outline"
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-time-picker
-                color="#ffadad"
-                v-if="menu"
+      <v-dialog v-model="dialog2" max-width="500px">
+        <v-card class="pa-4" justify="space-around" align="center">
+          <v-menu
+            ref="menu"
+            v-model="menu"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            :return-value.sync="start"
+            transition="scale-transition"
+            offset-y
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
                 v-model="start"
-                :max="end"
-                full-width
-                @click:minute="$refs.menu.save(start)"
-              ></v-time-picker>
-            </v-menu>
+                label="인증 시작 시간을 설정해주세요."
+                prepend-icon="mdi-clock-time-four-outline"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-time-picker
+              color="#ffadad"
+              v-if="menu"
+              v-model="start"
+              :max="end"
+              full-width
+              @click:minute="$refs.menu.save(start)"
+            ></v-time-picker>
+          </v-menu>
 
-            <!-- 마감 시간 -->
-            <v-menu
-              ref="menu1"
-              v-model="menu1"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              :return-value.sync="end"
-              transition="scale-transition"
-              offset-y
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="end"
-                  label="인증 마감 시간을 설정해주세요."
-                  prepend-icon="mdi-clock-time-four-outline"
-                  readonly
-                  v-bind="attrs"
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-time-picker
-                color="#ffadad"
-                v-if="menu1"
+          <!-- 마감 시간 -->
+          <v-menu
+            ref="menu1"
+            v-model="menu1"
+            :close-on-content-click="false"
+            :nudge-right="40"
+            :return-value.sync="end"
+            transition="scale-transition"
+            offset-y
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
                 v-model="end"
-                :min="start"
-                full-width
-                @click:minute="$refs.menu1.save(end)"
-              ></v-time-picker>
-            </v-menu>
-            <v-card-actions>
-              <v-btn outlined color="#143559" @click="dialog2 = false"> 취소 </v-btn>
-              <v-spacer></v-spacer>
-              <v-btn outlined color="#fa183e" @click="sendAuthenInfo"> 저장 </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="authenFailDialog" max-width="500px">
-          <v-card justify="space-around" align="center">
+                label="인증 마감 시간을 설정해주세요."
+                prepend-icon="mdi-clock-time-four-outline"
+                readonly
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-time-picker
+              color="#ffadad"
+              v-if="menu1"
+              v-model="end"
+              :min="start"
+              full-width
+              @click:minute="$refs.menu1.save(end)"
+            ></v-time-picker>
+          </v-menu>
+          <v-card-actions>
+            <v-btn outlined color="#143559" @click="dialog2 = false">
+              취소
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn outlined color="#fa183e" @click="sendAuthenInfo">
+              저장
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="authenFailDialog" max-width="500px">
+        <v-card justify="space-around" align="center">
           <v-card-title><h5>인증 시간을 모두 설정해주세요.</h5></v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -475,5 +479,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

@@ -32,7 +32,7 @@
           <v-text-field
             hide-details
             single-line
-            label="참여할 방의 코드를 입력해 주세요."
+            label="미션 코드를 입력해주세요"
             v-model="tofindsearch"
             @keyup.enter="transmit"
           ></v-text-field>

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-img  :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)" width="100%">
+    <v-img
+      :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)"
+      width="100%"
+    >
       <!-- 뒤로 가기 버튼 -->
       <v-btn @click="goback" icon color="pink" class="pa-3">
         <v-icon> mdi-arrow-left</v-icon>
@@ -27,7 +30,6 @@
 
       <!-- ---------------------------------------------------------------------------- -->
 
-
       <v-card-actions>
         <div class="my-4 text-subtitle-1">미션 정보 확인하기</div>
 
@@ -50,8 +52,6 @@
             style="display: flex; justify-content: center; align-items: center"
           >
             {{ mission.missionContent }}
-            <br />
-            흐르는 물에 손을 씻는 장면을 찍어 인증합니다!
           </v-card-text>
           <v-card-title>
             <v-icon color="pink darken-1">mdi-calendar-check</v-icon
@@ -121,7 +121,7 @@
           >
           <v-card-text>
             <div class="my-4 text-subtitle-1">
-              <v-dialog v-model="userdialog"> 
+              <v-dialog v-model="userdialog">
                 <template v-slot:activator="{ on, attrs }">
                   <v-container fluid>
                     <v-row>
@@ -198,9 +198,7 @@
       <!-- -------------------------------------------------------- -->
       <!-- 캘린더 view --------------------------------------------- -->
       <v-card-actions>
-        <div class="my-4 text-subtitle-1">
-          캘린더로 미션 진행 상황 확인하기
-        </div>
+        <div class="my-4 text-subtitle-1">캘린더로 미션 진행 상황 확인하기</div>
 
         <v-spacer></v-spacer>
 
@@ -212,12 +210,21 @@
       </v-card-actions>
       <v-expand-transition>
         <div v-show="calendarShow">
-      
-           <v-card-title>
+          <v-card-title>
             <v-icon color="pink darken-1">mdi-clock-time-four-outline</v-icon
             >&nbsp;&nbsp;
-            <div v-if ="mission.missionStatus=='ONGOING'" class="my-4 text-subtitle-1"><b>현재 미션 {{ weekInProgress }}주차 진행 중</b></div>
-            <div v-else-if="mission.missionStatus=='CLOSE'" class="my-4 text-subtitle-1"><b>해당 미션은 종료되었습니다.</b></div>
+            <div
+              v-if="mission.missionStatus == 'ONGOING'"
+              class="my-4 text-subtitle-1"
+            >
+              <b>현재 미션 {{ weekInProgress }}주차 진행 중</b>
+            </div>
+            <div
+              v-else-if="mission.missionStatus == 'CLOSE'"
+              class="my-4 text-subtitle-1"
+            >
+              <b>해당 미션은 종료되었습니다.</b>
+            </div>
           </v-card-title>
           <v-row class="fill-height">
             <v-col>
@@ -298,8 +305,7 @@
               </v-sheet>
             </v-col>
           </v-row>
-         
-          
+
           <v-card-text>
             <h3>팀성공률</h3>
             <v-progress-linear
@@ -327,8 +333,8 @@
         </div>
       </v-expand-transition>
 
- <v-divider></v-divider>
-  <v-card-actions>
+      <v-divider></v-divider>
+      <v-card-actions>
         <div class="my-4 text-subtitle-1">인증 하기</div>
 
         <v-spacer></v-spacer>
@@ -344,21 +350,21 @@
           <v-divider></v-divider>
           <v-card-text class="text-center" v-if="!isCurrentUserPicturePost">
             현재는 인증 가능하지 않습니다.
-          </v-card-text >
+          </v-card-text>
           <v-card-text class="text-center" v-else>
-        <router-link
-          :to="{
-            name: 'camera',
-            params: { missionNo: this.missionNo },
-          }"
-        >
-          <v-btn style="margin : 15px;" v-if="isCurrentUserPicturePost">클릭 시 카메라가 켜집니다.</v-btn></router-link
-        >
-    </v-card-text >
+            <router-link
+              :to="{
+                name: 'camera',
+                params: { missionNo: this.missionNo },
+              }"
+            >
+              <v-btn style="margin: 15px" v-if="isCurrentUserPicturePost"
+                >클릭 시 카메라가 켜집니다.</v-btn
+              ></router-link
+            >
+          </v-card-text>
         </div>
       </v-expand-transition>
-
-      
     </v-card>
   </div>
 </template>
@@ -465,7 +471,7 @@ export default {
           })
           .then(function (response) {
             vm.missionDetail = response.data;
-            console.log(vm.missionDetail) 
+            console.log(vm.missionDetail);
           })
           .catch(function (err) {
             console.log(err);
@@ -491,7 +497,6 @@ export default {
       .catch(function (err) {
         console.log(err);
       });
-   
   },
 
   methods: {
@@ -519,7 +524,7 @@ export default {
       const events = [];
       var vm = this;
       vm.pictureList = {};
-     // console.log(vm.calendarUserInfos)
+      // console.log(vm.calendarUserInfos)
       for (let i = 0; i < this.calendarUserInfos.length; i++) {
         for (
           let j = 0;

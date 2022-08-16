@@ -29,10 +29,10 @@
           label="미션 제목을 입력해주세요 (4 ~ 30자)"
         ></v-text-field>
       </v-row>
-      <v-row class="px-3 pt-3">
+      <v-row class="px-2 pt-3">
         <v-col cols="8">
           <p>공개방 여부를 선택해주세요.</p>
-          <h5>비공개방은 코드로만 참가 가능합니다.</h5>
+          <h5>비공개방: 코드로만 참가 가능</h5>
         </v-col>
         <v-col>
           <v-switch

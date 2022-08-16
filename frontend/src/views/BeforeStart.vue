@@ -1,6 +1,9 @@
 <template>
   <div>
-    <v-img  :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)" width="100%">
+    <v-img
+      :src="require(`../assets/img/Theme/${this.mission.missionType}.jpg`)"
+      width="100%"
+    >
       <!-- 뒤로 가기 버튼 -->
       <v-btn @click="goback" icon color="pink" class="pa-3">
         <v-icon> mdi-arrow-left</v-icon>
@@ -41,12 +44,11 @@
         <v-icon color="pink darken-1">mdi-help</v-icon>&nbsp;&nbsp;
         <div class="my-4 text-subtitle-1"><b>인증은 어떻게 하나요?</b></div>
       </v-card-title>
-      <v-card-text class="px-7"
+      <v-card-text
+        class="px-7"
         style="justify-content: center; align-items: center"
       >
         {{ mission.missionContent }}
-        <br />
-        흐르는 물에 손을 씻는 장면을 찍어 인증합니다!
       </v-card-text>
 
       <v-card-title>
@@ -125,7 +127,8 @@
                     :key="index"
                     style="padding: 0px 15px 10px 15px !important"
                   >
-                    <v-avatar v-if="userInfo.length > 0"
+                    <v-avatar
+                      v-if="userInfo.length > 0"
                       size="40"
                       color="red lighten-3"
                       @click="previewUser(item)"
@@ -135,15 +138,10 @@
                       <b>{{ item }}</b>
                     </v-avatar>
 
-                    <v-avatar v-else
-                      size="40"
-                      color="red lighten-3"
-                    
-                    >
+                    <v-avatar v-else size="40" color="red lighten-3">
                       <b>{{ item }}</b>
                     </v-avatar>
-        
-                 </v-col>
+                  </v-col>
                 </v-row>
               </v-container>
             </template>
@@ -316,7 +314,7 @@ export default {
             console.log(err);
           });
       });
-      console.log(this.userInfo.length)
+    console.log(this.userInfo.length);
   },
   filters: {
     changeDateFormat: function (value) {

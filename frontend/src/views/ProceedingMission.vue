@@ -48,11 +48,14 @@
             <v-icon color="pink darken-1">mdi-help</v-icon>&nbsp;&nbsp;
             <div class="my-4 text-subtitle-1"><b>인증은 어떻게 하나요?</b></div>
           </v-card-title>
-          <v-card-text
-            style="display: flex; justify-content: center; align-items: center"
-          >
-            {{ mission.missionContent }}
-          </v-card-text>
+         <v-card-text
+        class="px-7"
+        style="justify-content: center; align-items: center"
+      >
+        {{ mission.missionContent }}
+      </v-card-text>
+
+          
           <v-card-title>
             <v-icon color="pink darken-1">mdi-calendar-check</v-icon
             >&nbsp;&nbsp;

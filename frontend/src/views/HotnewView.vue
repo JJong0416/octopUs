@@ -2,57 +2,39 @@
   <div class="wrapper">
     <header-view></header-view>
     <v-card>
-<br>
-
-    <v-bottom-navigation
-      style="box-shadow: none !important;  height : 100%"
-    
-      color="pink darken-1"
-      grow
-    >
+      <br>
+      <v-bottom-navigation
+        style="box-shadow: none !important;"
+        width="100%"
+        height="100%"
+        color="#ffadad"
+        grow
+      >
       <v-btn text @click="clickevent('Hot')" style="display:block; height : 100%">
         <span>HOT</span>
-
         <v-img  :src="require(`../assets/img/Hot.png`)"   style="height:auto;"></v-img>
       </v-btn>
-
       <v-btn text @click="clickevent('New')" style="display:block;height : 100%">
         <span>NEW</span>
-
          <v-img  :src="require(`../assets/img/New.png`)"  style="height:auto;"></v-img>
       </v-btn>
-
-      
     </v-bottom-navigation>
-<v-divider></v-divider>
-    <v-divider></v-divider>
-<br>
-
-
-<div class="wrapper" v-if="hotnewSelected =='Hot'">
+  <br>
+    <div v-if="hotnewSelected =='Hot'">
       <div class="card" v-for="(hotmission, index) in hotmissions" :key="index">
         <div v-if="`${hotmissions.length}` == 0">
           <v-card-text
-        style="display: flex; justify-content: center; align-items: center"
-      >
-     현재 모집 중인 미션이 없습니다.
-      </v-card-text>
+            style="display: flex; justify-content: center; align-items: center"
+          >
+            현재 모집 중인 미션이 없습니다.
+          </v-card-text>
         </div>
+        
         <div v-else>
-          <v-card class="mx-auto" max-width="344" outlined>
-                      <v-list-item three-line>
-                        <v-list-item-content>
-                          <div class="text-overline mb-4">
-                            {{ hotmission.missionNo }}
-                          </div>
-                          <v-list-item-title class="text-h5 mb-1">
-                            {{ hotmission.missionTitle }}
-                          </v-list-item-title>
-                          <v-list-item-subtitle
-                            >{{ hotmission.missionContent }}
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                  <v-list-item-avatar tile size="80">
+          <v-card class="px-3" height="120" outlined>
+            <v-row>
+              <v-col cols="3">
+                <v-list-item-avatar tile width="100" height="100">
                     <v-img
                       :src="
                         require(`../assets/img/Ocsoon/Pet/${hotavatars[index][3]}.png`)
@@ -76,58 +58,50 @@
                         ></v-img>
                       </v-img> </v-img
                   ></v-list-item-avatar>
+              </v-col>
+              <v-col class="pt-6" cols="6">
+                <v-list-item three-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="text-h6">
+                      {{ hotmission.missionTitle }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle 
+                      >{{ hotmission.missionContent }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
                 </v-list-item>
-
+              </v-col>
+              <v-col class="pt-8" cols="3">
                 <v-card-actions>
                   <v-btn
                     outlined
-                    rounded
-                    text
-                    color="secondary"
+                    color="#fa183e"
                     @click="mvdetail(hotmission)"
                   >
-                    자세히보기
+                    자세히
                   </v-btn>
                 </v-card-actions>
-              </v-card>
+              </v-col>
+            </v-row>
+          </v-card>
         </div>
-        
-
-    
-        <br />
-        <!-- <a v-bind:href="post.link" target="_blank">
-        <img v-bind:src="post.img"/>
-        <small>posted by: {{ post.author }}</small> 
-        {{ post.title }}n
-      </a> -->
       </div>
-      
     </div>
 
-<div class="wrapper" v-if="hotnewSelected =='New'">
+    <div v-if="hotnewSelected =='New'">
       <div class="card" v-for="(newmission, index) in newmissions" :key="index">
         <div v-if="`${newmissions.length}` == 0">
           <v-card-text
-        style="display: flex; justify-content: center; align-items: center"
-      >
-      검색 조건에 맞는 미션이 없습니다.
-      </v-card-text>
+            style="display: flex; justify-content: center; align-items: center"
+          >
+            현재 모집 중인 미션이 없습니다.
+          </v-card-text>
         </div>
         <div v-else>
-          <v-card class="mx-auto" max-width="344" outlined>
-                      <v-list-item three-line>
-                        <v-list-item-content>
-                          <div class="text-overline mb-4">
-                            {{ newmission.missionNo }}
-                          </div>
-                          <v-list-item-title class="text-h5 mb-1">
-                            {{ newmission.missionTitle }}
-                          </v-list-item-title>
-                          <v-list-item-subtitle
-                            >{{ newmission.missionContent }}
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                  <v-list-item-avatar tile size="80">
+          <v-card class="px-3" height="120" outlined>
+            <v-row>
+              <v-col cols="3">
+                <v-list-item-avatar tile width="100" height="100">
                     <v-img
                       :src="
                         require(`../assets/img/Ocsoon/Pet/${newavatars[index][3]}.png`)
@@ -151,36 +125,36 @@
                         ></v-img>
                       </v-img> </v-img
                   ></v-list-item-avatar>
+              </v-col>
+              <v-col class="pt-6" cols="6">
+                <v-list-item three-line>
+                  <v-list-item-content>
+                    <v-list-item-title class="text-h6">
+                      {{ newmission.missionTitle }}
+                    </v-list-item-title>
+                    <v-list-item-subtitle 
+                      >{{ newmission.missionContent }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
                 </v-list-item>
-
+              </v-col>
+              <v-col class="pt-8" cols="3">
                 <v-card-actions>
                   <v-btn
                     outlined
-                    rounded
-                    text
-                    color="secondary"
+                    color="#fa183e"
                     @click="mvdetail(newmission)"
                   >
-                    자세히보기
+                    자세히
                   </v-btn>
                 </v-card-actions>
-              </v-card>
+              </v-col>
+            </v-row>
+          </v-card>
         </div>
-        
-
-    
-        <br />
-        <!-- <a v-bind:href="post.link" target="_blank">
-        <img v-bind:src="post.img"/>
-        <small>posted by: {{ post.author }}</small> 
-        {{ post.title }}n
-      </a> -->
       </div>
       
     </div>
-
-
-     
     </v-card>
     <footer-view></footer-view>
   </div>

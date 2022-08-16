@@ -104,7 +104,7 @@ const routes = [
     props: true,
   },
   {
-    path: "/avatar",
+    path: "/avatar/:avatarColor/:avatarFace/:avatarHat/:avatarPet",
     name: "avatar",
     component: () => import("@/views/AvatarView.vue"),
     props: true,

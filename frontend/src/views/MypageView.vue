@@ -40,10 +40,10 @@
               :to="{
                 name: 'avatar',
                 params: {
-                  avatarColor,
-                  avatarFace,
-                  avatarHat,
-                  avatarPet,
+                  avatarColor: this.avatarColor,
+                  avatarFace: this.avatarFace,
+                  avatarHat: this.avatarHat,
+                  avatarPet: this.avatarPet,
                 },
               }"
             >

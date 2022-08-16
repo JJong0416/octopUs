@@ -15,9 +15,7 @@ const onlyAuthUser = async (to, from, next) => {
   if (checkUserInfo === null) {
     alert("로그인이 필요한 페이지입니다..");
     next({ name: "signIn" });
-    // router.push({ name: "signIn" });
   } else {
-    // console.log("로그인 했다.");
     next();
   }
 };
@@ -86,12 +84,7 @@ const routes = [
     component: () => import("@/views/ProceedingMission.vue"),
     props: true,
   },
-  {
-    path: "/finished",
-    name: "finished",
-    component: () => import("@/views/FinishedMission.vue"),
-    props: true,
-  },
+  
   {
     path: "/hotnew",
     name: "hotnew",
@@ -109,12 +102,7 @@ const routes = [
     component: () => import("@/views/AvatarView.vue"),
     props: true,
   },
-  {
-    path: "/refund",
-    name: "refund",
-    component: () => import("@/views/RefundView.vue"),
-    props: true,
-  },
+
   {
     path: "/unactivated/:missionNo",
     name: "unactivated",

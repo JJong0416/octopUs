@@ -122,7 +122,7 @@
       </v-btn-toggle>
 
       <template>
-        <v-card color="basil">
+        <v-card>
           <v-tabs v-model="tab" background-color="#eefaec" color="#143559" grow>
             <v-tab v-for="(item, index) in items" :key="index">
               {{ item.kind }}
@@ -220,7 +220,6 @@ export default {
       initFace: null,
       initHat: null,
       initPet: null,
-      avatarInfo: [],
       selectItem: null,
       selectItemKind: {
         Face: this.initFace,
@@ -312,11 +311,11 @@ export default {
     },
     refresh() {
       if (this.avatarMsg === "아바타 변경이 완료되었습니다.")
-        window.location.replace("http://localhost:8080/Mypage");
+        window.location.href = "/Mypage";
       else this.avaChangeDialog = false;
     },
     saveAvatar_not() {
-      window.location.replace("http://localhost:8080/Mypage");
+      window.location.href = "/Mypage";
     },
     goback() {
       this.$router.go(-1);

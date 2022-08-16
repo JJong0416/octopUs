@@ -168,9 +168,7 @@ export default {
     ...mapActions("memberStore", ["userConfirm", "getUserInfo"]),
 
     async confirm() {
-      console.log(this.user);
       await this.userConfirm(this.user);
-      console.log(this.isLogin);
       if (this.isLogin) {
         this.$router.push({ name: "MainView" });
       } else {
@@ -201,8 +199,7 @@ export default {
     findPwByEmail() {
       axios
         .post("/api/find-pw", { userEmail: this.email })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           alert("이메일로 임시비밀번호가 발송되었습니다.");
         })
         .catch((error) => {

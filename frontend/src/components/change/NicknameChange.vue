@@ -134,7 +134,6 @@ export default {
             this.nickmsg = "닉네임 변경에 실패했습니다.";
           });
         this.nicknameDialog = false;
-        // this.$router.push("main");
       } else {
         this.nickmsg = "닉네임이 유효하지 않습니다.";
       }

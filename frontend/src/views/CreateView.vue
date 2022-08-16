@@ -179,7 +179,7 @@ export default {
         },
       })
       .then(function (response) {
-        console.log(response);
+
         vm.userInfo = response.data;
       })
       .catch(function (err) {
@@ -213,12 +213,6 @@ export default {
         !this.mission.missionLimitPersonnel ||
         !this.mission.missionContent
       ) {
-        console.log(this.mission.missionTitle);
-        console.log(this.mission.missionType);
-        console.log(this.mission.missionPoint);
-        console.log(this.mission.missionLimitPersonnel);
-        console.log(this.mission.missionContent);
-        console.log(this.mission.missionOpen);
         this.createMsg = "필수 정보를 모두 입력해주세요";
         this.createDialog = true;
       } else {
@@ -242,12 +236,6 @@ export default {
             })
             .catch(() => {
               this.createMsg = "미션 생성에 실패하였습니다.";
-              console.log(this.mission.missionTitle);
-              console.log(this.mission.missionType);
-              console.log(this.mission.missionPoint);
-              console.log(this.mission.missionLimitPersonnel);
-              console.log(this.mission.missionContent);
-              console.log(this.mission.missionOpen);
             });
           this.createDialog = true;
         }

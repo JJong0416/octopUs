@@ -24,9 +24,7 @@
       </v-card-text>
 
       <v-divider></v-divider>
-      <!-- <v-btn v-if="mission.missionLeaderId == userInfo.userId"
-        >미션 수정하기</v-btn
-      > -->
+
       <v-card-title v-if="isParticipated">
         <v-icon color="pink darken-1">mdi-chevron-right</v-icon>&nbsp;&nbsp;
         <div class="my-4 text-subtitle-1">
@@ -128,7 +126,7 @@
                     style="padding: 0px 15px 10px 15px !important"
                   >
                     <v-avatar
-                      v-if="userInfo.length > 0"
+                      v-if="userInfo.userId != null"
                       size="40"
                       color="red lighten-3"
                       @click="previewUser(item)"
@@ -216,34 +214,18 @@
 import axios from "axios";
 export default {
   data: () => ({
-    show: false,
     roomNo: "",
     userdialog: false,
-    userInfo: [],
+    userInfo: {},
     missionuser: [],
     clickUser: null,
     previewUsernickname: "",
     missionDetail: null,
-    userAvatar: [0, 0, 0, 0],
+    userAvatar: [0, 0, "0_nothing", "0_nothing"],
     picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
       .toISOString()
       .substr(0, 10),
-    authenweeks: null,
-    howmanyweeks: null,
-    authendays: null,
-    start: null,
-    end: null,
-    weekrules: [
-      (value) => !!value || "입력해주세요",
-      (value) => (value && value >= 1) || "숫자로 입력해주세요",
-    ],
     mission: null,
-    dialog: false,
-    dialog2: false,
-    dialog3: false,
-    notifications: false,
-    sound: true,
-    widgets: false,
     isParticipated: false,
   }),
   props: {
@@ -266,10 +248,6 @@ export default {
       .then(function (response) {
         vm.userInfo = response.data;
         vm.userAvatar = vm.userInfo.userAvatar.split(", ");
-        vm.avatarColor = parseInt(vm.userAvatar[0]);
-        vm.avatarFace = parseInt(vm.userAvatar[1]);
-        vm.avatarHat = parseInt(vm.userAvatar[2]);
-        vm.avatarPet = parseInt(vm.userAvatar[3]);
       })
       .catch(function (err) {
         console.log(err);
@@ -283,16 +261,15 @@ export default {
             },
           })
           .then(function (response) {
-            console.log(response);
             vm.mission = response.data;
             vm.missionuser = response.data.missionUsers.split(", ");
             if (
-              vm.userInfo.length != 0 &&
+              vm.userInfo.userId != null &&
               vm.missionuser.includes(vm.userInfo.userNickname)
             ) {
               vm.isParticipated = true;
             }
-            console.log(vm.missionuser);
+            console.log(vm.isParticipated);
             axios
               .get(
                 `../api/mission/${vm.$route.params.missionNo}/mission-detail`,
@@ -314,7 +291,6 @@ export default {
             console.log(err);
           });
       });
-    console.log(this.userInfo.length);
   },
   filters: {
     changeDateFormat: function (value) {
@@ -342,6 +318,12 @@ export default {
         .then((response) => {
           this.previewUsernickname = response.data.userNickname;
           this.userAvatar = response.data.userAvatar.split(", ");
+          if (this.userAvatar[2] == 0) {
+            this.userAvatar[2] = "0_nothing";
+          }
+          if (this.userAvatar[3] == 0) {
+            this.userAvatar[3] = "0_nothing";
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -366,11 +348,10 @@ export default {
       }
     },
     joinMission() {
-      if (this.userInfo.length != 0) {
+      if (this.userInfo.userId != null) {
         axios
           .post(`../api/mission/${this.roomNo}/join`)
-          .then((response) => {
-            console.log(response);
+          .then(() => {
             alert("미션에 참여하기가 완료되었습니다.");
             this.movePage();
           })

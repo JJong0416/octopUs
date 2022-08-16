@@ -109,12 +109,9 @@ export default {
       const pointReq = { userId: "", point: this.price };
       axios
         .patch(`api/user/modification/point/charge`, pointReq)
-        .then((response) => {
-          console.log(response);
-
+        .then(() => {
           this.charge = false;
           this.$emit("success");
-          // this.$router.push("Mypage");
         })
         .catch(function (err) {
           console.log(err);

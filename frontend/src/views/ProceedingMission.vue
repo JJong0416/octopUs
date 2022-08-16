@@ -24,6 +24,12 @@
       </v-card-text>
 
       <v-divider></v-divider>
+      <!-- <v-btn v-if="mission.missionLeaderId == userInfo.userId"
+        >미션 수정하기</v-btn
+      > -->
+
+      <!-- ---------------------------------------------------------------------------- -->
+
       <v-card-actions>
         <div class="my-4 text-subtitle-1">미션 정보 확인하기</div>
 
@@ -42,14 +48,13 @@
             <v-icon color="pink darken-1">mdi-help</v-icon>&nbsp;&nbsp;
             <div class="my-4 text-subtitle-1"><b>인증은 어떻게 하나요?</b></div>
           </v-card-title>
-         <v-card-text
-        class="px-7"
-        style="justify-content: center; align-items: center"
-      >
-        {{ mission.missionContent }}
-      </v-card-text>
+          <v-card-text
+            class="px-7"
+            style="justify-content: center; align-items: center"
+          >
+            {{ mission.missionContent }}
+          </v-card-text>
 
-          
           <v-card-title>
             <v-icon color="pink darken-1">mdi-calendar-check</v-icon
             >&nbsp;&nbsp;
@@ -137,6 +142,9 @@
                         >
                           <b>{{ item }}</b>
                         </v-avatar>
+                        <!-- <v-avatar size="40" color="red lighten-3" v-else>
+                      {{ item }}
+                    </v-avatar> -->
                       </v-col>
                     </v-row>
                   </v-container>
@@ -256,46 +264,46 @@
                   @click:event="showEvent"
                   short-intervals
                 ></v-calendar>
-                <v-menu
-                  v-model="selectedOpen"
-                  :close-on-content-click="false"
-                  
-                  offset-x
-                >
-                  <!-- 클릭하면 나오는 상세 창 -------------------------------- -->
-                  <v-card color="grey lighten-4" max-width="100%" flat>
-                    <v-toolbar :color="selectedEvent.color">
-                      <v-toolbar-title
-                        v-html="selectedEvent.name"
-                      ></v-toolbar-title>
-                      <v-spacer></v-spacer>
-                    </v-toolbar>
-                    <v-card-text class="text-center">
-                      <div>{{ clickDate }}</div>
-                      {{ pictures.length }} 번 인증하셨습니다.
-                      <div v-for="index in pictures" :key="index">
-                        <center>
-                          <v-img
-                            :src="index"
-                            max-width="30vh"
-                            style="margin-top: 3vh"
-                          ></v-img>
-                        </center>
-                      </div>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        text
-                        color="secondary"
-                        @click="selectedOpen = false"
-                      >
-                        확인
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                  <!-- -------------------------------------------------- -->
-                </v-menu>
+                <div class="text-center">
+                  <v-dialog
+                    v-model="selectedOpen"
+                    :close-on-content-click="false"
+                    :activator="selectedElement"
+                  >
+                    <v-card color="grey lighten-4" max-width="100%" flat>
+                      <v-toolbar :color="selectedEvent.color" dark>
+                        <v-toolbar-title
+                          v-html="selectedEvent.name"
+                        ></v-toolbar-title>
+                        <v-spacer></v-spacer>
+                      </v-toolbar>
+                      <v-card-text class="text-center">
+                        <br />
+                        <div>{{ clickDate }}</div>
+                        <b>{{ pictures.length }}</b> 번 인증하셨습니다.
+                        <div v-for="index in pictures" :key="index">
+                          <center>
+                            <v-img
+                              :src="index"
+                              max-width="50vh"
+                              style="margin-top: 3vh"
+                            ></v-img>
+                          </center>
+                        </div>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          text
+                          color="secondary"
+                          @click="selectedOpen = false"
+                        >
+                          확인
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </div>
               </v-sheet>
             </v-col>
           </v-row>
@@ -343,7 +351,7 @@
         <div v-show="cameraShow">
           <v-divider></v-divider>
           <v-card-text class="text-center" v-if="!isCurrentUserPicturePost">
-            인증 가능한 시간이 아닙니다.
+            현재는 인증 가능하지 않습니다.
           </v-card-text>
           <v-card-text class="text-center" v-else>
             <router-link
@@ -353,7 +361,7 @@
               }"
             >
               <v-btn style="margin: 15px" v-if="isCurrentUserPicturePost"
-                >클릭 시 사진 인증을 위해 카메라가 켜집니다.</v-btn
+                >클릭 시 카메라가 켜집니다.</v-btn
               ></router-link
             >
           </v-card-text>
@@ -370,14 +378,8 @@ export default {
   data: () => ({
     userdialog: false,
     previewUsernickname: "",
-    userAvatar: [0, 0, 0, 0],
+    userAvatar: [0, 0, "0_nothing", "0_nothing"],
     missionNo: "",
-    missionTitle: "",
-    missionContent: "",
-    missionCode: "",
-    missionUsers: "",
-    missionPoint: "",
-    missionType: "",
     mission: null,
     missionDetail: null,
     missionTeamSuccess: 0,
@@ -389,8 +391,6 @@ export default {
     clickDate: "",
     clickSuccessRate: "",
     picture: "",
-    content: "",
-    show: false,
     calendarShow: false,
     missionInfoShow: false,
     cameraShow: false,
@@ -452,7 +452,6 @@ export default {
         },
       })
       .then(function (response) {
-        console.log(response);
         vm.mission = response.data;
         vm.missionuser = response.data.missionUsers.split(", ");
 
@@ -465,7 +464,6 @@ export default {
           })
           .then(function (response) {
             vm.missionDetail = response.data;
-            console.log(vm.missionDetail);
           })
           .catch(function (err) {
             console.log(err);
@@ -482,7 +480,6 @@ export default {
         },
       })
       .then(({ data }) => {
-        console.log(data);
         this.missionTeamSuccess = data.successTeamRate;
         this.calendarUserInfos = data.calenderUserInfos;
         this.weekInProgress = data.weekInProgress;
@@ -494,6 +491,9 @@ export default {
   },
 
   methods: {
+    goback() {
+      this.$router.go(-1);
+    },
     previewUser(nickname) {
       this.clickUser = nickname;
       axios
@@ -506,19 +506,24 @@ export default {
         .then((response) => {
           this.previewUsernickname = response.data.userNickname;
           this.userAvatar = response.data.userAvatar.split(", ");
+          if (this.userAvatar[2] == 0) {
+            this.userAvatar[2] = "0_nothing";
+          }
+          if (this.userAvatar[3] == 0) {
+            this.userAvatar[3] = "0_nothing";
+          }
         })
         .catch((error) => {
           console.log(error);
         })
         .finally(() => {});
     },
-    // 달력과 관련된 methods---------------------------
-    uploadCalendar() {},
+
     getInfo() {
       const events = [];
       var vm = this;
       vm.pictureList = {};
-      // console.log(vm.calendarUserInfos)
+
       for (let i = 0; i < this.calendarUserInfos.length; i++) {
         for (
           let j = 0;
@@ -547,7 +552,7 @@ export default {
           }
         }
       }
-      console.log(this.pictureList);
+
       for (var key in vm.pictureList) {
         events.push({
           name: key.split(" ")[0],

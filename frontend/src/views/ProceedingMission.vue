@@ -354,17 +354,15 @@
             현재는 인증 가능하지 않습니다.
           </v-card-text>
           <v-card-text class="text-center" v-else>
-            <router-link
-              :to="{
-                name: 'camera',
-                params: { missionNo: this.missionNo },
-              }"
-              style="text-decoration: none; color: none"
-            >
-              <v-btn style="margin: 15px" v-if="isCurrentUserPicturePost"
-                >클릭 시 카메라가 켜집니다.</v-btn
-              ></router-link
-            >
+            <v-btn primary outlined @click="takepicture">사진찍기</v-btn>
+            <input
+              id="file"
+              type="file"
+              accept="image/*"
+              style="display: none"
+              capture
+            />
+            <v-btn @click="canvas(missionNo)">사진업로드</v-btn>
           </v-card-text>
         </div>
       </v-expand-transition>
@@ -492,6 +490,51 @@ export default {
   },
 
   methods: {
+    takepicture() {
+      document.getElementById("file").click();
+    },
+    canvas(missionNo) {
+      var input = document.querySelector("input[type=file]");
+      var file = input.files[0];
+      var reader = new FileReader();
+      let encodedImg = "";
+
+      reader.onload = function (e) {
+        var dataURL = e.target.result,
+          c = document.querySelector("canvas"), // see Example 4
+          ctx = c.getContext("2d"),
+          img = new Image();
+
+        img.onload = function () {
+          c.width = img.width;
+          c.height = img.height;
+          ctx.drawImage(img, 0, 0);
+        };
+        console.log(img.src + "dfsafasfasdf");
+        img.src = dataURL;
+      };
+      reader.readAsDataURL(file);
+      reader.onloadend = function () {
+        encodedImg = reader.result;
+        // console.log('Base64 String - ', encodedImg)
+        axios
+          .post(`../api/mission/${missionNo}/picture`, {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+            encodedImg,
+          })
+          .then((response) => {
+            alert("정상적으로 등록되었습니다.");
+            console.log(response);
+            window.location.reload();
+          })
+          .catch(() => {
+            alert("사진전송실패");
+          });
+      };
+    },
     goback() {
       this.$router.go(-1);
     },

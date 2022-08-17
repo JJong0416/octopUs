@@ -11,7 +11,14 @@
 
     <button onclick="storeImage()">Store Captured Image Offline</button>
     <button onclick="loadImage()">Load Stored Image</button> -->
-    <input type="file" accept="image/*" capture />
+    <v-btn primary outlined @click="takepicture">사진찍기</v-btn>
+    <input
+      id="file"
+      type="file"
+      accept="image/*"
+      style="display: none"
+      capture
+    />
     <v-btn @click="canvas(missionNo)">사진업로드</v-btn>
   </v-container>
 </template>
@@ -30,6 +37,9 @@ export default {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   },
   methods: {
+    takepicture() {
+      document.getElementById("file").click();
+    },
     canvas(missionNo) {
       var input = document.querySelector("input[type=file]");
       var file = input.files[0];

@@ -359,6 +359,7 @@
                 name: 'camera',
                 params: { missionNo: this.missionNo },
               }"
+              style="text-decoration: none; color: none"
             >
               <v-btn style="margin: 15px" v-if="isCurrentUserPicturePost"
                 >클릭 시 카메라가 켜집니다.</v-btn

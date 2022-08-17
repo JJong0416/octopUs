@@ -34,8 +34,8 @@
         </v-col>
       </v-row>
 
-      <v-row class="pl-13 pb-3 pt-0" justify="center">
-        <v-col cols="12">
+      <v-row class="logo-img-wrapper">
+        <v-col>
           <v-img
             :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
             width="30vh"
@@ -333,5 +333,11 @@ export default {
 }
 .wrapper {
   height: 100%;
+}
+.logo-img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 }
 </style>

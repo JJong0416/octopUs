@@ -128,7 +128,7 @@
                     <v-avatar
                       v-if="userInfo.userId != null"
                       size="40"
-                      color="red lighten-3"
+                      color="#ffadad"
                       @click="previewUser(item)"
                       v-bind="attrs"
                       v-on="on"
@@ -136,7 +136,7 @@
                       <b>{{ item }}</b>
                     </v-avatar>
 
-                    <v-avatar v-else size="40" color="red lighten-3">
+                    <v-avatar v-else size="40" color="#ffadad">
                       <b>{{ item }}</b>
                     </v-avatar>
                   </v-col>
@@ -145,11 +145,11 @@
             </template>
 
             <v-card>
-              <v-card-title class="text-h6 yellow lighten-2">
+              <v-card-title class="text-h6">
                 {{ previewUsernickname }}
               </v-card-title>
 
-              <v-row class="animate__animated animate__bounce">
+              <v-row class="animate__animated animate__tada">
                 <v-col class="logo-img-wrapper">
                   <v-img
                     max-width="85%"
@@ -178,17 +178,17 @@
               </v-row>
 
               <v-card-actions>
-                <v-spacer></v-spacer>
                 <v-btn
                   v-if="mission.missionLeaderId == userInfo.userId"
-                  color="warning"
-                  dark
+                  color="#fa183e"
+                  outlined
                   @click="kickOutUser()"
                 >
                   강퇴하기
                 </v-btn>
-                <v-btn color="primary" text @click="userdialog = false">
-                  close
+                <v-spacer></v-spacer>
+                <v-btn color="#143559" outlined @click="userdialog = false">
+                  닫기
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -212,6 +212,7 @@
 
 <script>
 import axios from "axios";
+import "animate.css";
 export default {
   data: () => ({
     roomNo: "",
@@ -375,4 +376,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.logo-img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+</style>

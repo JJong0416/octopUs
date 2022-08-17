@@ -132,16 +132,13 @@
                       >
                         <v-avatar
                           size="40"
-                          color="red lighten-3"
+                          color="#ffadad"
                           @click="previewUser(item)"
                           v-bind="attrs"
                           v-on="on"
                         >
                           <b>{{ item }}</b>
                         </v-avatar>
-                        <!-- <v-avatar size="40" color="red lighten-3" v-else>
-                      {{ item }}
-                    </v-avatar> -->
                       </v-col>
                     </v-row>
                   </v-container>
@@ -152,7 +149,7 @@
                     {{ previewUsernickname }}
                   </v-card-title>
 
-                  <v-row class="animate__animated animate__bounce">
+                  <v-row class="animate__animated animate__tada">
                     <v-col class="logo-img-wrapper">
                       <v-img
                         max-width="85%"
@@ -254,7 +251,7 @@
                 <v-calendar
                   ref="calendar"
                   v-model="focus"
-                  color="#E63946"
+                  color="#ffadad"
                   :events="events"
                   :event-color="getEventColor"
                   :type="type"
@@ -272,7 +269,6 @@
                         <v-toolbar-title
                           v-html="selectedEvent.name"
                         ></v-toolbar-title>
-                        <v-spacer></v-spacer>
                       </v-toolbar>
                       <v-card-text class="text-center">
                         <br />
@@ -291,8 +287,8 @@
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn
-                          text
-                          color="secondary"
+                          outlined
+                          color="#143559"
                           @click="selectedOpen = false"
                         >
                           확인
@@ -369,7 +365,7 @@
 
 <script>
 import axios from "axios";
-
+import "animate.css";
 export default {
   data: () => ({
     userdialog: false,
@@ -679,5 +675,11 @@ a {
 }
 ::v-deep .white--text {
   height: 50px;
+}
+.logo-img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
 }
 </style>

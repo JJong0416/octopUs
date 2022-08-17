@@ -23,8 +23,6 @@ const memberStore = {
       state.isLoginError = isLoginError;
     },
     SET_USER_INFO: (state, userInfo) => {
-      console.log(userInfo);
-
       state.userInfo = userInfo;
     },
   },
@@ -33,15 +31,11 @@ const memberStore = {
       await login(
         user,
         (response) => {
-          console.log(response);
-          console.log("login은 일단됨, 근데 response모름");
           if (response.status === 200) {
-            console.log("rd ? " + response.data);
-            console.log("rdt ? " + response.data.token);
             let token = response.data.token;
             cookie.set("token", token);
-            console.log("쿠키가 없는것같기도...");
-            console.log("쿠키있나요?" + cookie.isKey("token"));
+            // console.log("쿠키가 없는것같기도...");
+            // console.log("쿠키있나요?" + cookie.isKey("token"));
             sessionStorage.setItem("token", token);
             commit("SET_IS_LOGIN", true);
             commit("SET_IS_LOGIN_ERROR", false);

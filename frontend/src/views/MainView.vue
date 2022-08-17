@@ -68,6 +68,7 @@
             hide-delimiter-background
             hide-delimiters
             show-arrows-on-hover
+            :show-arrows="false"
           >
             <v-carousel-item v-for="(hotmission, i) in hotmissions" :key="i">
               <v-sheet height="100%">

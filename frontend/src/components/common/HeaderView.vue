@@ -89,7 +89,7 @@ export default {
       this.drawer = false;
     },
     movepage() {
-       window.location.href = "/StartView";
+      window.location.href = "/";
     },
   },
 };

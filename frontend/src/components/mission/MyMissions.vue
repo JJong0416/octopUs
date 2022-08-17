@@ -48,29 +48,20 @@
     <div class="wrapper">
       <div class="card" v-for="(mission, index) in filteredList" :key="index">
         <div v-if="`${search.length}` == 0">
-          <mission-card :mission=mission></mission-card>
+          <mission-card :mission="mission"></mission-card>
         </div>
         <div v-else-if="mission.missionTitle.includes(search)">
-          <mission-card :mission=mission></mission-card>
+          <mission-card :mission="mission"></mission-card>
         </div>
-        
 
-        <div v-else><v-card-text
-        style="display: flex; justify-content: center; align-items: center"
-      >
-      검색 조건에 맞는 미션이 없습니다.
-      </v-card-text></div>
         <br />
-    
       </div>
-      
     </div>
-
   </div>
 </template>
 
 <script>
-import MissionCard from './MissionCard.vue';
+import MissionCard from "./MissionCard.vue";
 export default {
   components: { MissionCard },
   props: ["missions"],
@@ -97,8 +88,7 @@ export default {
       userPictures: [],
     };
   },
-  methods: {
-  },
+  methods: {},
   computed: {
     filteredList() {
       return this.missions.filter((mission) => {

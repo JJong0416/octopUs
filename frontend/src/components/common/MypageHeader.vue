@@ -104,7 +104,7 @@ export default {
       this.logoutDialog = true;
     },
     refresh() {
-       window.location.href = "/StartView";
+      window.location.href = "/";
     },
   },
 };

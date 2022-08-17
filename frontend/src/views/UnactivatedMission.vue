@@ -86,13 +86,11 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text>
-        <v-textarea
-          height="100"
-          disabled
-          outlined
-          v-model="mission.missionContent"
-        />
+      <v-card-text class="px-7"
+            style="justify-content: center; align-items: center"
+          >
+            {{ mission.missionContent }}
+        
       </v-card-text>
       <v-spacer></v-spacer>
       <v-row class="py-3 px-0" justify="center">

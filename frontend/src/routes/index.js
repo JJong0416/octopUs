@@ -91,12 +91,6 @@ const routes = [
     component: () => import("@/views/HotnewView.vue"),
   },
   {
-    path: "/camera",
-    name: "camera",
-    component: () => import("@/views/CameraView.vue"),
-    props: true,
-  },
-  {
     path: "/avatar/:avatarColor/:avatarFace/:avatarHat/:avatarPet",
     name: "avatar",
     component: () => import("@/views/AvatarView.vue"),

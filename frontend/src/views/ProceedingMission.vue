@@ -24,9 +24,6 @@
       </v-card-text>
 
       <v-divider></v-divider>
-      <!-- <v-btn v-if="mission.missionLeaderId == userInfo.userId"
-        >미션 수정하기</v-btn
-      > -->
 
       <!-- ---------------------------------------------------------------------------- -->
 
@@ -309,7 +306,7 @@
           </v-row>
 
           <v-card-text>
-            <h3>팀성공률</h3>
+            <h3>팀 성공률</h3>
             <v-progress-linear
               v-model="missionTeamSuccess"
               color="pink"
@@ -337,7 +334,7 @@
 
       <v-divider></v-divider>
       <v-card-actions>
-        <div class="my-4 text-subtitle-1">인증 하기</div>
+        <div class="my-4 text-subtitle-1">인증하기</div>
 
         <v-spacer></v-spacer>
 
@@ -351,10 +348,10 @@
         <div v-show="cameraShow">
           <v-divider></v-divider>
           <v-card-text class="text-center" v-if="!isCurrentUserPicturePost">
-            현재는 인증 가능하지 않습니다.
+            인증 가능한 시간이 아닙니다.
           </v-card-text>
           <v-card-text class="text-center" v-else>
-            <v-btn primary outlined @click="takepicture">사진찍기</v-btn>
+            <v-btn color="#143559" outlined @click="takepicture">사진 찍기</v-btn>
             <input
               id="file"
               type="file"
@@ -362,7 +359,7 @@
               style="display: none"
               capture
             />
-            <v-btn @click="canvas(missionNo)">사진업로드</v-btn>
+            <v-btn outlined color="#fa183e" @click="canvas(missionNo)">사진 업로드</v-btn>
           </v-card-text>
         </div>
       </v-expand-transition>

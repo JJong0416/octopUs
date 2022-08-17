@@ -18,7 +18,7 @@
           <v-icon large @click="toOriginal">mdi-refresh</v-icon>
         </v-col>
         <v-col cols="4"></v-col>
-        <v-col class="px-10 pt-3 pb-0" cols="4">
+        <v-col class="pl-12 pt-2 pb-0" cols="4">
           <v-icon
             large
             v-if="
@@ -35,7 +35,8 @@
       </v-row>
 
       <v-row class="logo-img-wrapper">
-        <v-col>
+        <v-col cols="2"> </v-col>
+        <v-col cols="8">
           <v-img
             :src="require(`../assets/img/Ocsoon/Pet/${this.avatarPet}.png`)"
             width="30vh"
@@ -61,9 +62,10 @@
               ></v-img>
             </v-img> </v-img
         ></v-col>
+        <v-col cols="2"> </v-col>
       </v-row>
       <v-btn-toggle v-model="toggle_exclusive">
-        <v-row>
+        <v-row class="pl-4 pt-5 pb-2">
           <v-col cols="12" sm="6" class="py-1">
             <v-btn color="#fa183e" @click="changeColor(0)" />
             <v-btn color="#ffbbed" @click="changeColor(1)" />
@@ -73,6 +75,7 @@
             <v-btn color="#d2a1ff" @click="changeColor(5)" />
             <v-btn color="#8500ff" @click="changeColor(6)" />
           </v-col>
+
           <v-col cols="12" sm="6" class="pb-5 pt-0">
             <v-btn color="#a5bbff" @click="changeColor(7)" />
             <v-btn color="#fff9b5" @click="changeColor(8)" />
@@ -123,7 +126,7 @@
 
       <template>
         <v-card>
-          <v-tabs v-model="tab" background-color="#eefaec" color="#143559" grow>
+          <v-tabs v-model="tab" background-color="#f7f5fc" color="#143559" grow>
             <v-tab v-for="(item, index) in items" :key="index">
               {{ item.kind }}
             </v-tab>

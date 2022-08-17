@@ -21,6 +21,7 @@
     <br><br>
      <v-img src="../../assets/img/aboutus/6.png"></v-img>
      <br><br>
+     <v-img src="../../assets/img/aboutus/7.png" width="100%"></v-img>
     </v-container>
 </div>
 </template>

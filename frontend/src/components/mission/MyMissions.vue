@@ -61,11 +61,7 @@
       검색 조건에 맞는 미션이 없습니다.
       </v-card-text></div>
         <br />
-        <!-- <a v-bind:href="post.link" target="_blank">
-        <img v-bind:src="post.img"/>
-        <small>posted by: {{ post.author }}</small> 
-        {{ post.title }}n
-      </a> -->
+    
       </div>
       
     </div>
@@ -74,10 +70,7 @@
 </template>
 
 <script>
-import axios from "axios";
 import MissionCard from './MissionCard.vue';
-
-//import MissionCard from "../MissionCard.vue";
 export default {
   components: { MissionCard },
   props: ["missions"],
@@ -105,34 +98,6 @@ export default {
     };
   },
   methods: {
-    clickExpand({ item }) {
-      var vm = this;
-      console.log(item);
-      axios
-        .get(`api/mission/${item.missionNo}/picture`, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-          },
-        })
-        .then(function (response) {
-          console.log(response);
-          // 내부에 받은 이미지 확인필요
-          console.log(response.data[0].userPictures[0].pictureUrl);
-          console.log(response.data[0].userPictures);
-          vm.userPictures = response.data[0].userPictures;
-          // vm.URL = response.data[0].userPictures[0].pictureUrl;
-          // console.log(vm.URL)
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-    },
-    getColor(point) {
-      if (point > 1000) return "red";
-      else if (point > 500) return "orange";
-      else return "green";
-    },
   },
   computed: {
     filteredList() {

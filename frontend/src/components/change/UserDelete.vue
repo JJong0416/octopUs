@@ -96,7 +96,7 @@ export default {
                     sessionStorage.removeItem("token");
                     alert("회원 탈퇴가 완료되었습니다.");
                     this.drawer = false;
-                    window.location.replace("http://localhost:8080");
+                     window.location.href = "/StartView";
                 })
                 .catch((error) => {
                     console.log(error);

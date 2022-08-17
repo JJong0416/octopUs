@@ -131,21 +131,10 @@ export default {
   // data 속성 전체 코드
   data() {
     return {
-      model: null,
-      colors: [
-        "indigo",
-        "warning",
-        "pink darken-2",
-        "red lighten-1",
-        "deep-purple accent-4",
-      ],
       theme: "",
-      show: false,
       tofindsearch: "",
       selectedtheme: "",
-      dialog: false,
       userId: "",
-      slides: ["hot", "new", "mission", "is waiting for", "you"],
       searchtype: "",
       items: ["코드", "제목", "테마"],
       themes: ["생활", "운동", "공부", "모임", "기타"],
@@ -178,15 +167,11 @@ export default {
         },
       })
       .then(function (response) {
-        console.log(response);
         vm.allmissions = response.data;
         for (let index = 0; index < vm.allmissions.length; index++) {
           var allmission = vm.allmissions[index];
           vm.alltypes[index] = allmission.missionType;
         }
-        console.log("미션전부받아오기 성공");
-        console.log(vm.allmissions);
-        console.log(vm.alltypes);
       })
       .catch(function (error) {
         console.log(error);
@@ -199,12 +184,7 @@ export default {
         },
       })
       .then(function (response) {
-        console.log(response);
-
-        console.log("유저 ID를 저장성공");
-
         vm.userId = response.data.userId;
-        console.log(vm.userId);
       })
       .catch(function (err) {
         console.log(err);
@@ -255,21 +235,14 @@ export default {
           },
         })
         .then(function (response) {
-          console.log("여기는 search result");
-          console.log(response);
           vm.searchres = response.data;
           for (let index = 0; index < vm.searchres.length; index++) {
             var searchedmission = vm.searchres[index];
             vm.searchtypes[index] = searchedmission.missionType;
           }
-          console.log(vm.searchres);
         })
         .catch(function (err) {
           console.log(err);
-        })
-        .finally(function () {
-          // console.log(search);
-          // console.log(find);
         });
     },
     beforeJoinCheck(missionNum) {
@@ -283,7 +256,6 @@ export default {
           },
         })
         .then(function (response) {
-          console.log(response);
           for (var i = 0; i < response.data.length; i++) {
             if (response.data[i] === vm.userId) {
               alert("이미 참가중인 방입니다");
@@ -300,10 +272,7 @@ export default {
         .catch(function (err) {
           console.log(err);
         })
-        .finally(function () {
-          // console.log(search);
-          // console.log(find);
-        });
+        .finally(function () {});
     },
     joinMission(missionNum) {
       var vm = this;
@@ -314,9 +283,7 @@ export default {
             "Content-Type": "application/json",
           },
         })
-        .then(function (response) {
-          console.log(response);
-          console.log("방참가 성공");
+        .then(function () {
           vm.$router.push({
             name: "before",
             params: { missionNo: missionNum },
@@ -325,10 +292,7 @@ export default {
         .catch(function (err) {
           console.log(err);
         })
-        .finally(function () {
-          // console.log(search);
-          // console.log(find);
-        });
+        .finally(function () {});
     },
   },
 };

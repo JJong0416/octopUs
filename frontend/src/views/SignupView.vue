@@ -625,7 +625,6 @@ export default {
       axios
         .get(`api/register/check/id/${this.user.userid}`)
         .then(({ data }) => {
-          console.log("아이디중복확인 리턴: " + data);
           this.idmsg = "중복된 아이디입니다. 다시 입력해주세요";
           if (data === false) {
             this.idmsg = "사용가능한 아이디입니다.";
@@ -639,7 +638,6 @@ export default {
           this.idmsg = "ID중복체크에 실패했습니다..";
         })
         .finally(() => {
-          console.log(this.user.userid);
           this.IDDialog = true;
         });
     },
@@ -674,7 +672,7 @@ export default {
         })
         .then(({ data }) => {
           this.authenmsg = "인증번호를 다시 확인해주세요.";
-          console.log("인증코드 전송후 리턴 : " + data);
+
           if (data === true) {
             this.authenmsg = "인증되었습니다.";
             this.codeChk = true;
@@ -686,7 +684,6 @@ export default {
           console.log(error);
         })
         .finally(() => {
-          console.log(this.user.userid);
           this.EmailAuthenDialog = true;
         });
     },
@@ -696,7 +693,6 @@ export default {
           userEmail: this.user.email,
         })
         .then(({ data }) => {
-          console.log(data);
           this.msg = "email 전송에 실패했습니다.";
           if (data === "전송성공") {
             this.msg = "인증번호가 전송되었습니다.";
@@ -752,8 +748,7 @@ export default {
           userNickname: this.user.usernickname,
           userAvatar: this.user.avatar,
         })
-        .then(({ data }) => {
-          console.log(data);
+        .then(() => {
           this.registermsg = "등록이 완료되었습니다.";
           this.movePage();
         })
@@ -781,7 +776,6 @@ export default {
     },
     setavater(i) {
       this.user.avatar = i;
-      console.log(this.user.avatar);
     },
   },
 };

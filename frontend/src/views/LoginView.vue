@@ -159,18 +159,16 @@ export default {
   methods: {
     kakaoLogin() {
       window.location.replace(
-        "https://kauth.kakao.com/oauth/authorize?client_id=9a4a29dd046d8945a94faa4566beb2f9&redirect_uri=http://localhost:8080/main&response_type=code"
+        "https://kauth.kakao.com/oauth/authorize?client_id=9a4a29dd046d8945a94faa4566beb2f9&redirect_uri=34.97.99.194/main&response_type=code"
       );
-    },
+    }, 
     goback() {
       this.$router.go(-1);
     },
     ...mapActions("memberStore", ["userConfirm", "getUserInfo"]),
 
     async confirm() {
-      console.log(this.user);
       await this.userConfirm(this.user);
-      console.log(this.isLogin);
       if (this.isLogin) {
         this.$router.push({ name: "MainView" });
       } else {
@@ -201,8 +199,7 @@ export default {
     findPwByEmail() {
       axios
         .post("/api/find-pw", { userEmail: this.email })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           alert("이메일로 임시비밀번호가 발송되었습니다.");
         })
         .catch((error) => {

@@ -86,13 +86,11 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text>
-        <v-textarea
-          height="100"
-          disabled
-          outlined
-          v-model="mission.missionContent"
-        />
+      <v-card-text class="px-7"
+            style="justify-content: center; align-items: center"
+          >
+            {{ mission.missionContent }}
+        
       </v-card-text>
       <v-spacer></v-spacer>
       <v-row class="py-3 px-0" justify="center">
@@ -383,11 +381,7 @@ export default {
     mission: null,
     dialog: false,
     dialog2: false,
-    dialog3: false,
-    notifications: false,
-    sound: true,
-    widgets: false,
-    time: null,
+
     menu: false,
     menu1: false,
   }),
@@ -421,9 +415,7 @@ export default {
           authenticationStartTime: this.start,
           authenticationEndTime: this.end,
         })
-        .then((response) => {
-          console.log(response);
-          console.log("인증 시간이 저장되었습니다.");
+        .then(() => {
           this.isAuthentication = true;
         })
         .catch((error) => {
@@ -431,8 +423,6 @@ export default {
           alert("시간 정보 저장에 실패했습니다.");
         })
         .finally(() => {
-          console.log(this.start);
-          console.log(this.end);
           this.dialog2 = false;
           this.start = null;
           this.end = null;
@@ -447,8 +437,7 @@ export default {
             missionTimeDPW: this.authenweeks,
             missionTimeTPD: this.authendays,
           })
-          .then((response) => {
-            console.log(response);
+          .then(() => {
             this.successDialog = true;
             setTimeout(this.movePage, 2000);
           })
@@ -456,12 +445,7 @@ export default {
             console.log(error);
             alert("missiontime 정보 전송 실패");
           })
-          .finally(() => {
-            console.log(this.picker + "T00:00:00");
-            console.log(this.howmanyweeks);
-            console.log(this.authenweeks);
-            console.log(this.authendays);
-          });
+          .finally(() => {});
       } else {
         this.authenFailDialog = true;
       }

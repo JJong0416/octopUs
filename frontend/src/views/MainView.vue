@@ -72,8 +72,15 @@
             <v-carousel-item v-for="(hotmission, i) in hotmissions" :key="i">
               <v-sheet height="100%">
                 <v-row class="fill-height" align="center" justify="center">
-                   
-                  <div class="twiceLine" style="width: 9em; display: flex; justify-content: center; align-items: center" >
+                  <div
+                    class="twiceLine"
+                    style="
+                      width: 9em;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
                     {{ hotmission.missionTitle }}
                   </div>
                 </v-row>
@@ -94,8 +101,16 @@
           >
             <v-carousel-item v-for="(newmission, i) in newmissions" :key="i">
               <v-sheet height="100%">
-                     <v-row class="fill-height" align="center" justify="center">
-                  <div class="twiceLine" style="width: 9em; display: flex; justify-content: center; align-items: center" >
+                <v-row class="fill-height" align="center" justify="center">
+                  <div
+                    class="twiceLine"
+                    style="
+                      width: 9em;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
                     {{ newmission.missionTitle }}
                   </div>
                 </v-row>
@@ -174,8 +189,6 @@ export default {
           },
         })
         .then(function (response) {
-          console.log("여기는 search result");
-          console.log(response);
           if (!response.data[0]) {
             vm.failMsg = "참여할 수 없는 방입니다.";
           } else {
@@ -210,13 +223,10 @@ export default {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${response.data.token}`;
-        console.log("카카오 로그인 토큰 받아오기 성공");
-        console.log(response);
         let token = response.data.token;
         vm.SET_IS_LOGIN(true);
         vm.SET_USER_INFO(token);
         cookie.set("token", token);
-        console.log("userInfo : " + vm.userInfo);
         sessionStorage.setItem("token", token);
       })
       .catch((error) => {
@@ -231,7 +241,6 @@ export default {
             },
           })
           .then(function (response) {
-            console.log(response);
             vm.userInfo2 = response.data;
             vm.userAvatar = vm.userInfo2.userAvatar.split(", ");
             if (vm.userAvatar[2] == 0) {
@@ -240,7 +249,6 @@ export default {
             if (vm.userAvatar[3] == 0) {
               vm.userAvatar[3] = "0_nothing";
             }
-            console.log(vm.userAvatar);
           })
           .catch(function (err) {
             console.log(err);
@@ -257,8 +265,6 @@ export default {
       })
       .then(function (response) {
         vm.newmissions = response.data;
-        console.log("들어온 newmissions : ");
-        console.log(vm.newmissions);
       })
       .catch(function (err) {
         console.log(err);
@@ -273,8 +279,6 @@ export default {
       })
       .then(function (response) {
         vm.hotmissions = response.data;
-        console.log("들어온 hotmissions : ");
-        console.log(vm.hotmissions);
       })
       .catch(function (err) {
         console.log(err);
@@ -328,22 +332,21 @@ body {
 
   line-height: 1;
   white-space: normal;
-    line-height: 1.2;
+  line-height: 1.2;
 
-    text-align: left;
-    word-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-
+  text-align: left;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
-::v-deep .v-btn.v-btn--icon.v-btn--round.theme--dark.v-size--default{
-  display : none;
+::v-deep .v-btn.v-btn--icon.v-btn--round.theme--dark.v-size--default {
+  display: none;
 }
-::v-deep .v-window--show-arrows-on-hover.v-window__next{
-  display : none;
+::v-deep .v-window--show-arrows-on-hover.v-window__next {
+  display: none;
 }
-::v-deep .v-carousel__next > button{
+::v-deep .v-carousel__next > button {
   color: red;
 }
 </style>

@@ -104,15 +104,11 @@ export default {
         return;
       }
       const pointReq = { userId: "", point: vm.inputdata };
-      console.log(pointReq);
       axios
         .patch(`api/user/modification/point/refund`, pointReq)
-        .then((response) => {
-          console.log(response);
-
+        .then(() => {
           vm.refunddia = false;
           vm.$emit("success");
-          // this.$router.push("Mypage");
         })
         .catch(function (err) {
           console.log(err);

@@ -89,7 +89,7 @@ export default {
       this.drawer = false;
     },
     movepage() {
-      window.location.replace("http://localhost:8080");
+       window.location.href = "/StartView";
     },
   },
 };

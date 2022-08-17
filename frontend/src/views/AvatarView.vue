@@ -314,11 +314,11 @@ export default {
     },
     refresh() {
       if (this.avatarMsg === "아바타 변경이 완료되었습니다.")
-        window.location.href = "/Mypage";
+        window.location.href = "/mypage";
       else this.avaChangeDialog = false;
     },
     saveAvatar_not() {
-      window.location.href = "/Mypage";
+      window.location.href = "/mypage";
     },
     goback() {
       this.$router.go(-1);

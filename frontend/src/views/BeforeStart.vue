@@ -362,15 +362,11 @@ export default {
           });
       } else {
         alert("로그인 후 이용해주세요.");
-        this.$router.push({
-          name: "Login",
-        });
+        window.location.href = "/login";
       }
     },
     movePage() {
-      this.$router.push({
-        name: "Mypage",
-      });
+      window.location.href = "/mypage";
     },
   },
 };

@@ -141,7 +141,7 @@ export default {
     },
     refresh() {
       if (this.nickmsg === "닉네임 변경에 성공했습니다.")
-        window.location.reload();
+        window.location.href = "/mypage";
       else this.nickDialog = false;
     },
   },

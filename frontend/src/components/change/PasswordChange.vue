@@ -155,7 +155,7 @@ export default {
       cookie.remove("token");
       sessionStorage.removeItem("token");
 
-      this.$router.push("login");
+      window.location.href = "/login";
     },
   },
 };

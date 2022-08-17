@@ -347,7 +347,9 @@
             인증 가능한 시간이 아닙니다.
           </v-card-text>
           <v-card-text class="text-center" v-else>
-            <v-btn color="#143559" outlined @click="takepicture">사진 찍기</v-btn>
+            <v-btn color="#143559" outlined @click="takepicture"
+              >사진 찍기</v-btn
+            >
             <input
               id="file"
               type="file"
@@ -355,7 +357,9 @@
               style="display: none"
               capture
             />&nbsp;&nbsp;&nbsp;&nbsp;
-            <v-btn outlined color="#fa183e" @click="canvas(missionNo)">사진 업로드</v-btn>
+            <v-btn outlined color="#fa183e" @click="canvas(missionNo)"
+              >사진 업로드</v-btn
+            >
           </v-card-text>
         </div>
       </v-expand-transition>
@@ -503,15 +507,16 @@ export default {
           c.height = img.height;
           ctx.drawImage(img, 0, 0);
         };
-        console.log(img.src + "dfsafasfasdf");
         img.src = dataURL;
       };
+      console.log("사진제발찍혀라제발");
       reader.readAsDataURL(file);
       reader.onloadend = function () {
         encodedImg = reader.result;
-        // console.log('Base64 String - ', encodedImg)
+        console.log("BASE64가 나올겁니다");
+        console.log("Base64 String - ", encodedImg);
         axios
-          .post(`../api/mission/${missionNo}/picture`, {
+          .post(`../../api/mission/${missionNo}/picture`, {
             headers: {
               "Access-Control-Allow-Origin": "*",
               "Content-Type": "application/json",
@@ -521,9 +526,11 @@ export default {
           .then((response) => {
             alert("정상적으로 등록되었습니다.");
             console.log(response);
-            window.location.reload();
+
+            window.location.href = `/proceeding/${missionNo}`;
           })
-          .catch(() => {
+          .catch((error) => {
+            console.log(error);
             alert("사진전송실패");
           });
       };

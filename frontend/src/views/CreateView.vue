@@ -179,7 +179,6 @@ export default {
         },
       })
       .then(function (response) {
-
         vm.userInfo = response.data;
       })
       .catch(function (err) {
@@ -197,10 +196,7 @@ export default {
         this.createMsg ===
         "미션 성공 인증을 위한 시간을 설정하면 해당 미션이 활성화됩니다."
       )
-        this.$router.push({
-          name: "unactivated",
-          params: { missionNo: this.missionNum },
-        });
+        window.location.href = `/unactivated/${this.missionNum}`;
       else this.createDialog = false;
     },
     goback() {

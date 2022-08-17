@@ -202,7 +202,7 @@ export default {
     dialogOff() {
       this.chargeDialog = false;
       this.refundDialog = false;
-      this.$router.go();
+      window.location.href = "/mypage";
     },
   },
   created() {

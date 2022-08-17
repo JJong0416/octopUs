@@ -148,7 +148,7 @@
                 </template>
 
                 <v-card>
-                  <v-card-title class="text-h6 yellow lighten-2">
+                  <v-card-title class="text-h6">
                     {{ previewUsernickname }}
                   </v-card-title>
 
@@ -182,8 +182,8 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
 
-                    <v-btn color="primary" text @click="userdialog = false">
-                      close
+                    <v-btn color="#143559" outlined @click="userdialog = false">
+                      확인
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -358,7 +358,7 @@
               accept="image/*"
               style="display: none"
               capture
-            />
+            />&nbsp;&nbsp;&nbsp;&nbsp;
             <v-btn outlined color="#fa183e" @click="canvas(missionNo)">사진 업로드</v-btn>
           </v-card-text>
         </div>

@@ -4,10 +4,10 @@
 // });
 module.exports = {
   devServer: {
-    port: 8080,
+    port: 80,
     proxy: {
       "/api": {
-        target: "http://localhost:7070",
+        target: "http://34.64.41.23",
         changeOrigin: true,
         logLevel: "debug",
         secure: false,

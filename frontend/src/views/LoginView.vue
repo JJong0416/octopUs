@@ -159,9 +159,9 @@ export default {
   methods: {
     kakaoLogin() {
       window.location.replace(
-        "https://kauth.kakao.com/oauth/authorize?client_id=9a4a29dd046d8945a94faa4566beb2f9&redirect_uri=34.97.99.194/main&response_type=code"
+        "https://kauth.kakao.com/oauth/authorize?client_id=9a4a29dd046d8945a94faa4566beb2f9&redirect_uri=34.64.41.23/main&response_type=code"
       );
-    }, 
+    },
     goback() {
       this.$router.go(-1);
     },

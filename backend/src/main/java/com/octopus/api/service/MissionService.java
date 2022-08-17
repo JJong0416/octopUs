@@ -41,7 +41,12 @@ public class MissionService {
 
         /* 미션에 방장 정보와 String 으로 유저 넣기 */
         missionCreateReq.addMissionLeaderIdAndUser(user.getUserId(), user.getUserNickname());
-
+        if(missionCreateReq.getMissionPoint() > user.getUserPoint()){
+            throw new CustomException(ErrorCode.POINT_LACK_ERROR);
+        }else{
+            user.updatePoint(user.getUserPoint() - missionCreateReq.getMissionPoint());
+        }
+        
         /* DTO 를 통한 미션 생성 */
         Mission mission = Mission.createMission()
                 .missionCreateReq(missionCreateReq)

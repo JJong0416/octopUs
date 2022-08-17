@@ -51,7 +51,6 @@ public class MissionDetailsController {
     }
 
     @GetMapping("/mission-detail")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<MissionDetailRes> getMissionDetail(
             @PathVariable Long missionNo
     ) {

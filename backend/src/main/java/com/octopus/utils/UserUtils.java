@@ -19,6 +19,6 @@ public class UserUtils {
     }
 
     public static String createRandomKakaoAvatar(){
-        return "1, 0, 0, 0";
+        return "1";
     }
 }

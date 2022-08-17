@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .antMatchers("/api/mission/new").permitAll()
                 .antMatchers("/api/test").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/mission/{missionNo}").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/mission/{missionNo}/mission-detail").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

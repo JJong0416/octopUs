@@ -104,7 +104,7 @@ export default {
       this.logoutDialog = true;
     },
     refresh() {
-      window.location.replace("http://localhost:8080");
+       window.location.href = "/StartView";
     },
   },
 };

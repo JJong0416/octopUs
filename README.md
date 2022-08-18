@@ -1,4 +1,4 @@
-# ✨ OctopUS ✨
+# 🐙 OctopUS 🐙
 
 -  SSAFY 7기 서울 공통 7반 A702 공통 프로젝트입니다.
    <br><br><br>
@@ -8,32 +8,6 @@
 -  2022년 07월 05일 ~ 2022년 08월 19일
    
    <br><br><br>
-
-
-
-## ⚙ 시스템 아키텍쳐
-
-<p align="center">
-
-   <img src="img/architecture.png" width="70%" height="50%">
-   
-</p>
-<br><br><br>
-
-
-## ⚙ 프로젝트 상세 설명
-- ###  프로젝트 개요
-    
-     1. 혼자서는 동기 부여가 잘 안 되는 것 같으신 분   
-     2. 친구와 함께 '갓생' 살기로 마음 먹었는데 이를 효과적으로 실행할 수 있는 어플을 찾고 싶은 분  
-     3. 새로운 목표를 위해 나를 바꾸기도 하면서 돈도 벌고 싶으신 분
-     
-    # 여러분을 위해 준비하였습니다.
-
-    ### octopus는 확실한 동기부여와 확실한 보상을 통해 목표가 같은 사람들과 함께 성장해나갈 수 있는 어플리케이션입니다.
-
-<br><br><br>
-    
 
 ## 🛠 만든사람
 
@@ -66,8 +40,37 @@
 <img alt="MatterMost" src ="https://img.shields.io/badge/MatterMost-blue.svg?&style=for-the-badge&logo=MatterMost&logoColor=white"/>
 <img alt="Notion" src ="https://img.shields.io/badge/Notion-white.svg?&style=for-the-badge&logo=Notion&logoColor=black"/>
 <img alt="Webex" src ="https://img.shields.io/badge/Webex-181717.svg?&style=for-the-badge&logo=Webex&logoColor=green"/>
+<br>
+
+### <a href="https://jjongdev.notion.site/OctopUS-040789f552d24058b076c0dcbd4ea4af"> 🐙Octopus 노션 링크 </a>
 
 <br><br><br>
+
+
+## ⚙ 시스템 아키텍쳐
+
+<p align="center">
+
+   <img src="img/architecture.png" width="70%" height="50%">
+   
+</p>
+<br><br><br>
+
+
+## ⚙ 프로젝트 상세 설명
+- ###  프로젝트 개요
+    
+     1. 혼자서는 동기 부여가 잘 안 되는 것 같으신 분   
+     2. 친구와 함께 '갓생' 살기로 마음 먹었는데 이를 효과적으로 실행할 수 있는 어플을 찾고 싶은 분  
+     3. 새로운 목표를 위해 나를 바꾸기도 하면서 돈도 벌고 싶으신 분
+<br>
+
+- ### octopus는 확실한 동기부여와 확실한 보상을 통해 목표가 같은 사람들과 함께 성장해나갈 수 있는 어플리케이션입니다.
+
+<br><br><br>
+    
+
+
 
 ## 실행화면
 

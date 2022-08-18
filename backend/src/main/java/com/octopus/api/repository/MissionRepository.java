@@ -31,7 +31,9 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
 
     List<MissionRes> findMissionsByMissionCodeAndMissionStatus(String missionCode, MissionStatus missionStatus);
 
-    List<MissionRes> findMissionsByMissionTitleAndMissionOpenAndMissionStatus(String missionTitle, MissionOpenType openRoom,  MissionStatus missionStatus);
+    List<MissionRes> findMissionsByMissionTitleContainingAndMissionOpenAndMissionStatus(
+            String missionTitle, MissionOpenType openRoom,  MissionStatus missionStatus
+    );
 
     List<MissionRes> findMissionsByMissionTypeAndMissionStatus(MissionType missionType, MissionStatus missionStatus);
 

@@ -121,7 +121,9 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public List<MissionRes> getMissionByMissionTitle(String missionTitle) {
-        return missionRepository.findMissionsByMissionTitleAndMissionOpenAndMissionStatus(missionTitle, MissionOpenType.OPEN_ROOM, MissionStatus.OPEN);
+        return missionRepository.findMissionsByMissionTitleContainingAndMissionOpenAndMissionStatus(
+                missionTitle, MissionOpenType.OPEN_ROOM, MissionStatus.OPEN
+        );
     }
 
     @Transactional(readOnly = true)

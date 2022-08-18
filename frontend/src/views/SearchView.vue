@@ -103,12 +103,7 @@
           </v-list-item>
 
           <v-card-actions>
-            <v-btn
-              outlined
-              rounded
-              text
-              @click="beforeJoinCheck(item.missionNo)"
-            >
+            <v-btn outlined rounded text @click="mvdetail(item.missionNo)">
               입장하기
             </v-btn>
           </v-card-actions>
@@ -245,54 +240,11 @@ export default {
           console.log(err);
         });
     },
-    beforeJoinCheck(missionNum) {
-      var vm = this;
-
-      axios
-        .get(`api/mission/${missionNum}/users`, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-          },
-        })
-        .then(function (response) {
-          for (var i = 0; i < response.data.length; i++) {
-            if (response.data[i] === vm.userId) {
-              alert("이미 참가중인 방입니다");
-              vm.$router.push({
-                name: "before",
-                params: { missionNo: missionNum },
-              });
-              return;
-            }
-          }
-
-          vm.joinMission(missionNum);
-        })
-        .catch(function (err) {
-          console.log(err);
-        })
-        .finally(function () {});
-    },
-    joinMission(missionNum) {
-      var vm = this;
-      axios
-        .post(`api/mission/${missionNum}/join`, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-          },
-        })
-        .then(function () {
-          vm.$router.push({
-            name: "before",
-            params: { missionNo: missionNum },
-          });
-        })
-        .catch(function (err) {
-          console.log(err);
-        })
-        .finally(function () {});
+    mvdetail(missionNo) {
+      this.$router.push({
+        name: "before",
+        params: { missionNo: missionNo },
+      });
     },
   },
 };

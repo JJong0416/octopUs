@@ -13,13 +13,19 @@
 
 ## 시스템 아키텍쳐
 
+<p align="center">
+
+   <img src="img/architecture.png" width="70%" height="50%">
+   
+</p>
+<br><br><br>
 
 ## 🛠 만든사람
 
 - #### **배현중**(팀장/프론트엔드) [@hbae](https://github.com/hbae)
 - #### **김수미**(팀원/프론트엔드) [@soomi1015](https://github.com/soomi1015)
 - #### **박예인**(팀원/백엔드) [@iasfk](https://github.com/iasfk)
-- #### **박지수**(팀원/프론트엔드) [@lapaho8645](https://github.com/lapaho8645)
+- #### **박지수**(팀원/백엔드) [@lapaho8645](https://github.com/lapaho8645)
 - #### **박종찬**(팀원/백엔드) [@jjong0416](https://github.com/jjong0416)
 - #### **이경준**(팀원/백엔드) [@K15-1](https://github.com/K15-1)
 <br><br><br>

@@ -162,7 +162,6 @@
 </template>
 <script>
 import axios from "axios";
-import cookie from "vue-cookies";
 import MypageHeader from "../components/common/MypageHeader.vue";
 import FooterView from "../components/common/FooterView.vue";
 import NicknameChange from "../components/change/NicknameChange.vue";
@@ -207,8 +206,7 @@ export default {
   },
   created() {
     var vm = this;
-    let token = cookie.get("token");
-    console.log("쿠키는?" + token);
+
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${sessionStorage.getItem("token")}`;

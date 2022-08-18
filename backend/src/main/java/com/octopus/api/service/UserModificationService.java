@@ -1,6 +1,8 @@
 package com.octopus.api.service;
 
+import com.octopus.api.repository.OctopusTableRepository;
 import com.octopus.api.repository.UserRepository;
+import com.octopus.domain.Mission;
 import com.octopus.domain.User;
 import com.octopus.dto.request.AvatarReq;
 import com.octopus.dto.request.UserUpdatePasswordReq;
@@ -11,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 
 @Service
@@ -18,6 +22,7 @@ import static com.octopus.utils.SecurityUtils.getCurrentUsername;
 public class UserModificationService {
 
     private final UserRepository userRepository;
+    private final OctopusTableRepository octopusTableRepository;
     private final PasswordEncoder passwordEncoder;
     private final Integer changeAvatarPoint = 500;
 
@@ -55,7 +60,19 @@ public class UserModificationService {
     public void changeUserNickname(String newNickname) {
         if (!isUserByNicknameExist(newNickname)) {
             User user = getUserInfo(getCurrentUsername().get());
+            List<Mission> missions = octopusTableRepository.findMissionByUser(user);
+            StringBuilder sb = new StringBuilder();
+            for (Mission mission : missions) {
+                sb.setLength(0);
+                int index = mission.getMissionUsers()
+                        .indexOf(user.getUserNickname());
+                sb.append(mission.getMissionUsers())
+                        .replace(index,
+                                index + user.getUserNickname().length(), newNickname);
+                mission.updateMissionUsers(sb.toString());
+            }
             user.changeNickname(newNickname);
+
         } else {
             throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXISTS);
         }

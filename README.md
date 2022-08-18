@@ -9,9 +9,12 @@
    
    <br><br><br>
 
+
+## 프로젝트 소개랑 내용 써줄 박예인 구함
+
 ## 🛠 만든사람
 
-- #### **배현중**(팀장/프론트엔드) [@alex950107](https://github.com/alex950107)
+- #### **배현중**(팀장/프론트엔드) [@hbae](https://github.com/hbae)
 - #### **김수미**(팀원/프론트엔드) [@soomi1015](https://github.com/soomi1015)
 - #### **박예인**(팀원/백엔드) [@iasfk](https://github.com/iasfk)
 - #### **박지수**(팀원/프론트엔드) [@lapaho8645](https://github.com/lapaho8645)

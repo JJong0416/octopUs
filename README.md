@@ -32,8 +32,7 @@
 
     ### octopus는 확실한 동기부여와 확실한 보상을 통해 목표가 같은 사람들과 함께 성장해나갈 수 있는 어플리케이션입니다.
 
-
-    
+<br><br><br>
     
 
 ## 🛠 만든사람
@@ -68,7 +67,7 @@
 <img alt="Notion" src ="https://img.shields.io/badge/Notion-white.svg?&style=for-the-badge&logo=Notion&logoColor=black"/>
 <img alt="Webex" src ="https://img.shields.io/badge/Webex-181717.svg?&style=for-the-badge&logo=Webex&logoColor=green"/>
 
-<br><br>
+<br><br><br>
 
 ## 실행화면
 

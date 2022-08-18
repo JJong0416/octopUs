@@ -1,11 +1,8 @@
 package com.octopus.domain;
 
-import com.octopus.domain.dto.SignUpDto;
+import com.octopus.dto.request.UserSignUpReq;
 import com.octopus.domain.type.PlatformType;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@ToString
 @Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
@@ -28,10 +26,10 @@ public class User {
     @Column(name = "user_nickname", length = 10, nullable = false, unique = true)
     private String userNickname;
 
-    @Column(name = "user_password", length = 20, nullable = false)
+    @Column(name = "user_password", length = 100, nullable = false)
     private String userPassword;
 
-    @Column(name = "user_email", length = 30, nullable = false, unique = true)
+    @Column(name = "user_email", length = 30, nullable = false)
     private String userEmail;
 
     @Column(name = "user_point")
@@ -40,23 +38,38 @@ public class User {
     @Column(name = "user_avatar", nullable = false)
     private String userAvatar;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "platform_type")
     private PlatformType platformType;
 
     @Column(name = "platform_access_token")
     private Long platformAccessToken;
 
-    @ManyToMany
-    @JoinTable(
-            name = "octopus_table",
-            joinColumns = @JoinColumn(name = "user_no"),
-            inverseJoinColumns = @JoinColumn(name = "mission_no")
-    )
-    private final Set<Mission> missions = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private final Set<Octopus> octopus = new HashSet<>();
 
-    @Builder(builderMethodName = "signUpBuilder")
-    public User(SignUpDto signUpDto) {
-
+    @Builder
+    public User(String userId, String userPassword, String userNickname, String userEmail,
+                String userAvatar, Integer userPoint, PlatformType platformType) {
+        this.userId = userId;
+        this.userPassword = userPassword;
+        this.userNickname = userNickname;
+        this.userEmail = userEmail;
+        this.userAvatar = userAvatar;
+        this.userPoint = userPoint;
+        this.platformType = platformType;
     }
+
+    public void updateAvatar(String avatar){
+        this.userAvatar = avatar;
+    }
+
+    public void updatePassword(final String newPassword){
+        this.userPassword = newPassword;
+    }
+
+    public void changeNickname(String newNickname) {
+        this.userNickname = newNickname;
+    }
+
+    public void updatePoint(Integer newUserPoint) {this.userPoint = newUserPoint;}
 }

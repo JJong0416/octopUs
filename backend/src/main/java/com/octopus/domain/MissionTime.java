@@ -1,12 +1,13 @@
 package com.octopus.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -16,12 +17,19 @@ public class MissionTime implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mission_time_no")
+    private Long missionTimeNo;
+
+    //    @Id
     @OneToOne
-    @JoinColumn(name = "mission_no", unique = true)
+    @JoinColumn(name = "mission_no")
     private Mission mission;
 
     @Column(name = "mission_time_start_time")
-    private Date missionTimeStartTime;
+    private LocalDateTime missionTimeStartTime;
+
+    @Column(name = "mission_time_end_time")
+    private LocalDateTime missionTimeEndTime;
 
     @Column(name = "mission_time_week")
     private Integer missionTimeWeek;
@@ -31,4 +39,16 @@ public class MissionTime implements Serializable {
 
     @Column(name = "mission_time_tpd")
     private Integer missionTimeTPD;
+
+    @Builder(builderMethodName = "createMTBuilder")
+    public MissionTime(
+            Mission mission, LocalDateTime missionTimeStartTime, Integer missionTimeWeek, Integer missionTimeDPW, Integer missionTimeTPD
+    ) {
+        this.mission = mission;
+        this.missionTimeStartTime = missionTimeStartTime;
+        this.missionTimeEndTime = missionTimeStartTime.plusDays(missionTimeWeek * 7);
+        this.missionTimeWeek = missionTimeWeek;
+        this.missionTimeDPW = missionTimeDPW;
+        this.missionTimeTPD = missionTimeTPD;
+    }
 }

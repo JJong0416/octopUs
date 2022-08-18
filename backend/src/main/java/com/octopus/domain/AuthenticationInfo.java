@@ -1,10 +1,13 @@
 package com.octopus.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -23,9 +26,18 @@ public class AuthenticationInfo {
     private Mission mission;
 
     @Column(name = "authentication_start_time")
-    private Date authenticationStartTime;
+    private LocalTime authenticationStartTime;
 
     @Column(name = "authentication_end_time")
-    private Date authenticationEndTime;
+    private LocalTime authenticationEndTime;
+
+    @Builder(builderMethodName = "createAuthenticationInfo")
+    public AuthenticationInfo(
+            Mission mission, LocalTime authenticationStartTime, LocalTime authenticationEndTime
+    ){
+        this.mission = mission;
+        this.authenticationStartTime = authenticationStartTime;
+        this.authenticationEndTime = authenticationEndTime;
+    }
 
 }

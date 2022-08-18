@@ -1,27 +1,72 @@
 package com.octopus.config;
 
+import com.octopus.jwt.JwtAccessDeniedHandler;
+import com.octopus.jwt.JwtAuthenticationEntryPoint;
+import com.octopus.jwt.JwtSecurityConfig;
+import com.octopus.jwt.JwtTokenProvider;
+import com.octopus.oauth.OAuth2SuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() { // h2에 대한 접근에는 인증없이 진행할 수 있도록
-//        return (web -> web.ignoring().antMatchers("/h2-console/**", "/favicon.ico"));
-//    }
+    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    private final OAuth2SuccessHandler successHandler;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests() // HttpServletRequest를 사용하는 요청들에 대한 접근 제한을 설정
-                .antMatchers("/**").permitAll() // api/hello는 인증없이 접근을 허용
-                .anyRequest().authenticated(); // 나머지 요청에 대해서는 모두 인증이 필요하다.
+                .csrf().disable()
+
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .and()
+                .authorizeRequests()
+                .antMatchers("/api/login/**").permitAll()
+                .antMatchers("/api/register/**").permitAll()
+                .antMatchers("/api/mission/search/**").permitAll()
+                .antMatchers("/api/email/**").permitAll()
+                .antMatchers("/api/find-pw").permitAll()
+                .antMatchers("/api/mission/hot").permitAll()
+                .antMatchers("/api/mission/new").permitAll()
+                .antMatchers("/api/test").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/mission/{missionNo}").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/mission/{missionNo}/mission-detail").permitAll()
+                .anyRequest().authenticated()
+
+                .and()
+                .oauth2Login()
+                .successHandler(successHandler)
+
+
+                .and()
+                .apply(new JwtSecurityConfig(jwtTokenProvider));
 
         return http.build();
     }

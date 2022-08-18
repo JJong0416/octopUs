@@ -25,6 +25,9 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+**/application-oauth.properties
+**/application-data.properties
+**/application-jwt.properties
 
 ### NetBeans ###
 /nbproject/private/
@@ -35,6 +38,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-### application.properties ###
-resources/application-oauth.properties

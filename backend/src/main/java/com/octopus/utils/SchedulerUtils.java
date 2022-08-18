@@ -20,7 +20,7 @@ import java.util.Map;
 @EnableScheduling
 @RequiredArgsConstructor
 @Component
-public class Scheduler {
+public class SchedulerUtils {
     private final Job job;
     private final JobLauncher jobLauncher;
 

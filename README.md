@@ -8,6 +8,7 @@
 # 🐙 OctopUS 🐙
 
 -  SSAFY 7기 서울 공통 7반 A702 공통 프로젝트입니다.
+
    <br><br><br>
 
 ## 📆 프로젝트 기간
@@ -38,6 +39,7 @@
 <img src ="https://img.shields.io/badge/server-GCP-blue"></img>
 <img src ="https://img.shields.io/badge/server-Jenkins-red"></img>
 <img src ="https://img.shields.io/badge/server-Nginx-green"></img>
+<br>
 <br>
 <br>
 
@@ -83,7 +85,7 @@
 
 
 
-## 실행화면
+## 🖥실행화면
 
 <br>
 

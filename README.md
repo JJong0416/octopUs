@@ -1,3 +1,10 @@
+<br>
+
+<img src ="img/웹엑스가상배경화면.png">
+
+
+<br>
+
 # 🐙 OctopUS 🐙
 
 -  SSAFY 7기 서울 공통 7반 A702 공통 프로젝트입니다.

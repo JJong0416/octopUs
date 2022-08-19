@@ -84,7 +84,8 @@
 
 ### 새로운 미션 만들기
 
-![](img/새로운미션만들기.gif)
+![새로운미션만들기](/uploads/8090a44db4c9cebc3522a61f2f6051e3/새로운미션만들기.gif)
+<img src="/uploads/8090a44db4c9cebc3522a61f2f6051e3/새로운미션만들기.gif" width="40" height="40">
 
 <br>
 

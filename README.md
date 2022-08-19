@@ -78,37 +78,36 @@
 
 ### 회원가입하기
 
-<img src="img/회원가입하기.gif" >
+<img src="/uploads/44e16761caa3590a86e9beac2368afd8/회원가입하기.gif" width="300" height="700">
 
 <br>
 
 ### 새로운 미션 만들기
 
-![새로운미션만들기](/uploads/8090a44db4c9cebc3522a61f2f6051e3/새로운미션만들기.gif)
-<img src="/uploads/8090a44db4c9cebc3522a61f2f6051e3/새로운미션만들기.gif" width="40" height="40">
+<img src="/uploads/8090a44db4c9cebc3522a61f2f6051e3/새로운미션만들기.gif" width="300" height="700">
 
 <br>
 
 ### 미션 조회 및 참여
 
-![](img/미션조회및참여.gif)
+<img src="/uploads/bc9b869679727dbe6b4820077efad402/미션조회및참여.gif" width="300" height="700">
 
 <br>
 
 ### 진행중인 미션에 인증하기
 
-![](img/진행중인미션에인증하기.gif)
+<img src="/uploads/99b420e9e1d970ecefef42da151ac66b/진행중인미션에인증하기.gif" width="300" height="700">
 
 <br>
 
 ### 포인트
 
-![](img/포인트.gif)
+<img src="/uploads/dc0ab3f8cd96fef142e8b40e98ed2c68/포인트.gif" width="300" height="700">
 
 <br>
 
 ### 캐릭터(옥순이) 꾸미기
 
-![](img/옥순이꾸미기.gif)
+<img src="/uploads/fdc727015a62a12a7e986a38460e3136/옥순이꾸미기.gif" width="300" height="700">
 
 <br>

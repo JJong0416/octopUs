@@ -1,6 +1,6 @@
 <br>
 
-<img src ="img/웹엑스가상배경화면.png">
+<img src="img/octopus.png">
 
 
 <br>

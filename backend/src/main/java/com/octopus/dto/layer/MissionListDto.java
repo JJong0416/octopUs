@@ -1,6 +1,5 @@
 package com.octopus.dto.layer;
 
-import com.octopus.domain.type.MissionStatus;
 import com.octopus.domain.type.MissionType;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,12 +25,23 @@ public class MissionListDto {
 
     private final String missionContent;
 
+    private Integer missionPoint;
+
     @NotNull
     private MissionType missionType;
 
-
     @Builder
-    public MissionListDto(long missionNo, String missionCode, String missionTitle, String missionLeaderAvatar, String missionLeaderId, String missionContent, MissionType missionType) {
+    public MissionListDto(
+            long missionNo,
+            String missionCode,
+            String missionTitle,
+            String missionLeaderAvatar,
+            String missionLeaderId,
+            String missionContent,
+            MissionType missionType,
+            Integer missionPoint
+    ) {
+        this.missionPoint =missionPoint;
         this.missionNo = missionNo;
         this.missionCode = missionCode;
         this.missionTitle = missionTitle;

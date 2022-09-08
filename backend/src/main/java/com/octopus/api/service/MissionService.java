@@ -103,6 +103,7 @@ public class MissionService {
                 .missionTitle(mission.getMissionTitle())
                 .missionLeaderId(mission.getMissionLeaderId())
                 .missionContent(mission.getMissionContent())
+                .missionPoint(mission.getMissionPoint())
                 .missionLeaderAvatar(userRepository.findByUserId(mission.getMissionLeaderId()).orElseThrow(() -> {
                     throw new CustomException(ErrorCode.USER_NOT_FOUND);
                 }).getUserAvatar())

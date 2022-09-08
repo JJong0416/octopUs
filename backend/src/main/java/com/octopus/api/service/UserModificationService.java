@@ -23,6 +23,7 @@ public class UserModificationService {
 
     private final UserRepository userRepository;
     private final OctopusTableRepository octopusTableRepository;
+
     private final PasswordEncoder passwordEncoder;
     private final Integer changeAvatarPoint = 500;
 
@@ -72,7 +73,6 @@ public class UserModificationService {
                 mission.updateMissionUsers(sb.toString());
             }
             user.changeNickname(newNickname);
-
         } else {
             throw new CustomException(ErrorCode.NICKNAME_ALREADY_EXISTS);
         }

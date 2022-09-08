@@ -22,8 +22,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,7 +72,7 @@ public class BatchConfig {
         log.info("==> reader value : " + requestDate);
 
         Map<String, Object> parameterValues = new HashMap<>();
-        parameterValues.put("nowDateTime", ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime());
+        parameterValues.put("nowDateTime", LocalDateTime.now());
 
         return new JpaPagingItemReaderBuilder<Mission>()
                 .pageSize(10)
@@ -121,7 +119,7 @@ public class BatchConfig {
         log.info("==> reader value : " + requestDate);
 
         Map<String, Object> parameterValues = new HashMap<>();
-        parameterValues.put("nowDateTime", ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime());
+        parameterValues.put("nowDateTime", LocalDateTime.now());
 
 
         return new JpaPagingItemReaderBuilder<Mission>()

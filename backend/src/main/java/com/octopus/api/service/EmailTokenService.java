@@ -14,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -60,9 +58,7 @@ public class EmailTokenService {
     // 유효한 토큰 가져오기
     public Boolean findEmailToken(String emailTokenId) {
         Optional<EmailToken> emailToken = emailTokenRepository
-                .findByEmailCodeAndExpirationDateAfterAndExpired(emailTokenId,
-                        ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime(),
-                        false);
+                .findByEmailCodeAndExpirationDateAfterAndExpired(emailTokenId, LocalDateTime.now(), false);
 
         emailToken.ifPresent(EmailToken::hasTokenExpired);
         return emailToken.isPresent();

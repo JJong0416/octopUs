@@ -15,7 +15,7 @@ public class UserUtils {
     }
 
     public static String createRandomKakaoUserNickname(Long totalMember){
-        return RandomStringUtils.randomAlphabetic(RANDOM_KAKAO_NICKNAME) + "-" + totalMember;
+        return RandomStringUtils.randomAlphabetic(RANDOM_KAKAO_NICKNAME) + "#" + totalMember;
     }
 
     public static String createRandomKakaoAvatar(){

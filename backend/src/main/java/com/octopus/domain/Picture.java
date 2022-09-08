@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
@@ -40,6 +42,6 @@ public class Picture {
         this.missionNo = missionNo;
         this.userNo = userNo;
         this.pictureUrl = pictureUrl;
-        this.date = LocalDateTime.now();
+        this.date = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
     }
 }

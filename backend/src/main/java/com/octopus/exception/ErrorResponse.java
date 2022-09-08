@@ -3,11 +3,13 @@ package com.octopus.exception;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Getter
 public class ErrorResponse {
 
-    private final LocalDateTime timestamp = LocalDateTime.now();
+    private final LocalDateTime timestamp = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
     private final int status;
     private final String error;
     private final String code;

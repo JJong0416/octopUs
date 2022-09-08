@@ -1,6 +1,14 @@
+<br>
+
+<img src="img/octopus.png">
+
+
+<br>
+
 # 🐙 OctopUS 🐙
 
 -  SSAFY 7기 서울 공통 7반 A702 공통 프로젝트입니다.
+
    <br><br><br>
 
 ## 📆 프로젝트 기간
@@ -33,6 +41,7 @@
 <img src ="https://img.shields.io/badge/server-Nginx-green"></img>
 <br>
 <br>
+<br>
 
 ## 💻 협업툴
 <br>
@@ -58,20 +67,60 @@
 
 
 ## ⚙ 프로젝트 상세 설명
-- ###  프로젝트 개요
-    
-     1. 혼자서는 동기 부여가 잘 안 되는 것 같으신 분   
-     2. 친구와 함께 '갓생' 살기로 마음 먹었는데 이를 효과적으로 실행할 수 있는 어플을 찾고 싶은 분  
-     3. 새로운 목표를 위해 나를 바꾸기도 하면서 돈도 벌고 싶으신 분
+
 <br>
 
-- ### octopus는 확실한 동기부여와 확실한 보상을 통해 목표가 같은 사람들과 함께 성장해나갈 수 있는 어플리케이션입니다.
+<img src="img/1.png">
+
+<img src="img/2.png">
+
+<img src="img/3.png">
+
+<img src="img/4.png">
+
+<img src="img/5.png">
 
 <br><br><br>
     
 
 
 
-## 실행화면
+## 🖥실행화면
 
+<br>
 
+### 회원가입하기
+
+<img src="/img/회원가입하기.gif" width="300" height="700">
+
+<br>
+
+### 새로운 미션 만들기
+
+<img src="/img/새로운미션만들기.gif" width="300" height="700">
+
+<br>
+
+### 미션 조회 및 참여
+
+<img src="/img/미션조회및참여.gif" width="300" height="700">
+
+<br>
+
+### 진행중인 미션에 인증하기
+
+<img src="/img/진행중인미션에인증하기.gif" width="300" height="700">
+
+<br>
+
+### 포인트
+
+<img src="/img/포인트.gif" width="300" height="700">
+
+<br>
+
+### 캐릭터(옥순이) 꾸미기
+
+<img src="/img/옥순이꾸미기.gif" width="300" height="700">
+
+<br>

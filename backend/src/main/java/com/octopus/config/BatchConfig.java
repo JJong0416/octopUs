@@ -22,6 +22,11 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
+<<<<<<< HEAD
+=======
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +77,11 @@ public class BatchConfig {
         log.info("==> reader value : " + requestDate);
 
         Map<String, Object> parameterValues = new HashMap<>();
+<<<<<<< HEAD
         parameterValues.put("nowDateTime", LocalDateTime.now());
+=======
+        parameterValues.put("nowDateTime", ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime());
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
 
         return new JpaPagingItemReaderBuilder<Mission>()
                 .pageSize(10)
@@ -119,7 +128,11 @@ public class BatchConfig {
         log.info("==> reader value : " + requestDate);
 
         Map<String, Object> parameterValues = new HashMap<>();
+<<<<<<< HEAD
         parameterValues.put("nowDateTime", LocalDateTime.now());
+=======
+        parameterValues.put("nowDateTime", ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime());
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
 
 
         return new JpaPagingItemReaderBuilder<Mission>()
@@ -161,4 +174,8 @@ public class BatchConfig {
                 .build();
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95

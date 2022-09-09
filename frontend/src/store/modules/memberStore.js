@@ -23,8 +23,11 @@ const memberStore = {
       state.isLoginError = isLoginError;
     },
     SET_USER_INFO: (state, userInfo) => {
+<<<<<<< HEAD
       console.log(userInfo);
       state.isLogin = true;
+=======
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
       state.userInfo = userInfo;
     },
   },
@@ -33,6 +36,7 @@ const memberStore = {
       await login(
         user,
         (response) => {
+<<<<<<< HEAD
           console.log(response);
           console.log("login은 일단됨, 근데 response모름");
           if (response.status === 200) {
@@ -45,6 +49,17 @@ const memberStore = {
             commit("SET_IS_LOGIN", true);
             commit("SET_IS_LOGIN_ERROR", false);
 
+=======
+          if (response.status === 200) {
+            let token = response.data.token;
+            cookie.set("token", token);
+            // console.log("쿠키가 없는것같기도...");
+            // console.log("쿠키있나요?" + cookie.isKey("token"));
+            sessionStorage.setItem("token", token);
+            commit("SET_IS_LOGIN", true);
+            commit("SET_IS_LOGIN_ERROR", false);
+            commit("SET_USER_INFO", token);
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
             // header에 토큰 담기
             axios.defaults.headers.common[
               "Authorization"

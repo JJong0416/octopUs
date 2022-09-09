@@ -19,9 +19,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+<<<<<<< HEAD
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+=======
+import java.time.*;
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -189,7 +193,11 @@ public class MissionCalenderService {
 
         LocalDate thisWeekStart = missionTime.getMissionTimeStartTime()
                 .plusDays((int) (getCurrentWeek(missionTime.getMissionTimeStartTime()) - 1) * 7).toLocalDate();
+<<<<<<< HEAD
         LocalDate today = LocalDate.now();
+=======
+        LocalDate today = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate();
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
         for (CalenderUserInfoRes calenderUserInfoRes : calenderUserInfos) {
             if (calenderUserInfoRes.getUserNickname().equals(user.getUserNickname())) {
                 isParticipated = true;
@@ -206,7 +214,11 @@ public class MissionCalenderService {
             }
         }
 
+<<<<<<< HEAD
         LocalTime nowTime = LocalTime.now();
+=======
+        LocalTime nowTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalTime();
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
         for (AuthenticationInfo authenticationInfo : authenticationInfos) {
             if (nowTime.isAfter(authenticationInfo.getAuthenticationStartTime()) && nowTime.isBefore(authenticationInfo.getAuthenticationEndTime())) {
                 isPossibleTime = true;
@@ -262,7 +274,11 @@ public class MissionCalenderService {
     }
 
     private Long getCurrentWeek(LocalDateTime startDate) {
+<<<<<<< HEAD
         LocalDate today = LocalDate.now();
+=======
+        LocalDate today = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDate();
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
         LocalDate start = startDate.toLocalDate();
         return (ChronoUnit.DAYS.between(start, today)) / 7 + 1;
     }
@@ -273,8 +289,16 @@ public class MissionCalenderService {
                 .append("/")
                 .append(user.getUserId())
                 .append("/")
+<<<<<<< HEAD
                 .append(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss")))
                 .append(".png");
         return filename;
     }
 }
+=======
+                .append(ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss")))
+                .append(".png");
+        return filename;
+    }
+}
+>>>>>>> ac048782d308840093efdf3b8146c990ec2fcf95
